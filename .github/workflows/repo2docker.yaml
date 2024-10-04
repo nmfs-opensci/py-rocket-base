@@ -7,8 +7,6 @@ on:
   push:
     paths:
       - .github/workflows/repo2docker.yaml
-      # files used by binder/appendix
-      - conda/conda-lock.yml
       # files used by repo2docker, in order of use
       - apt.txt
       - environment.yml
