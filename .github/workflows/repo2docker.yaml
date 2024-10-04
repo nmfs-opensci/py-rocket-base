@@ -10,10 +10,10 @@ on:
       # files used by binder/appendix
       - conda/conda-lock.yml
       # files used by repo2docker, in order of use
-      - binder/apt.txt
-      - binder/environment.yml
-      - binder/start
-      - binder/appendix
+      - apt.txt
+      - environment.yml
+      - start
+      - appendix
 concurrency:
   group: ${{ github.workflow }}
   cancel-in-progress: true
@@ -30,5 +30,5 @@ jobs:
         DOCKER_USERNAME: ${{github.actor}}
         DOCKER_PASSWORD: ${{secrets.GITHUB_TOKEN}}
         DOCKER_REGISTRY: ghcr.io
-        IMAGE_NAME: nmfs-opensci/image-acoustics
-        APPENDIX_FILE: binder/appendix
+        IMAGE_NAME: nmfs-opensci/py-rocket-base
+        APPENDIX_FILE: appendix
