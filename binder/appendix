@@ -1,6 +1,0 @@
-# Override repo2docker use of start (so we can remove $REPO_DIR)
-USER root
-ENV R2D_ENTRYPOINT=/usr/local/bin/repo2docker-start
-RUN cp ${REPO_DIR}/binder/start ${R2D_ENTRYPOINT} && \
-    chmod +x ${R2D_ENTRYPOINT} && \
-    rm -r ${REPO_DIR}/*
