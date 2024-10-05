@@ -83,8 +83,6 @@ xclip
 xsel
 firefox
 chromium-browser
-openjdk-11-jdk
-openjdk-11-jre
 
 # GUI text editors
 emacs
