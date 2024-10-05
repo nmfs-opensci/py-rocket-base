@@ -29,4 +29,3 @@ jobs:
         DOCKER_PASSWORD: ${{secrets.GITHUB_TOKEN}}
         DOCKER_REGISTRY: ghcr.io
         IMAGE_NAME: nmfs-opensci/py-rocket-base
-        APPENDIX_FILE: appendix
