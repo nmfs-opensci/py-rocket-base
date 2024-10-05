@@ -1,7 +1,7 @@
-# py-rocket image
+# py-rocket-base image
 
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/nmfs-opensci/py-rocket-base/HEAD)
-[![Build and push container image](https://github.com/nmfs-opensci/py-rocket-base/actions/workflows/build.yaml/badge.svg)](https://github.com/nmfs-opensci/py-rocket-base/actions/workflows/build.yaml)
+[![Build and push container image](https://github.com/nmfs-opensci/py-rocket-base/actions/workflows/repo2docker.yaml/badge.svg)](https://github.com/nmfs-opensci/py-rocket-base/actions/workflows/repo2docker.yaml)
 
 The py-rocket image is the base image used for [nmfs-openscapes.2i2c.cloud](https://nmfs-openscapes.2i2c.cloud/hub/login?next=%2Fhub%2F) images that have R and Python. The repo is based off the [CryoCloud hub-image](https://github.com/CryoInTheCloud/hub-image).  The image is built with [repo2docker](https://repo2docker.readthedocs.io), which uses
 Ubuntu Bionic Beaver (18.04) as the base image. repo2docker saves the repo files to `${REPO_DIR}` in the image (default `/srv/repo`) and the `${REPO_DIR}/start` commands are issues after the image starts. In py-rocket-base, this is mainly used to set up the Desktop applications. Read the repo2docker docs to learn about the image and the various environmental variables.
