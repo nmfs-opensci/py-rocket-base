@@ -8,6 +8,9 @@ set -euo pipefail
 # pop open GUIs
 export DISPLAY=":1.0"
 
+# The for loops will fail if they return null (no files). Set shell option nullglob
+shopt -s nullglob
+
 # Add any .desktop files to the application database and desktop. This is done
 # at startup-time because it's expected that a remote filesystem will be
 # mounted at $HOME, which would overwrite the data if it was created at
