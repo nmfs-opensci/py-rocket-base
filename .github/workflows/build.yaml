@@ -7,12 +7,10 @@ on:
       - main
     paths:
       - 'apt.txt'
-      - 'conda-linux-64.lock'
       - 'environment.yml'
       - 'start'
       - 'postBuild'
       - 'appendix'
-      # Trigger rebuilds if the build process changes
       - '.github/workflows/build.yaml'
 
 jobs:
