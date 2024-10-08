@@ -11,5 +11,4 @@ RUN mandb
 
 RUN chmod +x ${REPO_DIR}/rocker.sh && ${REPO_DIR}/rocker.sh
 
-# Revert to default user
-USER ${NB_USER}
+# stay as root

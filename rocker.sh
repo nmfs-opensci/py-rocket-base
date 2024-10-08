@@ -15,18 +15,3 @@ mv rocker-versioned2-R${R_VERSION}/scripts rocker_scripts && \
 mv rocker-versioned2-R${R_VERSION}/dockerfiles/verse_${R_VERSION}.Dockerfile rocker_scripts/verse_${R_VERSION}.Dockerfile && \
 rm R${R_VERSION}.tar.gz && \
 rm -rf rocker-versioned2-R${R_VERSION}
-
-# Read the Dockerfile and process each line
-while IFS= read -r line; do
-    # Check if the line starts with ENV or RUN
-    if [[ "$line" == ENV* ]]; then
-        # Export the environment variable from the ENV line
-        eval $(echo "$line" | sed 's/^ENV //g')
-    elif [[ "$line" == RUN* ]]; then
-        # Run the command from the RUN line
-        cmd=$(echo "$line" | sed 's/^RUN //g')
-        full_cmd="${REPO_DIR}${cmd}"
-        echo "Executing: $full_cmd"
-        eval "$full_cmd"
-    fi
-done < rocker_scripts/verse_${R_VERSION}.Dockerfile
