@@ -25,7 +25,8 @@ while IFS= read -r line; do
     elif [[ "$line" == RUN* ]]; then
         # Run the command from the RUN line
         cmd=$(echo "$line" | sed 's/^RUN //g')
-        echo "Executing: $cmd"
-        eval "$cmd"
+        full_cmd="${REPO_DIR}${cmd}"
+        echo "Executing: $full_cmd"
+        eval "$full_cmd"
     fi
 done < rocker_scripts/verse_${R_VERSION}.Dockerfile
