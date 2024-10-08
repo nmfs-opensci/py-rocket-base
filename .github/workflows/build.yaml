@@ -11,6 +11,7 @@ on:
       - 'start'
       - 'postBuild'
       - 'appendix'
+      - 'rocker.sh'
       - '.github/workflows/build.yaml'
 
 jobs:
