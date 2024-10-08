@@ -29,4 +29,4 @@ while IFS= read -r line; do
         echo "Executing: $full_cmd"
         eval "$cmd"
     fi
-done < rocker_scripts/verse_${R_VERSION}.Dockerfile
+done < /rocker_scripts/verse_${R_VERSION}.Dockerfile
