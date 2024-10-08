@@ -1,0 +1,50 @@
+name: Build and push container image
+
+on:
+  workflow_dispatch: null
+  push:
+    branches:
+      - dev
+    paths:
+      - 'apt.txt'
+      - 'environment.yml'
+      - 'start'
+      - 'postBuild'
+      - 'appendix'
+      - 'rocker.sh'
+      - '.github/workflows/build.yaml'
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+
+    # For biggish images, github actions runs out of disk space.
+    # So we cleanup some unwanted things in the disk image, and reclaim that space for our docker use
+    # https://github.com/actions/virtual-environments/issues/2606#issuecomment-772683150
+    # and https://github.com/easimon/maximize-build-space/blob/b4d02c14493a9653fe7af06cc89ca5298071c66e/action.yml#L104
+    # This gives us a total of about 52G of free space, which should be enough for now
+    - name: cleanup disk space
+      run: |
+        sudo rm -rf /usr/local/lib/android /usr/share/dotnet /opt/ghc
+        df -h
+
+    - name: Checkout files in repo
+      uses: actions/checkout@main
+
+    - name: Build and push the image to quay.io
+      uses: jupyterhub/repo2docker-action@master
+      with:
+        # Make sure username & password/token pair matches your registry credentials
+        DOCKER_USERNAME: ${{github.actor}}
+        DOCKER_PASSWORD: ${{secrets.GITHUB_TOKEN}}
+        DOCKER_REGISTRY: ghcr.io
+        IMAGE_NAME: nmfs-opensci/py-rocket-2
+        # Put repo contents in /srv/repo, so they aren't mangled when we put user home in /home/jovyan
+        REPO_DIR: /srv/repo
+        # Fix man pages that are disabled by Ubuntu 18 minimal base image
+        APPENDIX_FILE: "appendix"
+
+    # Lets us monitor disks getting full as images get bigger over time
+    - name: Show how much disk space is left
+      run: df -h
