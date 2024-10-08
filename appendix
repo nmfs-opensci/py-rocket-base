@@ -9,8 +9,7 @@ RUN yes | unminimize
 ENV MANPATH="${NB_PYTHON_PREFIX}/share/man:${MANPATH}"
 RUN mandb
 
-COPY rocker.sh /rocker.sh
-RUN chmod +x /rocker.sh && /rocker.sh && rm /rocker.sh
+RUN chmod +x ${REPO_DIR}/rocker.sh && ${REPO_DIR}/rocker.sh
 
 # Revert to default user
 USER ${NB_USER}
