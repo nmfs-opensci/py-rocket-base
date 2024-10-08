@@ -12,3 +12,4 @@ RUN mandb
 RUN chmod +x ${REPO_DIR}/rocker.sh && ${REPO_DIR}/rocker.sh
 
 # stay as root
+RUN echo 'root:Docker!' | chpasswd
