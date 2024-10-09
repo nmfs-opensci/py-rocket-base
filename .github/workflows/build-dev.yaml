@@ -31,7 +31,9 @@ jobs:
 
     - name: Checkout files in repo
       uses: actions/checkout@main
-
+        with:
+          ref: dev2
+          
     - name: Build and push the image to quay.io
       uses: jupyterhub/repo2docker-action@master
       with:
