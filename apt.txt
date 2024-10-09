@@ -1,9 +1,0 @@
-# Some linux packages for basic terminal work, particularly
-# oriented at users new to Unix/cmd line environments.
-
-# Basic unix tools
-man
-man-db
-manpages-posix
-manpages-dev
-manpages-posix-dev
