@@ -4,7 +4,7 @@ on:
   workflow_dispatch: null
   push:
     branches:
-      - dev
+      - dev2
     paths:
       - 'apt.txt'
       - 'environment.yml'
@@ -12,7 +12,7 @@ on:
       - 'postBuild'
       - 'appendix'
       - 'rocker.sh'
-      - '.github/workflows/build.yaml'
+      - '.github/workflows/build-dev.yaml'
 
 jobs:
   build-and-push:
