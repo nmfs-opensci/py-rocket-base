@@ -15,6 +15,7 @@ ENV TZ="Etc/UTC"
 
 RUN mkdir /rocker_scripts && \
   cp ${REPO_DIR}/install_R_source.sh /rocker_scripts/install_R_source.sh && \
+  chmod +x /rocker_scripts/install_R_source.sh && \
   cd / && \
   /rocker_scripts/install_R_source.sh
 
