@@ -47,6 +47,7 @@ jobs:
         REPO_DIR: /srv/repo
         # Fix man pages that are disabled by Ubuntu 18 minimal base image
         APPENDIX_FILE: "appendix"
+        REPO2DOCKER_EXTRA_ARGS: "--debug"
 
     # Lets us monitor disks getting full as images get bigger over time
     - name: Show how much disk space is left
