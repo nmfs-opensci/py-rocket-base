@@ -4,7 +4,7 @@ on:
   workflow_dispatch: null
   push:
     branches:
-      - dev
+      - dev2
     paths:
       - 'apt.txt'
       - 'environment.yml'
@@ -12,7 +12,8 @@ on:
       - 'postBuild'
       - 'appendix'
       - 'rocker.sh'
-      - '.github/workflows/build.yaml'
+      - 'install_R_source.sh'
+      - '.github/workflows/build-dev.yaml'
 
 jobs:
   build-and-push:
@@ -31,7 +32,9 @@ jobs:
 
     - name: Checkout files in repo
       uses: actions/checkout@main
-
+        with:
+          ref: dev2
+          
     - name: Build and push the image to quay.io
       uses: jupyterhub/repo2docker-action@master
       with:
