@@ -1,5 +1,3 @@
-# Re-enable man pages disabled in Ubuntu 18 minimal image
-# https://wiki.ubuntu.com/Minimal
 USER root
 
 ENV R_VERSION="4.4.1"
