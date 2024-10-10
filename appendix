@@ -9,7 +9,9 @@ RUN yes | unminimize
 ENV MANPATH="${NB_PYTHON_PREFIX}/share/man:${MANPATH}"
 RUN mandb
 
-RUN chmod +x ${REPO_DIR}/rocker.sh && source ${REPO_DIR}/rocker.sh
+RUN PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin && \
+  chmod +x ${REPO_DIR}/rocker.sh && \
+  source ${REPO_DIR}/rocker.sh
 
 # Revert to default user
 USER ${NB_USER}
