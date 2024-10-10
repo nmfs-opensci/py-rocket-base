@@ -7,8 +7,6 @@ set -euo pipefail
 # Tell applications where to open desktop apps - this allows notebooks to
 # pop open GUIs
 export DISPLAY=":1.0"
-# source this file to get the variables defined in the rocker Dockerfile
-source ${REPO_DIR}/env.txt
 
 # The for loops will fail if they return null (no files). Set shell option nullglob
 shopt -s nullglob
