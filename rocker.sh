@@ -23,8 +23,11 @@ while IFS= read -r line; do
     if [[ "$line" == ENV* ]]; then
         # Extract the variable assignment
         var_assignment=$(echo "$line" | sed 's/^ENV //g')        
-        # Export the environment variable
+        # Export the environment variable for use in subsequent scripts
         export "$var_assignment"
+        # Write the exported variable to env.txt so I can call this from start to
+        # Create in the user environment.
+        echo "$var_assignment" >> ${REPO_DIR}/env.txt
     elif [[ "$line" == RUN* ]]; then
         # Run the command from the RUN line
         cmd=$(echo "$line" | sed 's/^RUN //g')
