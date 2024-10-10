@@ -21,17 +21,16 @@ cd /
 while IFS= read -r line; do
     # Check if the line starts with ENV or RUN
     if [[ "$line" == ENV* ]]; then
+        # Assign variable
+        eval $(echo "$line" | sed 's/^ENV //g')
         # Extract the variable assignment
         var_assignment=$(echo "$line" | sed 's/^ENV //g')        
-        # Export the environment variable for use in subsequent scripts
-        export "$var_assignment"
-        # Write the exported variable to env.txt so I can call this from start to
-        # Create in the user environment.
+        # Write the exported variable to env.txt
         echo "export $var_assignment" >> ${REPO_DIR}/env.txt
     elif [[ "$line" == RUN* ]]; then
         # Run the command from the RUN line
         cmd=$(echo "$line" | sed 's/^RUN //g')
         echo "Executing: $cmd"
-        eval "$cmd" || echo ${cmd}" encountered an error, but continuing..."
+        eval "$cmd" # || echo ${cmd}" encountered an error, but continuing..."
     fi
 done < /rocker_scripts/r-ver_${R_VERSION}.Dockerfile
