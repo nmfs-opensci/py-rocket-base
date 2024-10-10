@@ -27,7 +27,7 @@ while IFS= read -r line; do
         export "$var_assignment"
         # Write the exported variable to env.txt so I can call this from start to
         # Create in the user environment.
-        echo "$var_assignment" >> ${REPO_DIR}/env.txt
+        echo "export $var_assignment" >> ${REPO_DIR}/env.txt
     elif [[ "$line" == RUN* ]]; then
         # Run the command from the RUN line
         cmd=$(echo "$line" | sed 's/^RUN //g')
