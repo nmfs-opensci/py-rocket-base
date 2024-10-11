@@ -23,10 +23,9 @@ while IFS= read -r line; do
     # Check if the line starts with ENV or RUN
     if [[ "$line" == ENV* ]]; then
         # Assign variable
-        eval $(echo "$line" | sed 's/^ENV //g')
-        # Extract the variable assignment; removing "; could pose problems
-        # But needed so that " does not get turned into %22
-        var_assignment=$(echo "$line" | sed 's/^ENV //g' | sed 's/"//g')        
+        var_assignment=$(echo "$line" | sed 's/^ENV //g')
+        # Run this way eval "export ..." otherwise the " will get turned to %22
+        eval "export $var_assignment"
         # Write the exported variable to env.txt
         echo "export $var_assignment" >> ${REPO_DIR}/env.txt
     elif [[ "$line" == RUN* ]]; then
