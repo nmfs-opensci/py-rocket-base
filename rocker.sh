@@ -8,7 +8,7 @@ set -e
 
 # Copy in the rocker files. Work in ${REPO_DIR} to make sure I don't clobber anything
 cd ${REPO_DIR}
-wget https://github.com/eeholmes/rocker-versioned2/archive/refs/heads/master.tar.gz
+wget https://github.com/eeholmes/rocker-versioned2/archive/refs/tags/R4.4.1.tar.gz
 #wget https://github.com/rocker-org/rocker-versioned2/archive/refs/tags/R${R_VERSION}.tar.gz
 tar zxvf R${R_VERSION}.tar.gz && \
 mv rocker-versioned2-R${R_VERSION}/scripts /rocker_scripts && \
