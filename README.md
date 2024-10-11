@@ -3,9 +3,9 @@
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/nmfs-opensci/py-rocket-2/HEAD)
 [![Build and push container image](https://github.com/nmfs-opensci/py-rocket-2/actions/workflows/build.yaml/badge.svg)](https://github.com/nmfs-opensci/py-rocket-2/actions/workflows/build.yaml)
 
-The py-rocket-base image is a base image for the JupyterHubs with a scientific stack for Python and R for the earth sciences. This base image does not have the scientific stack, rather it is a base image to which a set of packages can be added. The image is built with [repo2docker](https://repo2docker.readthedocs.io), which uses Ubuntu Jammy (22.04) as the base image. 
+The py-rocket-base image is a base image for the JupyterHubs with Python and R. This is a base image to which a set of packages can be added. The image is built with [repo2docker](https://repo2docker.readthedocs.io), which uses Ubuntu Jammy (22.04) as the base image. 
 
-The py-rocket-base image is designed to install the Jupyter and JupyterHub environment with repo2docker and the R environment with Rocker (or other) installation scripts.
+The py-rocket-base image is designed to install the Jupyter and JupyterHub environment with repo2docker and the R environment with Rocker (or other) installation scripts. Using a set of installation scripts designed for R/RStudio environments. You can scroll through the Rocker [installation scripts](https://github.com/rocker-org/rocker-versioned2/blob/master/scripts/install_rstudio.sh) to see that getting everything working perfectly takes some fiddling.
 
 * Python + JupyterLab with conda handling package installation
 * R + RStudio
