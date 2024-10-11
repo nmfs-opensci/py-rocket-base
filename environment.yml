@@ -1,4 +1,4 @@
-name: cryocloud
+name: py-rocket-base
 
 channels:
   - conda-forge
@@ -26,6 +26,9 @@ dependencies:
   # More git tools from github-cli
   - gh~=2.32.1
 
+  # R/RStudio Support
+  - jupyter-rsession-proxy
+  
   # VS Code support
   - jupyter-vscode-proxy~=0.5
   - code-server~=4.23
