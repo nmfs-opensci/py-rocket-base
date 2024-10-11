@@ -10,6 +10,7 @@ ENV MANPATH="${NB_PYTHON_PREFIX}/share/man:${MANPATH}"
 RUN mandb
 
 ENV R_VERSION="4.4.1"
+ENV R_DOCKERFILE="verse_${R_VERSION}"
 RUN PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin && \
   chmod +x ${REPO_DIR}/rocker.sh && \
   ${REPO_DIR}/rocker.sh
