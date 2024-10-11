@@ -2,17 +2,18 @@
 set -e
 
 # This script will copy in the rocker_scripts to install things and
-# Install rocker-verse using the verse_${R_VERSION}.Dockerfile file
+# Install rocker-verse using the TAG_${R_VERSION}.Dockerfile file
 # It will run just the ENV and RUN commands in that file
 # Variables defined here will only be available in this script.
 
 # Copy in the rocker files. Work in ${REPO_DIR} to make sure I don't clobber anything
 cd ${REPO_DIR}
+ROCKER_DOCKERFILE_NAME="${R_DOCKERFILE}.Dockerfile"
 # For degugging use: wget https://github.com/eeholmes/rocker-versioned2/archive/refs/tags/R4.4.1.tar.gz
 wget https://github.com/rocker-org/rocker-versioned2/archive/refs/tags/R${R_VERSION}.tar.gz
 tar zxvf R${R_VERSION}.tar.gz && \
 mv rocker-versioned2-R${R_VERSION}/scripts /rocker_scripts && \
-mv rocker-versioned2-R${R_VERSION}/dockerfiles/${R_DOCKERFILE}_${R_VERSION}.Dockerfile /rocker_scripts/original.Dockerfile && \
+mv rocker-versioned2-R${R_VERSION}/dockerfiles/${ROCKER_DOCKERFILE_NAME} /rocker_scripts/original.Dockerfile && \
 rm R${R_VERSION}.tar.gz && \
 rm -rf rocker-versioned2-R${R_VERSION}
 
