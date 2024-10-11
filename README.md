@@ -5,7 +5,7 @@
 
 The py-rocket-base image is a base image for the JupyterHubs with a scientific stack for Python and R for the earth sciences. This base image does not have the scientific stack, rather it is a base image to which a set of packages can be added. The image is built with [repo2docker](https://repo2docker.readthedocs.io), which uses Ubuntu Jammy (22.04) as the base image. 
 
-The py-rocket-base image is designed to install the Jupyter and JupyterHub environment with repo2docker and the R environment with Rocker (or other R installation scripts) intallation scripts.
+The py-rocket-base image is designed to install the Jupyter and JupyterHub environment with repo2docker and the R environment with Rocker (or other) installation scripts.
 
 * Python + JupyterLab with conda handling package installation
 * R + RStudio
