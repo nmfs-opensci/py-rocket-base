@@ -3,14 +3,15 @@
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/nmfs-opensci/py-rocket-2/HEAD)
 [![Build and push container image](https://github.com/nmfs-opensci/py-rocket-2/actions/workflows/build.yaml/badge.svg)](https://github.com/nmfs-opensci/py-rocket-2/actions/workflows/build.yaml)[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.13942617.svg)](https://doi.org/10.5281/zenodo.13942617)
 
+The py-rocket-base image is a base image for the JupyterHubs with Python and RStudio. The py-rocket-base image is designed to install the Jupyter and JupyterHub environment with [repo2docker](https://repo2docker.readthedocs.io) and the R environment with [Rocker](https://rocker-project.org/) installation scripts. You can scroll through the Rocker [installation scripts](https://github.com/rocker-org/rocker-versioned2/blob/master/scripts/install_rstudio.sh) to see how the environment is set up.
 
-The py-rocket-base image is a base image for the JupyterHubs with Python and R. This is a base image to which a set of packages can be added. The image is built with [repo2docker](https://repo2docker.readthedocs.io), which uses Ubuntu Jammy (22.04) as the base image. 
+*There are many ways to install R and RStudio into an image designed for JupyterHubs.* The objective of py-rocker-base is not to install R and RStudio, per se. The objective of py-rocket-base is to create an JupyterHub (or binder) image such when you click the RStudio button in the JupyterLab UI to enter the RStudio UI, you enter an environment that is the same as if you had used a Rocker image but if you are in the JupyterLab UI, the environment is the same as it you had used repo2docker to create the environment. The py-rocker-base image includes the Rocker scripts so that the user can use the image as a base and extend the R environment to match other Rocker environments, e.g. verse, geospatial or ml.
 
-The py-rocket-base image is designed to install the Jupyter and JupyterHub environment with repo2docker and the R environment with Rocker (or other) installation scripts. Using a set of installation scripts designed for R/RStudio environments. You can scroll through the Rocker [installation scripts](https://github.com/rocker-org/rocker-versioned2/blob/master/scripts/install_rstudio.sh) to see that getting everything working perfectly takes some fiddling.
+The base image has the following support:
 
-* Python + JupyterLab with conda handling package installation
-* R + RStudio
-* Desktop VNC for running applications
+* Python + JupyterLab with mamba handling package installation
+* R + RStudio with the rocker scripts and other functions available
+* Desktop VNC ready for installing applications, including Java-based applications
 * VSCode
 
 ## Where are the images
