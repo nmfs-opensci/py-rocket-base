@@ -14,15 +14,17 @@ The py-rocket-base image is designed to install the Jupyter and JupyterHub envir
 
 ## Where are the images
 
-The `.github/workflows/repo2docker.yaml` is a GitHub Action to build the image with [repo2docker-action](https://github.com/jupyterhub/repo2docker-action). It builds to GitHub packages and you will find it in the [packages for the repo](https://github.com/orgs/nmfs-opensci/packages?repo_name=py-rocket-2). The URL will look like
-Your image URL in your repo will look like
+The `.github/workflows/build.yaml` is a GitHub Action to build the image with [repo2docker-action](https://github.com/jupyterhub/repo2docker-action). It builds to GitHub packages and you will find it in the [packages for the repo](https://github.com/orgs/nmfs-opensci/packages?repo_name=py-rocket-base). The URL will look like
+Your image URL in your repo will look like one of these
 ```
-ghcr.io/nmfs-opensci/container-images/py-rocket-base:latest
+ghcr.io/nmfs-opensci/repo-name/image-name:latest
+ghcr.io/nmfs-opensci/image-name:latest
 ```
+For example, for this repo the image is `ghcr.io/nmfs-opensci/py-rocket-base:latest`.
 
 ## Using this in a JupyterHub
 
-If the JupyterHub has the **Bring your own image** feature, then you can paste in `ghcr.io/nmfs-opensci/py-rocket-2:latest` to the image and a server with your image will spin up.
+If the JupyterHub has the **Bring your own image** feature, then you can paste in `ghcr.io/nmfs-opensci/py-rocket-base:latest` to the image and a server with your image will spin up.
 
 <img width="772" alt="image" src="https://github.com/user-attachments/assets/13f1d200-b8a6-44e1-a9db-537260b21ec4">
 
