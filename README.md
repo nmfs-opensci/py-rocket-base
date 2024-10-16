@@ -45,7 +45,7 @@ FROM ghcr.io/nmfs-opensci/container-images/py-rocket-base:latest
 # If needed to do a root install of software
 USER root
 COPY app.sh app.sh
-RUN chmod xxxxx && ./app.sh && rm app.sh
+RUN chmod +x app.sh && ./app.sh && rm app.sh
 USER ${NB_USER}
 
 # install R packages
