@@ -67,3 +67,7 @@ COPY mime/*.xml ${REPO_DIR}/mime/*.xml
 USER ${NB_USER}
 ```
 -->
+
+## History
+
+The original [py-rocket 1.0](https://github.com/NASA-Openscapes/py-rocket) was developed by Luis Lopez and was built off a Rocker base image. Carl Boettiger and Eli Holmes later altered the image (py-rocket 2.0) so that the Python environment matched the Pangeo structure but the image was still built off a Rocker image. Subsequently, Carl Boettiger developed an image that used a [Jupyter image](https://jupyter-docker-stacks.readthedocs.io/en/latest/) as base. For py-rocker 3.0, Eli Holmes used Carl's ideas but used repo2docker to build the base image and cloned the [CryoCloud hub image](https://github.com/CryoInTheCloud/hub-image) for the basic structure and approach. She added the `rocker.sh` script and `appendix` modifications to install R and RStudio via the Rocker scripts (rather than using a Rocker image as base). Yuvi Panda (repo2docker) gave input throughout the process as snags were hit; Carl, Luis and Andy Tuecher also contributed during this stage.
