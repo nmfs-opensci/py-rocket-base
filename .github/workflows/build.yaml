@@ -39,10 +39,9 @@ jobs:
         DOCKER_USERNAME: ${{github.actor}}
         DOCKER_PASSWORD: ${{secrets.GITHUB_TOKEN}}
         DOCKER_REGISTRY: ghcr.io
-        IMAGE_NAME: nmfs-opensci/py-rocket-2
-        # Put repo contents in /srv/repo, so they aren't mangled when we put user home in /home/jovyan
+        IMAGE_NAME: nmfs-opensci/py-rocket-base
+        # REQUIRED. Otherwise start when /home is set-up w persistent storage
         REPO_DIR: /srv/repo
-        # Fix man pages that are disabled by Ubuntu 18 minimal base image
         APPENDIX_FILE: "appendix"
 
     # Lets us monitor disks getting full as images get bigger over time
