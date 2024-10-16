@@ -24,6 +24,10 @@ while IFS= read -r line; do
     if [[ "$line" == ENV* ]]; then
         # Assign variable
         var_assignment=$(echo "$line" | sed 's/^ENV //g')
+        # Replace ENV DEFAULT_USER="jovyan"
+        if [[ "$var_assignment" == DEFAULT_USER* ]]; then
+            var_assignment="DEFAULT_USER=${NB_USER}"
+        fi
         # Run this way eval "export ..." otherwise the " will get turned to %22
         eval "export $var_assignment"
         # Write the exported variable to env.txt
