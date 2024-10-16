@@ -4,7 +4,7 @@ on:
   workflow_dispatch: null
   push:
     branches:
-      - dev2
+      - dev
     paths:
       - 'apt.txt'
       - 'environment.yml'
@@ -33,7 +33,7 @@ jobs:
     - name: Checkout files in repo
       uses: actions/checkout@main
       with:
-        ref: dev2
+        ref: dev
           
     - name: Build and push the image to quay.io
       uses: jupyterhub/repo2docker-action@master
