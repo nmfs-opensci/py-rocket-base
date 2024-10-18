@@ -1,5 +1,5 @@
-# Some linux packages for basic terminal work, particularly
-# oriented at users new to Unix/cmd line environments.
+# Do not name apt.txt because R installation scripts is removing apps
+# and causing problems. Need to install after R installation
 
 # Basic unix tools
 man
