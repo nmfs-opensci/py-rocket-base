@@ -1,6 +1,21 @@
+USER root
+
+# Install R, RStudio via Rocker scripts
+ENV R_VERSION="4.4.1"
+ENV R_DOCKERFILE="verse_${R_VERSION}"
+RUN PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin && \
+  chmod +x ${REPO_DIR}/rocker.sh && \
+  ${REPO_DIR}/rocker.sh
+
+# Install extra cmd line packages after R installation
+RUN apt-get update && \
+  xargs -a apt-extras.txt apt-get install --yes --no-install-recommends && \
+  apt-get autoremove --purge && \
+  apt-get clean && \
+  rm -rf /var/lib/apt/lists/*
+
 # Re-enable man pages disabled in Ubuntu 18 minimal image
 # https://wiki.ubuntu.com/Minimal
-USER root
 RUN yes | unminimize
 # NOTE: $NB_PYTHON_PREFIX is the same as $CONDA_PREFIX at run-time.
 # $CONDA_PREFIX isn't available in this context.
@@ -8,12 +23,6 @@ RUN yes | unminimize
 # the trailing colon ensures that system paths are searched.
 ENV MANPATH="${NB_PYTHON_PREFIX}/share/man:${MANPATH}"
 RUN mandb
-
-ENV R_VERSION="4.4.1"
-ENV R_DOCKERFILE="verse_${R_VERSION}"
-RUN PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin && \
-  chmod +x ${REPO_DIR}/rocker.sh && \
-  ${REPO_DIR}/rocker.sh
 
 # Revert to default user
 USER ${NB_USER}
