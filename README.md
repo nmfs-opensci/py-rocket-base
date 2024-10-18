@@ -41,7 +41,7 @@ Create a repo with a Dockerfile that looks like the example below. Include the f
 
 Your Dockerfile in your repo will look like
 ```
-FROM ghcr.io/nmfs-opensci/container-images/py-rocket-base:latest
+FROM ghcr.io/nmfs-opensci/py-rocket-base:latest
 
 # If needed to do a root install of software
 USER root
