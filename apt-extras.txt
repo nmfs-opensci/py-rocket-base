@@ -36,13 +36,13 @@ build-essential
 gfortran
 
 # Dependencies for nbconvert and myst
-# LaTeX tools
-# Are installed by R installation
+# texlive is installed by R installation but not some of the common packages
+texlive-recommended
+texlive-recommended-extras
 
 # Other useful document-related tools
 # pandoc installed by R installation
 imagemagick
-# /end nbconvert/myst tools
 
 # Some useful git utilities use basic Ruby
 ruby
