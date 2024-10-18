@@ -4,7 +4,7 @@
 
 The py-rocket-base image is a base image for the JupyterHubs with Python and RStudio. The py-rocket-base image is designed to install the Jupyter and JupyterHub environment with [repo2docker](https://repo2docker.readthedocs.io) and the R environment with [Rocker](https://rocker-project.org/) installation scripts. You can scroll through the Rocker [installation scripts](https://github.com/rocker-org/rocker-versioned2/blob/master/scripts/install_rstudio.sh) to see how the environment is set up.
 
-*There are many ways to install R and RStudio into an image designed for JupyterHubs.* The objective of py-rocket-base is to create a JupyterHub (or binder) image such when you click the RStudio button in the JupyterLab UI to enter the RStudio UI (`/rstudio`), you **enter an environment that is the same as if you had used a Rocker image** but if you are in the JupyterLab UI (`/lab`), the **environment is the same as if you had used repo2docker** to create the environment. There are many other ways to install R and RStudio in an image that will run in a JupyterHub. See History below for other approaches we have used. 
+*There are many ways to install R and RStudio into an image designed for JupyterHubs.* The objective of py-rocket-base is to create a JupyterHub (or binder) image such when you click the RStudio button in the JupyterLab UI to enter the RStudio UI (`/rstudio`), you **enter an environment that is the same as if you had used a Rocker image** but if you are in the JupyterLab UI (`/lab`), the **environment is the same as if you had used repo2docker** to create the environment. There are many other ways to install R and RStudio in a JupyterHub image. See History below for other approaches we have used. 
 
 The base image has the following support:
 
