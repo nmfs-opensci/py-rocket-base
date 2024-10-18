@@ -9,7 +9,7 @@ RUN PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin && \
 
 # Install extra cmd line packages after R installation
 RUN apt-get update && \
-  xargs -a apt-extras.txt apt-get install --yes --no-install-recommends && \
+  xargs -a ${REPO_DIR}/apt-extras.txt apt-get install --yes --no-install-recommends && \
   apt-get autoremove --purge && \
   apt-get clean && \
   rm -rf /var/lib/apt/lists/*
