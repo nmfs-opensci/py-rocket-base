@@ -1,5 +1,5 @@
-# Some linux packages for basic terminal work, particularly
-# oriented at users new to Unix/cmd line environments.
+# Do not name apt.txt because R installation scripts is removing apps
+# and causing problems. Need to install after R installation
 
 # Basic unix tools
 man
@@ -36,21 +36,13 @@ build-essential
 gfortran
 
 # Dependencies for nbconvert and myst
-# LaTeX tools
-texlive-xetex
-texlive-plain-generic
-texlive-fonts-extra
-texlive-fonts-recommended
-texlive-lang-chinese
-texlive-science
-latexmk
-lmodern
-latexdiff
+# texlive is installed by R installation but not some of the common packages
+texlive-recommended
+texlive-recommended-extras
 
 # Other useful document-related tools
-pandoc
+# pandoc installed by R installation
 imagemagick
-# /end nbconvert/myst tools
 
 # Some useful git utilities use basic Ruby
 ruby
@@ -68,12 +60,7 @@ tig  # console UI for git
 multitail
 tree
 
-# For later, these are not available in 18.04
-#browsh # text-based web browser, occasionally handy
-#dasel  # json/yml/csv/etc data wrangling at the terminal
-#fzf   # fuzzy file finder
-
-## This section adds tools for desktop environment usage
+## This section adds tools needed for desktop environment
 dbus-x11
 xorg
 xubuntu-icon-theme
@@ -81,8 +68,6 @@ xfce4
 xfce4-goodies
 xclip
 xsel
-firefox
-chromium-browser
 
 # GUI text editors
 emacs
