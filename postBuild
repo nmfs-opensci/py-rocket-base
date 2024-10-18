@@ -1,12 +1,6 @@
 #!/bin/bash -l
 set -euo pipefail
 
-apt-get update && \
-  xargs -a apt-extras.txt apt-get install --yes --no-install-recommends && \
-  apt-get autoremove --purge && \
-  apt-get clean && \
-  rm -rf /var/lib/apt/lists/*
-
 # Put our custom Jupyter Server config into appropriate platform
 # This path is determined by looking at output of `jupyter --path` in the hub
 # We copy both to notebook server config and jupyter server config, because either can be
