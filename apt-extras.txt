@@ -37,18 +37,10 @@ gfortran
 
 # Dependencies for nbconvert and myst
 # LaTeX tools
-texlive-xetex
-texlive-plain-generic
-texlive-fonts-extra
-texlive-fonts-recommended
-texlive-lang-chinese
-texlive-science
-latexmk
-lmodern
-latexdiff
+# Are installed by R installation
 
 # Other useful document-related tools
-pandoc
+# pandoc installed by R installation
 imagemagick
 # /end nbconvert/myst tools
 
@@ -68,12 +60,7 @@ tig  # console UI for git
 multitail
 tree
 
-# For later, these are not available in 18.04
-#browsh # text-based web browser, occasionally handy
-#dasel  # json/yml/csv/etc data wrangling at the terminal
-#fzf   # fuzzy file finder
-
-## This section adds tools for desktop environment usage
+## This section adds tools needed for desktop environment
 dbus-x11
 xorg
 xubuntu-icon-theme
@@ -81,8 +68,6 @@ xfce4
 xfce4-goodies
 xclip
 xsel
-firefox
-chromium-browser
 
 # GUI text editors
 emacs
