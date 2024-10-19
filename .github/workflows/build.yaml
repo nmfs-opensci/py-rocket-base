@@ -6,7 +6,7 @@ on:
     branches:
       - main
     paths:
-      - 'apt.txt'
+      - 'apt-extras.txt'
       - 'environment.yml'
       - 'start'
       - 'postBuild'
