@@ -19,6 +19,10 @@ shopt -s nullglob
 # build-time.
 APPLICATIONS_DIR="${HOME}/.local/share/applications"
 DESKTOP_DIR="${HOME}/Desktop"
+# Remove DESKTOP_DIR if it exists to avoid leftover files
+if [ -d "${DESKTOP_DIR}" ]; then
+    rm -rf "${DESKTOP_DIR}"
+fi
 mkdir -p "${APPLICATIONS_DIR}"
 mkdir -p "${DESKTOP_DIR}"
 for desktop_file_path in ${REPO_DIR}/Desktop/*.desktop; do
