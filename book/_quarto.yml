@@ -1,0 +1,20 @@
+project:
+  type: book
+  output-dir: ../docs  # Path to output directory, relative to _quarto.yml
+
+book:
+  title: "py-rocket-base user guide"
+  author: "Eli Holmes"
+  output:
+    html_book:
+      toc: true
+      number_sections: true
+
+chapters:
+  - index.qmd
+  - customizing.qmd
+  - configuration_files.qmd
+  - desktop.qmd
+  - tex.qmd
+  - design.qmd
+  - py-rocket-base.qmd
