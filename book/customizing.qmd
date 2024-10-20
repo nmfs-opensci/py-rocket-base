@@ -9,3 +9,37 @@ install Python package or R packages if those special files are present. If you 
 - install.R
 - postBuild
 - apt.txt
+
+## File structure
+
+Only Dockerfile is required. The rest are optional. 
+
+```
+your-repo/
+├── Dockerfile
+├── apt.txt
+├── environment.yml
+├── install.R
+├── postBuild
+├── start
+├── Desktop/
+│   ├── qgis.desktop
+│   ├── qgis.xml
+│   └── qgis.png
+```
+
+Read [configuration_files](configuration_files.html) to learn about apt.txt, environment.yml, install.R, postBuild, and start. Read [Desktop](desktop.html) to learn about the Desktop folder and files for applications.
+
+## Examples
+
+You want to add some Python packages to py-rocker-base.
+
+```
+your-repo/
+├── Dockerfile
+├── environment.yml
+```
+
+Dockerfile
+```
+FROM 
