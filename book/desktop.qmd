@@ -1,0 +1,12 @@
+---
+Title: Desktop
+---
+
+py-rocket-base includes a Desktop UI where you can run applications. A common application is to run QGIS or java-based applications. py-rocket-base
+looks for files with the ending `.desktop`, `.xml` (optional), and `.png` (optional) associated with an application.
+
+## .desktop
+
+## .xml
+
+## .png
