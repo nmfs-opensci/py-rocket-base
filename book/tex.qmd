@@ -1,0 +1,25 @@
+---
+Title: TeX and TeXLive
+---
+
+TeXLive is installed and the tlmgr is used to manage packages. This allows packages to be installed 'on the fly' if they are missing.
+
+## tlmgr
+
+* Do not use `apt-get` to install texlive packages. This will turn off tlmgr (the TeX package manager). Instead use
+```
+tlmgr install <package>
+```
+* Run `tlmgr option` to make sure tlmgr is working.
+
+## Installing packages
+
+Unfortunately any packages you install will be in the `/opt` directory and this gets recreated every time you restart your server. So if you need a
+particular package you will need to keep installing it. Or create your own image based on py-rocket-base:
+
+Dockerfile
+```
+FROM py-rocket-base:latest
+
+RUN tlmgr install collection-latexrecommended && tlmgr clean --all
+```
