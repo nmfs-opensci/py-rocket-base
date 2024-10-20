@@ -19,6 +19,23 @@ shopt -s nullglob
 # build-time.
 APPLICATIONS_DIR="${HOME}/.local/share/applications"
 DESKTOP_DIR="${HOME}/Desktop"
+# Remove DESKTOP_DIR if it exists to avoid leftover files
+if [ -d "${DESKTOP_DIR}" ]; then
+    for desktop_file_path in ${REPO_DIR}/Desktop/*.desktop; do
+    try_exec=$(grep '^TryExec=' "${DESKTOP_FILE}" | cut -d '=' -f 2)
+
+    # If TryExec is found, check if the executable exists
+    if [ -n "${try_exec}" ]; then
+        if command -v "${try_exec}" &> /dev/null; then
+            echo "Executable ${try_exec} found."
+        else
+            echo "Executable ${try_exec} not found."
+        fi
+    else
+        echo "No TryExec line found in the .desktop file."
+    fi 
+    rm -rf "${DESKTOP_DIR}"
+fi
 mkdir -p "${APPLICATIONS_DIR}"
 mkdir -p "${DESKTOP_DIR}"
 for desktop_file_path in ${REPO_DIR}/Desktop/*.desktop; do
