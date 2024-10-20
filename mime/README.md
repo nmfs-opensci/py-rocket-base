@@ -1,1 +1,1 @@
-This is a folder for xml for Desktop apps.
+This is a folder Desktop apps files: .desktop, .xml, .png
