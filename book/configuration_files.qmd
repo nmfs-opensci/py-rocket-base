@@ -1,0 +1,17 @@
+---
+Title: Configuration files
+---
+
+The presence of these files will trigger the following behavior. Do not use these names if you do not want this behavior and you instead want
+to write you own code in your Dockerfile.
+
+## environment.yml
+
+## install.R
+
+## apt.txt
+
+## postBuild
+
+## Desktop directory
+
