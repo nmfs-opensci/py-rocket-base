@@ -1,0 +1,5 @@
+---
+Title: py-rocket-base notes
+---
+
+Notes on how py-rocket-base works and why things are set up as they are.
