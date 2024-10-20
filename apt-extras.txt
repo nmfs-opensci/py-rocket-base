@@ -37,7 +37,6 @@ gfortran
 
 # Dependencies for nbconvert and myst
 # texlive is installed by R installation but not some of the common packages
-texlive-latex-recommended
 
 # Other useful document-related tools
 # pandoc installed by R installation
