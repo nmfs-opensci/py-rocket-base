@@ -1,0 +1,47 @@
+project:
+  type: book
+  output-dir: ../docs  # Path to output directory, relative to _quarto.yml
+
+book: 
+  page-navigation: true
+  title: "py-rocket-base documentation" 
+  site-url: "https://nmfs-opensci.github.io/py-rocket-base" 
+  repo-url: "https://github.com/nmfs-opensci/py-rocket-base"
+  repo-actions: [edit, source, issue]
+  favicon: assets/favicon.ico
+  search: true
+  author:
+    - name: Eli Holmes
+      affiliations:
+        - name: NOAA Fisheres
+          department: NMFS Open Science
+  chapters:
+    - index.qmd
+    - customizing.qmd
+    - configuration_files.qmd
+    - desktop.qmd
+    - tex.qmd
+    - py-rocket-base.qmd
+
+  sidebar:
+    background: "#D9E3E4"
+    logo: "https://raw.githubusercontent.com/nmfs-opensci/assets/main/logo/nmfs-opensci-logo3.png"
+    pinned: true
+    align: center
+    tools: 
+      - icon: globe
+        href: https://nmfs-opensci.github.io
+        text: "NMFS Open Science"
+    style: "docked"
+    search: true
+    collapse-level: 1
+
+  
+format:
+  html:
+    theme:
+      light: [cosmo, theme.scss] 
+      dark: [cosmo, theme-dark.scss]
+    code-copy: true
+    code-overflow: wrap
+    toc: true
