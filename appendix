@@ -26,5 +26,9 @@ RUN yes | unminimize
 ENV MANPATH="${NB_PYTHON_PREFIX}/share/man:${MANPATH}"
 RUN mandb
 
+# Copy Desktop files into ${REPO_DIR}/Desktop if they exist
+ONBUILD RUN mkdir -p ${REPO_DIR}/Desktop && \
+            if [ -d Desktop ]; then cp Desktop/* ${REPO_DIR}/Desktop/; fi
+
 # Revert to default user
 USER ${NB_USER}
