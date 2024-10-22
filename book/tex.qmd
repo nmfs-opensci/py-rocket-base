@@ -23,3 +23,17 @@ FROM ghcr.io/nmfs-opensci/py-rocket-base:latest
 
 RUN tlmgr install collection-latexrecommended && tlmgr clean --all
 ```
+
+## RStudio: Creating pdfs with Quarto or RMarkdown
+
+Knit to PDF or `format: pdf` should work fine and packages will be installed on the fly. But the package installations will not persist and you will need to install them again after you restart the server.
+
+## Jupyter Lab
+
+Myst and Quarto are installed so this works:
+
+Creating pdfs from a Jupyter notebook: `jupyter nbconvert --to pdf test.ipynb`
+
+Creating pdfs from a Quarto notebook: `quarto render --to pdf test.qmd`
+
+Packages will not install on the fly and you will need to do `tlmgr install packagename` for any missing package errors you get.
