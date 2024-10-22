@@ -36,7 +36,8 @@ build-essential
 gfortran
 
 # Dependencies for nbconvert and myst
-# texlive is installed by R installation but not some of the common packages
+# texlive is installed by R installation
+# Add packages with tlmgr in rocker.sh
 
 # Other useful document-related tools
 # pandoc installed by R installation
@@ -58,14 +59,17 @@ tig  # console UI for git
 multitail
 tree
 
-## This section adds tools needed for desktop environment
+# This section adds tools needed for desktop environment
+# https://github.com/jupyterhub/jupyter-remote-desktop-proxy
 dbus-x11
+xfce4
+xfce4-panel
+xfce4-session
+xfce4-settings
 xorg
 xubuntu-icon-theme
-xfce4
-xfce4-goodies
-xclip
-xsel
+tigervnc-standalone-server
+tigervnc-xorg-extension
 
 # GUI text editors
 emacs
