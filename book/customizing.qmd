@@ -1,6 +1,4 @@
----
-Title: Customizing py-rocket-base
----
+# Using py-rocket-base
 
 py-rocket-base is designed to be used in the FROM line of a Dockerfile. It behaves like repo2docker in that it looks for special files and will 
 install Python package or R packages if those special files are present. You do not need to add anything to the Dockerfile to have it process these files. py-rocker-base does this automatically for you.
