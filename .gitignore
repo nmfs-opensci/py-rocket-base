@@ -107,3 +107,4 @@ dmypy.json
 # Rproj stuff
 .Rproj.user/
 *.Rproj
+.Rhistory
