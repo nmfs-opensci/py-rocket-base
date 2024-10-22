@@ -1,0 +1,39 @@
+---
+Title: TeX and TeXLive
+---
+
+TeXLive is installed and the tlmgr is used to manage packages. This allows packages to be installed 'on the fly' if they are missing.
+
+## tlmgr
+
+* Do not use `apt-get` to install texlive packages. This will turn off tlmgr (the TeX package manager). Instead use
+```
+tlmgr install <package>
+```
+* Run `tlmgr option` to make sure tlmgr is working.
+
+## Installing packages
+
+Unfortunately any packages you install will be in the `/opt` directory and this gets recreated every time you restart your server. So if you need a
+particular package you will need to keep installing it. Or create your own image based on py-rocket-base:
+
+Dockerfile
+```
+FROM ghcr.io/nmfs-opensci/py-rocket-base:latest
+
+RUN tlmgr install collection-latexrecommended && tlmgr clean --all
+```
+
+## RStudio: Creating pdfs with Quarto or RMarkdown
+
+Knit to PDF or `format: pdf` should work fine and packages will be installed on the fly. But the package installations will not persist and you will need to install them again after you restart the server.
+
+## Jupyter Lab
+
+Myst and Quarto are installed so this works:
+
+Creating pdfs from a Jupyter notebook: `jupyter nbconvert --to pdf test.ipynb`
+
+Creating pdfs from a Quarto notebook: `quarto render --to pdf test.qmd`
+
+Packages will not install on the fly and you will need to do `tlmgr install packagename` for any missing package errors you get.

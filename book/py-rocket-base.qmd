@@ -1,0 +1,16 @@
+# Developer notes
+
+Notes on how py-rocket-base works and why things are set up as they are.
+
+## Image Design
+
+Inspired by the Pangeo base-image and CryoCloud Hub image.
+
+## Documentation
+
+```
+cd book
+quarto render .
+```
+
+Set GitHub Pages to docs folder
