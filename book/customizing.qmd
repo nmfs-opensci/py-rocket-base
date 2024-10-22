@@ -1,0 +1,57 @@
+# Using py-rocket-base
+
+py-rocket-base is designed to be used in the FROM line of a Dockerfile. It behaves like repo2docker in that it looks for special files and will 
+install Python package or R packages if those special files are present. You do not need to add anything to the Dockerfile to have it process these files. py-rocker-base does this automatically for you.
+
+If you don't want it to do this then do not name your files one of these names:
+
+- environment.yml
+- install.R
+- postBuild
+- apt.txt
+- start
+
+## File structure
+
+Only Dockerfile is required. The rest are optional. 
+
+```
+your-repo/
+├── Dockerfile
+├── apt.txt
+├── environment.yml
+├── install.R
+├── postBuild
+├── start
+├── Desktop/
+│   ├── qgis.desktop
+│   ├── qgis.xml
+│   └── qgis.png
+```
+
+Read [configuration_files](configuration_files.html) to learn about apt.txt, environment.yml, install.R, postBuild, and start. Read [Desktop](desktop.html) to learn about the Desktop folder and files for applications.
+
+## Examples
+
+You want to add some Python packages to py-rocker-base.
+
+```
+your-repo/
+├── Dockerfile
+├── environment.yml
+```
+
+Dockerfile
+```
+FROM ghcr.io/nmfs-opensci/py-rocket-base:latest
+```
+
+environment.yml
+```
+name: optional
+channels:
+  - conda-forge
+dependencies:
+  - cmocean
+  - numpy
+```

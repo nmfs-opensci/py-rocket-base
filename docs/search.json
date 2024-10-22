@@ -1,0 +1,182 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "py-rocket-base documentation",
+    "section": "",
+    "text": "1 Guide to py-rocket-base\nThe py-rocket-base image is a base image for JupyterHubs with Jupyter Lab and RStudio UIs. The py-rocket-base image is designed to install with repo2docker. The /lab UI is Jupyter Lab and the /rstudio is a R and RStudio environment installed with Rocker installation scripts.\nThere are many ways to install R and RStudio into an image designed for JupyterHubs. The objective of py-rocker-base is not to install R and RStudio, per se. The objective of py-rocket-base is to create an JupyterHub image such when you click the RStudio button in the JupyterLab UI to enter the RStudio UI, you enter an environment that is the same as if you had used a Rocker image but if you are in the JupyterLab UI, the environment is the same as it you had used repo2docker to create the environment. The py-rocker-base image includes the Rocker scripts so that the user can use the image as a base and extend the R environment to match other Rocker environments, e.g. verse, geospatial or ml.\nThe base image has the following support:\n\nPython + JupyterLab with mamba handling package installation\nR + RStudio with the Rocker scripts and other functions available\nDesktop VNC ready for installing applications, including Java-based applications\nVSCode",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Guide to py-rocket-base</span>"
+    ]
+  },
+  {
+    "objectID": "customizing.html",
+    "href": "customizing.html",
+    "title": "2  Using py-rocket-base",
+    "section": "",
+    "text": "2.1 File structure\nOnly Dockerfile is required. The rest are optional.\nRead configuration_files to learn about apt.txt, environment.yml, install.R, postBuild, and start. Read Desktop to learn about the Desktop folder and files for applications.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Using py-rocket-base</span>"
+    ]
+  },
+  {
+    "objectID": "customizing.html#file-structure",
+    "href": "customizing.html#file-structure",
+    "title": "2  Using py-rocket-base",
+    "section": "",
+    "text": "your-repo/\n├── Dockerfile\n├── apt.txt\n├── environment.yml\n├── install.R\n├── postBuild\n├── start\n├── Desktop/\n│   ├── qgis.desktop\n│   ├── qgis.xml\n│   └── qgis.png",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Using py-rocket-base</span>"
+    ]
+  },
+  {
+    "objectID": "customizing.html#examples",
+    "href": "customizing.html#examples",
+    "title": "2  Using py-rocket-base",
+    "section": "2.2 Examples",
+    "text": "2.2 Examples\nYou want to add some Python packages to py-rocker-base.\nyour-repo/\n├── Dockerfile\n├── environment.yml\nDockerfile\nFROM ghcr.io/nmfs-opensci/py-rocket-base:latest\nenvironment.yml\nname: optional\nchannels:\n  - conda-forge\ndependencies:\n  - cmocean\n  - numpy",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Using py-rocket-base</span>"
+    ]
+  },
+  {
+    "objectID": "configuration_files.html",
+    "href": "configuration_files.html",
+    "title": "3  Configuration files",
+    "section": "",
+    "text": "3.1 environment.yml",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Configuration files</span>"
+    ]
+  },
+  {
+    "objectID": "configuration_files.html#install.r",
+    "href": "configuration_files.html#install.r",
+    "title": "3  Configuration files",
+    "section": "3.2 install.R",
+    "text": "3.2 install.R",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Configuration files</span>"
+    ]
+  },
+  {
+    "objectID": "configuration_files.html#apt.txt",
+    "href": "configuration_files.html#apt.txt",
+    "title": "3  Configuration files",
+    "section": "3.3 apt.txt",
+    "text": "3.3 apt.txt",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Configuration files</span>"
+    ]
+  },
+  {
+    "objectID": "configuration_files.html#postbuild",
+    "href": "configuration_files.html#postbuild",
+    "title": "3  Configuration files",
+    "section": "3.4 postBuild",
+    "text": "3.4 postBuild",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Configuration files</span>"
+    ]
+  },
+  {
+    "objectID": "configuration_files.html#desktop-directory",
+    "href": "configuration_files.html#desktop-directory",
+    "title": "3  Configuration files",
+    "section": "3.5 Desktop directory",
+    "text": "3.5 Desktop directory",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Configuration files</span>"
+    ]
+  },
+  {
+    "objectID": "desktop.html",
+    "href": "desktop.html",
+    "title": "4  Desktop",
+    "section": "",
+    "text": "4.1 .desktop",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Desktop</span>"
+    ]
+  },
+  {
+    "objectID": "desktop.html#xml",
+    "href": "desktop.html#xml",
+    "title": "4  Desktop",
+    "section": "4.2 .xml",
+    "text": "4.2 .xml",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Desktop</span>"
+    ]
+  },
+  {
+    "objectID": "desktop.html#png",
+    "href": "desktop.html#png",
+    "title": "4  Desktop",
+    "section": "4.3 .png",
+    "text": "4.3 .png",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Desktop</span>"
+    ]
+  },
+  {
+    "objectID": "tex.html",
+    "href": "tex.html",
+    "title": "5  tlmgr",
+    "section": "",
+    "text": "5.1 Installing packages\nUnfortunately any packages you install will be in the /opt directory and this gets recreated every time you restart your server. So if you need a particular package you will need to keep installing it. Or create your own image based on py-rocket-base:\nDockerfile",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>tlmgr</span>"
+    ]
+  },
+  {
+    "objectID": "tex.html#installing-packages",
+    "href": "tex.html#installing-packages",
+    "title": "5  tlmgr",
+    "section": "",
+    "text": "FROM ghcr.io/nmfs-opensci/py-rocket-base:latest\n\nRUN tlmgr install collection-latexrecommended && tlmgr clean --all",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>tlmgr</span>"
+    ]
+  },
+  {
+    "objectID": "tex.html#rstudio-creating-pdfs-with-quarto-or-rmarkdown",
+    "href": "tex.html#rstudio-creating-pdfs-with-quarto-or-rmarkdown",
+    "title": "5  tlmgr",
+    "section": "5.2 RStudio: Creating pdfs with Quarto or RMarkdown",
+    "text": "5.2 RStudio: Creating pdfs with Quarto or RMarkdown\nKnit to PDF or format: pdf should work fine and packages will be installed on the fly. But the package installations will not persist and you will need to install them again after you restart the server.",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>tlmgr</span>"
+    ]
+  },
+  {
+    "objectID": "tex.html#jupyter-lab",
+    "href": "tex.html#jupyter-lab",
+    "title": "5  tlmgr",
+    "section": "5.3 Jupyter Lab",
+    "text": "5.3 Jupyter Lab\nMyst and Quarto are installed so this works:\nCreating pdfs from a Jupyter notebook: jupyter nbconvert --to pdf test.ipynb\nCreating pdfs from a Quarto notebook: quarto render --to pdf test.qmd\nPackages will not install on the fly and you will need to do tlmgr install packagename for any missing package errors you get.",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>tlmgr</span>"
+    ]
+  },
+  {
+    "objectID": "py-rocket-base.html",
+    "href": "py-rocket-base.html",
+    "title": "6  Developer notes",
+    "section": "",
+    "text": "6.1 Image Design\nInspired by the Pangeo base-image and CryoCloud Hub image.",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Developer notes</span>"
+    ]
+  },
+  {
+    "objectID": "py-rocket-base.html#documentation",
+    "href": "py-rocket-base.html#documentation",
+    "title": "6  Developer notes",
+    "section": "6.2 Documentation",
+    "text": "6.2 Documentation\ncd book\nquarto render .\nSet GitHub Pages to docs folder",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Developer notes</span>"
+    ]
+  }
+]
