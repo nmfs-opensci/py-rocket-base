@@ -44,4 +44,5 @@ done < /rocker_scripts/original.Dockerfile
 if command -v tlmgr &> /dev/null; then
     echo "Installing texlive collection-latexrecommended..."
     tlmgr install collection-latexrecommended
+    tlmgr install pdfcol tcolorbox eurosym upquote adjustbox titling enumitem ulem soul rsfs
 fi
