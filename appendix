@@ -30,12 +30,12 @@ RUN mandb
 RUN rm -rf ${REPO_DIR}/book ${REPO_DIR}/docs
 
 # Copy Desktop files into ${REPO_DIR}/Desktop if they exist. First copy files to tmpbuild
-ONBUILD COPY . ${REPO_DIR}/tmpbuild/
-ONBUILD RUN if [ -d ${REPO_DIR}/tmpbuild/Desktop ]; then \
+ONBUILD COPY . /tmpbuild/
+ONBUILD RUN if [ -d /tmpbuild/Desktop ]; then \
         mkdir -p ${REPO_DIR}/Desktop && \
-        cp -r ${REPO_DIR}/tmpbuild/Desktop/* ${REPO_DIR}/Desktop/; \
-    fi && \
-    rm -rf ${REPO_DIR}/tmpbuild/
+        cp -r /tmpbuild/Desktop/* ${REPO_DIR}/Desktop/; \
+    fi
+ONBUILD RUN whoami && rm -rf /tmpbuild
 
 # Revert to default user
 USER ${NB_USER}
