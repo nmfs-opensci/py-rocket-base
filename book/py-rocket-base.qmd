@@ -1,12 +1,22 @@
+---
+reference-location: block
+---
+
 # Developer notes
 
-Notes on how py-rocket-base works and why things are set up as they are.
+## Design
 
-## Image Design
+py-rocket-base is inspired by [repo2docker](https://github.com/jupyterhub/repo2docker) and the [Pangeo Docker stack](https://pangeo-docker-images.readthedocs.io/en/latest/) design. py-rocker-base is built using repo2docker (via [repo2docker-action](https://github.com/jupyterhub/repo2docker-action)) and thus lets repo2docker make the choices regarding the environment design---things like how the conda environment is set-up and the base directory structure and permissions.
 
-Inspired by the Pangeo base-image and CryoCloud Hub image.
+The Pangeo Docker stack does not use repo2docker, but mimics repo2docker's environment design. The Pangeo base-image behaves similar to repo2docker in that using the base-image in the `FROM` line of a Dockerfile causes the build to look for files with the same names as repo2docker's [configuration files](https://repo2docker.readthedocs.io/en/latest/config_files.html) and then do the proper action with those files. This means that routine users do not need to know how to write Dockerfile code in order to extend the image with new packages or applications. py-rocker-base Docker image uses this Pangeo base-image design. It is based on `ONBUILD` commands in the Dockerfile that trigger actions only when the image is used in the `FROM` line of another Dockerfile.
+
+*There are many ways to install R and RStudio into an image designed for JupyterHubs* The objective of py-rocker-base is not to install R and RStudio, per se, and there are other leaner and faster ways to install R/RStudio if that is your goal[^1]. The objective of py-rocket-base is to create an JupyterHub image such when you click the RStudio button in the JupyterLab UI to enter the RStudio UI, you enter an environment that is the same as if you had used a Rocker image. If you are in the JupyterLab UI, the environment is the same as it you had used repo2docker (or Pangeo base-image) to create the environment.
+
+[^1]: See for example [repo2docker-r](https://github.com/boettiger-lab/repo2docker-r) and [conda-r](https://github.com/binder-examples/r-conda) in [binder-examples](https://github.com/binder-examples).
 
 ## Documentation
+
+To build the documentation book, clone repo and then
 
 ```
 cd book
