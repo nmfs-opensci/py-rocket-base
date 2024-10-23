@@ -30,10 +30,8 @@ RUN mandb
 RUN rm -rf ${REPO_DIR}/book ${REPO_DIR}/docs
 
 # Set up behavior for child dockerfiles
-# Define NB_USER since that is not exported by the parent dockerfile (py-rocket-base)
-# This works because py-rocket-base sets user to NB_USER
-ONBUILD RUN export NB_USER=$(whoami)
-ONBUILD ENV NB_USER=${NB_USER}
+# Convert NB_USER to ENV (from ARG) so that it passes to the child dockerfile
+ENV NB_USER=${NB_USER}
 
 ONBUILD USER root
 ONBUILD COPY . /tmpbuild/
