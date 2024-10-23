@@ -33,16 +33,14 @@ RUN rm -rf ${REPO_DIR}/book ${REPO_DIR}/docs
 # Convert NB_USER to ENV (from ARG) so that it passes to the child dockerfile
 ENV NB_USER=${NB_USER}
 
-ONBUILD USER root
-ONBUILD COPY . /tmpbuild/
-# Copy Desktop files into ${REPO_DIR}/Desktop if they exist. First copy files to tmpbuild
-ONBUILD RUN if [ -d /tmpbuild/Desktop ]; then \
+# ${REPO_DIR} is owned by ${NB_USER}
+ONBUILD COPY --chown=${NB_USER}:${NB_USER} . ${REPO_DIR}/childimage
+# Copy Desktop files into ${REPO_DIR}/Desktop if they exist. start will copy to Application dir and Desktop
+ONBUILD RUN if [ -d ${REPO_DIR}/childimage/Desktop ]; then \
         mkdir -p ${REPO_DIR}/Desktop && \
-        cp -r /tmpbuild/Desktop/* ${REPO_DIR}/Desktop/; \
+        cp -r ${REPO_DIR}/childimage/Desktop/* ${REPO_DIR}/Desktop/; \
     fi
-ONBUILD RUN whoami && rm -rf /tmpbuild
-ONBUILD USER ${NB_USER}
-ONBUILD RUN whoami
 
-# Revert to default user
+# Revert to default user and home as pwd
 USER ${NB_USER}
+WORKDIR ${HOME}
