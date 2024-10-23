@@ -1,8 +1,14 @@
----
-Title: TeX and TeXLive
----
+# Creating PDFs
 
-TeXLive is installed and the tlmgr is used to manage packages. This allows packages to be installed 'on the fly' if they are missing.
+<div>
+<div style="float: right; position: relative; top: 0px; padding: 2px;">
+![](assets/texlive.png)
+</div>
+
+py-rocket-base has Quarto and Myst installed along with pandoc and TeXLive for output to PDF. TeX Live is installed and the tlmgr is used to manage packages. 
+
+</div>
+
 
 ## tlmgr
 

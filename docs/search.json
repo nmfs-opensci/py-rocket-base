@@ -4,7 +4,17 @@
     "href": "index.html",
     "title": "py-rocket-base documentation",
     "section": "",
-    "text": "1 Guide to py-rocket-base\nThe py-rocket-base image is a base image for JupyterHubs with Jupyter Lab and RStudio UIs. The py-rocket-base image is designed to install with repo2docker. The /lab UI is Jupyter Lab and the /rstudio is a R and RStudio environment installed with Rocker installation scripts.\nThere are many ways to install R and RStudio into an image designed for JupyterHubs. The objective of py-rocker-base is not to install R and RStudio, per se. The objective of py-rocket-base is to create an JupyterHub image such when you click the RStudio button in the JupyterLab UI to enter the RStudio UI, you enter an environment that is the same as if you had used a Rocker image but if you are in the JupyterLab UI, the environment is the same as it you had used repo2docker to create the environment. The py-rocker-base image includes the Rocker scripts so that the user can use the image as a base and extend the R environment to match other Rocker environments, e.g. verse, geospatial or ml.\nThe base image has the following support:\n\nPython + JupyterLab with mamba handling package installation\nR + RStudio with the Rocker scripts and other functions available\nDesktop VNC ready for installing applications, including Java-based applications\nVSCode",
+    "text": "1 Guide to py-rocket-base\nThe py-rocket-base image is a base image for JupyterHubs with Jupyter Lab, RStudio, Desktop, and VSCode UIs. What makes py-rocket-base unique, is that the RStudio UI (via /rstudio) is a R and RStudio environment installed with Rocker installation scripts. Thus all the Rocker design choices and R/RStudio environment choices are in that UI. Properly setting up environments to work properly with spatial libraries and HPC libraries is tricky. py-rocket-base solves this problem (and the associated maintenance of installation scripts) by using Rocker installation scripts.\nThe base image has the following support:\nDesign: py-rocket-base is inspired by repo2docker and the Pangeo Docker stack design. py-rocker-base is built using repo2docker (via repo2docker-action) and thus lets repo2docker make the choices regarding the environment design—things like how the conda environment is set-up and the base directory structure and permissions. The Pangeo Docker stack does not use repo2docker, but mimics repo2docker’s environment design. The Pangeo base-image is designed like repo2docker in that using the base-image in the FROM line of a Dockerfile causes the build to look for files with particular names (like environment.yml) and then do the proper action with those files. This means that routine users do not need to know how to write Dockerfile code in order to extend the image with new packages or applications. py-rocker-base Docker image uses this Pangeo base-image design. It is based on ONBUILD commands in the Dockerfile that trigger actions only when the image is used in the FROM line of another Dockerfile.\nThere are many ways to install R and RStudio into an image designed for JupyterHubs The objective of py-rocker-base is not to install R and RStudio, per se, and there are other leaner and faster ways to install R/RStudio if that is your goal1. The objective of py-rocket-base is to create an JupyterHub image such when you click the RStudio button in the JupyterLab UI to enter the RStudio UI, you enter an environment that is the same as if you had used a Rocker image. If you are in the JupyterLab UI, the environment is the same as it you had used repo2docker (or Pangeo base-image) to create the environment.",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Guide to py-rocket-base</span>"
+    ]
+  },
+  {
+    "objectID": "index.html#footnotes",
+    "href": "index.html#footnotes",
+    "title": "py-rocket-base documentation",
+    "section": "",
+    "text": "See the Developer section for links to some other approaches.↩︎",
     "crumbs": [
       "<span class='chapter-number'>1</span>  <span class='chapter-title'>Guide to py-rocket-base</span>"
     ]
@@ -122,41 +132,51 @@
   {
     "objectID": "tex.html",
     "href": "tex.html",
-    "title": "5  tlmgr",
+    "title": "5  Creating PDFs",
     "section": "",
-    "text": "5.1 Installing packages\nUnfortunately any packages you install will be in the /opt directory and this gets recreated every time you restart your server. So if you need a particular package you will need to keep installing it. Or create your own image based on py-rocket-base:\nDockerfile",
+    "text": "5.1 tlmgr",
     "crumbs": [
-      "<span class='chapter-number'>5</span>  <span class='chapter-title'>tlmgr</span>"
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Creating PDFs</span>"
+    ]
+  },
+  {
+    "objectID": "tex.html#tlmgr",
+    "href": "tex.html#tlmgr",
+    "title": "5  Creating PDFs",
+    "section": "",
+    "text": "Do not use apt-get to install texlive packages. This will turn off tlmgr (the TeX package manager). Instead use\n\ntlmgr install &lt;package&gt;\n\nRun tlmgr option to make sure tlmgr is working.",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Creating PDFs</span>"
     ]
   },
   {
     "objectID": "tex.html#installing-packages",
     "href": "tex.html#installing-packages",
-    "title": "5  tlmgr",
-    "section": "",
-    "text": "FROM ghcr.io/nmfs-opensci/py-rocket-base:latest\n\nRUN tlmgr install collection-latexrecommended && tlmgr clean --all",
+    "title": "5  Creating PDFs",
+    "section": "5.2 Installing packages",
+    "text": "5.2 Installing packages\nUnfortunately any packages you install will be in the /opt directory and this gets recreated every time you restart your server. So if you need a particular package you will need to keep installing it. Or create your own image based on py-rocket-base:\nDockerfile\nFROM ghcr.io/nmfs-opensci/py-rocket-base:latest\n\nRUN tlmgr install collection-latexrecommended && tlmgr clean --all",
     "crumbs": [
-      "<span class='chapter-number'>5</span>  <span class='chapter-title'>tlmgr</span>"
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Creating PDFs</span>"
     ]
   },
   {
     "objectID": "tex.html#rstudio-creating-pdfs-with-quarto-or-rmarkdown",
     "href": "tex.html#rstudio-creating-pdfs-with-quarto-or-rmarkdown",
-    "title": "5  tlmgr",
-    "section": "5.2 RStudio: Creating pdfs with Quarto or RMarkdown",
-    "text": "5.2 RStudio: Creating pdfs with Quarto or RMarkdown\nKnit to PDF or format: pdf should work fine and packages will be installed on the fly. But the package installations will not persist and you will need to install them again after you restart the server.",
+    "title": "5  Creating PDFs",
+    "section": "5.3 RStudio: Creating pdfs with Quarto or RMarkdown",
+    "text": "5.3 RStudio: Creating pdfs with Quarto or RMarkdown\nKnit to PDF or format: pdf should work fine and packages will be installed on the fly. But the package installations will not persist and you will need to install them again after you restart the server.",
     "crumbs": [
-      "<span class='chapter-number'>5</span>  <span class='chapter-title'>tlmgr</span>"
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Creating PDFs</span>"
     ]
   },
   {
     "objectID": "tex.html#jupyter-lab",
     "href": "tex.html#jupyter-lab",
-    "title": "5  tlmgr",
-    "section": "5.3 Jupyter Lab",
-    "text": "5.3 Jupyter Lab\nMyst and Quarto are installed so this works:\nCreating pdfs from a Jupyter notebook: jupyter nbconvert --to pdf test.ipynb\nCreating pdfs from a Quarto notebook: quarto render --to pdf test.qmd\nPackages will not install on the fly and you will need to do tlmgr install packagename for any missing package errors you get.",
+    "title": "5  Creating PDFs",
+    "section": "5.4 Jupyter Lab",
+    "text": "5.4 Jupyter Lab\nMyst and Quarto are installed so this works:\nCreating pdfs from a Jupyter notebook: jupyter nbconvert --to pdf test.ipynb\nCreating pdfs from a Quarto notebook: quarto render --to pdf test.qmd\nPackages will not install on the fly and you will need to do tlmgr install packagename for any missing package errors you get.",
     "crumbs": [
-      "<span class='chapter-number'>5</span>  <span class='chapter-title'>tlmgr</span>"
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Creating PDFs</span>"
     ]
   },
   {

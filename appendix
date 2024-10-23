@@ -26,9 +26,16 @@ RUN yes | unminimize
 ENV MANPATH="${NB_PYTHON_PREFIX}/share/man:${MANPATH}"
 RUN mandb
 
+# Clean up extra files in ${REPO_DIR}
+RUN rm -rf ${REPO_DIR}/book ${REPO_DIR}/docs
+
 # Copy Desktop files into ${REPO_DIR}/Desktop if they exist
-ONBUILD RUN mkdir -p ${REPO_DIR}/Desktop && \
-            if [ -d Desktop ]; then cp Desktop/* ${REPO_DIR}/Desktop/; fi
+ONBUILD COPY . /pyrocket-child/
+ONBUILD RUN if [ -d /pyrocket-child/Desktop ]; then \
+        mkdir -p ${REPO_DIR}/Desktop && \
+        cp -r /pyrocket-child/Desktop/* ${REPO_DIR}/Desktop/; \
+    fi && \
+    rm -rf /pyrocket-child
 
 # Revert to default user
 USER ${NB_USER}

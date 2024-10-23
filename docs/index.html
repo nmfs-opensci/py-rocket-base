@@ -143,7 +143,7 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./tex.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">tlmgr</span></span></a>
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Creating PDFs</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -203,17 +203,25 @@ ul.task-list li input[type="checkbox"] {
 
 <section id="guide-to-py-rocket-base" class="level1" data-number="1">
 <h1 data-number="1"><span class="header-section-number">1</span> Guide to py-rocket-base</h1>
-<p>The py-rocket-base image is a base image for JupyterHubs with Jupyter Lab and RStudio UIs. The py-rocket-base image is designed to install with repo2docker. The <code>/lab</code> UI is Jupyter Lab and the <code>/rstudio</code> is a R and RStudio environment installed with Rocker installation scripts.</p>
-<p>There are many ways to install R and RStudio into an image designed for JupyterHubs. The objective of py-rocker-base is not to install R and RStudio, per se. The objective of py-rocket-base is to create an JupyterHub image such when you click the RStudio button in the JupyterLab UI to enter the RStudio UI, you enter an environment that is the same as if you had used a Rocker image but if you are in the JupyterLab UI, the environment is the same as it you had used repo2docker to create the environment. The py-rocker-base image includes the Rocker scripts so that the user can use the image as a base and extend the R environment to match other Rocker environments, e.g.&nbsp;verse, geospatial or ml.</p>
+<p>The py-rocket-base image is a base image for JupyterHubs with Jupyter Lab, RStudio, Desktop, and VSCode UIs. What makes py-rocket-base unique, is that the RStudio UI (via <code>/rstudio</code>) is a R and RStudio environment installed with Rocker installation scripts. Thus all the Rocker design choices and R/RStudio environment choices are in that UI. Properly setting up environments to work properly with spatial libraries and HPC libraries is tricky. py-rocket-base solves this problem (and the associated maintenance of installation scripts) by using Rocker installation scripts.</p>
 <p>The base image has the following support:</p>
 <ul>
-<li>Python + JupyterLab with mamba handling package installation</li>
-<li>R + RStudio with the Rocker scripts and other functions available</li>
-<li>Desktop VNC ready for installing applications, including Java-based applications</li>
-<li>VSCode</li>
+<li>Python + JupyterLab with mamba handling package installation and repo2docker (Pangeo) environment design</li>
+<li>R + RStudio with the Rocker environment design and Rocker scripts and other functions included</li>
+<li>Desktop UI for serving applications, including Java-based applications</li>
+<li>VSCode UI</li>
+<li>Quarto, Myst and Texlive installed with tlmgr for tex package management</li>
 </ul>
+<p><strong>Design</strong>: py-rocket-base is inspired by repo2docker and the Pangeo Docker stack design. py-rocker-base is built using repo2docker (via <code>repo2docker-action</code>) and thus lets repo2docker make the choices regarding the environment design—things like how the conda environment is set-up and the base directory structure and permissions. The Pangeo Docker stack does not use repo2docker, but mimics repo2docker’s environment design. The Pangeo base-image is designed like repo2docker in that using the base-image in the <code>FROM</code> line of a Dockerfile causes the build to look for files with particular names (like <code>environment.yml</code>) and then do the proper action with those files. This means that routine users do not need to know how to write Dockerfile code in order to extend the image with new packages or applications. py-rocker-base Docker image uses this Pangeo base-image design. It is based on <code>ONBUILD</code> commands in the Dockerfile that trigger actions only when the image is used in the <code>FROM</code> line of another Dockerfile.</p>
+<p><em>There are many ways to install R and RStudio into an image designed for JupyterHubs</em> The objective of py-rocker-base is not to install R and RStudio, per se, and there are other leaner and faster ways to install R/RStudio if that is your goal<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>. The objective of py-rocket-base is to create an JupyterHub image such when you click the RStudio button in the JupyterLab UI to enter the RStudio UI, you enter an environment that is the same as if you had used a Rocker image. If you are in the JupyterLab UI, the environment is the same as it you had used repo2docker (or Pangeo base-image) to create the environment.</p>
 
 
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>See the Developer section for links to some other approaches.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
 </section>
 
 </main> <!-- /main -->

@@ -103,5 +103,8 @@ venv.bak/
 dmypy.json
 # Pyre type checker
 .pyre/
-.Rproj.user
-py-rocket-base.Rproj
+
+# Rproj stuff
+.Rproj.user/
+*.Rproj
+.Rhistory
