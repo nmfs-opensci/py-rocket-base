@@ -29,13 +29,13 @@ RUN mandb
 # Clean up extra files in ${REPO_DIR}
 RUN rm -rf ${REPO_DIR}/book ${REPO_DIR}/docs
 
-# Copy Desktop files into ${REPO_DIR}/Desktop if they exist
-ONBUILD COPY . /pyrocket-child/
-ONBUILD RUN if [ -d /pyrocket-child/Desktop ]; then \
+# Copy Desktop files into ${REPO_DIR}/Desktop if they exist. First copy files to tmpbuild
+ONBUILD COPY . ${REPO_DIR}/tmpbuild/
+ONBUILD RUN if [ -d ${REPO_DIR}/tmpbuild/Desktop ]; then \
         mkdir -p ${REPO_DIR}/Desktop && \
-        cp -r /pyrocket-child/Desktop/* ${REPO_DIR}/Desktop/; \
+        cp -r ${REPO_DIR}/tmpbuild/Desktop/* ${REPO_DIR}/Desktop/; \
     fi && \
-    rm -rf /pyrocket-child
+    rm -rf ${REPO_DIR}/tmpbuild/
 
 # Revert to default user
 USER ${NB_USER}
