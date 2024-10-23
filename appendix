@@ -38,6 +38,7 @@ ONBUILD RUN if [ -d /tmpbuild/Desktop ]; then \
     fi
 ONBUILD RUN whoami && rm -rf /tmpbuild
 ONBUILD USER ${NB_USER}
+ONBUILD RUN whoami
 
 # Revert to default user
 USER ${NB_USER}
