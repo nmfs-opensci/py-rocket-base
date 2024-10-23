@@ -1,14 +1,15 @@
 #!/bin/bash
 set -euo pipefail
 
-# Set any environment variables here
+# Start - Set any environment variables here
 # These are inherited by all processes, *except* RStudio
-
-# Tell applications where to open desktop apps - this allows notebooks to
-# pop open GUIs
+# USE export <parname>=value
+# Tell applications where to open desktop apps - this allows notebooks to pop open GUIs
 export DISPLAY=":1.0"
 # source this file to get the variables defined in the rocker Dockerfile
 source ${REPO_DIR}/env.txt
+# End - Set any environment variables here
+
 
 # The for loops will fail if they return null (no files). Set shell option nullglob
 shopt -s nullglob
@@ -28,8 +29,10 @@ mkdir -p "${DESKTOP_DIR}"
 for desktop_file_path in ${REPO_DIR}/Desktop/*.desktop; do
     cp "${desktop_file_path}" "${APPLICATIONS_DIR}/."
 
-    # Symlink application to desktop
+    # Symlink application to desktop and set execute permission so xfce (desktop) doesn't complain
     desktop_file_name="$(basename ${desktop_file_path})"
+    # Set execute permissions on the copied .desktop file
+    chmod +x "${APPLICATIONS_DIR}/${desktop_file_name}"
     ln -sf "${APPLICATIONS_DIR}/${desktop_file_name}" "${DESKTOP_DIR}/${desktop_file_name}"
 done
 update-desktop-database "${APPLICATIONS_DIR}"

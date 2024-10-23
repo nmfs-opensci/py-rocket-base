@@ -26,9 +26,21 @@ RUN yes | unminimize
 ENV MANPATH="${NB_PYTHON_PREFIX}/share/man:${MANPATH}"
 RUN mandb
 
-# Copy Desktop files into ${REPO_DIR}/Desktop if they exist
-ONBUILD RUN mkdir -p ${REPO_DIR}/Desktop && \
-            if [ -d Desktop ]; then cp Desktop/* ${REPO_DIR}/Desktop/; fi
+# Clean up extra files in ${REPO_DIR}
+RUN rm -rf ${REPO_DIR}/book ${REPO_DIR}/docs
 
-# Revert to default user
+# Set up behavior for child dockerfiles
+# Convert NB_USER to ENV (from ARG) so that it passes to the child dockerfile
+ENV NB_USER=${NB_USER}
+
+# ${REPO_DIR} is owned by ${NB_USER}
+ONBUILD COPY --chown=${NB_USER}:${NB_USER} . ${REPO_DIR}/childimage
+# Copy Desktop files into ${REPO_DIR}/Desktop if they exist. start will copy to Application dir and Desktop
+ONBUILD RUN if [ -d ${REPO_DIR}/childimage/Desktop ]; then \
+        mkdir -p ${REPO_DIR}/Desktop && \
+        cp -r ${REPO_DIR}/childimage/Desktop/* ${REPO_DIR}/Desktop/; \
+    fi
+
+# Revert to default user and home as pwd
 USER ${NB_USER}
+WORKDIR ${HOME}
