@@ -29,9 +29,15 @@ RUN mandb
 # Clean up extra files in ${REPO_DIR}
 RUN rm -rf ${REPO_DIR}/book ${REPO_DIR}/docs
 
-# Copy Desktop files into ${REPO_DIR}/Desktop if they exist. First copy files to tmpbuild
+# Set up behavior for child dockerfiles
+# Define NB_USER since that is not exported by the parent dockerfile (py-rocket-base)
+# This works because py-rocket-base sets user to NB_USER
+ONBUILD RUN export NB_USER=$(whoami)
+ONBUILD ENV NB_USER=${NB_USER}
+
 ONBUILD USER root
 ONBUILD COPY . /tmpbuild/
+# Copy Desktop files into ${REPO_DIR}/Desktop if they exist. First copy files to tmpbuild
 ONBUILD RUN if [ -d /tmpbuild/Desktop ]; then \
         mkdir -p ${REPO_DIR}/Desktop && \
         cp -r /tmpbuild/Desktop/* ${REPO_DIR}/Desktop/; \
