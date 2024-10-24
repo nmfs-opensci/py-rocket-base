@@ -47,23 +47,23 @@ ONBUILD RUN if [ -d ${REPO_DIR}/childimage/Desktop ]; then \
     fi
 
 # Add the environment
-ONBUILD RUN echo "Checking for 'conda-lock.yml' or 'environment.yml'..." && \
-        cd "${REPO_DIR}/childimage/" && \
-        [ -d binder ] && cd binder && \
-        [ -d .binder ] && cd .binder && \
-        if test -f "conda-lock.yml"; then 
-          echo "Using conda-lock.yml" && \
-          conda-lock install --name ${CONDA_ENV}; 
-        elif test -f "environment.yml"; then 
-          echo "Using environment.yml" && \
-          mamba env create --name ${CONDA_ENV} -f environment.yml; 
-        fi && \
-        mamba clean -yaf && \
-        find ${CONDA_DIR} -follow -type f -name '*.a' -delete && \
-        find ${CONDA_DIR} -follow -type f -name '*.js.map' -delete && \
-        if ls ${NB_PYTHON_PREFIX}/lib/python*/site-packages/bokeh/server/static > /dev/null 2>&1; then \
-          find ${NB_PYTHON_PREFIX}/lib/python*/site-packages/bokeh/server/static -follow -type f -name '*.js' ! -name '*.min.js' -delete; \
-        fi
+ONBUILD RUN echo "Checking for 'conda-lock.yml' or 'environment.yml'..." \
+        ; cd "${REPO_DIR}/childimage/" \
+        ; [ -d binder ] && cd binder \
+        ; [ -d .binder ] && cd .binder \
+        ; if test -f "conda-lock.yml" ; then echo "Using conda-lock.yml" & \
+        conda-lock install --name ${CONDA_ENV} \
+        ; elif test -f "environment.yml" ; then echo "Using environment.yml" & \
+        mamba env create --name ${CONDA_ENV} -f environment.yml  \
+        ; else echo "No conda-lock.yml or environment.yml! *creating default env*" ; \
+        mamba create --name ${CONDA_ENV} pangeo-notebook \
+        ; fi \
+        && mamba clean -yaf \
+        && find ${CONDA_DIR} -follow -type f -name '*.a' -delete \
+        && find ${CONDA_DIR} -follow -type f -name '*.js.map' -delete \
+        ; if ls ${NB_PYTHON_PREFIX}/lib/python*/site-packages/bokeh/server/static > /dev/null 2>&1; then \
+        find ${NB_PYTHON_PREFIX}/lib/python*/site-packages/bokeh/server/static -follow -type f -name '*.js' ! -name '*.min.js' -delete \
+        ; fi
 
 # Revert to default user and home as pwd
 USER ${NB_USER}
