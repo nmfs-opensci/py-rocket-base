@@ -1,5 +1,7 @@
 USER root
 
+ENV CONDA_ENV=${CONDA_DEFAULT_ENV}
+
 # Install R, RStudio via Rocker scripts
 ENV R_VERSION="4.4.1"
 ENV R_DOCKERFILE="verse_${R_VERSION}"
