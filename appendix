@@ -57,9 +57,7 @@ ONBUILD RUN echo "Checking for 'conda-lock.yml' or 'environment.yml'..." \
         ; if test -f "conda-lock.yml" ; then echo "Using conda-lock.yml" & \
         conda-lock install --name ${CONDA_ENV} \
         ; elif test -f "environment.yml" ; then echo "Using environment.yml" & \
-        mamba env create --name ${CONDA_ENV} -f environment.yml  \
-        ; else echo "No conda-lock.yml or environment.yml! *creating default env*" ; \
-        mamba create --name ${CONDA_ENV} pangeo-notebook \
+        mamba env update --name ${CONDA_ENV} -f environment.yml  \
         ; fi \
         && mamba clean -yaf \
         && find ${CONDA_DIR} -follow -type f -name '*.a' -delete \
