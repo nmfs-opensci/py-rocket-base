@@ -76,10 +76,11 @@ ONBUILD RUN echo "Checking for 'renv.lock' or 'r-requirements.txt'..." \
         ; [ -d .binder ] && cd .binder \
         ; if test -f "renv.lock" ; then echo "renv not set-up yet" & \
         ; elif test -f "r-requirements.txt" ; then echo "Using r-requirements.txt" & \
-        # process r-requirements.txt into a string of package names
-        && r_packages=$( awk 'NF && $1 !~ /^#/ { gsub(/^[ \t]+|[ \t]+$/, ""); split($0, a, ","); for (i in a) print a[i] }' r-requirements.txt ) \
+        r_packages=$( awk 'NF && $1 !~ /^#/ { gsub(/^[ \t]+|[ \t]+$/, ""); split($0, a, ","); for (i in a) print a[i] }' r-requirements.txt ) \
         && install2.r --error --skipinstalled -n "$NCPUS" $r_packages \
-        ; fi \
+        ; elif test -f "install.R" ; then echo "Using install.R" & \
+        Rscript install.R \
+        ; fi
 
 # Revert to default user and home as pwd
 USER ${NB_USER}
