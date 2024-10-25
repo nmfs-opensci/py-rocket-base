@@ -1,8 +1,14 @@
 USER root
 
+# repo2docker does not set this; name is vague. This is the default env in repo2docker type images
+ENV CONDA_ENV=notebook
+
 # Install R, RStudio via Rocker scripts
 ENV R_VERSION="4.4.1"
 ENV R_DOCKERFILE="verse_${R_VERSION}"
+# This is in the rocker script but will not run since ${NB_USER} already exists
+# Needed because rocker scripts set permissions based on the staff group
+RUN usermod -a -G staff "${NB_USER}"
 RUN PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin && \
   chmod +x ${REPO_DIR}/rocker.sh && \
   ${REPO_DIR}/rocker.sh
@@ -33,13 +39,38 @@ RUN rm -rf ${REPO_DIR}/book ${REPO_DIR}/docs
 # Convert NB_USER to ENV (from ARG) so that it passes to the child dockerfile
 ENV NB_USER=${NB_USER}
 
+## ONBUILD section. These are run in child Dockerfiles. First thing that is run
+
+ONBUILD USER ${NB_USER}
+
 # ${REPO_DIR} is owned by ${NB_USER}
 ONBUILD COPY --chown=${NB_USER}:${NB_USER} . ${REPO_DIR}/childimage
+
 # Copy Desktop files into ${REPO_DIR}/Desktop if they exist. start will copy to Application dir and Desktop
 ONBUILD RUN if [ -d ${REPO_DIR}/childimage/Desktop ]; then \
         mkdir -p ${REPO_DIR}/Desktop && \
         cp -r ${REPO_DIR}/childimage/Desktop/* ${REPO_DIR}/Desktop/; \
     fi
+
+# Add the environment
+# sometimes package solving will get rid of pip installed packages. Make sure jupyter-remote-desktop-proxy does not disappear
+ONBUILD RUN echo "Checking for 'conda-lock.yml' or 'environment.yml'..." \
+        ; cd "${REPO_DIR}/childimage/" \
+        ; [ -d binder ] && cd binder \
+        ; [ -d .binder ] && cd .binder \
+        ; if test -f "conda-lock.yml" ; then echo "Using conda-lock.yml" & \
+        conda-lock install --name ${CONDA_ENV} \
+        && pip install --no-deps jupyter-remote-desktop-proxy \
+        ; elif test -f "environment.yml" ; then echo "Using environment.yml" & \
+        mamba env update --name ${CONDA_ENV} -f environment.yml  \
+        && pip install --no-deps jupyter-remote-desktop-proxy \
+        ; fi \
+        && mamba clean -yaf \
+        && find ${CONDA_DIR} -follow -type f -name '*.a' -delete \
+        && find ${CONDA_DIR} -follow -type f -name '*.js.map' -delete \
+        ; if ls ${NB_PYTHON_PREFIX}/lib/python*/site-packages/bokeh/server/static > /dev/null 2>&1; then \
+        find ${NB_PYTHON_PREFIX}/lib/python*/site-packages/bokeh/server/static -follow -type f -name '*.js' ! -name '*.min.js' -delete \
+        ; fi
 
 # Revert to default user and home as pwd
 USER ${NB_USER}
