@@ -69,19 +69,6 @@ ONBUILD RUN echo "Checking for 'conda-lock.yml' or 'environment.yml'..." \
         find ${NB_PYTHON_PREFIX}/lib/python*/site-packages/bokeh/server/static -follow -type f -name '*.js' ! -name '*.min.js' -delete \
         ; fi
 
-# Add the environment
-ONBUILD RUN echo "Checking for 'renv.lock' or 'r-requirements.txt'..." \
-        ; cd "${REPO_DIR}/childimage/" \
-        ; [ -d binder ] && cd binder \
-        ; [ -d .binder ] && cd .binder \
-        ; if test -f "renv.lock" ; then echo "renv not set-up yet" & \
-        ; elif test -f "r-requirements.txt" ; then echo "Using r-requirements.txt" & \
-        r_packages=$( awk 'NF && $1 !~ /^#/ { gsub(/^[ \t]+|[ \t]+$/, ""); split($0, a, ","); for (i in a) print a[i] }' r-requirements.txt ) \
-        && install2.r --error --skipinstalled -n "$NCPUS" $r_packages \
-        ; elif test -f "install.R" ; then echo "Using install.R" & \
-        Rscript install.R \
-        ; fi
-
 # Revert to default user and home as pwd
 USER ${NB_USER}
 WORKDIR ${HOME}
