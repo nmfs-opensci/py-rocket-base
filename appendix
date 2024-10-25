@@ -1,7 +1,5 @@
 USER root
 
-ENV CONDA_ENV=${CONDA_DEFAULT_ENV}
-
 # Install R, RStudio via Rocker scripts
 ENV R_VERSION="4.4.1"
 ENV R_DOCKERFILE="verse_${R_VERSION}"
@@ -49,6 +47,9 @@ ONBUILD RUN if [ -d ${REPO_DIR}/childimage/Desktop ]; then \
     fi
 
 # Add the environment
+# hard code conda_env for now. In the final image conda_default_env is notebook but in build context it is /srv/conda/envs/
+# some kind of start change?
+ONBUILD ENV CONDA_ENV=notebook
 ONBUILD RUN echo "Checking for 'conda-lock.yml' or 'environment.yml'..." \
         ; cd "${REPO_DIR}/childimage/" \
         ; [ -d binder ] && cd binder \
