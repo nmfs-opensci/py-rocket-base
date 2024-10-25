@@ -6,6 +6,9 @@ ENV CONDA_ENV=notebook
 # Install R, RStudio via Rocker scripts
 ENV R_VERSION="4.4.1"
 ENV R_DOCKERFILE="verse_${R_VERSION}"
+# This is in the rocker script but will not run since ${NB_USER} already exists
+# Needed because rocker scripts set permissions based on the staff group
+RUN usermod -a -G staff "${NB_USER}"
 RUN PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin && \
   chmod +x ${REPO_DIR}/rocker.sh && \
   ${REPO_DIR}/rocker.sh
