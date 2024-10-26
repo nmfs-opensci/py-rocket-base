@@ -1,0 +1,42 @@
+# R packages
+
+To install extra R packages, use `install.R`. This is treated as a R script which is run.  For example, you can have a script like
+```
+repo <- "https://p3m.dev/cran/__linux__/jammy/2024-05-13"
+list.of.packages <- c("ggplot2","remotes")
+install.packages(list.of.packages, repos=repo)
+remotes::install_github("hadley/httr@v0.4")
+```
+
+### Spatial libraries
+
+Some packages depend on linux packages. One example are spatial packages like `sf` which depend on GDAL. In this case
+```
+install.packages("sf")
+```
+will not work because it will not install the linux package dependencies.
+
+There are a few ways to get around this.
+
+* Install the necessary linux packages via apt-get. This can be hard.
+* Install via via /rocker_scipts/install_geospatial.sh
+  To do this include
+  ```
+  RUN /rocker_scipts/install_geospatial.sh
+  ```
+  in your Dockerfile.
+* Use r2u which has Ubuntu binaries with all the dependencies included.
+
+### Default CRAN repository
+
+The default CRAN repository is set in ${R_HOME}/etc/Rprofile.site and the CRAN environmental variable to
+```
+https://p3m.dev/cran/__linux__/jammy/latest
+```
+
+To set a different repo, edit ${R_HOME}/etc/Rprofile.site or specify the repo to use in `install.packages()` like so
+```
+repo <- "https://p3m.dev/cran/__linux__/jammy/2024-05-13"
+list.of.packages <- c("maps", "mapdata", "RColorBrewer")
+install.packages(list.of.packages, repos=repo)
+```
