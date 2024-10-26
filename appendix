@@ -73,12 +73,22 @@ ONBUILD RUN echo "Checking for 'conda-lock.yml' or 'environment.yml'..." \
         ; fi
 
 # Add the r packages
-ONBUILD RUN echo "Checking for 'renv.lock' or 'r-requirements.txt'..." \
+ONBUILD RUN echo "Checking for 'install.R" \
         ; cd "${REPO_DIR}/childimage/" \
         ; [ -d binder ] && cd binder \
         ; [ -d .binder ] && cd .binder \
         ; if test -f "install.R" ; then echo "Using install.R" & \
         Rscript install.R \
+        ; fi
+
+# If a start file exists, put that under ${REPO_DIR}/childimage/start. 
+# This is sourced in ${REPO_DIR}/start
+ONBUILD RUN echo "Checking for 'start'..." \
+        ; [ -d binder ] && cd binder \
+        ; [ -d .binder ] && cd .binder \
+        ; if test -f "start" ; then \
+        chmod +x start \
+        && cp start ${REPO_DIR}/childimage/start \
         ; fi
 
 # Revert to default user and home as pwd
