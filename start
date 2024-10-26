@@ -47,6 +47,6 @@ done
 update-mime-database "${MIME_DIR}"
 
 # Run child start in a subshell to contain its environment
-[ -f /path/to/b.sh ] && ( source ${REPO_DIR}/child/start )
+[ -f /path/to/b.sh ] && ( source ${REPO_DIR}/childimage/start )
 
 exec "$@"
