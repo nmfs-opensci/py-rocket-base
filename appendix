@@ -77,7 +77,7 @@ ONBUILD RUN echo "Checking for 'renv.lock' or 'r-requirements.txt'..." \
         ; cd "${REPO_DIR}/childimage/" \
         ; [ -d binder ] && cd binder \
         ; [ -d .binder ] && cd .binder \
-        ; elif test -f "install.R" ; then echo "Using install.R" & \
+        ; if test -f "install.R" ; then echo "Using install.R" & \
         Rscript install.R \
         ; fi
 
