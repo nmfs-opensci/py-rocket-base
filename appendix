@@ -60,6 +60,7 @@ ONBUILD RUN echo "Checking for 'conda-lock.yml' or 'environment.yml'..." \
         ; [ -d .binder ] && cd .binder \
         ; if test -f "conda-lock.yml" ; then echo "Using conda-lock.yml" & \
         conda-lock install --name ${CONDA_ENV} \
+        && pip install --no-deps jupyter-remote-desktop-proxy \
         ; elif test -f "environment.yml" ; then echo "Using environment.yml" & \
         mamba env update --name ${CONDA_ENV} -f environment.yml  \
         && pip install --no-deps jupyter-remote-desktop-proxy \
