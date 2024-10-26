@@ -72,6 +72,15 @@ ONBUILD RUN echo "Checking for 'conda-lock.yml' or 'environment.yml'..." \
         find ${NB_PYTHON_PREFIX}/lib/python*/site-packages/bokeh/server/static -follow -type f -name '*.js' ! -name '*.min.js' -delete \
         ; fi
 
+# Add the r packages
+ONBUILD RUN echo "Checking for 'renv.lock' or 'r-requirements.txt'..." \
+        ; cd "${REPO_DIR}/childimage/" \
+        ; [ -d binder ] && cd binder \
+        ; [ -d .binder ] && cd .binder \
+        ; elif test -f "install.R" ; then echo "Using install.R" & \
+        Rscript install.R \
+        ; fi
+
 # Revert to default user and home as pwd
 USER ${NB_USER}
 WORKDIR ${HOME}
