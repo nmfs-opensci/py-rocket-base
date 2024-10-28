@@ -12,26 +12,22 @@ manpages-posix-dev
 curl
 wget
 
-# Core text editors on a *nix box: vim and emacs
+# command line text editors
 vim
 emacs-nox
 emacs-goodies-el
-
-# A couple of CLI editors that are easier than vim
-# micro  # currently not working on 18.04
 nano
-jed
-jed-extra
+
+# GUI text editors
+emacs
+vim-gtk3
+gedit
 
 # powerful terminal-based file manager, better than the one in JLab
 mc
 
-# for easily managing multiple repositories with one command (perl-doc
-# is needed for its help pages to work)
-mr
-perl-doc
-
 # Regular build tools for compiling common stuff
+# most installed with R installation
 build-essential
 gfortran
 
@@ -70,11 +66,6 @@ xorg
 xubuntu-icon-theme
 tigervnc-standalone-server
 tigervnc-xorg-extension
-
-# GUI text editors
-emacs
-vim-gtk3
-gedit
 
 # Git clients and tools
 git-gui
