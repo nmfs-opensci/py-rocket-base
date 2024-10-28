@@ -85,11 +85,10 @@ ONBUILD RUN echo "Checking for 'install.R" \
 # This is sourced in ${REPO_DIR}/start
 ONBUILD RUN echo "Checking for 'start'..." \
         ; cd "${REPO_DIR}/childimage/" \
-        ; [ -d binder ] && cd binder \
-        ; [ -d .binder ] && cd .binder \
+        ; [ -d binder ] && cd binder && cp start ${REPO_DIR}/childimage/start \
+        ; [ -d .binder ] && cd .binder && cp start ${REPO_DIR}/childimage/start \
         ; if test -f "start" ; then \
         chmod +x start \
-        && cp start ${REPO_DIR}/childimage/start \
         ; fi
 
 # If a postBuild file exists, run it!
