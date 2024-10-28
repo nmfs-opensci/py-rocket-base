@@ -21,6 +21,7 @@ book:
     - configuration_files.qmd
     - desktop.qmd
     - tex.qmd
+    - jupyter-config.qmd
     - py-rocket-base.qmd
 
   sidebar:
