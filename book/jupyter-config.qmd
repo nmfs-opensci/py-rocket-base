@@ -1,6 +1,22 @@
 # Customizing Jupyter
 
 If you want to customize some feature of the JupyterHub or JupyterLab, you can do this by passing in `*.json` or `*.py` configuration files. 
-In py-rocket-base, these are in the `/srv/conda/envs/notebook/etc/jupyter`
+In py-rocket-base, these are in the `jupyter_server_config.d` and `jupyter_notebook_config.d` directories in the conda notebook environment. These directories contain the json that specifies the configurations:
+
+```
+/srv/conda/envs/notebook/
+└── etc/
+    └── jupyter/
+        └── jupyter_server_config.d/
+            ├── security.json
+            ├── extensions.json
+            └── custom.json
+        └── jupyter_notebook_config.d/
+            └── custom.json
+```
+
+If you want to change these configurations, you need to either update the file with the configuration or add a new configuration file. You can add either *.json or *.py configurations files to the same directory.
+
+
 
 
