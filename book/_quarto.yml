@@ -22,6 +22,7 @@ book:
     - r-packages.qmd
     - desktop.qmd
     - tex.qmd
+    - jupyter-config.qmd
     - py-rocket-base.qmd
 
   sidebar:

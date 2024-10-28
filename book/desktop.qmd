@@ -11,6 +11,7 @@ your-repo/
 │   ├── qgis.desktop
 │   ├── qgis.xml
 │   └── qgis.png
+```
 
 ## .desktop
 

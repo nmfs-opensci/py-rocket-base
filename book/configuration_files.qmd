@@ -11,5 +11,11 @@ to write you own code in your Dockerfile.
 
 ## postBuild
 
+## start
+
+`start` bash code is run when the image starts. py-rocker-base has a start script at `${REPO_DIR}/start` which loads the Desktop applications. If you change that start file, then the Desktop apps will not be loaded properly. 
+
+By default, if you include `start` in the chile repo then that script is sourced within the `${REPO_DIR}/start` script at the end. If you don't want that behavior and want the whole start script replaced, then you will need to do that in your Dockerfile by copying your start file onto `${REPO_DIR}/start`.  Take a look at that file first unless you intend to report Desktop applications.
+
 ## Desktop directory
 

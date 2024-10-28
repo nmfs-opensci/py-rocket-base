@@ -1,0 +1,54 @@
+# Customizing Jupyter
+
+If you want to customize some feature of the JupyterHub or JupyterLab, you can do this by passing in `*.json` or `*.py` configuration files. 
+In py-rocket-base, these are in the `jupyter_server_config.d` and `jupyter_notebook_config.d` directories in the conda notebook environment. These directories contain the json that specifies the configurations:
+
+```
+/srv/conda/envs/notebook/
+└── etc/
+    └── jupyter/
+        └── jupyter_server_config.d/
+            ├── security.json
+            ├── extensions.json
+            └── custom.json
+        └── jupyter_notebook_config.d/
+            └── custom.json
+```
+
+If you want to change these configurations, you need to either update the file with the configuration or add a new configuration file.
+You can add either *.json or *.py configurations files to the same directory.
+
+For example, if you want to allow hidden files to be shown in the file browser in Jupyter Lab. Add 
+
+custom_jupyter_server_config.json
+```
+{
+    "ContentsManager": {
+        "allow_hidden": true
+    }
+}
+```
+
+and then copy this into `jupyter_server_config.d` and `jupyter_notebook_config.d` via code in the Dockerfile or in postBuild. We copy both to notebook server config and jupyter server config, because either can be used in the JupyterHub.
+
+Dockerfile
+```
+COPY custom_jupyter_server_config.json custom_jupyter_server_config.json
+RUN cp custom_jupyter_server_config.json ${NB_PYTHON_PREFIX}/etc/jupyter/jupyter_server_config.d/ && \
+    cp custom_jupyter_server_config.json ${NB_PYTHON_PREFIX}/etc/jupyter/jupyter_notebook_config.d/ && \
+    rm custom_jupyter_server_config.json
+```
+
+Alternatively, you can add a postBuild file to your repo and py-rocket-base will automatically run this when you image builds.
+
+postBuild
+```
+#!/bin/bash -l
+set -euo pipefail
+
+cp custom_jupyter_server_config.json ${NB_PYTHON_PREFIX}/etc/jupyter/jupyter_server_config.d/
+cp custom_jupyter_server_config.json ${NB_PYTHON_PREFIX}/etc/jupyter/jupyter_notebook_config.d/
+```
+
+
+
