@@ -19,6 +19,7 @@ book:
     - index.qmd
     - customizing.qmd
     - configuration_files.qmd
+    - r-packages.qmd
     - desktop.qmd
     - tex.qmd
     - jupyter-config.qmd

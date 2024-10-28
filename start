@@ -46,4 +46,7 @@ for mime_file_path in ${REPO_DIR}/Desktop/*.xml; do
 done
 update-mime-database "${MIME_DIR}"
 
+# Run child start in a subshell to contain its environment
+[ -f ${REPO_DIR}/childimage/start ] && ( source ${REPO_DIR}/childimage/start )
+
 exec "$@"
