@@ -39,20 +39,54 @@ RUN rm -rf ${REPO_DIR}/book ${REPO_DIR}/docs
 # Convert NB_USER to ENV (from ARG) so that it passes to the child dockerfile
 ENV NB_USER=${NB_USER}
 
-## ONBUILD section. These are run in child Dockerfiles. First thing that is run
+## ONBUILD section. These are run in child Dockerfiles. These are run right after the FROM image is loaded
 
 ONBUILD USER ${NB_USER}
 
 # ${REPO_DIR} is owned by ${NB_USER}
 ONBUILD COPY --chown=${NB_USER}:${NB_USER} . ${REPO_DIR}/childimage
 
-# Copy Desktop files into ${REPO_DIR}/Desktop if they exist. start will copy to Application dir and Desktop
-ONBUILD RUN if [ -d ${REPO_DIR}/childimage/Desktop ]; then \
-        mkdir -p ${REPO_DIR}/Desktop && \
-        cp -r ${REPO_DIR}/childimage/Desktop/* ${REPO_DIR}/Desktop/; \
-    fi
+# repo2docker will load files from a .binder or binder directory if
+# present. We check if those directories exist.
+ONBUILD RUN echo "Checking for 'binder' or '.binder' subfolder" \
+        ; cd "${REPO_DIR}/childimage/" \
+        ; if [ -d binder ] ; then \
+        echo "Using 'binder/' build context" \
+        ; elif [ -d .binder ] ; then \
+        echo "Using '.binder/' build context" \
+        ; else \
+        echo "Using './' build context" \
+        ; fi
 
-# Add the environment
+# Copy Desktop files into ${REPO_DIR}/Desktop if they exist. start will copy to Application dir and Desktop
+# Will not fail if Desktop dir exists but is empty
+ONBUILD RUN echo "Checking for 'Desktop directory'..." \
+        ; cd "${REPO_DIR}/childimage/" \
+        ; [ -d binder ] && cd binder \
+        ; [ -d .binder ] && cd .binder \
+        ; if test -d Desktop ; then \
+            mkdir -p "${REPO_DIR}/Desktop" && \
+            [ "$(ls -A Desktop 2>/dev/null)" ] && cp -r Desktop/* "${REPO_DIR}/Desktop/"; \
+        fi
+
+# Install apt packages specified in a apt.txt file if it exists.
+# blank lines and comments are supported in apt.txt
+ONBUILD USER root
+ONBUILD RUN echo "Checking for 'apt.txt'..." \
+        ; cd "${REPO_DIR}/childimage/" \
+        ; [ -d binder ] && cd binder \
+        ; [ -d .binder ] && cd .binder \
+        ; if test -f "apt.txt" ; then \
+        package_list=$(grep -v '^\s*#' ${REPO_DIR}/apt-extras.txt | grep -v '^\s*$' | sed 's/\r//g; s/#.*//; s/^[[:space:]]*//; s/[[:space:]]*$//' | awk '{$1=$1};1') \
+        && apt-get update --fix-missing > /dev/null \
+        && apt-get install --yes --no-install-recommends $package_list \
+        && apt-get autoremove --purge \
+        && apt-get clean \
+        && rm -rf /var/lib/apt/lists/* \
+        ; fi
+ONBUILD USER ${NB_USER}
+
+# Add the conda environment
 # sometimes package solving will get rid of pip installed packages. Make sure jupyter-remote-desktop-proxy does not disappear
 ONBUILD RUN echo "Checking for 'conda-lock.yml' or 'environment.yml'..." \
         ; cd "${REPO_DIR}/childimage/" \
@@ -93,7 +127,7 @@ ONBUILD RUN echo "Checking for 'start'..." \
 
 # If a postBuild file exists, run it!
 # After it's done, we try to remove any possible cruft commands there
-# leave behind under $HOME - particularly stuff that jupyterlab extensions
+# left behind under $HOME - particularly stuff that jupyterlab extensions
 # leave behind.
 ONBUILD RUN echo "Checking for 'postBuild'..." \
         ; cd "${REPO_DIR}/childimage/" \
