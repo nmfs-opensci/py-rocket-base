@@ -1,1 +1,6 @@
-Editing
+# Customizing Jupyter
+
+If you want to customize some feature of the JupyterHub or JupyterLab, you can do this by passing in `*.json` or `*.py` configuration files. 
+In py-rocket-base, these are in the `/srv/conda/envs/notebook/etc/jupyter`
+
+
