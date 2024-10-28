@@ -106,6 +106,17 @@ ONBUILD RUN echo "Checking for 'conda-lock.yml' or 'environment.yml'..." \
         find ${NB_PYTHON_PREFIX}/lib/python*/site-packages/bokeh/server/static -follow -type f -name '*.js' ! -name '*.min.js' -delete \
         ; fi
 
+# If a requirements.txt file exists, use pip to install packages
+# listed there. We don't want to save cached wheels in the image
+# to avoid wasting space.
+ONBUILD RUN echo "Checking for pip 'requirements.txt'..." \
+        ; cd "${REPO_DIR}/childimage/" \
+        ; [ -d binder ] && cd binder \
+        ; [ -d .binder ] && cd .binder \
+        ; if test -f "requirements.txt" ; then \
+        ${NB_PYTHON_PREFIX}/bin/pip install --no-cache -r requirements.txt \
+        ; fi
+
 # Add the r packages
 ONBUILD RUN echo "Checking for 'install.R" \
         ; cd "${REPO_DIR}/childimage/" \
