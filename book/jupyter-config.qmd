@@ -29,7 +29,7 @@ custom_jupyter_server_config.json
 }
 ```
 
-and then copy this into `jupyter_server_config.d` and `jupyter_notebook_config.d` via code in the Dockerfile or in postBuild.
+and then copy this into `jupyter_server_config.d` and `jupyter_notebook_config.d` via code in the Dockerfile or in postBuild. We copy both to notebook server config and jupyter server config, because either can be used in the JupyterHub.
 
 Dockerfile
 ```
@@ -39,6 +39,16 @@ RUN cp custom_jupyter_server_config.json ${NB_PYTHON_PREFIX}/etc/jupyter/jupyter
     rm custom_jupyter_server_config.json
 ```
 
+Alternatively, you can add a postBuild file to your repo and py-rocket-base will automatically run this when you image builds.
+
+postBuild
+```
+#!/bin/bash -l
+set -euo pipefail
+
+cp custom_jupyter_server_config.json ${NB_PYTHON_PREFIX}/etc/jupyter/jupyter_server_config.d/
+cp custom_jupyter_server_config.json ${NB_PYTHON_PREFIX}/etc/jupyter/jupyter_notebook_config.d/
+```
 
 
 
