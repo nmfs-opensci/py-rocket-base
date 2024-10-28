@@ -28,8 +28,7 @@ mc
 
 # Regular build tools for compiling common stuff
 # most installed with R installation
-# build-essential
-# gfortran
+# need to install after R so these added to appendix
 
 # Dependencies for nbconvert and myst
 # texlive is installed by R installation
