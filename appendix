@@ -127,7 +127,7 @@ ONBUILD RUN echo "Checking for 'start'..." \
 
 # If a postBuild file exists, run it!
 # After it's done, we try to remove any possible cruft commands there
-# leave behind under $HOME - particularly stuff that jupyterlab extensions
+# left behind under $HOME - particularly stuff that jupyterlab extensions
 # leave behind.
 ONBUILD RUN echo "Checking for 'postBuild'..." \
         ; cd "${REPO_DIR}/childimage/" \
