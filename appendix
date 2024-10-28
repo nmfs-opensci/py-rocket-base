@@ -1,6 +1,6 @@
 USER root
 
-# repo2docker does not set this; name is vague. This is the default env in repo2docker type images
+# repo2docker does not set this. This is the default env in repo2docker type images
 ENV CONDA_ENV=notebook
 
 # Install R, RStudio via Rocker scripts
@@ -30,15 +30,19 @@ RUN yes | unminimize
 ENV MANPATH="${NB_PYTHON_PREFIX}/share/man:${MANPATH}"
 RUN mandb
 
+# Add custom jupyter config. You can also put config.py files in the same place
+COPY custom_jupyter_server_config.json ${NB_PYTHON_PREFIX}/etc/jupyter/jupyter_server_config.d/
+COPY custom_jupyter_server_config.json ${NB_PYTHON_PREFIX}/etc/jupyter/jupyter_notebook_config.d/
+
 # Clean up extra files in ${REPO_DIR}
 RUN rm -rf ${REPO_DIR}/book ${REPO_DIR}/docs
 
+###################
 # Set up behavior for child dockerfiles
 # Convert NB_USER to ENV (from ARG) so that it passes to the child dockerfile
 ENV NB_USER=${NB_USER}
 
-###################
-## ONBUILD section. These are run in child Dockerfiles. These are run right after the FROM image is loaded
+## ONBUILD section. These commands are run in child Dockerfiles. These are run right after the FROM image is loaded
 
 ONBUILD USER ${NB_USER}
 
