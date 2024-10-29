@@ -28,7 +28,7 @@ mc
 
 # Regular build tools for compiling common stuff
 # most installed with R installation
-build-essentials
+build-essential
 gfortran
 
 # Dependencies for nbconvert and myst
