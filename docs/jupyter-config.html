@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>4&nbsp; Desktop – py-rocket-base documentation</title>
+<title>6&nbsp; Customizing Jupyter – py-rocket-base documentation</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -29,8 +29,8 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./tex.html" rel="next">
-<link href="./r-packages.html" rel="prev">
+<link href="./py-rocket-base.html" rel="next">
+<link href="./tex.html" rel="prev">
 <link href="./assets/favicon.ico" rel="icon">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -83,7 +83,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./desktop.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Desktop</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./jupyter-config.html"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Customizing Jupyter</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -142,7 +142,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./desktop.html" class="sidebar-item-text sidebar-link active">
+  <a href="./desktop.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Desktop</span></span></a>
   </div>
 </li>
@@ -154,7 +154,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./jupyter-config.html" class="sidebar-item-text sidebar-link">
+  <a href="./jupyter-config.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Customizing Jupyter</span></span></a>
   </div>
 </li>
@@ -169,23 +169,15 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">Table of contents</h2>
-   
-  <ul>
-  <li><a href="#desktop" id="toc-desktop" class="nav-link active" data-scroll-target="#desktop"><span class="header-section-number">4.1</span> .desktop</a></li>
-  <li><a href="#xml" id="toc-xml" class="nav-link" data-scroll-target="#xml"><span class="header-section-number">4.2</span> .xml</a></li>
-  <li><a href="#png" id="toc-png" class="nav-link" data-scroll-target="#png"><span class="header-section-number">4.3</span> .png</a></li>
-  </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/nmfs-opensci/py-rocket-base/edit/main/desktop.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/nmfs-opensci/py-rocket-base/blob/main/desktop.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/nmfs-opensci/py-rocket-base/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+        
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Desktop</span></h1>
+<h1 class="title"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Customizing Jupyter</span></h1>
 </div>
 
 
@@ -202,25 +194,39 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>py-rocket-base includes a Desktop UI where you can run applications. A common application is to run QGIS or java-based applications. py-rocket-base looks for files with the ending <code>.desktop</code>, <code>.xml</code> (optional), and <code>.png</code> (optional) associated with an application in a directory called Desktop in your repo.</p>
-<pre><code>your-repo/
-├── Dockerfile
-├── optional extra files
-├── Desktop/
-│   ├── qgis.desktop
-│   ├── qgis.xml
-│   └── qgis.png</code></pre>
-<section id="desktop" class="level2" data-number="4.1">
-<h2 data-number="4.1" class="anchored" data-anchor-id="desktop"><span class="header-section-number">4.1</span> .desktop</h2>
-</section>
-<section id="xml" class="level2" data-number="4.2">
-<h2 data-number="4.2" class="anchored" data-anchor-id="xml"><span class="header-section-number">4.2</span> .xml</h2>
-</section>
-<section id="png" class="level2" data-number="4.3">
-<h2 data-number="4.3" class="anchored" data-anchor-id="png"><span class="header-section-number">4.3</span> .png</h2>
+<p>If you want to customize some feature of the JupyterHub or JupyterLab, you can do this by passing in <code>*.json</code> or <code>*.py</code> configuration files. In py-rocket-base, these are in the <code>jupyter_server_config.d</code> and <code>jupyter_notebook_config.d</code> directories in the conda notebook environment. These directories contain the json that specifies the configurations:</p>
+<pre><code>/srv/conda/envs/notebook/
+└── etc/
+    └── jupyter/
+        └── jupyter_server_config.d/
+            ├── security.json
+            ├── extensions.json
+            └── custom.json
+        └── jupyter_notebook_config.d/
+            └── custom.json</code></pre>
+<p>If you want to change these configurations, you need to either update the file with the configuration or add a new configuration file. You can add either <em>.json or </em>.py configurations files to the same directory.</p>
+<p>For example, if you want to allow hidden files to be shown in the file browser in Jupyter Lab. Add</p>
+<p>custom_jupyter_server_config.json</p>
+<pre><code>{
+    "ContentsManager": {
+        "allow_hidden": true
+    }
+}</code></pre>
+<p>and then copy this into <code>jupyter_server_config.d</code> and <code>jupyter_notebook_config.d</code> via code in the Dockerfile or in postBuild. We copy both to notebook server config and jupyter server config, because either can be used in the JupyterHub.</p>
+<p>Dockerfile</p>
+<pre><code>COPY custom_jupyter_server_config.json custom_jupyter_server_config.json
+RUN cp custom_jupyter_server_config.json ${NB_PYTHON_PREFIX}/etc/jupyter/jupyter_server_config.d/ &amp;&amp; \
+    cp custom_jupyter_server_config.json ${NB_PYTHON_PREFIX}/etc/jupyter/jupyter_notebook_config.d/ &amp;&amp; \
+    rm custom_jupyter_server_config.json</code></pre>
+<p>Alternatively, you can add a postBuild file to your repo and py-rocket-base will automatically run this when you image builds.</p>
+<p>postBuild</p>
+<pre><code>#!/bin/bash -l
+set -euo pipefail
+
+cp custom_jupyter_server_config.json ${NB_PYTHON_PREFIX}/etc/jupyter/jupyter_server_config.d/
+cp custom_jupyter_server_config.json ${NB_PYTHON_PREFIX}/etc/jupyter/jupyter_notebook_config.d/</code></pre>
 
 
-</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -789,13 +795,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./r-packages.html" class="pagination-link" aria-label="R packages">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">R packages</span></span>
+      <a href="./tex.html" class="pagination-link" aria-label="Creating PDFs">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Creating PDFs</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./tex.html" class="pagination-link" aria-label="Creating PDFs">
-        <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Creating PDFs</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./py-rocket-base.html" class="pagination-link" aria-label="Developer notes">
+        <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Developer notes</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
@@ -804,4 +810,4 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 
 
 
-<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/nmfs-opensci/py-rocket-base/edit/main/desktop.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/nmfs-opensci/py-rocket-base/blob/main/desktop.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/nmfs-opensci/py-rocket-base/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions"><ul><li><a href="https://github.com/nmfs-opensci/py-rocket-base/edit/main/jupyter-config.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/nmfs-opensci/py-rocket-base/blob/main/jupyter-config.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/nmfs-opensci/py-rocket-base/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>

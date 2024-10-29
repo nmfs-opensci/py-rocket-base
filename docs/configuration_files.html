@@ -29,7 +29,7 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./desktop.html" rel="next">
+<link href="./r-packages.html" rel="next">
 <link href="./customizing.html" rel="prev">
 <link href="./assets/favicon.ico" rel="icon">
 <script src="site_libs/quarto-html/quarto.js"></script>
@@ -136,20 +136,32 @@ ul.task-list li input[type="checkbox"] {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./r-packages.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">R packages</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./desktop.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Desktop</span></span></a>
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Desktop</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./tex.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Creating PDFs</span></span></a>
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Creating PDFs</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./jupyter-config.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Customizing Jupyter</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./py-rocket-base.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Developer notes</span></span></a>
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Developer notes</span></span></a>
   </div>
 </li>
     </ul>
@@ -166,7 +178,8 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#install.r" id="toc-install.r" class="nav-link" data-scroll-target="#install.r"><span class="header-section-number">2.2</span> install.R</a></li>
   <li><a href="#apt.txt" id="toc-apt.txt" class="nav-link" data-scroll-target="#apt.txt"><span class="header-section-number">2.3</span> apt.txt</a></li>
   <li><a href="#postbuild" id="toc-postbuild" class="nav-link" data-scroll-target="#postbuild"><span class="header-section-number">2.4</span> postBuild</a></li>
-  <li><a href="#desktop-directory" id="toc-desktop-directory" class="nav-link" data-scroll-target="#desktop-directory"><span class="header-section-number">2.5</span> Desktop directory</a></li>
+  <li><a href="#start" id="toc-start" class="nav-link" data-scroll-target="#start"><span class="header-section-number">2.5</span> start</a></li>
+  <li><a href="#desktop-directory" id="toc-desktop-directory" class="nav-link" data-scroll-target="#desktop-directory"><span class="header-section-number">2.6</span> Desktop directory</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/nmfs-opensci/py-rocket-base/edit/main/configuration_files.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/nmfs-opensci/py-rocket-base/blob/main/configuration_files.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/nmfs-opensci/py-rocket-base/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
@@ -205,8 +218,13 @@ ul.task-list li input[type="checkbox"] {
 <section id="postbuild" class="level2" data-number="2.4">
 <h2 data-number="2.4" class="anchored" data-anchor-id="postbuild"><span class="header-section-number">2.4</span> postBuild</h2>
 </section>
-<section id="desktop-directory" class="level2" data-number="2.5">
-<h2 data-number="2.5" class="anchored" data-anchor-id="desktop-directory"><span class="header-section-number">2.5</span> Desktop directory</h2>
+<section id="start" class="level2" data-number="2.5">
+<h2 data-number="2.5" class="anchored" data-anchor-id="start"><span class="header-section-number">2.5</span> start</h2>
+<p><code>start</code> bash code is run when the image starts. py-rocker-base has a start script at <code>${REPO_DIR}/start</code> which loads the Desktop applications. If you change that start file, then the Desktop apps will not be loaded properly.</p>
+<p>By default, if you include <code>start</code> in the chile repo then that script is sourced within the <code>${REPO_DIR}/start</code> script at the end. If you don’t want that behavior and want the whole start script replaced, then you will need to do that in your Dockerfile by copying your start file onto <code>${REPO_DIR}/start</code>. Take a look at that file first unless you intend to report Desktop applications.</p>
+</section>
+<section id="desktop-directory" class="level2" data-number="2.6">
+<h2 data-number="2.6" class="anchored" data-anchor-id="desktop-directory"><span class="header-section-number">2.6</span> Desktop directory</h2>
 
 
 </section>
@@ -783,8 +801,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./desktop.html" class="pagination-link" aria-label="Desktop">
-        <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Desktop</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./r-packages.html" class="pagination-link" aria-label="R packages">
+        <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">R packages</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

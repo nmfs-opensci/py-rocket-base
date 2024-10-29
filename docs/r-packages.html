@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>4&nbsp; Desktop – py-rocket-base documentation</title>
+<title>3&nbsp; R packages – py-rocket-base documentation</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -29,8 +29,8 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./tex.html" rel="next">
-<link href="./r-packages.html" rel="prev">
+<link href="./desktop.html" rel="next">
+<link href="./configuration_files.html" rel="prev">
 <link href="./assets/favicon.ico" rel="icon">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -83,7 +83,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./desktop.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Desktop</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./r-packages.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">R packages</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -136,13 +136,13 @@ ul.task-list li input[type="checkbox"] {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./r-packages.html" class="sidebar-item-text sidebar-link">
+  <a href="./r-packages.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">R packages</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./desktop.html" class="sidebar-item-text sidebar-link active">
+  <a href="./desktop.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Desktop</span></span></a>
   </div>
 </li>
@@ -174,18 +174,17 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#desktop" id="toc-desktop" class="nav-link active" data-scroll-target="#desktop"><span class="header-section-number">4.1</span> .desktop</a></li>
-  <li><a href="#xml" id="toc-xml" class="nav-link" data-scroll-target="#xml"><span class="header-section-number">4.2</span> .xml</a></li>
-  <li><a href="#png" id="toc-png" class="nav-link" data-scroll-target="#png"><span class="header-section-number">4.3</span> .png</a></li>
+  <li><a href="#spatial-libraries" id="toc-spatial-libraries" class="nav-link active" data-scroll-target="#spatial-libraries"><span class="header-section-number">3.0.1</span> Spatial libraries</a></li>
+  <li><a href="#default-cran-repository" id="toc-default-cran-repository" class="nav-link" data-scroll-target="#default-cran-repository"><span class="header-section-number">3.0.2</span> Default CRAN repository</a></li>
   </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/nmfs-opensci/py-rocket-base/edit/main/desktop.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/nmfs-opensci/py-rocket-base/blob/main/desktop.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/nmfs-opensci/py-rocket-base/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+<div class="toc-actions"><ul><li><a href="https://github.com/nmfs-opensci/py-rocket-base/edit/main/r-packages.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/nmfs-opensci/py-rocket-base/blob/main/r-packages.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/nmfs-opensci/py-rocket-base/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Desktop</span></h1>
+<h1 class="title"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">R packages</span></h1>
 </div>
 
 
@@ -202,22 +201,33 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>py-rocket-base includes a Desktop UI where you can run applications. A common application is to run QGIS or java-based applications. py-rocket-base looks for files with the ending <code>.desktop</code>, <code>.xml</code> (optional), and <code>.png</code> (optional) associated with an application in a directory called Desktop in your repo.</p>
-<pre><code>your-repo/
-├── Dockerfile
-├── optional extra files
-├── Desktop/
-│   ├── qgis.desktop
-│   ├── qgis.xml
-│   └── qgis.png</code></pre>
-<section id="desktop" class="level2" data-number="4.1">
-<h2 data-number="4.1" class="anchored" data-anchor-id="desktop"><span class="header-section-number">4.1</span> .desktop</h2>
+<p>To install extra R packages, use <code>install.R</code>. This is treated as a R script which is run. For example, you can have a script like</p>
+<pre><code>repo &lt;- "https://p3m.dev/cran/__linux__/jammy/2024-05-13"
+list.of.packages &lt;- c("ggplot2","remotes")
+install.packages(list.of.packages, repos=repo)
+remotes::install_github("hadley/httr@v0.4")</code></pre>
+<section id="spatial-libraries" class="level3" data-number="3.0.1">
+<h3 data-number="3.0.1" class="anchored" data-anchor-id="spatial-libraries"><span class="header-section-number">3.0.1</span> Spatial libraries</h3>
+<p>Some packages depend on linux packages. One example are spatial packages like <code>sf</code> which depend on GDAL. In this case</p>
+<pre><code>install.packages("sf")</code></pre>
+<p>will not work because it will not install the linux package dependencies.</p>
+<p>There are a few ways to get around this.</p>
+<ul>
+<li><p>Install the necessary linux packages via apt-get. This can be hard.</p></li>
+<li><p>Install via via /rocker_scipts/install_geospatial.sh To do this include</p>
+<pre><code>RUN /rocker_scipts/install_geospatial.sh</code></pre>
+<p>in your Dockerfile.</p></li>
+<li><p>Use r2u which has Ubuntu binaries with all the dependencies included.</p></li>
+</ul>
 </section>
-<section id="xml" class="level2" data-number="4.2">
-<h2 data-number="4.2" class="anchored" data-anchor-id="xml"><span class="header-section-number">4.2</span> .xml</h2>
-</section>
-<section id="png" class="level2" data-number="4.3">
-<h2 data-number="4.3" class="anchored" data-anchor-id="png"><span class="header-section-number">4.3</span> .png</h2>
+<section id="default-cran-repository" class="level3" data-number="3.0.2">
+<h3 data-number="3.0.2" class="anchored" data-anchor-id="default-cran-repository"><span class="header-section-number">3.0.2</span> Default CRAN repository</h3>
+<p>The default CRAN repository is set in ${R_HOME}/etc/Rprofile.site and the CRAN environmental variable to</p>
+<pre><code>https://p3m.dev/cran/__linux__/jammy/latest</code></pre>
+<p>To set a different repo, edit ${R_HOME}/etc/Rprofile.site or specify the repo to use in <code>install.packages()</code> like so</p>
+<pre><code>repo &lt;- "https://p3m.dev/cran/__linux__/jammy/2024-05-13"
+list.of.packages &lt;- c("maps", "mapdata", "RColorBrewer")
+install.packages(list.of.packages, repos=repo)</code></pre>
 
 
 </section>
@@ -789,13 +799,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./r-packages.html" class="pagination-link" aria-label="R packages">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">R packages</span></span>
+      <a href="./configuration_files.html" class="pagination-link" aria-label="Configuration files">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Configuration files</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./tex.html" class="pagination-link" aria-label="Creating PDFs">
-        <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Creating PDFs</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./desktop.html" class="pagination-link" aria-label="Desktop">
+        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Desktop</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
@@ -804,4 +814,4 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 
 
 
-<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/nmfs-opensci/py-rocket-base/edit/main/desktop.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/nmfs-opensci/py-rocket-base/blob/main/desktop.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/nmfs-opensci/py-rocket-base/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/nmfs-opensci/py-rocket-base/edit/main/r-packages.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/nmfs-opensci/py-rocket-base/blob/main/r-packages.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/nmfs-opensci/py-rocket-base/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>

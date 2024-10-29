@@ -1,5 +1,6 @@
 ---
 reference-location: block
+code-annotations: select
 ---
 
 # Developer notes
@@ -23,4 +24,367 @@ cd book
 quarto render .
 ```
 
-Set GitHub Pages to docs folder
+Set GitHub Pages to docs folder.
+
+## repo2docker
+
+[repo2docker-action](https://github.com/jupyterhub/repo2docker-action) is creating the image and publishing to `ghcr.io/nmfs-opensci/py-rocket-base` (image hosting like dockerhub or quay.io).
+
+[repo2docker](https://github.com/jupyterhub/repo2docker) (a python package) sets up the structure of the base environment, e.g. installs mamba for package solving, sets up environment variables, installs linux packages, etc. It looks for specific files (like apt.txt, environment.yml, postBuild) in the build context (the repo that the Dockerfile is in) and takes the appropriate action. repo2docker-action also allows you to include `appendix` to add more commands to your Dockerfile. 
+
+repo2docker does a lot behind the scene and has some different behavior.
+
+### COPY
+
+`COPY <src> <dest>` does not work in `appendix` because repo2docker changes the build context. The files are in `src` not `.`. In appendix, you do not do lines like this
+```
+COPY file1 newlocation/file1
+```
+to bring file1 into the build. Instead, the files are already in `${REPO_DIR}/`. If you want to copy a file to a new location, run the following as root if jovyan does not have permission to write to `newlocation`.
+```
+RUN cp ${REPO_DIR}/file1 newlocation/file1
+```
+
+### ENV and ARGS
+
+repo2docker uses a number of ARGs in the build which you might expect to be in the image environment, for example `${NB_USER}`. These need to be converted to ENV to be available to child builds.
+
+## Basic structure of py-rocket-base
+
+The py-rocket-base docker build has the following structure:
+```
+# base image and environment
+repo2docker sets this up
+repo2docker-action set the directory where the build files 
+  are put to /srv/repo (via $REPO_DIR in GitHub Action)
+  and ownership is set to jovyan (via $NB_USER)
+  
+# apt.txt
+repo2docker installs the linux packages in this file
+
+# environment.yml
+repo2docker add these packages to the conda notebook environment
+
+# start
+repo2docker points the Docker image entrypoint (commant run on start) to this file
+${REPO_DIR}/start
+
+# appendix
+repo2docker-action adds the Docker commands here to the end of the Dockerfile
+```
+
+Each file is described below.
+
+### apt.txt
+
+Basic linux packages are here minus ones that will be installed
+when R is installed with `rocker.sh`. Do not put `build-essentials` here as it will interfere with R installation.  There are some packages that are required for Desktop (`/desktop`) to operate correctly. Packages needed for R and RStudio (`/rstudio`) are installed via the rocker install scripts.
+
+### environment.yml
+
+These are added to the notebook conda environment and in py-rocket-base the basic packages needed for Jupyter Lab, RStudio and Desktop are added. Scientific packages are added via child images that use py-rocket-base as the base image (in the FROM line).
+
+
+### appendix
+
+This a long file with many pieces. The pieces are explained below. Click on the number next to code to read about what that code block does.
+
+
+```r
+USER root # <1>
+
+# repo2docker does not set this. This is the default env in repo2docker type images
+ENV CONDA_ENV=notebook # <2>
+
+# Install R, RStudio via Rocker scripts
+ENV R_VERSION="4.4.1"                                                      # <3>
+ENV R_DOCKERFILE="verse_${R_VERSION}"  # <3>
+# This is in the rocker script but will not run since ${NB_USER} already exists  # <3>
+# Needed because rocker scripts set permissions based on the staff group  # <3>
+RUN usermod -a -G staff "${NB_USER}"  # <3>
+RUN PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin && \  # <3>
+  chmod +x ${REPO_DIR}/rocker.sh && \  # <3>
+  ${REPO_DIR}/rocker.sh  # <3>
+
+# Install any missing build packages. Most are installed when R installed but get any missing packages
+RUN apt-get update && \  # <4>
+  apt-get install --yes --no-install-recommends build-essential gfortran && \  # <4>
+  apt-get autoremove --purge && \ # <4>
+  apt-get clean && \ # <4>
+  rm -rf /var/lib/apt/lists/* # <4>
+
+# Re-enable man pages disabled in Ubuntu 18 minimal image
+# https://wiki.ubuntu.com/Minimal
+RUN yes | unminimize # <5>
+# NOTE: $NB_PYTHON_PREFIX is the same as $CONDA_PREFIX at run-time. # <5>
+# $CONDA_PREFIX isn't available in this context. # <5>
+# NOTE: Prepending ensures a working path; if $MANPATH was previously empty, # <5>
+# the trailing colon ensures that system paths are searched. # <5>
+ENV MANPATH="${NB_PYTHON_PREFIX}/share/man:${MANPATH}" # <5>
+RUN mandb # <5>
+
+# Add custom jupyter config. You can also put config.py files in the same place
+COPY custom_jupyter_server_config.json ${NB_PYTHON_PREFIX}/etc/jupyter/jupyter_server_config.d/ # <6>
+COPY custom_jupyter_server_config.json ${NB_PYTHON_PREFIX}/etc/jupyter/jupyter_notebook_config.d/ # <6>
+
+# Clean up extra files in ${REPO_DIR}
+RUN rm -rf ${REPO_DIR}/book ${REPO_DIR}/docs # <7>
+
+###################
+# Set up behavior for child dockerfiles
+# Convert NB_USER to ENV (from ARG) so that it passes to the child dockerfile
+ENV NB_USER=${NB_USER} # <8>
+
+## ONBUILD section. These commands are run in child Dockerfiles. These are run right after the FROM image is loaded # <9>
+
+ONBUILD USER ${NB_USER} # <10>
+
+# ${REPO_DIR} is owned by ${NB_USER}
+ONBUILD COPY --chown=${NB_USER}:${NB_USER} . ${REPO_DIR}/childimage # <11>
+
+# repo2docker will load files from a .binder or binder directory if
+# present. We check if those directories exist.
+ONBUILD RUN echo "Checking for 'binder' or '.binder' subfolder" \ # <12>
+        ; cd "${REPO_DIR}/childimage/" \ # <12>
+        ; if [ -d binder ] ; then \ # <12>
+        echo "Using 'binder/' build context" \ # <12>
+        ; elif [ -d .binder ] ; then \ # <12>
+        echo "Using '.binder/' build context" \ # <12>
+        ; else \ # <12>
+        echo "Using './' build context" \ # <12>
+        ; fi # <12>
+
+# Copy Desktop files into ${REPO_DIR}/Desktop if they exist. start will copy to Application dir and Desktop
+# Will not fail if Desktop dir exists but is empty
+ONBUILD RUN echo "Checking for 'Desktop directory'..." \ # <13>
+        ; cd "${REPO_DIR}/childimage/" \ # <13>
+        ; [ -d binder ] && cd binder \ # <13>
+        ; [ -d .binder ] && cd .binder \ # <13>
+        ; if test -d Desktop ; then \ # <13>
+            mkdir -p "${REPO_DIR}/Desktop" && \ # <13>
+            [ "$(ls -A Desktop 2>/dev/null)" ] && cp -r Desktop/* "${REPO_DIR}/Desktop/"; \ # <13>
+        fi # <13>
+
+# Install apt packages specified in a apt.txt file if it exists.
+# blank lines and comments are supported in apt.txt
+ONBUILD USER root # <14>
+ONBUILD RUN echo "Checking for 'apt.txt'..." \ # <14>
+        ; cd "${REPO_DIR}/childimage/" \ # <14>
+        ; [ -d binder ] && cd binder \ # <14>
+        ; [ -d .binder ] && cd .binder \ # <14>
+        ; if test -f "apt.txt" ; then \ # <14>
+        package_list=$(grep -v '^\s*#' apt.txt | grep -v '^\s*$' | sed 's/\r//g; s/#.*//; s/^[[:space:]]*//; s/[[:space:]]*$//' | awk '{$1=$1};1') \  # <14>
+        && apt-get update --fix-missing > /dev/null \ # <14>
+        && apt-get install --yes --no-install-recommends $package_list \ # <14>
+        && apt-get autoremove --purge \ # <14>
+        && apt-get clean \ # <14>
+        && rm -rf /var/lib/apt/lists/* \ # <14>
+        ; fi
+ONBUILD USER ${NB_USER} # <15>
+
+# Add the conda environment
+# sometimes package solving will get rid of pip installed packages. Make sure jupyter-remote-desktop-proxy does not disappear
+ONBUILD RUN echo "Checking for 'conda-lock.yml' or 'environment.yml'..." \ # <16>
+        ; cd "${REPO_DIR}/childimage/" \ # <16>
+        ; [ -d binder ] && cd binder \ # <16>
+        ; [ -d .binder ] && cd .binder \ # <16>
+        ; if test -f "conda-lock.yml" ; then echo "Using conda-lock.yml" & \ # <16>
+        conda-lock install --name ${CONDA_ENV} \ # <16>
+        && pip install --no-deps jupyter-remote-desktop-proxy \ # <16>
+        ; elif test -f "environment.yml" ; then echo "Using environment.yml" & \ # <16>
+        mamba env update --name ${CONDA_ENV} -f environment.yml  \ # <16>
+        && pip install --no-deps jupyter-remote-desktop-proxy \ # <16>
+        ; fi \ # <16>
+        && mamba clean -yaf \ # <16>
+        && find ${CONDA_DIR} -follow -type f -name '*.a' -delete \ # <16>
+        && find ${CONDA_DIR} -follow -type f -name '*.js.map' -delete \ # <16>
+        ; if ls ${NB_PYTHON_PREFIX}/lib/python*/site-packages/bokeh/server/static > /dev/null 2>&1; then \ # <16>
+        find ${NB_PYTHON_PREFIX}/lib/python*/site-packages/bokeh/server/static -follow -type f -name '*.js' ! -name '*.min.js' -delete \ # <16>
+        ; fi # <16>
+
+# If a requirements.txt file exists, use pip to install packages
+# listed there. We don't want to save cached wheels in the image
+# to avoid wasting space.
+ONBUILD RUN echo "Checking for pip 'requirements.txt'..." \
+        ; cd "${REPO_DIR}/childimage/" \ # <17>
+        ; [ -d binder ] && cd binder \ # <17>
+        ; [ -d .binder ] && cd .binder \ # <17>
+        ; if test -f "requirements.txt" ; then \ # <17>
+        ${NB_PYTHON_PREFIX}/bin/pip install --no-cache -r requirements.txt \ # <17>
+        ; fi # <17>
+
+# Add the r packages
+ONBUILD RUN echo "Checking for 'install.R" \ # <18>
+        ; cd "${REPO_DIR}/childimage/" \ # <18>
+        ; [ -d binder ] && cd binder \ # <18>
+        ; [ -d .binder ] && cd .binder \ # <18>
+        ; if test -f "install.R" ; then echo "Using install.R" & \ # <18>
+        Rscript install.R \ # <18>
+        ; fi # <18>
+
+# If a start file exists, put that under ${REPO_DIR}/childimage/start. 
+# This is sourced in ${REPO_DIR}/start
+ONBUILD RUN echo "Checking for 'start'..." \ # <19>
+        ; cd "${REPO_DIR}/childimage/" \ # <19>
+        ; [ -d binder ] && cd binder && cp start ${REPO_DIR}/childimage/start \ # <19>
+        ; [ -d .binder ] && cd .binder && cp start ${REPO_DIR}/childimage/start \ # <19>
+        ; if test -f "start" ; then \ # <19>
+        chmod +x start \ # <19>
+        ; fi # <19>
+
+# If a postBuild file exists, run it!
+# After it's done, we try to remove any possible cruft commands there
+# left behind under $HOME - particularly stuff that jupyterlab extensions
+# leave behind.
+ONBUILD RUN echo "Checking for 'postBuild'..." \ # <20>
+        ; cd "${REPO_DIR}/childimage/" \ # <20>
+        ; [ -d binder ] && cd binder \ # <20>
+        ; [ -d .binder ] && cd .binder \ # <20>
+        ; if test -f "postBuild" ; then \ # <20>
+        chmod +x postBuild \ # <20>
+        && ./postBuild \ # <20>
+        && rm -rf /tmp/* \ # <20>
+        && rm -rf ${HOME}/.cache ${HOME}/.npm ${HOME}/.yarn \ # <20>
+        && rm -rf ${NB_PYTHON_PREFIX}/share/jupyter/lab/staging \ # <20>
+        && find ${CONDA_DIR} -follow -type f -name '*.a' -delete \ # <20>
+        && find ${CONDA_DIR} -follow -type f -name '*.js.map' -delete \ # <20>
+        ; fi # <20>
+
+## End ONBUILD section for child images
+################################
+
+# Revert to default user and home as pwd
+USER ${NB_USER}  # <21>
+WORKDIR ${HOME} # <21>                                 
+```
+1. Some commands need to be run as root, such as installing linux packages with `apt-get`
+2. repo2docker does not set this environment variable and it is useful for child builds
+3. This section runs the script `rocker.sh` which installs R and RStudio using rocker scripts.
+4. The rocker scripts build R from source and install the needed build tools. Installing `build-essential` (a common apt build pack) before the R build will cause errors. Most of the build tools are installed by the rocker scripts, but we run `apt-get install build-essential gfortran` here to catch any packages that are missed.
+5. Ubuntu does not have man pages installed by default. These lines activate `man` so users have the common help files.
+6. This is some custom jupyter config to allow hidden files to be listed in the folder browser.
+7. `book` and `docs` are the documentation files and are not needed in the image.
+8. The `NB_USER` environmental variable is not exported by repo2docker (it is an argument confined to the parent build) but is very useful for child builds. So it is converted to an environmental variable.
+9. This next section is a series of `ONBUILD` commands. These are only run if py-rocker-base is used in the `FROM` line in a child docker file.
+10. Set the user to NB_USER. Not strictly necessary but helps ensure that we don't accidentally create files that jovyan (NB_USER) cannot access.
+11. Copy the child build context (files with the Docker file) into `${REPO_DIR}`. Make sure that jovyan owns the directory. Note, jovyan owns `${REPO_DIR}` (this is set by repo2docker).
+12. The environment files can be in `binder` or `.binder` directory or at the same level as the Dockerfile.
+13. The Desktop files are put in a directory called Desktop. Copy them into `${REPO_DIR}/Desktop`. The start script will copy these into the correct location for the Desktop server.
+14. If `apt.txt` is present, then install the packages. The code processes any comments or blank lines in `apt.txt`. This must be run as root so we switch to root to install.
+15. Switch back to jovyan so we don't accidentally make files as belonging to root.
+16. If `environment.yml` is present, install these into the conda environment and do some clean-up. Sometimes package solving will get rid of pip installed packages. We need to make sure that jupyter-remote-desktop-proxy does not disappear.
+17. If `requirements.txt` is present, install with pip and do some clean-up.
+18. `install.R` is an R script where the user can specify how to install packages or run any other R code.
+19. `start` is run in the `${REPO_DIR}/start` command in a subshell. The `${REPO_DIR}/start` command cannot be replaced since it contains code to move the Desktop files into the correct place.
+20. `postBuild` is a script. If present, run it and then do some clean-up. It is common to use `postBuild` to apply extensions or install packages that cannot be installed with `apt`.
+21. The parent docker build completes by setting the user to jovyan and the working directory to `${HOME}`. Within a JupyterHub deployment, `${HOME}` will often be re-mapped to the user persistent memory so it is important not to write anything that needs to be persistent to `${HOME}`, for example configuration. You can do this in the `start` script since that runs after the user directory is mapped or you can put configuration files in some place other than `${HOME}`.
+
+## rocker.sh
+
+```
+#!/bin/bash
+set -e
+
+# This script will copy in the rocker_scripts to install things and
+# Install rocker-verse using the TAG_${R_VERSION}.Dockerfile file
+# It will run just the ENV and RUN commands in that file
+# Variables defined here will only be available in this script.
+
+# Copy in the rocker files. Work in ${REPO_DIR} to make sure I don't clobber anything
+cd ${REPO_DIR}
+ROCKER_DOCKERFILE_NAME="${R_DOCKERFILE}.Dockerfile"
+# For degugging use: wget https://github.com/eeholmes/rocker-versioned2/archive/refs/tags/R4.4.1.tar.gz
+wget https://github.com/rocker-org/rocker-versioned2/archive/refs/tags/R${R_VERSION}.tar.gz
+tar zxvf R${R_VERSION}.tar.gz && \
+mv rocker-versioned2-R${R_VERSION}/scripts /rocker_scripts && \
+mv rocker-versioned2-R${R_VERSION}/dockerfiles/${ROCKER_DOCKERFILE_NAME} /rocker_scripts/original.Dockerfile && \
+rm R${R_VERSION}.tar.gz && \
+rm -rf rocker-versioned2-R${R_VERSION}
+
+cd /
+# Read the Dockerfile and process each line
+while IFS= read -r line; do
+    # Check if the line starts with ENV or RUN
+    if [[ "$line" == ENV* ]]; then
+        # Assign variable
+        var_assignment=$(echo "$line" | sed 's/^ENV //g')
+        # Replace ENV DEFAULT_USER="jovyan"
+        if [[ "$var_assignment" == DEFAULT_USER* ]]; then
+            var_assignment="DEFAULT_USER=${NB_USER}"
+        fi
+        # Run this way eval "export ..." otherwise the " will get turned to %22
+        eval "export $var_assignment"
+        # Write the exported variable to env.txt
+        echo "export $var_assignment" >> ${REPO_DIR}/env.txt
+    elif [[ "$line" == RUN* ]]; then
+        # Run the command from the RUN line
+        cmd=$(echo "$line" | sed 's/^RUN //g')
+        echo "Executing: $cmd"
+        eval "$cmd" # || echo ${cmd}" encountered an error, but continuing..."
+    fi
+done < /rocker_scripts/original.Dockerfile
+
+# Install extra tex packages that are not installed by default
+if command -v tlmgr &> /dev/null; then
+    echo "Installing texlive collection-latexrecommended..."
+    tlmgr install collection-latexrecommended
+    tlmgr install pdfcol tcolorbox eurosym upquote adjustbox titling enumitem ulem soul rsfs
+fi
+```
+
+## start
+
+```
+#!/bin/bash
+set -euo pipefail
+
+# Start - Set any environment variables here
+# These are inherited by all processes, *except* RStudio
+# USE export <parname>=value
+# Tell applications where to open desktop apps - this allows notebooks to pop open GUIs
+export DISPLAY=":1.0"
+# source this file to get the variables defined in the rocker Dockerfile
+source ${REPO_DIR}/env.txt
+# End - Set any environment variables here
+
+
+# The for loops will fail if they return null (no files). Set shell option nullglob
+shopt -s nullglob
+
+# Add any .desktop files to the application database and desktop. This is done
+# at startup-time because it's expected that a remote filesystem will be
+# mounted at $HOME, which would overwrite the data if it was created at
+# build-time.
+APPLICATIONS_DIR="${HOME}/.local/share/applications"
+DESKTOP_DIR="${HOME}/Desktop"
+# Remove DESKTOP_DIR if it exists to avoid leftover files
+if [ -d "${DESKTOP_DIR}" ]; then
+    rm -rf "${DESKTOP_DIR}"
+fi
+mkdir -p "${APPLICATIONS_DIR}"
+mkdir -p "${DESKTOP_DIR}"
+for desktop_file_path in ${REPO_DIR}/Desktop/*.desktop; do
+    cp "${desktop_file_path}" "${APPLICATIONS_DIR}/."
+
+    # Symlink application to desktop and set execute permission so xfce (desktop) doesn't complain
+    desktop_file_name="$(basename ${desktop_file_path})"
+    # Set execute permissions on the copied .desktop file
+    chmod +x "${APPLICATIONS_DIR}/${desktop_file_name}"
+    ln -sf "${APPLICATIONS_DIR}/${desktop_file_name}" "${DESKTOP_DIR}/${desktop_file_name}"
+done
+update-desktop-database "${APPLICATIONS_DIR}"
+
+# Add MIME Type data from XML files  to the MIME database.
+MIME_DIR="${HOME}/.local/share/mime"
+MIME_PACKAGES_DIR="${MIME_DIR}/packages"
+mkdir -p "${MIME_PACKAGES_DIR}"
+for mime_file_path in ${REPO_DIR}/Desktop/*.xml; do
+    cp "${mime_file_path}" "${MIME_PACKAGES_DIR}/."
+done
+update-mime-database "${MIME_DIR}"
+
+# Run child start in a subshell to contain its environment
+[ -f ${REPO_DIR}/childimage/start ] && ( source ${REPO_DIR}/childimage/start )
+
+exec "$@"
+```

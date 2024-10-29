@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>4&nbsp; Creating PDFs – py-rocket-base documentation</title>
+<title>5&nbsp; Creating PDFs – py-rocket-base documentation</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -29,7 +29,7 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./py-rocket-base.html" rel="next">
+<link href="./jupyter-config.html" rel="next">
 <link href="./desktop.html" rel="prev">
 <link href="./assets/favicon.ico" rel="icon">
 <script src="site_libs/quarto-html/quarto.js"></script>
@@ -83,7 +83,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./tex.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Creating PDFs</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./tex.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Creating PDFs</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -136,20 +136,32 @@ ul.task-list li input[type="checkbox"] {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./r-packages.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">R packages</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./desktop.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Desktop</span></span></a>
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Desktop</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./tex.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Creating PDFs</span></span></a>
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Creating PDFs</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./jupyter-config.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Customizing Jupyter</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./py-rocket-base.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Developer notes</span></span></a>
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Developer notes</span></span></a>
   </div>
 </li>
     </ul>
@@ -162,10 +174,10 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#tlmgr" id="toc-tlmgr" class="nav-link active" data-scroll-target="#tlmgr"><span class="header-section-number">4.1</span> tlmgr</a></li>
-  <li><a href="#installing-packages" id="toc-installing-packages" class="nav-link" data-scroll-target="#installing-packages"><span class="header-section-number">4.2</span> Installing packages</a></li>
-  <li><a href="#rstudio-creating-pdfs-with-quarto-or-rmarkdown" id="toc-rstudio-creating-pdfs-with-quarto-or-rmarkdown" class="nav-link" data-scroll-target="#rstudio-creating-pdfs-with-quarto-or-rmarkdown"><span class="header-section-number">4.3</span> RStudio: Creating pdfs with Quarto or RMarkdown</a></li>
-  <li><a href="#jupyter-lab" id="toc-jupyter-lab" class="nav-link" data-scroll-target="#jupyter-lab"><span class="header-section-number">4.4</span> Jupyter Lab</a></li>
+  <li><a href="#tlmgr" id="toc-tlmgr" class="nav-link active" data-scroll-target="#tlmgr"><span class="header-section-number">5.1</span> tlmgr</a></li>
+  <li><a href="#installing-packages" id="toc-installing-packages" class="nav-link" data-scroll-target="#installing-packages"><span class="header-section-number">5.2</span> Installing packages</a></li>
+  <li><a href="#rstudio-creating-pdfs-with-quarto-or-rmarkdown" id="toc-rstudio-creating-pdfs-with-quarto-or-rmarkdown" class="nav-link" data-scroll-target="#rstudio-creating-pdfs-with-quarto-or-rmarkdown"><span class="header-section-number">5.3</span> RStudio: Creating pdfs with Quarto or RMarkdown</a></li>
+  <li><a href="#jupyter-lab" id="toc-jupyter-lab" class="nav-link" data-scroll-target="#jupyter-lab"><span class="header-section-number">5.4</span> Jupyter Lab</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/nmfs-opensci/py-rocket-base/edit/main/tex.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/nmfs-opensci/py-rocket-base/blob/main/tex.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/nmfs-opensci/py-rocket-base/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
@@ -174,7 +186,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Creating PDFs</span></h1>
+<h1 class="title"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Creating PDFs</span></h1>
 </div>
 
 
@@ -197,8 +209,8 @@ ul.task-list li input[type="checkbox"] {
 </div>
 <p>py-rocket-base has Quarto and Myst installed along with pandoc and TeXLive for output to PDF. TeX Live is installed and the tlmgr is used to manage packages.</p>
 </div>
-<section id="tlmgr" class="level2" data-number="4.1">
-<h2 data-number="4.1" class="anchored" data-anchor-id="tlmgr"><span class="header-section-number">4.1</span> tlmgr</h2>
+<section id="tlmgr" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="tlmgr"><span class="header-section-number">5.1</span> tlmgr</h2>
 <ul>
 <li>Do not use <code>apt-get</code> to install texlive packages. This will turn off tlmgr (the TeX package manager). Instead use</li>
 </ul>
@@ -207,20 +219,20 @@ ul.task-list li input[type="checkbox"] {
 <li>Run <code>tlmgr option</code> to make sure tlmgr is working.</li>
 </ul>
 </section>
-<section id="installing-packages" class="level2" data-number="4.2">
-<h2 data-number="4.2" class="anchored" data-anchor-id="installing-packages"><span class="header-section-number">4.2</span> Installing packages</h2>
+<section id="installing-packages" class="level2" data-number="5.2">
+<h2 data-number="5.2" class="anchored" data-anchor-id="installing-packages"><span class="header-section-number">5.2</span> Installing packages</h2>
 <p>Unfortunately any packages you install will be in the <code>/opt</code> directory and this gets recreated every time you restart your server. So if you need a particular package you will need to keep installing it. Or create your own image based on py-rocket-base:</p>
 <p>Dockerfile</p>
 <pre><code>FROM ghcr.io/nmfs-opensci/py-rocket-base:latest
 
 RUN tlmgr install collection-latexrecommended &amp;&amp; tlmgr clean --all</code></pre>
 </section>
-<section id="rstudio-creating-pdfs-with-quarto-or-rmarkdown" class="level2" data-number="4.3">
-<h2 data-number="4.3" class="anchored" data-anchor-id="rstudio-creating-pdfs-with-quarto-or-rmarkdown"><span class="header-section-number">4.3</span> RStudio: Creating pdfs with Quarto or RMarkdown</h2>
+<section id="rstudio-creating-pdfs-with-quarto-or-rmarkdown" class="level2" data-number="5.3">
+<h2 data-number="5.3" class="anchored" data-anchor-id="rstudio-creating-pdfs-with-quarto-or-rmarkdown"><span class="header-section-number">5.3</span> RStudio: Creating pdfs with Quarto or RMarkdown</h2>
 <p>Knit to PDF or <code>format: pdf</code> should work fine and packages will be installed on the fly. But the package installations will not persist and you will need to install them again after you restart the server.</p>
 </section>
-<section id="jupyter-lab" class="level2" data-number="4.4">
-<h2 data-number="4.4" class="anchored" data-anchor-id="jupyter-lab"><span class="header-section-number">4.4</span> Jupyter Lab</h2>
+<section id="jupyter-lab" class="level2" data-number="5.4">
+<h2 data-number="5.4" class="anchored" data-anchor-id="jupyter-lab"><span class="header-section-number">5.4</span> Jupyter Lab</h2>
 <p>Myst and Quarto are installed so this works:</p>
 <p>Creating pdfs from a Jupyter notebook: <code>jupyter nbconvert --to pdf test.ipynb</code></p>
 <p>Creating pdfs from a Quarto notebook: <code>quarto render --to pdf test.qmd</code></p>
@@ -797,12 +809,12 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
       <a href="./desktop.html" class="pagination-link" aria-label="Desktop">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Desktop</span></span>
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Desktop</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./py-rocket-base.html" class="pagination-link" aria-label="Developer notes">
-        <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Developer notes</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./jupyter-config.html" class="pagination-link" aria-label="Customizing Jupyter">
+        <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Customizing Jupyter</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
