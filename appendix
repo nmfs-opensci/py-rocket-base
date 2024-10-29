@@ -35,6 +35,8 @@ RUN mandb
 # COPY ${REPO_DIR}/custom_jupyter_server_config.json ${NB_PYTHON_PREFIX}/etc/jupyter/jupyter_notebook_config.d/
 RUN echo "REPO_DIR is: ${REPO_DIR}" && ls ${REPO_DIR}/
 RUN echo "NB_PYTHON_PREFIX is: ${NB_PYTHON_PREFIX}" && ls ${NB_PYTHON_PREFIX}/etc/jupyter/
+COPY . /build
+RUN ls -l /build
 
 # Clean up extra files in ${REPO_DIR}
 RUN rm -rf ${REPO_DIR}/book ${REPO_DIR}/docs
