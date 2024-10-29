@@ -2,6 +2,8 @@ USER root
 
 # repo2docker does not set this. This is the default env in repo2docker type images
 ENV CONDA_ENV=notebook
+# Tell applications where to open desktop apps - this allows notebooks to pop open GUIs
+ENV DISPLAY=":1.0"
 
 # Install R, RStudio via Rocker scripts
 ENV R_VERSION="4.4.1"
