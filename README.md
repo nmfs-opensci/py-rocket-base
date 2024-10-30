@@ -10,7 +10,7 @@ The base image has the following support:
 
 * Python + JupyterLab with mamba handling package installation
 * R + RStudio with the rocker scripts and other functions available
-* Desktop VNC ready for installing applications, including Java-based applications
+* Desktop ready for installing applications, including Java-based applications
 * VSCode
 
 ## Where are the images
@@ -29,43 +29,13 @@ If the JupyterHub has the **Bring your own image** feature, then you can paste i
 
 <img width="772" alt="image" src="https://github.com/user-attachments/assets/13f1d200-b8a6-44e1-a9db-537260b21ec4">
 
-<!--
 ## Using this as a base image
 
-Create a repo with a Dockerfile that looks like the example below. Include the following files depending on your needs. The py-rocket-geospatial repo shows an example and includes a GitHub Action to build the image.
-
-* R packages: Include `install.R`
-* Python packages: `environment.yml`
-* Desktop applications: `*.desktop` files + entry in `mime` directory if application should be associated with specific file types.
-* root installs: `app.sh` file.
-
-Your Dockerfile in your repo will look like
+py-rocket-base is designed like the Pangeo base-image. Your Docker file in your repo will look like
 ```
 FROM ghcr.io/nmfs-opensci/py-rocket-base:latest
-
-# If needed to do a root install of software
-USER root
-COPY app.sh app.sh
-RUN chmod +x app.sh && ./app.sh && rm app.sh
-USER ${NB_USER}
-
-# install R packages
-COPY install.R install.R
-RUN Rscript install.R && rm install.R
-
-# install the Python libraries
-COPY environment.yml environment.yml
-RUN conda env update -n notebook -f environment.yml \
-    && conda clean --all \
-    && rm environment.yml
-
-# Add a Desktop application
-COPY *.desktop ${REPO_DIR}/*.desktop
-COPY mime/*.xml ${REPO_DIR}/mime/*.xml
-
-USER ${NB_USER}
 ```
--->
+Then add `environment.yml`, `apt.txt` or `install.R` to the repo and those will be installed. Read the [documentation](https://nmfs-opensci.github.io/py-rocket-base/) for more examples. The behavior with files like `environment.yml` is triggered by `ONBUILD` statements in py-rocket-base. If you want to prevent this behavior, you will need to avoid the specific configuration file names.
 
 ## History and motivation
 
