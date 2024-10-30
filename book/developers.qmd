@@ -156,24 +156,11 @@ ONBUILD USER ${NB_USER} # <10>
 # ${REPO_DIR} is owned by ${NB_USER}
 ONBUILD COPY --chown=${NB_USER}:${NB_USER} . ${REPO_DIR}/childimage # <11>
 
-# repo2docker will load files from a .binder or binder directory if
-# present. We check if those directories exist.
-ONBUILD RUN echo "Checking for 'binder' or '.binder' subfolder" \ # <12>
-        ; cd "${REPO_DIR}/childimage/" \ # <12>
-        ; if [ -d binder ] ; then \ # <12>
-        echo "Using 'binder/' build context" \ # <12>
-        ; elif [ -d .binder ] ; then \ # <12>
-        echo "Using '.binder/' build context" \ # <12>
-        ; else \ # <12>
-        echo "Using './' build context" \ # <12>
-        ; fi # <12>
 
 # Copy Desktop files into ${REPO_DIR}/Desktop if they exist. start will copy to Application dir and Desktop
 # Will not fail if Desktop dir exists but is empty
 ONBUILD RUN echo "Checking for 'Desktop directory'..." \ # <13>
         ; cd "${REPO_DIR}/childimage/" \ # <13>
-        ; [ -d binder ] && cd binder \ # <13>
-        ; [ -d .binder ] && cd .binder \ # <13>
         ; if test -d Desktop ; then \ # <13>
             mkdir -p "${REPO_DIR}/Desktop" && \ # <13>
             [ "$(ls -A Desktop 2>/dev/null)" ] && cp -r Desktop/* "${REPO_DIR}/Desktop/"; \ # <13>
@@ -184,8 +171,6 @@ ONBUILD RUN echo "Checking for 'Desktop directory'..." \ # <13>
 ONBUILD USER root # <14>
 ONBUILD RUN echo "Checking for 'apt.txt'..." \ # <14>
         ; cd "${REPO_DIR}/childimage/" \ # <14>
-        ; [ -d binder ] && cd binder \ # <14>
-        ; [ -d .binder ] && cd .binder \ # <14>
         ; if test -f "apt.txt" ; then \ # <14>
         package_list=$(grep -v '^\s*#' apt.txt | grep -v '^\s*$' | sed 's/\r//g; s/#.*//; s/^[[:space:]]*//; s/[[:space:]]*$//' | awk '{$1=$1};1') \  # <14>
         && apt-get update --fix-missing > /dev/null \ # <14>
@@ -200,8 +185,6 @@ ONBUILD USER ${NB_USER} # <15>
 # sometimes package solving will get rid of pip installed packages. Make sure jupyter-remote-desktop-proxy does not disappear
 ONBUILD RUN echo "Checking for 'conda-lock.yml' or 'environment.yml'..." \ # <16>
         ; cd "${REPO_DIR}/childimage/" \ # <16>
-        ; [ -d binder ] && cd binder \ # <16>
-        ; [ -d .binder ] && cd .binder \ # <16>
         ; if test -f "conda-lock.yml" ; then echo "Using conda-lock.yml" & \ # <16>
         conda-lock install --name ${CONDA_ENV} \ # <16>
         && pip install --no-deps jupyter-remote-desktop-proxy \ # <16>
@@ -219,10 +202,8 @@ ONBUILD RUN echo "Checking for 'conda-lock.yml' or 'environment.yml'..." \ # <16
 # If a requirements.txt file exists, use pip to install packages
 # listed there. We don't want to save cached wheels in the image
 # to avoid wasting space.
-ONBUILD RUN echo "Checking for pip 'requirements.txt'..." \
+ONBUILD RUN echo "Checking for pip 'requirements.txt'..." \ # <17>
         ; cd "${REPO_DIR}/childimage/" \ # <17>
-        ; [ -d binder ] && cd binder \ # <17>
-        ; [ -d .binder ] && cd .binder \ # <17>
         ; if test -f "requirements.txt" ; then \ # <17>
         ${NB_PYTHON_PREFIX}/bin/pip install --no-cache -r requirements.txt \ # <17>
         ; fi # <17>
@@ -230,8 +211,6 @@ ONBUILD RUN echo "Checking for pip 'requirements.txt'..." \
 # Add the r packages
 ONBUILD RUN echo "Checking for 'install.R" \ # <18>
         ; cd "${REPO_DIR}/childimage/" \ # <18>
-        ; [ -d binder ] && cd binder \ # <18>
-        ; [ -d .binder ] && cd .binder \ # <18>
         ; if test -f "install.R" ; then echo "Using install.R" & \ # <18>
         Rscript install.R \ # <18>
         ; fi # <18>
@@ -240,8 +219,6 @@ ONBUILD RUN echo "Checking for 'install.R" \ # <18>
 # This is sourced in ${REPO_DIR}/start
 ONBUILD RUN echo "Checking for 'start'..." \ # <19>
         ; cd "${REPO_DIR}/childimage/" \ # <19>
-        ; [ -d binder ] && cd binder && cp start ${REPO_DIR}/childimage/start \ # <19>
-        ; [ -d .binder ] && cd .binder && cp start ${REPO_DIR}/childimage/start \ # <19>
         ; if test -f "start" ; then \ # <19>
         chmod +x start \ # <19>
         ; fi # <19>
@@ -252,8 +229,6 @@ ONBUILD RUN echo "Checking for 'start'..." \ # <19>
 # leave behind.
 ONBUILD RUN echo "Checking for 'postBuild'..." \ # <20>
         ; cd "${REPO_DIR}/childimage/" \ # <20>
-        ; [ -d binder ] && cd binder \ # <20>
-        ; [ -d .binder ] && cd .binder \ # <20>
         ; if test -f "postBuild" ; then \ # <20>
         chmod +x postBuild \ # <20>
         && ./postBuild \ # <20>
@@ -282,7 +257,7 @@ WORKDIR ${HOME} # <21>
 9. This next section is a series of `ONBUILD` commands. These are only run if py-rocker-base is used in the `FROM` line in a child docker file.
 10. Set the user to NB_USER. Not strictly necessary but helps ensure that we don't accidentally create files that jovyan (NB_USER) cannot access.
 11. Copy the child build context (files with the Docker file) into `${REPO_DIR}`. Make sure that jovyan owns the directory. Note, jovyan owns `${REPO_DIR}` (this is set by repo2docker).
-12. The environment files can be in `binder` or `.binder` directory or at the same level as the Dockerfile.
+12. empty
 13. The Desktop files are put in a directory called Desktop. Copy them into `${REPO_DIR}/Desktop`. The start script will copy these into the correct location for the Desktop server.
 14. If `apt.txt` is present, then install the packages. The code processes any comments or blank lines in `apt.txt`. This must be run as root so we switch to root to install.
 15. Switch back to jovyan so we don't accidentally make files as belonging to root.
