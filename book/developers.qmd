@@ -49,6 +49,18 @@ RUN cp ${REPO_DIR}/file1 newlocation/file1
 
 repo2docker uses a number of ARGs in the build which you might expect to be in the image environment, for example `${NB_USER}`. These need to be converted to ENV to be available to child builds.
 
+## RStudio
+
+[jupyter-rsession-proxy](https://github.com/jupyterhub/jupyter-rsession-proxy) allows us to launch RStudio from Jupyter Lab, but the environment is different than the environment in Jupyter Lab.
+
+### Environmental variables
+
+* PATH is different. conda is not on the path.
+* None of the environmental variables in the docker file will be in the `/rstudio` environment. The start command affects `\lab` and `\notebook` but not `\rstudio`.
+* The path in the terminal (in RStudio) can/is different than in the R console. Expect weird unexpected behavior because of this. If you type `bash`, then `.bashrc` is run and that will run `conda init` and that will add conda binaries to the path. Then really weird and unexpected things can happen.
+
+If you need some environmental variable set, you will need to set those in `$R_HOME/etc/Rprofile.site` which is run when R starts.
+
 ## Basic structure of py-rocket-base
 
 The py-rocket-base docker build has the following structure:
@@ -106,13 +118,15 @@ RUN PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin && \  # <3
   chmod +x ${REPO_DIR}/rocker.sh && \  # <3>
   ${REPO_DIR}/rocker.sh  # <3>
 
-# Install any missing build packages. Most are installed when R installed but get any missing packages
-RUN apt-get update && \  # <4>
-  apt-get install --yes --no-install-recommends build-essential gfortran && \  # <4>
-  apt-get autoremove --purge && \ # <4>
-  apt-get clean && \ # <4>
-  rm -rf /var/lib/apt/lists/* # <4>
-
+# Install linux packages after R installation since the R install scripts get rid of packages  # <4>
+# The package_list part is reading the file and doing clean-up to just have the list of packages  # <4>
+RUN package_list=$(grep -v '^\s*#' ${REPO_DIR}/apt2.txt | grep -v '^\s*$' | sed 's/\r//g; s/#.*//; s/^[[:space:]]*//; s/[[:space:]]*$//' | awk '{$1=$1};1') && \  # <4>
+  apt-get update && \  # <4>
+  apt-get install --yes --no-install-recommends $package_list && \  # <4>
+  apt-get autoremove --purge && \  # <4>
+  apt-get clean && \  # <4>
+  rm -rf /var/lib/apt/lists/*  # <4>
+  
 # Re-enable man pages disabled in Ubuntu 18 minimal image
 # https://wiki.ubuntu.com/Minimal
 RUN yes | unminimize # <5>
@@ -260,7 +274,7 @@ WORKDIR ${HOME} # <21>
 1. Some commands need to be run as root, such as installing linux packages with `apt-get`
 2. repo2docker does not set this environment variable and it is useful for child builds
 3. This section runs the script `rocker.sh` which installs R and RStudio using rocker scripts.
-4. The rocker scripts build R from source and install the needed build tools. Installing `build-essential` (a common apt build pack) before the R build will cause errors. Most of the build tools are installed by the rocker scripts, but we run `apt-get install build-essential gfortran` here to catch any packages that are missed.
+4. The rocker scripts build R from source and as part of clean up in the script, linux packages are removed that are not needed. repo2docker installs the packages in `apt.txt` automatically before the code in `appendix` thus the needed linux packages (which include packages for desktop) are put in `apt2.txt` (which repo2docker will not detect) and are installed separately here. The  `grep -v ` etc code is processing `apt2.txt` and removing comments and blank lines.
 5. Ubuntu does not have man pages installed by default. These lines activate `man` so users have the common help files.
 6. This is some custom jupyter config to allow hidden files to be listed in the folder browser.
 7. `book` and `docs` are the documentation files and are not needed in the image.
@@ -281,110 +295,123 @@ WORKDIR ${HOME} # <21>
 
 ## rocker.sh
 
+This script will copy in the rocker scripts from [rocker-versioned2](https://github.com/rocker-org/rocker-versioned2) into `${REPO_DIR}` to install things. It will read in one of the rocker docker files using `R_DOCKERFILE` defined in the `appendix` file (which is inserted into the main docker file). 
+Variables defined here will only be available in this script. Click on the numbers in the script to learn what each section is doing.
+
 ```
 #!/bin/bash
 set -e
 
-# This script will copy in the rocker_scripts to install things and
-# Install rocker-verse using the TAG_${R_VERSION}.Dockerfile file
-# It will run just the ENV and RUN commands in that file
-# Variables defined here will only be available in this script.
-
 # Copy in the rocker files. Work in ${REPO_DIR} to make sure I don't clobber anything
-cd ${REPO_DIR}
-ROCKER_DOCKERFILE_NAME="${R_DOCKERFILE}.Dockerfile"
-# For degugging use: wget https://github.com/eeholmes/rocker-versioned2/archive/refs/tags/R4.4.1.tar.gz
-wget https://github.com/rocker-org/rocker-versioned2/archive/refs/tags/R${R_VERSION}.tar.gz
-tar zxvf R${R_VERSION}.tar.gz && \
-mv rocker-versioned2-R${R_VERSION}/scripts /rocker_scripts && \
-mv rocker-versioned2-R${R_VERSION}/dockerfiles/${ROCKER_DOCKERFILE_NAME} /rocker_scripts/original.Dockerfile && \
-rm R${R_VERSION}.tar.gz && \
-rm -rf rocker-versioned2-R${R_VERSION}
+cd ${REPO_DIR}   # <1>
+wget https://github.com/rocker-org/rocker-versioned2/archive/refs/tags/R${R_VERSION}.tar.gz  # <1>
+tar zxvf R${R_VERSION}.tar.gz && \  # <1>
+mv rocker-versioned2-R${R_VERSION}/scripts /rocker_scripts && \  # <2>
+ROCKER_DOCKERFILE_NAME="${R_DOCKERFILE}.Dockerfile"   # <3>
+mv rocker-versioned2-R${R_VERSION}/dockerfiles/${ROCKER_DOCKERFILE_NAME}  /rocker_scripts/original.Dockerfile && \  # <3>
+rm R${R_VERSION}.tar.gz && \  # <4>
+rm -rf rocker-versioned2-R${R_VERSION}  # <4>
 
-cd /
-# Read the Dockerfile and process each line
-while IFS= read -r line; do
-    # Check if the line starts with ENV or RUN
-    if [[ "$line" == ENV* ]]; then
-        # Assign variable
-        var_assignment=$(echo "$line" | sed 's/^ENV //g')
-        # Replace ENV DEFAULT_USER="jovyan"
-        if [[ "$var_assignment" == DEFAULT_USER* ]]; then
-            var_assignment="DEFAULT_USER=${NB_USER}"
-        fi
+cd /   # <5>
+# Read the Dockerfile and process each line   # <6>
+while IFS= read -r line; do   # <6>
+    # Check if the line starts with ENV or RUN   # <7>
+    if [[ "$line" == ENV* ]]; then  # <7>
+        # Assign variable  # <7>
+        var_assignment=$(echo "$line" | sed 's/^ENV //g')  # <7>
+        # Replace ENV DEFAULT_USER="jovyan"  # <8>
+        if [[ "$var_assignment" == DEFAULT_USER* ]]; then  # <8>
+            var_assignment="DEFAULT_USER=${NB_USER}"  # <8>
+        fi  # <8>
         # Run this way eval "export ..." otherwise the " will get turned to %22
-        eval "export $var_assignment"
+        eval "export $var_assignment"   # <9>
         # Write the exported variable to env.txt
-        echo "export $var_assignment" >> ${REPO_DIR}/env.txt
-    elif [[ "$line" == RUN* ]]; then
-        # Run the command from the RUN line
-        cmd=$(echo "$line" | sed 's/^RUN //g')
-        echo "Executing: $cmd"
-        eval "$cmd" # || echo ${cmd}" encountered an error, but continuing..."
-    fi
-done < /rocker_scripts/original.Dockerfile
+        echo "export $var_assignment" >> ${REPO_DIR}/env.txt   # <10>
+    elif [[ "$line" == RUN* ]]; then   # <11>
+        # Run the command from the RUN line  # <11>
+        cmd=$(echo "$line" | sed 's/^RUN //g')  # <11>
+        echo "Executing: $cmd"  # <11>
+        eval "$cmd" # || echo ${cmd}" encountered an error, but continuing..."  # <11>
+    fi  # <11>
+done < /rocker_scripts/original.Dockerfile  # <12>
 
-# Install extra tex packages that are not installed by default
-if command -v tlmgr &> /dev/null; then
-    echo "Installing texlive collection-latexrecommended..."
-    tlmgr install collection-latexrecommended
-    tlmgr install pdfcol tcolorbox eurosym upquote adjustbox titling enumitem ulem soul rsfs
-fi
+# Install extra tex packages that are not installed by default  # <13>
+if command -v tlmgr &> /dev/null; then  # <13>
+    echo "Installing texlive collection-latexrecommended..."  # <13>
+    tlmgr install collection-latexrecommended  # <13>
+    tlmgr install pdfcol tcolorbox eurosym upquote adjustbox titling enumitem ulem soul rsfs  # <13>
+fi  # <13>
 ```
+1. The [rocker-versioned2](https://github.com/rocker-org/rocker-versioned2) repository for a particular R version is copied into `{REPO_DIR}` and unzipped. `R_VERSION` is defined in `appendix`.
+2. The unzipped directory will be named `rocker-versioned2-R${R_VERSION}`. We move the `scripts` directory to `/rocker_scripts` (base level) because the rocker scripts expect the scripts to be there.
+3. `R_DOCKERFILE` is defined as `verse_${R_VERSION}`. The docker file we will process (find ENV and RUN lines) is called `ROCKER_DOCKERFILE_NAME` in the rocker files. We move this to `/rocker_scripts/original.Dockerfile` so we can refer to it later.
+4. Clean up the rocker directories that we no longer need.
+5. cd to the base level where `/rocker_scripts` is.
+6. The big while loop is processing `/rocker_scripts/original.Dockerfile`. The code is using piping `>` and the input file and pipe is specified at the end of the while loop code.
+7. This looks if the line starts with `ENV` and if it does, it strips off `ENV` and stores the variable assigment statement to `$var_assignment`.
+8. The rocker docker files do not use the `NB_USER` environmental variable (defined in `appendix`). If the `ENV` line is defining the default user, we need to change that assignment to the variable `NB_USER`. This part is specific to the rocker docker files.
+9. We need to export any variables (`ENV`) found in the docker file so it is available to the scripts that will run in the `RUN` statements. We need to export the variables as done here (with `eval` and `export`) otherwise they don't make it to the child scripts about to be run. Getting variables to be exported to child scripts being called by a parent script is tricky and this line required a lot of testing and debugging to get variables exported properly.
+10. The export line will only make the variable available to the child scripts. We also want them available in the final image. To do that, we write them to a file that we will source from the docker file. Scripts are run in an ephemeral subshell during docker builds so we cannot define the variable here.
+11. If the docker file line starts with `RUN` then run the command. This command should be a rocker script because that is how rocker docker files are organized. See an example [rocker docker file](https://github.com/rocker-org/rocker-versioned2/blob/master/dockerfiles/verse_4.4.1.Dockerfile).
+12. Here the input file for the while loop is specified.
+13. The rocker `install_texlive.sh` script (which is part of verse) will provide a basic texlive installation. Here a few more packages are added so that the user is able to run vanilla Quarto to PDF and Myst to PDF. See the [chapter on texlive](tex.html).
 
 ## start
+
+Within a JupyterHub, the user home directory `$HOME` is typically re-mapped to the user persistent home directory. That means that the image build process cannot put things into `$HOME`, they would just be lost when `$HOME` is re-mapped. If a process needs to have something in the home directory, e.g. in some local user configuration, this must be done in the `start` script. The repo2docker docker image specifies that the start script is `${REPO_DIR}/start`. 
+
+For py-rocket-base, the start script is used to move the Desktop files (`*.desktop`) to where the Desktop server expects them, which is `${HOME}/.local/share/applications/` and `${HOME}/Desktop`. Any `*.desktop` files found there will appear as clickable icons in `\desktop`. This must be done in start, since the files need to be put in `${HOME}` which not available until after the server starts.
 
 ```
 #!/bin/bash
 set -euo pipefail
 
-# Start - Set any environment variables here
-# These are inherited by all processes, *except* RStudio
-# USE export <parname>=value
-# Tell applications where to open desktop apps - this allows notebooks to pop open GUIs
-export DISPLAY=":1.0"
-# source this file to get the variables defined in the rocker Dockerfile
-source ${REPO_DIR}/env.txt
-# End - Set any environment variables here
-
+# Start - Set any environment variables here   # <1>
+# These are inherited by all processes, *except* RStudio  # <1>
+# USE export <parname>=value  # <1>
+# Tell applications where to open desktop apps - this allows notebooks to pop open GUIs  # <1>
+export DISPLAY=":1.0"  # <1>
+# source this file to get the variables defined in the rocker Dockerfile  # <1>
+source ${REPO_DIR}/env.txt  # <1>
+# End - Set any environment variables here  # <1>
 
 # The for loops will fail if they return null (no files). Set shell option nullglob
-shopt -s nullglob
+shopt -s nullglob  # <2>
 
 # Add any .desktop files to the application database and desktop. This is done
 # at startup-time because it's expected that a remote filesystem will be
 # mounted at $HOME, which would overwrite the data if it was created at
 # build-time.
-APPLICATIONS_DIR="${HOME}/.local/share/applications"
-DESKTOP_DIR="${HOME}/Desktop"
+APPLICATIONS_DIR="${HOME}/.local/share/applications"  # <3>
+DESKTOP_DIR="${HOME}/Desktop"  # <3>
 # Remove DESKTOP_DIR if it exists to avoid leftover files
-if [ -d "${DESKTOP_DIR}" ]; then
-    rm -rf "${DESKTOP_DIR}"
-fi
-mkdir -p "${APPLICATIONS_DIR}"
-mkdir -p "${DESKTOP_DIR}"
-for desktop_file_path in ${REPO_DIR}/Desktop/*.desktop; do
-    cp "${desktop_file_path}" "${APPLICATIONS_DIR}/."
+if [ -d "${DESKTOP_DIR}" ]; then  # <4>
+    rm -rf "${DESKTOP_DIR}"  # <4>
+fi  # <4>
+mkdir -p "${APPLICATIONS_DIR}"  # <5>
+mkdir -p "${DESKTOP_DIR}"  # <5>
+for desktop_file_path in ${REPO_DIR}/Desktop/*.desktop; do  # <6>
+    cp "${desktop_file_path}" "${APPLICATIONS_DIR}/."  # <6>
 
     # Symlink application to desktop and set execute permission so xfce (desktop) doesn't complain
-    desktop_file_name="$(basename ${desktop_file_path})"
-    # Set execute permissions on the copied .desktop file
-    chmod +x "${APPLICATIONS_DIR}/${desktop_file_name}"
-    ln -sf "${APPLICATIONS_DIR}/${desktop_file_name}" "${DESKTOP_DIR}/${desktop_file_name}"
+    desktop_file_name="$(basename ${desktop_file_path})"  # <7>
+    # Set execute permissions on the copied .desktop file  # <7>
+    chmod +x "${APPLICATIONS_DIR}/${desktop_file_name}"  # <7>
+    ln -sf "${APPLICATIONS_DIR}/${desktop_file_name}" "${DESKTOP_DIR}/${desktop_file_name}"  # <8>
 done
-update-desktop-database "${APPLICATIONS_DIR}"
+update-desktop-database "${APPLICATIONS_DIR}"  # <9>
 
 # Add MIME Type data from XML files  to the MIME database.
-MIME_DIR="${HOME}/.local/share/mime"
-MIME_PACKAGES_DIR="${MIME_DIR}/packages"
-mkdir -p "${MIME_PACKAGES_DIR}"
-for mime_file_path in ${REPO_DIR}/Desktop/*.xml; do
-    cp "${mime_file_path}" "${MIME_PACKAGES_DIR}/."
-done
-update-mime-database "${MIME_DIR}"
+MIME_DIR="${HOME}/.local/share/mime"  # <10>
+MIME_PACKAGES_DIR="${MIME_DIR}/packages"  # <10>
+mkdir -p "${MIME_PACKAGES_DIR}"  # <10>
+for mime_file_path in ${REPO_DIR}/Desktop/*.xml; do  # <10>
+    cp "${mime_file_path}" "${MIME_PACKAGES_DIR}/."  # <10>
+done  # <10>
+update-mime-database "${MIME_DIR}"  # <10>
 
 # Run child start in a subshell to contain its environment
-[ -f ${REPO_DIR}/childimage/start ] && ( source ${REPO_DIR}/childimage/start )
+[ -f ${REPO_DIR}/childimage/start ] && ( source ${REPO_DIR}/childimage/start )  # <11>
 
 exec "$@"
 ```

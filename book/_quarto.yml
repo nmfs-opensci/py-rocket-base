@@ -23,7 +23,7 @@ book:
     - desktop.qmd
     - tex.qmd
     - jupyter-config.qmd
-    - py-rocket-base.qmd
+    - developers.qmd
 
   sidebar:
     background: "#D9E3E4"

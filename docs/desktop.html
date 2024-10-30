@@ -160,7 +160,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./py-rocket-base.html" class="sidebar-item-text sidebar-link">
+  <a href="./developers.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Developer notes</span></span></a>
   </div>
 </li>
@@ -202,7 +202,8 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>py-rocket-base includes a Desktop UI where you can run applications. A common application is to run QGIS or java-based applications. py-rocket-base looks for files with the ending <code>.desktop</code>, <code>.xml</code> (optional), and <code>.png</code> (optional) associated with an application in a directory called Desktop in your repo.</p>
+<p>py-rocket-base includes the <a href="https://www.xfce.org/">xfce4 Desktop UI</a> where you can run applications. A common application is to run QGIS or java-based applications. py-rocket-base looks for files with the ending <code>.desktop</code>, <code>.xml</code> (optional), and <code>.png</code> (optional) associated with an application in a directory called Desktop in your repo.</p>
+<p>To add new desktop applications<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>, you add a <code>.desktop</code> file to <code>${HOME}/.local/share/applications/</code>. To have an icon on the Desktop, you create a folder Desktop in the <code>${HOME}</code> and create a soft link to the <code>.desktop</code> files in <code>${HOME}/.local/share/applications/</code>. py-rocket-base does this automatically (via a start script) so that the user only has to put files into a Desktop directory in the docker build repo.</p>
 <pre><code>your-repo/
 ├── Dockerfile
 ├── optional extra files
@@ -212,14 +213,34 @@ ul.task-list li input[type="checkbox"] {
 │   └── qgis.png</code></pre>
 <section id="desktop" class="level2" data-number="4.1">
 <h2 data-number="4.1" class="anchored" data-anchor-id="desktop"><span class="header-section-number">4.1</span> .desktop</h2>
+<p>Example <code>.desktop</code> file is a configuration file that describes how an application is launched. The required parts are Name, Exec and Type. MimeType specifies what types of files the application can use (optional).</p>
+<pre><code>[Desktop Entry]
+Type=Application
+Name=CWUtils
+GenericName=CoastWatch Data Analysis Tool
+Icon=/srv/repo/Desktop/cdat.png
+TryExec=cdat
+Exec=cdat %F
+Terminal=false
+StartupNotify=false
+Categories=Qt;Education;Science;Geography;
+Keywords=map;globe;</code></pre>
 </section>
 <section id="xml" class="level2" data-number="4.2">
 <h2 data-number="4.2" class="anchored" data-anchor-id="xml"><span class="header-section-number">4.2</span> .xml</h2>
+<p>You can specify the mime types via xml.</p>
 </section>
 <section id="png" class="level2" data-number="4.3">
 <h2 data-number="4.3" class="anchored" data-anchor-id="png"><span class="header-section-number">4.3</span> .png</h2>
+<p>You can include a png for the icon. py-rocket-base will place this in <code>/srv/repo/Desktop/</code> so use a location like <code>/srv/repo/Desktop/my.png</code> for your png that you include in your Desktop folder.</p>
 
 
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>See this <a href="https://medium.com/@zoldin/how-to-add-new-application-to-xfce-menu-list-d90955e101d5">Medium article</a> for a description.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
 </section>
 
 </main> <!-- /main -->

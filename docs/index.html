@@ -160,7 +160,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./py-rocket-base.html" class="sidebar-item-text sidebar-link">
+  <a href="./developers.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Developer notes</span></span></a>
   </div>
 </li>
@@ -174,7 +174,10 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a>
+  <ul class="collapse">
+  <li><a href="#using-the-image" id="toc-using-the-image" class="nav-link" data-scroll-target="#using-the-image">Using the image</a></li>
+  </ul></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/nmfs-opensci/py-rocket-base/edit/main/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/nmfs-opensci/py-rocket-base/blob/main/index.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/nmfs-opensci/py-rocket-base/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
@@ -224,8 +227,15 @@ ul.task-list li input[type="checkbox"] {
 <li>VSCode UI</li>
 <li>Quarto, Myst and Texlive installed with tlmgr for tex package management</li>
 </ul>
+<section id="using-the-image" class="level2">
+<h2 class="anchored" data-anchor-id="using-the-image">Using the image</h2>
+<p>Include a Dockerfile in your repository with the following from line:</p>
+<pre><code>FROM ghcr.io/nmfs-opensci/py-rocket-base:latest</code></pre>
+<p>For simple extensions of py-rocket-base, this is the only line you need in the Dockerfile. py-rocket-base has <code>ONBUILD</code> statements that detect configuration files with the names: <code>environment.yml</code>, <code>install.R</code>, <code>apt.txt</code>, <code>postBuild</code>, <code>start</code>, and <code>Desktop</code> (directory). If those files are present, it triggers specific installation behavior. You can also add lines directory to the Dockerfile. See the documentation on using the base image.</p>
+<p>This work is related to the work on the <a href="https://nmfs-opensci.github.io/container-images/">NMFS Open Science docker stack</a>.</p>
 
 
+</section>
 </section>
 <section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
 <hr>
