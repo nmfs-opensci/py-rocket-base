@@ -61,8 +61,10 @@ ONBUILD RUN echo "Checking for 'Desktop directory'..." \
         ; cd "${REPO_DIR}/childimage/" \
         ; if test -d Desktop ; then \
             mkdir -p "${REPO_DIR}/Desktop" && \
-            [ "$(ls -A Desktop 2>/dev/null)" ] && cp -r Desktop/* "${REPO_DIR}/Desktop/"; \
-        fi
+            cp -r Desktop/* "${REPO_DIR}/Desktop/" 2>/dev/null && \
+            chmod +x "${REPO_DIR}/desktop.sh" ; \
+        fi \
+        ; "${REPO_DIR}/desktop.sh"
 
 # Install apt packages specified in a apt.txt file if it exists.
 # blank lines and comments are supported in apt.txt
