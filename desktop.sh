@@ -1,3 +1,6 @@
+#!/bin/bash
+set -e
+
 # set the Desktop dir to something in base
 echo 'XDG_DESKTOP_DIR="/usr/share/Desktop"' > /etc/xdg/user-dirs.defaults
 
