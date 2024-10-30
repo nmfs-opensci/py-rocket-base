@@ -40,3 +40,14 @@ for mime_file_path in ${REPO_DIR}/Desktop/*.xml; do
 done
 update-mime-database "${MIME_DIR}"
 
+# Add icons
+ICON_DIR="/usr/share/icons"
+ICON_PACKAGES_DIR="${ICON_DIR}/packages"
+mkdir -p "${ICON_PACKAGES_DIR}"
+for icon_file_path in "${REPO_DIR}"/Desktop/*.png; do
+    cp "${icon_file_path}" "${ICON_PACKAGES_DIR}/" || echo "Failed to copy ${icon_file_path}"
+done
+for icon_file_path in "${REPO_DIR}"/Desktop/*.svg; do
+    cp "${icon_file_path}" "${ICON_PACKAGES_DIR}/" || echo "Failed to copy ${icon_file_path}"
+donegtk-update-icon-cache "${ICON_DIR}"
+
