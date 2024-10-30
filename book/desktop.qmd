@@ -1,7 +1,24 @@
 # Desktop
 
-py-rocket-base includes a Desktop UI where you can run applications. A common application is to run QGIS or java-based applications. py-rocket-base
+py-rocket-base includes the [xfce4 Desktop UI](https://www.xfce.org/) where you can run applications. A common application is to run QGIS or java-based applications. py-rocket-base
 looks for files with the ending `.desktop`, `.xml` (optional), and `.png` (optional) associated with an application in a directory called Desktop in your repo.
+
+To add new desktop applications[^1], 
+
+* Install the application. See examples below.
+* Add a `.desktop` file to `${HOME}/.local/share/applications/`. 
+* To have an icon on the Desktop, you create a folder Desktop in the `${HOME}` and create a soft link to the `.desktop` files in `${HOME}/.local/share/applications/`. 
+
+py-rocket-base does these steps automatically (via the start script) so that the user only has to put files into a Desktop directory in the docker build repo.
+
+[^1]: See this [Medium article](https://medium.com/@zoldin/how-to-add-new-application-to-xfce-menu-list-d90955e101d5) for a description.
+
+
+## Adding an application in your child docker image
+
+### Create the Desktop directory
+
+Create the directory and add the .desktop and optional .png and .xml files.
 
 ```
 your-repo/
@@ -13,8 +30,89 @@ your-repo/
 │   └── qgis.png
 ```
 
-## .desktop
 
-## .xml
+#### .desktop file
 
-## .png
+Example `.desktop` file is a configuration file that describes how an application is launched. The required parts are Name, Exec and Type. MimeType specifies what types of files the application can use (optional).
+
+```
+[Desktop Entry]
+Type=Application
+Name=CWUtils
+GenericName=CoastWatch Data Analysis Tool
+Icon=/srv/repo/Desktop/cdat.png
+TryExec=cdat
+Exec=cdat %F
+Terminal=false
+StartupNotify=false
+Categories=Qt;Education;Science;Geography;
+Keywords=map;globe;
+```
+
+#### .xml
+
+You can specify the mime types via xml.
+
+#### .png
+
+You can include a png for the icon. py-rocket-base will place this in `/srv/repo/Desktop/` so use a location like `/srv/repo/Desktop/my.png` for your png that you include in your Desktop folder.
+
+
+### Install the application
+
+How you install the application really varies. Here are 2 examples.
+
+**QGIS**
+
+* add `qgis` to `environment.yml`
+* add `libgl1-mesa-glx` to `apt.txt`
+* .desktop file
+```
+# From: https://github.com/qgis/QGIS/blob/ltr-3_28/linux/org.qgis.qgis.desktop.in
+[Desktop Entry]
+Type=Application
+Name=QGIS Desktop
+GenericName=Geographic Information System
+Icon=/srv/conda/envs/notebook/share/qgis/images/icons/qgis-icon-512x512.png
+TryExec=qgis
+Exec=qgis %F
+Terminal=false
+StartupNotify=false
+Categories=Qt;Education;Science;Geography;
+MimeType=application/x-qgis-project;application/x-qgis-project-container;application/x-qgis-layer-settings;application/x-qgis-layer-definition;application/x-qgis-composer-template;image/tiff;image/jpeg;image/jp2;application/x-raster-aig;application/x-raster-ecw;application/x-raster-mrsid;application/x-mapinfo-mif;application/x-esri-shape;application/vnd.google-earth.kml+xml;application/vnd.google-earth.kmz;application/geopackage+sqlite3;
+Keywords=map;globe;postgis;wms;wfs;ogc;osgeo;
+StartupWMClass=QGIS3
+```
+
+**CoastWatch Utilities**
+
+Add this to the docker file
+```
+USER root
+# Install cwutils
+RUN cd /tmp && \
+    wget https://www.star.nesdis.noaa.gov/socd/coastwatch/cwf/cwutils-4_0_0_198-linux-x86_64.tar.gz && \
+    tar -zxf cwutils-4_0_0_198-linux-x86_64.tar.gz && \
+    rm -rf cwutils-4_0_0_198-linux-x86_64.tar.gz
+ENV PATH=${PATH}:/tmp/cwutils_4.0.0.198/bin
+ENV MANPATH=${MANPATH}:/tmp/cwutils_4.0.0.198/doc/man
+ENV INSTALL4J ADD VM PARAMS=-Dsun.java2d.uiScale=2.0
+USER ${NB_USER}
+```
+
+Add this `cdat.desktop` file to Desktop directory
+```
+[Desktop Entry]
+Type=Application
+Name=CWUtils
+GenericName=CoastWatch Data Analysis Tool
+Icon=/srv/repo/Desktop/cdat.png
+TryExec=cdat
+Exec=cdat %F
+Terminal=false
+StartupNotify=false
+Categories=Qt;Education;Science;Geography;
+Keywords=map;globe;
+```
+
+Add `cdat.png` icon to Desktop directory.

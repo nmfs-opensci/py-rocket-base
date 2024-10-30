@@ -160,7 +160,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./py-rocket-base.html" class="sidebar-item-text sidebar-link">
+  <a href="./developers.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Developer notes</span></span></a>
   </div>
 </li>
@@ -175,11 +175,14 @@ ul.task-list li input[type="checkbox"] {
    
   <ul>
   <li><a href="#environment.yml" id="toc-environment.yml" class="nav-link active" data-scroll-target="#environment.yml"><span class="header-section-number">2.1</span> environment.yml</a></li>
-  <li><a href="#install.r" id="toc-install.r" class="nav-link" data-scroll-target="#install.r"><span class="header-section-number">2.2</span> install.R</a></li>
+  <li><a href="#install.r" id="toc-install.r" class="nav-link" data-scroll-target="#install.r"><span class="header-section-number">2.2</span> install.R</a>
+  <ul class="collapse">
+  <li><a href="#add-r-geospatial-packages" id="toc-add-r-geospatial-packages" class="nav-link" data-scroll-target="#add-r-geospatial-packages"><span class="header-section-number">2.2.1</span> Add R geospatial packages</a></li>
+  </ul></li>
   <li><a href="#apt.txt" id="toc-apt.txt" class="nav-link" data-scroll-target="#apt.txt"><span class="header-section-number">2.3</span> apt.txt</a></li>
   <li><a href="#postbuild" id="toc-postbuild" class="nav-link" data-scroll-target="#postbuild"><span class="header-section-number">2.4</span> postBuild</a></li>
   <li><a href="#start" id="toc-start" class="nav-link" data-scroll-target="#start"><span class="header-section-number">2.5</span> start</a></li>
-  <li><a href="#desktop-directory" id="toc-desktop-directory" class="nav-link" data-scroll-target="#desktop-directory"><span class="header-section-number">2.6</span> Desktop directory</a></li>
+  <li><a href="#desktop-applications" id="toc-desktop-applications" class="nav-link" data-scroll-target="#desktop-applications"><span class="header-section-number">2.6</span> Desktop applications</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/nmfs-opensci/py-rocket-base/edit/main/configuration_files.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/nmfs-opensci/py-rocket-base/blob/main/configuration_files.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/nmfs-opensci/py-rocket-base/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
@@ -205,26 +208,60 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>The presence of these files will trigger the following behavior. Do not use these names if you do not want this behavior and you instead want to write you own code in your Dockerfile.</p>
+<p>The presence of these files will trigger the following behavior. Do not use these names if you do not want this behavior and you instead want to write you own code in your Docker file.</p>
 <section id="environment.yml" class="level2" data-number="2.1">
 <h2 data-number="2.1" class="anchored" data-anchor-id="environment.yml"><span class="header-section-number">2.1</span> environment.yml</h2>
+<p>This is a standard format. You can add version pinning.</p>
+<p>environment.yml</p>
+<pre><code>name: optional
+channels:
+  - conda-forge
+dependencies:
+  - cmocean
+  - numpy</code></pre>
 </section>
 <section id="install.r" class="level2" data-number="2.2">
 <h2 data-number="2.2" class="anchored" data-anchor-id="install.r"><span class="header-section-number">2.2</span> install.R</h2>
+<p>install.R example</p>
+<pre><code># to match rocker/verse:4.4 used in py-rocker-base
+# look up the date that the Rocker image was created and put that
+repo &lt;- "https://p3m.dev/cran/__linux__/jammy/2024-05-13"
+list.of.packages &lt;- c("ncdf4", "httr", "plyr", "lubridate")
+install.packages(list.of.packages, repos=repo)</code></pre>
+<section id="add-r-geospatial-packages" class="level3" data-number="2.2.1">
+<h3 data-number="2.2.1" class="anchored" data-anchor-id="add-r-geospatial-packages"><span class="header-section-number">2.2.1</span> Add R geospatial packages</h3>
+<p>Geospatial packages require some linux packages. To get this working in your docker image add this to your Docker file:</p>
+<pre><code>FROM ghcr.io/nmfs-opensci/py-rocket-base:latest
+
+USER root
+RUN /rocker_scripts/install_geospatial.sh
+USER ${NB_USER} </code></pre>
+</section>
 </section>
 <section id="apt.txt" class="level2" data-number="2.3">
 <h2 data-number="2.3" class="anchored" data-anchor-id="apt.txt"><span class="header-section-number">2.3</span> apt.txt</h2>
+<pre><code># Some useful stuff
+tk-dev
+
+# Add some more
+cmocean</code></pre>
 </section>
 <section id="postbuild" class="level2" data-number="2.4">
 <h2 data-number="2.4" class="anchored" data-anchor-id="postbuild"><span class="header-section-number">2.4</span> postBuild</h2>
+<p>This is a script that will be run after all the other commands. This script is run as jovyan not as root. If you need commands run as root, you will need to add these to the Docker file.</p>
+<pre><code>#!/bin/bash -l
+set -e
+
+&lt;bash commands&gt;</code></pre>
 </section>
 <section id="start" class="level2" data-number="2.5">
 <h2 data-number="2.5" class="anchored" data-anchor-id="start"><span class="header-section-number">2.5</span> start</h2>
 <p><code>start</code> bash code is run when the image starts. py-rocker-base has a start script at <code>${REPO_DIR}/start</code> which loads the Desktop applications. If you change that start file, then the Desktop apps will not be loaded properly.</p>
-<p>By default, if you include <code>start</code> in the chile repo then that script is sourced within the <code>${REPO_DIR}/start</code> script at the end. If you don’t want that behavior and want the whole start script replaced, then you will need to do that in your Dockerfile by copying your start file onto <code>${REPO_DIR}/start</code>. Take a look at that file first unless you intend to report Desktop applications.</p>
+<p>By default, if you include <code>start</code> in the child repo then that script is sourced within the <code>${REPO_DIR}/start</code> script at the end. If you don’t want that behavior and want the whole start script replaced, then you will need to do that in your Docker file by copying your start file onto <code>${REPO_DIR}/start</code>.</p>
 </section>
-<section id="desktop-directory" class="level2" data-number="2.6">
-<h2 data-number="2.6" class="anchored" data-anchor-id="desktop-directory"><span class="header-section-number">2.6</span> Desktop directory</h2>
+<section id="desktop-applications" class="level2" data-number="2.6">
+<h2 data-number="2.6" class="anchored" data-anchor-id="desktop-applications"><span class="header-section-number">2.6</span> Desktop applications</h2>
+<p>See the <a href="desktop.html">chapter on Desktop applications</a>.</p>
 
 
 </section>

@@ -2,15 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://nmfs-opensci.github.io/py-rocket-base/index.html</loc>
-    <lastmod>2024-10-23T00:41:31.091Z</lastmod>
+    <lastmod>2024-10-29T15:35:45.979Z</lastmod>
   </url>
   <url>
     <loc>https://nmfs-opensci.github.io/py-rocket-base/customizing.html</loc>
-    <lastmod>2024-10-22T15:00:53.788Z</lastmod>
+    <lastmod>2024-10-30T01:49:08.794Z</lastmod>
   </url>
   <url>
     <loc>https://nmfs-opensci.github.io/py-rocket-base/configuration_files.html</loc>
-    <lastmod>2024-10-28T20:27:54.034Z</lastmod>
+    <lastmod>2024-10-30T02:07:58.038Z</lastmod>
   </url>
   <url>
     <loc>https://nmfs-opensci.github.io/py-rocket-base/r-packages.html</loc>
@@ -18,7 +18,7 @@
   </url>
   <url>
     <loc>https://nmfs-opensci.github.io/py-rocket-base/desktop.html</loc>
-    <lastmod>2024-10-28T20:27:54.034Z</lastmod>
+    <lastmod>2024-10-30T02:12:48.754Z</lastmod>
   </url>
   <url>
     <loc>https://nmfs-opensci.github.io/py-rocket-base/tex.html</loc>
@@ -29,7 +29,7 @@
     <lastmod>2024-10-28T20:27:54.034Z</lastmod>
   </url>
   <url>
-    <loc>https://nmfs-opensci.github.io/py-rocket-base/py-rocket-base.html</loc>
-    <lastmod>2024-10-29T03:27:28.370Z</lastmod>
+    <loc>https://nmfs-opensci.github.io/py-rocket-base/developers.html</loc>
+    <lastmod>2024-10-30T01:28:25.923Z</lastmod>
   </url>
 </urlset>

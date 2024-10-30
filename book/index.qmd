@@ -12,3 +12,13 @@ The base image has the following support:
 
 [^1]: See the Developer section other approaches for installing R/RStudio and the design goals for py-rocket-base.
 
+## Using the image
+
+Include a Dockerfile in your repository with the following from line:
+```
+FROM ghcr.io/nmfs-opensci/py-rocket-base:latest
+```
+For simple extensions of py-rocket-base, this is the only line you need in the Dockerfile. py-rocket-base has `ONBUILD` statements that detect configuration files with the names: `environment.yml`, `install.R`, `apt.txt`, `postBuild`, `start`, and `Desktop` (directory). If those files are present, it triggers specific installation behavior. You can also add lines directory to the Dockerfile. See the documentation on using the base image.
+
+This work is related to the work on the [NMFS Open Science docker stack](https://nmfs-opensci.github.io/container-images/).
+

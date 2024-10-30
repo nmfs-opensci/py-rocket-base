@@ -1,21 +1,73 @@
 # Configuration files
 
 The presence of these files will trigger the following behavior. Do not use these names if you do not want this behavior and you instead want
-to write you own code in your Dockerfile.
+to write you own code in your Docker file.
 
 ## environment.yml
 
+This is a standard format. You can add version pinning.
+
+environment.yml
+```
+name: optional
+channels:
+  - conda-forge
+dependencies:
+  - cmocean
+  - numpy
+```
+
 ## install.R
+
+install.R example
+```
+# to match rocker/verse:4.4 used in py-rocker-base
+# look up the date that the Rocker image was created and put that
+repo <- "https://p3m.dev/cran/__linux__/jammy/2024-05-13"
+list.of.packages <- c("ncdf4", "httr", "plyr", "lubridate")
+install.packages(list.of.packages, repos=repo)
+```
+
+### Add R geospatial packages
+
+Geospatial packages require some linux packages. To get this working in your docker image add this to your Docker file:
+
+```
+FROM ghcr.io/nmfs-opensci/py-rocket-base:latest
+
+USER root
+RUN /rocker_scripts/install_geospatial.sh
+USER ${NB_USER} 
+```
 
 ## apt.txt
 
+```
+# Some useful stuff
+tk-dev
+
+# Add some more
+cmocean
+```
+
 ## postBuild
+
+This is a script that will be run after all the other commands. This script is run as jovyan not as root. If you need commands run as root, you will need to add these to the Docker file.
+
+```
+#!/bin/bash -l
+set -e
+
+<bash commands>
+```
 
 ## start
 
 `start` bash code is run when the image starts. py-rocker-base has a start script at `${REPO_DIR}/start` which loads the Desktop applications. If you change that start file, then the Desktop apps will not be loaded properly. 
 
-By default, if you include `start` in the chile repo then that script is sourced within the `${REPO_DIR}/start` script at the end. If you don't want that behavior and want the whole start script replaced, then you will need to do that in your Dockerfile by copying your start file onto `${REPO_DIR}/start`.  Take a look at that file first unless you intend to report Desktop applications.
+By default, if you include `start` in the child repo then that script is sourced within the `${REPO_DIR}/start` script at the end. If you don't want that behavior and want the whole start script replaced, then you will need to do that in your Docker file by copying your start file onto `${REPO_DIR}/start`.
 
-## Desktop directory
 
+## Desktop applications
+
+See the [chapter on Desktop applications](desktop.html). 

@@ -160,7 +160,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./py-rocket-base.html" class="sidebar-item-text sidebar-link">
+  <a href="./developers.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Developer notes</span></span></a>
   </div>
 </li>
@@ -175,7 +175,12 @@ ul.task-list li input[type="checkbox"] {
    
   <ul>
   <li><a href="#file-structure" id="toc-file-structure" class="nav-link active" data-scroll-target="#file-structure"><span class="header-section-number">1.1</span> File structure</a></li>
-  <li><a href="#examples" id="toc-examples" class="nav-link" data-scroll-target="#examples"><span class="header-section-number">1.2</span> Examples</a></li>
+  <li><a href="#examples" id="toc-examples" class="nav-link" data-scroll-target="#examples"><span class="header-section-number">1.2</span> Examples</a>
+  <ul class="collapse">
+  <li><a href="#add-some-python-packages" id="toc-add-some-python-packages" class="nav-link" data-scroll-target="#add-some-python-packages"><span class="header-section-number">1.2.1</span> Add some Python packages</a></li>
+  <li><a href="#add-r-packages" id="toc-add-r-packages" class="nav-link" data-scroll-target="#add-r-packages"><span class="header-section-number">1.2.2</span> Add R packages</a></li>
+  <li><a href="#add-r-geospatial-packages" id="toc-add-r-geospatial-packages" class="nav-link" data-scroll-target="#add-r-geospatial-packages"><span class="header-section-number">1.2.3</span> Add R geospatial packages</a></li>
+  </ul></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/nmfs-opensci/py-rocket-base/edit/main/customizing.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/nmfs-opensci/py-rocket-base/blob/main/customizing.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/nmfs-opensci/py-rocket-base/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
@@ -228,7 +233,9 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="examples" class="level2" data-number="1.2">
 <h2 data-number="1.2" class="anchored" data-anchor-id="examples"><span class="header-section-number">1.2</span> Examples</h2>
-<p>You want to add some Python packages to py-rocker-base.</p>
+<section id="add-some-python-packages" class="level3" data-number="1.2.1">
+<h3 data-number="1.2.1" class="anchored" data-anchor-id="add-some-python-packages"><span class="header-section-number">1.2.1</span> Add some Python packages</h3>
+<p>You want to add some Python packages to the conda notebook environment.</p>
 <pre><code>your-repo/
 ├── Dockerfile
 ├── environment.yml</code></pre>
@@ -241,8 +248,29 @@ channels:
 dependencies:
   - cmocean
   - numpy</code></pre>
+</section>
+<section id="add-r-packages" class="level3" data-number="1.2.2">
+<h3 data-number="1.2.2" class="anchored" data-anchor-id="add-r-packages"><span class="header-section-number">1.2.2</span> Add R packages</h3>
+<p>Add an R script to install packages. <strong>Important</strong>: packages that have linux dependencies (e.g.&nbsp;all the spatial packages depend on GDAL) will not work if you use <code>install.packages()</code>. GDAL will not be installed.</p>
+<p>install.R</p>
+<pre><code># to match rocker/verse:4.4 used in py-rocker-base
+# look up the date that the Rocker image was created and put that
+repo &lt;- "https://p3m.dev/cran/__linux__/jammy/2024-05-13"
+list.of.packages &lt;- c("ncdf4", "httr", "plyr", "lubridate")
+install.packages(list.of.packages, repos=repo)</code></pre>
+</section>
+<section id="add-r-geospatial-packages" class="level3" data-number="1.2.3">
+<h3 data-number="1.2.3" class="anchored" data-anchor-id="add-r-geospatial-packages"><span class="header-section-number">1.2.3</span> Add R geospatial packages</h3>
+<p>Geospatial packages require some linux packages. To get this working in your Docker image add this to your Docker file:</p>
+<pre><code>FROM ghcr.io/nmfs-opensci/py-rocket-base:latest
+
+USER root
+RUN /rocker_scripts/install_geospatial.sh
+USER ${NB_USER} </code></pre>
+<p>You have access to all the rocker_scripts and you can run these similar to the line above.</p>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->

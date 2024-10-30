@@ -33,7 +33,9 @@ Read [configuration_files](configuration_files.html) to learn about apt.txt, env
 
 ## Examples
 
-You want to add some Python packages to py-rocker-base.
+### Add some Python packages
+
+You want to add some Python packages to the conda notebook environment.
 
 ```
 your-repo/
@@ -55,3 +57,34 @@ dependencies:
   - cmocean
   - numpy
 ```
+
+### Add R packages
+
+Add an R script to install packages. **Important**: packages that have linux dependencies (e.g. all the spatial packages depend on GDAL) will not work if you use `install.packages()`. GDAL will not be installed.
+
+install.R
+```
+# to match rocker/verse:4.4 used in py-rocker-base
+# look up the date that the Rocker image was created and put that
+repo <- "https://p3m.dev/cran/__linux__/jammy/2024-05-13"
+list.of.packages <- c("ncdf4", "httr", "plyr", "lubridate")
+install.packages(list.of.packages, repos=repo)
+```
+
+### Add R geospatial packages
+
+Geospatial packages require some linux packages. To get this working in your Docker image add this to your Docker file:
+
+```
+FROM ghcr.io/nmfs-opensci/py-rocket-base:latest
+
+USER root
+RUN /rocker_scripts/install_geospatial.sh
+USER ${NB_USER} 
+```
+
+You have access to all the rocker_scripts and you can run these similar to the line above.
+
+
+
+
