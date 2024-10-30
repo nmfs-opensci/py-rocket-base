@@ -6,8 +6,9 @@
 set -e
 
 # Copy in the Desktop files
-APPLICATIONS_DIR=/usr/share/applications
+APPLICATIONS_DIR=/usr/share/applications/packages
 DESKTOP_DIR=/usr/share/Desktop
+mkdir -p "${APPLICATIONS_DIR}"
 mkdir -p "${DESKTOP_DIR}"
 chown :staff /usr/share/Desktop
 chmod 775 /usr/share/Desktop
