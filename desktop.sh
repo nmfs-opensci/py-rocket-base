@@ -42,6 +42,13 @@ update-mime-database "${MIME_DIR}"
 ICON_DIR="/usr/share/icons"
 ICON_PACKAGES_DIR="${ICON_DIR}/packages"
 mkdir -p "${ICON_PACKAGES_DIR}"
+# Create the required index.theme file
+cat <<EOF > "${ICON_PACKAGES_DIR}/index.theme"
+[Icon Theme]
+Name=xfce4 display icons
+Comment=User provided icons for applications
+EOF
+# Copy in the icons
 for icon_file_path in "${REPO_DIR}"/Desktop/*.png; do
     cp "${icon_file_path}" "${ICON_PACKAGES_DIR}/" || echo "Failed to copy ${icon_file_path}"
 done
