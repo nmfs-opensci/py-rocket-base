@@ -162,6 +162,7 @@ ENV NB_USER=${NB_USER} # <8>
 ONBUILD USER ${NB_USER} # <10>
 
 # ${REPO_DIR} is owned by ${NB_USER}
+# copy all the files in the repo (i.e. ".") into ${REPO_DIR}
 ONBUILD COPY --chown=${NB_USER}:${NB_USER} . ${REPO_DIR}/childimage # <11>
 
 
