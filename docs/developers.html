@@ -219,14 +219,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul class="collapse">
   <li><a href="#environmental-variables" id="toc-environmental-variables" class="nav-link" data-scroll-target="#environmental-variables"><span class="header-section-number">7.5.1</span> Environmental variables</a></li>
   </ul></li>
-  <li><a href="#basic-structure-of-py-rocket-base" id="toc-basic-structure-of-py-rocket-base" class="nav-link" data-scroll-target="#basic-structure-of-py-rocket-base"><span class="header-section-number">7.6</span> Basic structure of py-rocket-base</a>
-  <ul class="collapse">
-  <li><a href="#apt2.txt" id="toc-apt2.txt" class="nav-link" data-scroll-target="#apt2.txt"><span class="header-section-number">7.6.1</span> apt2.txt</a></li>
-  <li><a href="#environment.yml" id="toc-environment.yml" class="nav-link" data-scroll-target="#environment.yml"><span class="header-section-number">7.6.2</span> environment.yml</a></li>
-  <li><a href="#appendix" id="toc-appendix" class="nav-link" data-scroll-target="#appendix"><span class="header-section-number">7.6.3</span> appendix</a></li>
-  </ul></li>
-  <li><a href="#rocker.sh" id="toc-rocker.sh" class="nav-link" data-scroll-target="#rocker.sh"><span class="header-section-number">7.7</span> rocker.sh</a></li>
-  <li><a href="#start" id="toc-start" class="nav-link" data-scroll-target="#start"><span class="header-section-number">7.8</span> start</a></li>
+  <li><a href="#basic-structure-of-py-rocket-base" id="toc-basic-structure-of-py-rocket-base" class="nav-link" data-scroll-target="#basic-structure-of-py-rocket-base"><span class="header-section-number">7.6</span> Basic structure of py-rocket-base</a></li>
+  <li><a href="#apt2.txt" id="toc-apt2.txt" class="nav-link" data-scroll-target="#apt2.txt"><span class="header-section-number">7.7</span> apt2.txt</a></li>
+  <li><a href="#environment.yml" id="toc-environment.yml" class="nav-link" data-scroll-target="#environment.yml"><span class="header-section-number">7.8</span> environment.yml</a></li>
+  <li><a href="#appendix" id="toc-appendix" class="nav-link" data-scroll-target="#appendix"><span class="header-section-number">7.9</span> appendix</a></li>
+  <li><a href="#rocker.sh" id="toc-rocker.sh" class="nav-link" data-scroll-target="#rocker.sh"><span class="header-section-number">7.10</span> rocker.sh</a></li>
+  <li><a href="#start" id="toc-start" class="nav-link" data-scroll-target="#start"><span class="header-section-number">7.11</span> start</a></li>
+  <li><a href="#desktop.sh" id="toc-desktop.sh" class="nav-link" data-scroll-target="#desktop.sh"><span class="header-section-number">7.12</span> desktop.sh</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/nmfs-opensci/py-rocket-base/edit/main/developers.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/nmfs-opensci/py-rocket-base/blob/main/developers.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/nmfs-opensci/py-rocket-base/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
@@ -327,160 +326,168 @@ ${REPO_DIR}/start
 repo2docker-action adds the Docker commands here to the end of Dockerfile
 most of the work in py-rocket-base is done here. appendix calls rocker.sh and install packages in apt2.txt</code></pre>
 <p>Each file is described below.</p>
-<section id="apt2.txt" class="level3" data-number="7.6.1">
-<h3 data-number="7.6.1" class="anchored" data-anchor-id="apt2.txt"><span class="header-section-number">7.6.1</span> apt2.txt</h3>
+</section>
+<section id="apt2.txt" class="level2" data-number="7.7">
+<h2 data-number="7.7" class="anchored" data-anchor-id="apt2.txt"><span class="header-section-number">7.7</span> apt2.txt</h2>
 <p>This is not named <code>apt.txt</code> because these packages need to be installed after R is installed because the R scripts uninstall packages as part of cleanup. There are some packages that are required for Desktop (<code>/desktop</code>) to operate correctly. Packages needed for R and RStudio building (<code>/rstudio</code>) are installed via the rocker install scripts.</p>
 </section>
-<section id="environment.yml" class="level3" data-number="7.6.2">
-<h3 data-number="7.6.2" class="anchored" data-anchor-id="environment.yml"><span class="header-section-number">7.6.2</span> environment.yml</h3>
+<section id="environment.yml" class="level2" data-number="7.8">
+<h2 data-number="7.8" class="anchored" data-anchor-id="environment.yml"><span class="header-section-number">7.8</span> environment.yml</h2>
 <p>These are added to the notebook conda environment and in py-rocket-base the basic packages needed for Jupyter Lab, RStudio and Desktop are added. Scientific packages are not added here. They will be added via child images that use py-rocket-base as the base image (in the FROM line).</p>
 </section>
-<section id="appendix" class="level3" data-number="7.6.3">
-<h3 data-number="7.6.3" class="anchored" data-anchor-id="appendix"><span class="header-section-number">7.6.3</span> appendix</h3>
+<section id="appendix" class="level2" data-number="7.9">
+<h2 data-number="7.9" class="anchored" data-anchor-id="appendix"><span class="header-section-number">7.9</span> appendix</h2>
 <p>This a long file with many pieces. The pieces are explained below. Click on the number next to code to read about what that code block does.</p>
 <div class="sourceCode" id="annotated-cell-6"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><button class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="1">1</button><span id="annotated-cell-6-1" class="code-annotation-target"><a href="#annotated-cell-6-1" aria-hidden="true" tabindex="-1"></a>USER root</span>
 <span id="annotated-cell-6-2"><a href="#annotated-cell-6-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="annotated-cell-6-3"><a href="#annotated-cell-6-3" aria-hidden="true" tabindex="-1"></a><span class="co"># repo2docker does not set this. This is the default env in repo2docker type images</span></span>
-<button class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="2">2</button><span id="annotated-cell-6-4" class="code-annotation-target"><a href="#annotated-cell-6-4" aria-hidden="true" tabindex="-1"></a>ENV CONDA_ENV<span class="ot">=</span>notebook</span>
-<span id="annotated-cell-6-5"><a href="#annotated-cell-6-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="annotated-cell-6-6"><a href="#annotated-cell-6-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Install R, RStudio via Rocker scripts</span></span>
-<button class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="3">3</button><span id="annotated-cell-6-7" class="code-annotation-target"><a href="#annotated-cell-6-7" aria-hidden="true" tabindex="-1"></a>ENV R_VERSION<span class="ot">=</span><span class="st">"4.4.1"</span></span>
-<span id="annotated-cell-6-8"><a href="#annotated-cell-6-8" aria-hidden="true" tabindex="-1"></a>ENV R_DOCKERFILE<span class="ot">=</span><span class="st">"verse_${R_VERSION}"</span></span>
-<span id="annotated-cell-6-9"><a href="#annotated-cell-6-9" aria-hidden="true" tabindex="-1"></a><span class="co"># This is in the rocker script but will not run since ${NB_USER} already exists</span></span>
-<span id="annotated-cell-6-10"><a href="#annotated-cell-6-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Needed because rocker scripts set permissions based on the staff group</span></span>
-<span id="annotated-cell-6-11"><a href="#annotated-cell-6-11" aria-hidden="true" tabindex="-1"></a>RUN usermod <span class="sc">-</span>a <span class="sc">-</span>G staff <span class="st">"${NB_USER}"</span></span>
-<span id="annotated-cell-6-12"><a href="#annotated-cell-6-12" aria-hidden="true" tabindex="-1"></a>RUN PATH<span class="ot">=</span><span class="er">/</span>usr<span class="sc">/</span>local<span class="sc">/</span>sbin<span class="sc">:</span><span class="er">/</span>usr<span class="sc">/</span>local<span class="sc">/</span>bin<span class="sc">:</span><span class="er">/</span>usr<span class="sc">/</span>sbin<span class="sc">:</span><span class="er">/</span>usr<span class="sc">/</span>bin<span class="sc">:</span><span class="er">/</span>sbin<span class="sc">:</span><span class="er">/</span>bin <span class="sc">&amp;&amp;</span> \</span>
-<span id="annotated-cell-6-13"><a href="#annotated-cell-6-13" aria-hidden="true" tabindex="-1"></a>  chmod <span class="sc">+</span>x <span class="sc">$</span>{REPO_DIR}<span class="sc">/</span>rocker.sh <span class="sc">&amp;&amp;</span> \</span>
-<span id="annotated-cell-6-14"><a href="#annotated-cell-6-14" aria-hidden="true" tabindex="-1"></a>  <span class="sc">$</span>{REPO_DIR}<span class="sc">/</span>rocker.sh</span>
-<span id="annotated-cell-6-15"><a href="#annotated-cell-6-15" aria-hidden="true" tabindex="-1"></a></span>
-<button class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="4">4</button><span id="annotated-cell-6-16" class="code-annotation-target"><a href="#annotated-cell-6-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Install linux packages after R installation since the R install scripts get rid of packages</span></span>
-<span id="annotated-cell-6-17"><a href="#annotated-cell-6-17" aria-hidden="true" tabindex="-1"></a><span class="co"># The package_list part is reading the file and doing clean-up to just have the list of packages</span></span>
-<span id="annotated-cell-6-18"><a href="#annotated-cell-6-18" aria-hidden="true" tabindex="-1"></a>RUN package_list<span class="ot">=</span><span class="er">$</span>(grep <span class="sc">-</span>v <span class="st">'^\s*#'</span> <span class="sc">$</span>{REPO_DIR}<span class="sc">/</span>apt2.txt <span class="sc">|</span> grep <span class="sc">-</span>v <span class="st">'^\s*$'</span> <span class="sc">|</span> sed <span class="st">'s/</span><span class="sc">\r</span><span class="st">//g; s/#.*//; s/^[[:space:]]*//; s/[[:space:]]*$//'</span> <span class="sc">|</span> awk <span class="st">'{$1=$1};1'</span>) <span class="sc">&amp;&amp;</span> \</span>
-<span id="annotated-cell-6-19"><a href="#annotated-cell-6-19" aria-hidden="true" tabindex="-1"></a>  apt<span class="sc">-</span>get update <span class="sc">&amp;&amp;</span> \</span>
-<span id="annotated-cell-6-20"><a href="#annotated-cell-6-20" aria-hidden="true" tabindex="-1"></a>  apt<span class="sc">-</span>get install <span class="sc">--</span>yes <span class="sc">--</span>no<span class="sc">-</span>install<span class="sc">-</span>recommends <span class="sc">$</span>package_list <span class="sc">&amp;&amp;</span> \</span>
-<span id="annotated-cell-6-21"><a href="#annotated-cell-6-21" aria-hidden="true" tabindex="-1"></a>  apt<span class="sc">-</span>get autoremove <span class="sc">--</span>purge <span class="sc">&amp;&amp;</span> \</span>
-<span id="annotated-cell-6-22"><a href="#annotated-cell-6-22" aria-hidden="true" tabindex="-1"></a>  apt<span class="sc">-</span>get clean <span class="sc">&amp;&amp;</span> \</span>
-<span id="annotated-cell-6-23"><a href="#annotated-cell-6-23" aria-hidden="true" tabindex="-1"></a>  rm <span class="sc">-</span>rf <span class="sc">/</span>var<span class="sc">/</span>lib<span class="sc">/</span>apt<span class="sc">/</span>lists<span class="sc">/</span><span class="er">*</span></span>
-<span id="annotated-cell-6-24"><a href="#annotated-cell-6-24" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="annotated-cell-6-25"><a href="#annotated-cell-6-25" aria-hidden="true" tabindex="-1"></a><span class="co"># Re-enable man pages disabled in Ubuntu 18 minimal image</span></span>
-<span id="annotated-cell-6-26"><a href="#annotated-cell-6-26" aria-hidden="true" tabindex="-1"></a><span class="co"># https://wiki.ubuntu.com/Minimal</span></span>
-<button class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="5">5</button><span id="annotated-cell-6-27" class="code-annotation-target"><a href="#annotated-cell-6-27" aria-hidden="true" tabindex="-1"></a>RUN yes <span class="sc">|</span> unminimize</span>
-<span id="annotated-cell-6-28"><a href="#annotated-cell-6-28" aria-hidden="true" tabindex="-1"></a><span class="co"># </span><span class="al">NOTE</span><span class="co">: $NB_PYTHON_PREFIX is the same as $CONDA_PREFIX at run-time.</span></span>
-<span id="annotated-cell-6-29"><a href="#annotated-cell-6-29" aria-hidden="true" tabindex="-1"></a><span class="co"># $CONDA_PREFIX isn't available in this context.</span></span>
-<span id="annotated-cell-6-30"><a href="#annotated-cell-6-30" aria-hidden="true" tabindex="-1"></a><span class="co"># </span><span class="al">NOTE</span><span class="co">: Prepending ensures a working path; if $MANPATH was previously empty,</span></span>
-<span id="annotated-cell-6-31"><a href="#annotated-cell-6-31" aria-hidden="true" tabindex="-1"></a><span class="co"># the trailing colon ensures that system paths are searched.</span></span>
-<span id="annotated-cell-6-32"><a href="#annotated-cell-6-32" aria-hidden="true" tabindex="-1"></a>ENV MANPATH<span class="ot">=</span><span class="st">"${NB_PYTHON_PREFIX}/share/man:${MANPATH}"</span></span>
-<span id="annotated-cell-6-33"><a href="#annotated-cell-6-33" aria-hidden="true" tabindex="-1"></a>RUN mandb</span>
-<span id="annotated-cell-6-34"><a href="#annotated-cell-6-34" aria-hidden="true" tabindex="-1"></a></span>
-<span id="annotated-cell-6-35"><a href="#annotated-cell-6-35" aria-hidden="true" tabindex="-1"></a><span class="co"># Add custom jupyter config. You can also put config.py files in the same place</span></span>
-<button class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="6">6</button><span id="annotated-cell-6-36" class="code-annotation-target"><a href="#annotated-cell-6-36" aria-hidden="true" tabindex="-1"></a>COPY custom_jupyter_server_config.json <span class="sc">$</span>{NB_PYTHON_PREFIX}<span class="sc">/</span>etc<span class="sc">/</span>jupyter<span class="sc">/</span>jupyter_server_config.d<span class="sc">/</span></span>
-<span id="annotated-cell-6-37"><a href="#annotated-cell-6-37" aria-hidden="true" tabindex="-1"></a>COPY custom_jupyter_server_config.json <span class="sc">$</span>{NB_PYTHON_PREFIX}<span class="sc">/</span>etc<span class="sc">/</span>jupyter<span class="sc">/</span>jupyter_notebook_config.d<span class="sc">/</span></span>
-<span id="annotated-cell-6-38"><a href="#annotated-cell-6-38" aria-hidden="true" tabindex="-1"></a></span>
-<span id="annotated-cell-6-39"><a href="#annotated-cell-6-39" aria-hidden="true" tabindex="-1"></a><span class="co"># Clean up extra files in ${REPO_DIR}</span></span>
-<button class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="7">7</button><span id="annotated-cell-6-40" class="code-annotation-target"><a href="#annotated-cell-6-40" aria-hidden="true" tabindex="-1"></a>RUN rm <span class="sc">-</span>rf <span class="sc">$</span>{REPO_DIR}<span class="sc">/</span>book <span class="sc">$</span>{REPO_DIR}<span class="sc">/</span>docs</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="2">2</button><span id="annotated-cell-6-3" class="code-annotation-target"><a href="#annotated-cell-6-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Set env variables</span></span>
+<span id="annotated-cell-6-4"><a href="#annotated-cell-6-4" aria-hidden="true" tabindex="-1"></a><span class="co"># This is the default env in repo2docker type images</span></span>
+<span id="annotated-cell-6-5"><a href="#annotated-cell-6-5" aria-hidden="true" tabindex="-1"></a>ENV CONDA_ENV<span class="ot">=</span>notebook</span>
+<span id="annotated-cell-6-6"><a href="#annotated-cell-6-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Tell applications where to open desktop apps</span></span>
+<span id="annotated-cell-6-7"><a href="#annotated-cell-6-7" aria-hidden="true" tabindex="-1"></a>DISPLAY<span class="ot">=</span><span class="st">":1.0"</span></span>
+<span id="annotated-cell-6-8"><a href="#annotated-cell-6-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-6-9"><a href="#annotated-cell-6-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Install R, RStudio via Rocker scripts</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="3">3</button><span id="annotated-cell-6-10" class="code-annotation-target"><a href="#annotated-cell-6-10" aria-hidden="true" tabindex="-1"></a>ENV R_VERSION<span class="ot">=</span><span class="st">"4.4.1"</span></span>
+<span id="annotated-cell-6-11"><a href="#annotated-cell-6-11" aria-hidden="true" tabindex="-1"></a>ENV R_DOCKERFILE<span class="ot">=</span><span class="st">"verse_${R_VERSION}"</span></span>
+<span id="annotated-cell-6-12"><a href="#annotated-cell-6-12" aria-hidden="true" tabindex="-1"></a><span class="co"># This is in the rocker script but will not run since ${NB_USER} already exists</span></span>
+<span id="annotated-cell-6-13"><a href="#annotated-cell-6-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Needed because rocker scripts set permissions based on the staff group</span></span>
+<span id="annotated-cell-6-14"><a href="#annotated-cell-6-14" aria-hidden="true" tabindex="-1"></a>RUN usermod <span class="sc">-</span>a <span class="sc">-</span>G staff <span class="st">"${NB_USER}"</span></span>
+<span id="annotated-cell-6-15"><a href="#annotated-cell-6-15" aria-hidden="true" tabindex="-1"></a>RUN PATH<span class="ot">=</span><span class="er">/</span>usr<span class="sc">/</span>local<span class="sc">/</span>sbin<span class="sc">:</span><span class="er">/</span>usr<span class="sc">/</span>local<span class="sc">/</span>bin<span class="sc">:</span><span class="er">/</span>usr<span class="sc">/</span>sbin<span class="sc">:</span><span class="er">/</span>usr<span class="sc">/</span>bin<span class="sc">:</span><span class="er">/</span>sbin<span class="sc">:</span><span class="er">/</span>bin <span class="sc">&amp;&amp;</span> \</span>
+<span id="annotated-cell-6-16"><a href="#annotated-cell-6-16" aria-hidden="true" tabindex="-1"></a>  chmod <span class="sc">+</span>x <span class="sc">$</span>{REPO_DIR}<span class="sc">/</span>rocker.sh <span class="sc">&amp;&amp;</span> \</span>
+<span id="annotated-cell-6-17"><a href="#annotated-cell-6-17" aria-hidden="true" tabindex="-1"></a>  <span class="sc">$</span>{REPO_DIR}<span class="sc">/</span>rocker.sh</span>
+<span id="annotated-cell-6-18"><a href="#annotated-cell-6-18" aria-hidden="true" tabindex="-1"></a></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="4">4</button><span id="annotated-cell-6-19" class="code-annotation-target"><a href="#annotated-cell-6-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Install linux packages after R installation since the R install scripts get rid of packages</span></span>
+<span id="annotated-cell-6-20"><a href="#annotated-cell-6-20" aria-hidden="true" tabindex="-1"></a><span class="co"># The package_list part is reading the file and doing clean-up to just have the list of packages</span></span>
+<span id="annotated-cell-6-21"><a href="#annotated-cell-6-21" aria-hidden="true" tabindex="-1"></a>RUN package_list<span class="ot">=</span><span class="er">$</span>(grep <span class="sc">-</span>v <span class="st">'^\s*#'</span> <span class="sc">$</span>{REPO_DIR}<span class="sc">/</span>apt2.txt <span class="sc">|</span> grep <span class="sc">-</span>v <span class="st">'^\s*$'</span> <span class="sc">|</span> sed <span class="st">'s/</span><span class="sc">\r</span><span class="st">//g; s/#.*//; s/^[[:space:]]*//; s/[[:space:]]*$//'</span> <span class="sc">|</span> awk <span class="st">'{$1=$1};1'</span>) <span class="sc">&amp;&amp;</span> \</span>
+<span id="annotated-cell-6-22"><a href="#annotated-cell-6-22" aria-hidden="true" tabindex="-1"></a>  apt<span class="sc">-</span>get update <span class="sc">&amp;&amp;</span> \</span>
+<span id="annotated-cell-6-23"><a href="#annotated-cell-6-23" aria-hidden="true" tabindex="-1"></a>  apt<span class="sc">-</span>get install <span class="sc">--</span>yes <span class="sc">--</span>no<span class="sc">-</span>install<span class="sc">-</span>recommends <span class="sc">$</span>package_list <span class="sc">&amp;&amp;</span> \</span>
+<span id="annotated-cell-6-24"><a href="#annotated-cell-6-24" aria-hidden="true" tabindex="-1"></a>  apt<span class="sc">-</span>get autoremove <span class="sc">--</span>purge <span class="sc">&amp;&amp;</span> \</span>
+<span id="annotated-cell-6-25"><a href="#annotated-cell-6-25" aria-hidden="true" tabindex="-1"></a>  apt<span class="sc">-</span>get clean <span class="sc">&amp;&amp;</span> \</span>
+<span id="annotated-cell-6-26"><a href="#annotated-cell-6-26" aria-hidden="true" tabindex="-1"></a>  rm <span class="sc">-</span>rf <span class="sc">/</span>var<span class="sc">/</span>lib<span class="sc">/</span>apt<span class="sc">/</span>lists<span class="sc">/</span><span class="er">*</span></span>
+<span id="annotated-cell-6-27"><a href="#annotated-cell-6-27" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="annotated-cell-6-28"><a href="#annotated-cell-6-28" aria-hidden="true" tabindex="-1"></a><span class="co"># Re-enable man pages disabled in Ubuntu 18 minimal image</span></span>
+<span id="annotated-cell-6-29"><a href="#annotated-cell-6-29" aria-hidden="true" tabindex="-1"></a><span class="co"># https://wiki.ubuntu.com/Minimal</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="5">5</button><span id="annotated-cell-6-30" class="code-annotation-target"><a href="#annotated-cell-6-30" aria-hidden="true" tabindex="-1"></a>RUN yes <span class="sc">|</span> unminimize</span>
+<span id="annotated-cell-6-31"><a href="#annotated-cell-6-31" aria-hidden="true" tabindex="-1"></a><span class="co"># </span><span class="al">NOTE</span><span class="co">: $NB_PYTHON_PREFIX is the same as $CONDA_PREFIX at run-time.</span></span>
+<span id="annotated-cell-6-32"><a href="#annotated-cell-6-32" aria-hidden="true" tabindex="-1"></a><span class="co"># $CONDA_PREFIX isn't available in this context.</span></span>
+<span id="annotated-cell-6-33"><a href="#annotated-cell-6-33" aria-hidden="true" tabindex="-1"></a><span class="co"># </span><span class="al">NOTE</span><span class="co">: Prepending ensures a working path; if $MANPATH was previously empty,</span></span>
+<span id="annotated-cell-6-34"><a href="#annotated-cell-6-34" aria-hidden="true" tabindex="-1"></a><span class="co"># the trailing colon ensures that system paths are searched.</span></span>
+<span id="annotated-cell-6-35"><a href="#annotated-cell-6-35" aria-hidden="true" tabindex="-1"></a>ENV MANPATH<span class="ot">=</span><span class="st">"${NB_PYTHON_PREFIX}/share/man:${MANPATH}"</span></span>
+<span id="annotated-cell-6-36"><a href="#annotated-cell-6-36" aria-hidden="true" tabindex="-1"></a>RUN mandb</span>
+<span id="annotated-cell-6-37"><a href="#annotated-cell-6-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-6-38"><a href="#annotated-cell-6-38" aria-hidden="true" tabindex="-1"></a><span class="co"># Add custom jupyter config. You can also put config.py files in the same place</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="6">6</button><span id="annotated-cell-6-39" class="code-annotation-target"><a href="#annotated-cell-6-39" aria-hidden="true" tabindex="-1"></a>COPY custom_jupyter_server_config.json <span class="sc">$</span>{NB_PYTHON_PREFIX}<span class="sc">/</span>etc<span class="sc">/</span>jupyter<span class="sc">/</span>jupyter_server_config.d<span class="sc">/</span></span>
+<span id="annotated-cell-6-40"><a href="#annotated-cell-6-40" aria-hidden="true" tabindex="-1"></a>COPY custom_jupyter_server_config.json <span class="sc">$</span>{NB_PYTHON_PREFIX}<span class="sc">/</span>etc<span class="sc">/</span>jupyter<span class="sc">/</span>jupyter_notebook_config.d<span class="sc">/</span></span>
 <span id="annotated-cell-6-41"><a href="#annotated-cell-6-41" aria-hidden="true" tabindex="-1"></a></span>
-<span id="annotated-cell-6-42"><a href="#annotated-cell-6-42" aria-hidden="true" tabindex="-1"></a><span class="do">###################</span></span>
-<span id="annotated-cell-6-43"><a href="#annotated-cell-6-43" aria-hidden="true" tabindex="-1"></a><span class="co"># Set up behavior for child dockerfiles</span></span>
-<span id="annotated-cell-6-44"><a href="#annotated-cell-6-44" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert NB_USER to ENV (from ARG) so that it passes to the child dockerfile</span></span>
-<button class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="8">8</button><span id="annotated-cell-6-45" class="code-annotation-target"><a href="#annotated-cell-6-45" aria-hidden="true" tabindex="-1"></a>ENV NB_USER<span class="ot">=</span><span class="er">$</span>{NB_USER}</span>
-<span id="annotated-cell-6-46"><a href="#annotated-cell-6-46" aria-hidden="true" tabindex="-1"></a></span>
-<button class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="9">9</button><span id="annotated-cell-6-47" class="code-annotation-target"><a href="#annotated-cell-6-47" aria-hidden="true" tabindex="-1"></a><span class="do">## ONBUILD section. These commands are run in child Dockerfiles. These are run right after the FROM image is loaded</span></span>
-<span id="annotated-cell-6-48"><a href="#annotated-cell-6-48" aria-hidden="true" tabindex="-1"></a></span>
-<button class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="10">10</button><span id="annotated-cell-6-49" class="code-annotation-target"><a href="#annotated-cell-6-49" aria-hidden="true" tabindex="-1"></a>ONBUILD USER <span class="sc">$</span>{NB_USER}</span>
-<span id="annotated-cell-6-50"><a href="#annotated-cell-6-50" aria-hidden="true" tabindex="-1"></a></span>
-<span id="annotated-cell-6-51"><a href="#annotated-cell-6-51" aria-hidden="true" tabindex="-1"></a><span class="co"># ${REPO_DIR} is owned by ${NB_USER}</span></span>
-<span id="annotated-cell-6-52"><a href="#annotated-cell-6-52" aria-hidden="true" tabindex="-1"></a><span class="co"># copy all the files in the repo (i.e. ".") into ${REPO_DIR}</span></span>
-<button class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="11">11</button><span id="annotated-cell-6-53" class="code-annotation-target"><a href="#annotated-cell-6-53" aria-hidden="true" tabindex="-1"></a>ONBUILD COPY <span class="sc">--</span>chown<span class="ot">=</span><span class="er">$</span>{NB_USER}<span class="sc">:</span><span class="er">$</span>{NB_USER} . <span class="sc">$</span>{REPO_DIR}<span class="sc">/</span>childimage</span>
-<span id="annotated-cell-6-54"><a href="#annotated-cell-6-54" aria-hidden="true" tabindex="-1"></a></span>
-<span id="annotated-cell-6-55"><a href="#annotated-cell-6-55" aria-hidden="true" tabindex="-1"></a></span>
-<span id="annotated-cell-6-56"><a href="#annotated-cell-6-56" aria-hidden="true" tabindex="-1"></a><span class="co"># Copy Desktop files into ${REPO_DIR}/Desktop if they exist. start will copy to Application dir and Desktop</span></span>
-<span id="annotated-cell-6-57"><a href="#annotated-cell-6-57" aria-hidden="true" tabindex="-1"></a><span class="co"># Will not fail if Desktop dir exists but is empty</span></span>
-<button class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="13">13</button><span id="annotated-cell-6-58" class="code-annotation-target"><a href="#annotated-cell-6-58" aria-hidden="true" tabindex="-1"></a>ONBUILD RUN echo <span class="st">"Checking for 'Desktop directory'..."</span> \</span>
-<span id="annotated-cell-6-59"><a href="#annotated-cell-6-59" aria-hidden="true" tabindex="-1"></a>        ; cd <span class="st">"${REPO_DIR}/childimage/"</span> \</span>
-<span id="annotated-cell-6-60"><a href="#annotated-cell-6-60" aria-hidden="true" tabindex="-1"></a>        ; <span class="cf">if</span> test <span class="sc">-</span>d Desktop ; then \</span>
-<span id="annotated-cell-6-61"><a href="#annotated-cell-6-61" aria-hidden="true" tabindex="-1"></a>            mkdir <span class="sc">-</span>p <span class="st">"${REPO_DIR}/Desktop"</span> <span class="sc">&amp;&amp;</span> \</span>
-<span id="annotated-cell-6-62"><a href="#annotated-cell-6-62" aria-hidden="true" tabindex="-1"></a>            [ <span class="st">"$(ls -A Desktop 2&gt;/dev/null)"</span> ] <span class="sc">&amp;&amp;</span> cp <span class="sc">-</span>r Desktop<span class="sc">/</span><span class="er">*</span> <span class="st">"${REPO_DIR}/Desktop/"</span>; \</span>
-<span id="annotated-cell-6-63"><a href="#annotated-cell-6-63" aria-hidden="true" tabindex="-1"></a>        fi</span>
-<span id="annotated-cell-6-64"><a href="#annotated-cell-6-64" aria-hidden="true" tabindex="-1"></a></span>
-<span id="annotated-cell-6-65"><a href="#annotated-cell-6-65" aria-hidden="true" tabindex="-1"></a><span class="co"># Install apt packages specified in a apt.txt file if it exists.</span></span>
-<span id="annotated-cell-6-66"><a href="#annotated-cell-6-66" aria-hidden="true" tabindex="-1"></a><span class="co"># blank lines and comments are supported in apt.txt</span></span>
-<button class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="14">14</button><span id="annotated-cell-6-67" class="code-annotation-target"><a href="#annotated-cell-6-67" aria-hidden="true" tabindex="-1"></a>ONBUILD USER root</span>
-<span id="annotated-cell-6-68"><a href="#annotated-cell-6-68" aria-hidden="true" tabindex="-1"></a>ONBUILD RUN echo <span class="st">"Checking for 'apt.txt'..."</span> \</span>
-<span id="annotated-cell-6-69"><a href="#annotated-cell-6-69" aria-hidden="true" tabindex="-1"></a>        ; cd <span class="st">"${REPO_DIR}/childimage/"</span> \</span>
-<span id="annotated-cell-6-70"><a href="#annotated-cell-6-70" aria-hidden="true" tabindex="-1"></a>        ; <span class="cf">if</span> test <span class="sc">-</span>f <span class="st">"apt.txt"</span> ; then \</span>
-<span id="annotated-cell-6-71"><a href="#annotated-cell-6-71" aria-hidden="true" tabindex="-1"></a>        package_list<span class="ot">=</span><span class="er">$</span>(grep <span class="sc">-</span>v <span class="st">'^\s*#'</span> apt.txt <span class="sc">|</span> grep <span class="sc">-</span>v <span class="st">'^\s*$'</span> <span class="sc">|</span> sed <span class="st">'s/</span><span class="sc">\r</span><span class="st">//g; s/#.*//; s/^[[:space:]]*//; s/[[:space:]]*$//'</span> <span class="sc">|</span> awk <span class="st">'{$1=$1};1'</span>) \</span>
-<span id="annotated-cell-6-72"><a href="#annotated-cell-6-72" aria-hidden="true" tabindex="-1"></a>        <span class="sc">&amp;&amp;</span> apt<span class="sc">-</span>get update <span class="sc">--</span>fix<span class="sc">-</span>missing <span class="sc">&gt;</span> <span class="er">/</span>dev<span class="sc">/</span>null \</span>
-<span id="annotated-cell-6-73"><a href="#annotated-cell-6-73" aria-hidden="true" tabindex="-1"></a>        <span class="sc">&amp;&amp;</span> apt<span class="sc">-</span>get install <span class="sc">--</span>yes <span class="sc">--</span>no<span class="sc">-</span>install<span class="sc">-</span>recommends <span class="sc">$</span>package_list \</span>
-<span id="annotated-cell-6-74"><a href="#annotated-cell-6-74" aria-hidden="true" tabindex="-1"></a>        <span class="sc">&amp;&amp;</span> apt<span class="sc">-</span>get autoremove <span class="sc">--</span>purge \</span>
-<span id="annotated-cell-6-75"><a href="#annotated-cell-6-75" aria-hidden="true" tabindex="-1"></a>        <span class="sc">&amp;&amp;</span> apt<span class="sc">-</span>get clean \</span>
-<span id="annotated-cell-6-76"><a href="#annotated-cell-6-76" aria-hidden="true" tabindex="-1"></a>        <span class="sc">&amp;&amp;</span> rm <span class="sc">-</span>rf <span class="sc">/</span>var<span class="sc">/</span>lib<span class="sc">/</span>apt<span class="sc">/</span>lists<span class="sc">/</span><span class="er">*</span> \</span>
-<span id="annotated-cell-6-77"><a href="#annotated-cell-6-77" aria-hidden="true" tabindex="-1"></a>        ; fi</span>
-<button class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="15">15</button><span id="annotated-cell-6-78" class="code-annotation-target"><a href="#annotated-cell-6-78" aria-hidden="true" tabindex="-1"></a>ONBUILD USER <span class="sc">$</span>{NB_USER}</span>
-<span id="annotated-cell-6-79"><a href="#annotated-cell-6-79" aria-hidden="true" tabindex="-1"></a></span>
-<span id="annotated-cell-6-80"><a href="#annotated-cell-6-80" aria-hidden="true" tabindex="-1"></a><span class="co"># Add the conda environment</span></span>
-<span id="annotated-cell-6-81"><a href="#annotated-cell-6-81" aria-hidden="true" tabindex="-1"></a><span class="co"># sometimes package solving will get rid of pip installed packages. Make sure jupyter-remote-desktop-proxy does not disappear</span></span>
-<button class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="16">16</button><span id="annotated-cell-6-82" class="code-annotation-target"><a href="#annotated-cell-6-82" aria-hidden="true" tabindex="-1"></a>ONBUILD RUN echo <span class="st">"Checking for 'conda-lock.yml' or 'environment.yml'..."</span> \</span>
-<span id="annotated-cell-6-83"><a href="#annotated-cell-6-83" aria-hidden="true" tabindex="-1"></a>        ; cd <span class="st">"${REPO_DIR}/childimage/"</span> \</span>
-<span id="annotated-cell-6-84"><a href="#annotated-cell-6-84" aria-hidden="true" tabindex="-1"></a>        ; <span class="cf">if</span> test <span class="sc">-</span>f <span class="st">"conda-lock.yml"</span> ; then echo <span class="st">"Using conda-lock.yml"</span> <span class="sc">&amp;</span> \</span>
-<span id="annotated-cell-6-85"><a href="#annotated-cell-6-85" aria-hidden="true" tabindex="-1"></a>        conda<span class="sc">-</span>lock install <span class="sc">--</span>name <span class="sc">$</span>{CONDA_ENV} \</span>
-<span id="annotated-cell-6-86"><a href="#annotated-cell-6-86" aria-hidden="true" tabindex="-1"></a>        <span class="sc">&amp;&amp;</span> pip install <span class="sc">--</span>no<span class="sc">-</span>deps jupyter<span class="sc">-</span>remote<span class="sc">-</span>desktop<span class="sc">-</span>proxy \</span>
-<span id="annotated-cell-6-87"><a href="#annotated-cell-6-87" aria-hidden="true" tabindex="-1"></a>        ; elif test <span class="sc">-</span>f <span class="st">"environment.yml"</span> ; then echo <span class="st">"Using environment.yml"</span> <span class="sc">&amp;</span> \</span>
-<span id="annotated-cell-6-88"><a href="#annotated-cell-6-88" aria-hidden="true" tabindex="-1"></a>        mamba env update <span class="sc">--</span>name <span class="sc">$</span>{CONDA_ENV} <span class="sc">-</span>f environment.yml  \</span>
-<span id="annotated-cell-6-89"><a href="#annotated-cell-6-89" aria-hidden="true" tabindex="-1"></a>        <span class="sc">&amp;&amp;</span> pip install <span class="sc">--</span>no<span class="sc">-</span>deps jupyter<span class="sc">-</span>remote<span class="sc">-</span>desktop<span class="sc">-</span>proxy \</span>
-<span id="annotated-cell-6-90"><a href="#annotated-cell-6-90" aria-hidden="true" tabindex="-1"></a>        ; fi \</span>
-<span id="annotated-cell-6-91"><a href="#annotated-cell-6-91" aria-hidden="true" tabindex="-1"></a>        <span class="sc">&amp;&amp;</span> mamba clean <span class="sc">-</span>yaf \</span>
-<span id="annotated-cell-6-92"><a href="#annotated-cell-6-92" aria-hidden="true" tabindex="-1"></a>        <span class="sc">&amp;&amp;</span> find <span class="sc">$</span>{CONDA_DIR} <span class="sc">-</span>follow <span class="sc">-</span>type f <span class="sc">-</span>name <span class="st">'*.a'</span> <span class="sc">-</span>delete \</span>
-<span id="annotated-cell-6-93"><a href="#annotated-cell-6-93" aria-hidden="true" tabindex="-1"></a>        <span class="sc">&amp;&amp;</span> find <span class="sc">$</span>{CONDA_DIR} <span class="sc">-</span>follow <span class="sc">-</span>type f <span class="sc">-</span>name <span class="st">'*.js.map'</span> <span class="sc">-</span>delete \</span>
-<span id="annotated-cell-6-94"><a href="#annotated-cell-6-94" aria-hidden="true" tabindex="-1"></a>        ; <span class="cf">if</span> ls <span class="sc">$</span>{NB_PYTHON_PREFIX}<span class="sc">/</span>lib<span class="sc">/</span>python<span class="sc">*</span><span class="er">/</span>site<span class="sc">-</span>packages<span class="sc">/</span>bokeh<span class="sc">/</span>server<span class="sc">/</span>static <span class="sc">&gt;</span> <span class="er">/</span>dev<span class="sc">/</span>null <span class="dv">2</span><span class="sc">&gt;</span><span class="er">&amp;</span><span class="dv">1</span>; then \</span>
-<span id="annotated-cell-6-95"><a href="#annotated-cell-6-95" aria-hidden="true" tabindex="-1"></a>        find <span class="sc">$</span>{NB_PYTHON_PREFIX}<span class="sc">/</span>lib<span class="sc">/</span>python<span class="sc">*</span><span class="er">/</span>site<span class="sc">-</span>packages<span class="sc">/</span>bokeh<span class="sc">/</span>server<span class="sc">/</span>static <span class="sc">-</span>follow <span class="sc">-</span>type f <span class="sc">-</span>name <span class="st">'*.js'</span> <span class="sc">!</span> <span class="sc">-</span>name <span class="st">'*.min.js'</span> <span class="sc">-</span>delete \</span>
-<span id="annotated-cell-6-96"><a href="#annotated-cell-6-96" aria-hidden="true" tabindex="-1"></a>        ; fi</span>
-<span id="annotated-cell-6-97"><a href="#annotated-cell-6-97" aria-hidden="true" tabindex="-1"></a></span>
-<span id="annotated-cell-6-98"><a href="#annotated-cell-6-98" aria-hidden="true" tabindex="-1"></a><span class="co"># If a requirements.txt file exists, use pip to install packages</span></span>
-<span id="annotated-cell-6-99"><a href="#annotated-cell-6-99" aria-hidden="true" tabindex="-1"></a><span class="co"># listed there. We don't want to save cached wheels in the image</span></span>
-<span id="annotated-cell-6-100"><a href="#annotated-cell-6-100" aria-hidden="true" tabindex="-1"></a><span class="co"># to avoid wasting space.</span></span>
-<button class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="17">17</button><span id="annotated-cell-6-101" class="code-annotation-target"><a href="#annotated-cell-6-101" aria-hidden="true" tabindex="-1"></a>ONBUILD RUN echo <span class="st">"Checking for pip 'requirements.txt'..."</span> \</span>
-<span id="annotated-cell-6-102"><a href="#annotated-cell-6-102" aria-hidden="true" tabindex="-1"></a>        ; cd <span class="st">"${REPO_DIR}/childimage/"</span> \</span>
-<span id="annotated-cell-6-103"><a href="#annotated-cell-6-103" aria-hidden="true" tabindex="-1"></a>        ; <span class="cf">if</span> test <span class="sc">-</span>f <span class="st">"requirements.txt"</span> ; then \</span>
-<span id="annotated-cell-6-104"><a href="#annotated-cell-6-104" aria-hidden="true" tabindex="-1"></a>        <span class="sc">$</span>{NB_PYTHON_PREFIX}<span class="sc">/</span>bin<span class="sc">/</span>pip install <span class="sc">--</span>no<span class="sc">-</span>cache <span class="sc">-</span>r requirements.txt \</span>
-<span id="annotated-cell-6-105"><a href="#annotated-cell-6-105" aria-hidden="true" tabindex="-1"></a>        ; fi</span>
-<span id="annotated-cell-6-106"><a href="#annotated-cell-6-106" aria-hidden="true" tabindex="-1"></a></span>
-<span id="annotated-cell-6-107"><a href="#annotated-cell-6-107" aria-hidden="true" tabindex="-1"></a><span class="co"># Add the r packages</span></span>
-<button class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="18">18</button><span id="annotated-cell-6-108" class="code-annotation-target"><a href="#annotated-cell-6-108" aria-hidden="true" tabindex="-1"></a>ONBUILD RUN echo <span class="st">"Checking for 'install.R"</span> \</span>
+<span id="annotated-cell-6-42"><a href="#annotated-cell-6-42" aria-hidden="true" tabindex="-1"></a><span class="co"># Clean up extra files in ${REPO_DIR}</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="7">7</button><span id="annotated-cell-6-43" class="code-annotation-target"><a href="#annotated-cell-6-43" aria-hidden="true" tabindex="-1"></a>RUN rm <span class="sc">-</span>rf <span class="sc">$</span>{REPO_DIR}<span class="sc">/</span>book <span class="sc">$</span>{REPO_DIR}<span class="sc">/</span>docs</span>
+<span id="annotated-cell-6-44"><a href="#annotated-cell-6-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-6-45"><a href="#annotated-cell-6-45" aria-hidden="true" tabindex="-1"></a><span class="do">###################</span></span>
+<span id="annotated-cell-6-46"><a href="#annotated-cell-6-46" aria-hidden="true" tabindex="-1"></a><span class="co"># Set up behavior for child dockerfiles</span></span>
+<span id="annotated-cell-6-47"><a href="#annotated-cell-6-47" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert NB_USER to ENV (from ARG) so that it passes to the child dockerfile</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="8">8</button><span id="annotated-cell-6-48" class="code-annotation-target"><a href="#annotated-cell-6-48" aria-hidden="true" tabindex="-1"></a>ENV NB_USER<span class="ot">=</span><span class="er">$</span>{NB_USER}</span>
+<span id="annotated-cell-6-49"><a href="#annotated-cell-6-49" aria-hidden="true" tabindex="-1"></a></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="9">9</button><span id="annotated-cell-6-50" class="code-annotation-target"><a href="#annotated-cell-6-50" aria-hidden="true" tabindex="-1"></a><span class="do">## ONBUILD section. These commands are run in child Dockerfiles. These are run right after the FROM image is loaded</span></span>
+<span id="annotated-cell-6-51"><a href="#annotated-cell-6-51" aria-hidden="true" tabindex="-1"></a></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="10">10</button><span id="annotated-cell-6-52" class="code-annotation-target"><a href="#annotated-cell-6-52" aria-hidden="true" tabindex="-1"></a>ONBUILD USER <span class="sc">$</span>{NB_USER}</span>
+<span id="annotated-cell-6-53"><a href="#annotated-cell-6-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-6-54"><a href="#annotated-cell-6-54" aria-hidden="true" tabindex="-1"></a><span class="co"># ${REPO_DIR} is owned by ${NB_USER}</span></span>
+<span id="annotated-cell-6-55"><a href="#annotated-cell-6-55" aria-hidden="true" tabindex="-1"></a><span class="co"># copy all the files in the repo (i.e. ".") into ${REPO_DIR}</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="11">11</button><span id="annotated-cell-6-56" class="code-annotation-target"><a href="#annotated-cell-6-56" aria-hidden="true" tabindex="-1"></a>ONBUILD COPY <span class="sc">--</span>chown<span class="ot">=</span><span class="er">$</span>{NB_USER}<span class="sc">:</span><span class="er">$</span>{NB_USER} . <span class="sc">$</span>{REPO_DIR}<span class="sc">/</span>childimage</span>
+<span id="annotated-cell-6-57"><a href="#annotated-cell-6-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-6-58"><a href="#annotated-cell-6-58" aria-hidden="true" tabindex="-1"></a><span class="co"># Desktop and apt.txt installs need to be done by root</span></span>
+<span id="annotated-cell-6-59"><a href="#annotated-cell-6-59" aria-hidden="true" tabindex="-1"></a>ONBUILD USER root </span>
+<span id="annotated-cell-6-60"><a href="#annotated-cell-6-60" aria-hidden="true" tabindex="-1"></a></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="13">13</button><span id="annotated-cell-6-61" class="code-annotation-target"><a href="#annotated-cell-6-61" aria-hidden="true" tabindex="-1"></a><span class="co"># Copy Desktop files into ${REPO_DIR}/Desktop if they exist. start will copy to Application dir and Desktop</span></span>
+<span id="annotated-cell-6-62"><a href="#annotated-cell-6-62" aria-hidden="true" tabindex="-1"></a><span class="co"># Will not fail if Desktop dir exists but is empty</span></span>
+<span id="annotated-cell-6-63"><a href="#annotated-cell-6-63" aria-hidden="true" tabindex="-1"></a>ONBUILD RUN echo <span class="st">"Checking for 'Desktop directory'..."</span> \</span>
+<span id="annotated-cell-6-64"><a href="#annotated-cell-6-64" aria-hidden="true" tabindex="-1"></a>        ; cd <span class="st">"${REPO_DIR}/childimage/"</span> \</span>
+<span id="annotated-cell-6-65"><a href="#annotated-cell-6-65" aria-hidden="true" tabindex="-1"></a>        ; <span class="cf">if</span> test <span class="sc">-</span>d Desktop ; then \</span>
+<span id="annotated-cell-6-66"><a href="#annotated-cell-6-66" aria-hidden="true" tabindex="-1"></a>            mkdir <span class="sc">-</span>p <span class="st">"${REPO_DIR}/Desktop"</span> <span class="sc">&amp;&amp;</span> \</span>
+<span id="annotated-cell-6-67"><a href="#annotated-cell-6-67" aria-hidden="true" tabindex="-1"></a>            cp <span class="sc">-</span>r Desktop<span class="sc">/</span><span class="er">*</span> <span class="st">"${REPO_DIR}/Desktop/"</span> <span class="dv">2</span><span class="sc">&gt;</span><span class="er">/</span>dev<span class="sc">/</span>null <span class="sc">&amp;&amp;</span> \</span>
+<span id="annotated-cell-6-68"><a href="#annotated-cell-6-68" aria-hidden="true" tabindex="-1"></a>            chmod <span class="sc">+</span>x <span class="st">"${REPO_DIR}/desktop.sh"</span> ; \</span>
+<span id="annotated-cell-6-69"><a href="#annotated-cell-6-69" aria-hidden="true" tabindex="-1"></a>        fi \</span>
+<span id="annotated-cell-6-70"><a href="#annotated-cell-6-70" aria-hidden="true" tabindex="-1"></a>        ; <span class="st">"${REPO_DIR}/desktop.sh"</span></span>
+<span id="annotated-cell-6-71"><a href="#annotated-cell-6-71" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-6-72"><a href="#annotated-cell-6-72" aria-hidden="true" tabindex="-1"></a><span class="co"># Install apt packages specified in a apt.txt file if it exists.</span></span>
+<span id="annotated-cell-6-73"><a href="#annotated-cell-6-73" aria-hidden="true" tabindex="-1"></a><span class="co"># blank lines and comments are supported in apt.txt</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="14">14</button><span id="annotated-cell-6-74" class="code-annotation-target"><a href="#annotated-cell-6-74" aria-hidden="true" tabindex="-1"></a>ONBUILD RUN echo <span class="st">"Checking for 'apt.txt'..."</span> \</span>
+<span id="annotated-cell-6-75"><a href="#annotated-cell-6-75" aria-hidden="true" tabindex="-1"></a>        ; cd <span class="st">"${REPO_DIR}/childimage/"</span> \</span>
+<span id="annotated-cell-6-76"><a href="#annotated-cell-6-76" aria-hidden="true" tabindex="-1"></a>        ; <span class="cf">if</span> test <span class="sc">-</span>f <span class="st">"apt.txt"</span> ; then \</span>
+<span id="annotated-cell-6-77"><a href="#annotated-cell-6-77" aria-hidden="true" tabindex="-1"></a>        package_list<span class="ot">=</span><span class="er">$</span>(grep <span class="sc">-</span>v <span class="st">'^\s*#'</span> apt.txt <span class="sc">|</span> grep <span class="sc">-</span>v <span class="st">'^\s*$'</span> <span class="sc">|</span> sed <span class="st">'s/</span><span class="sc">\r</span><span class="st">//g; s/#.*//; s/^[[:space:]]*//; s/[[:space:]]*$//'</span> <span class="sc">|</span> awk <span class="st">'{$1=$1};1'</span>) \</span>
+<span id="annotated-cell-6-78"><a href="#annotated-cell-6-78" aria-hidden="true" tabindex="-1"></a>        <span class="sc">&amp;&amp;</span> apt<span class="sc">-</span>get update <span class="sc">--</span>fix<span class="sc">-</span>missing <span class="sc">&gt;</span> <span class="er">/</span>dev<span class="sc">/</span>null \</span>
+<span id="annotated-cell-6-79"><a href="#annotated-cell-6-79" aria-hidden="true" tabindex="-1"></a>        <span class="sc">&amp;&amp;</span> apt<span class="sc">-</span>get install <span class="sc">--</span>yes <span class="sc">--</span>no<span class="sc">-</span>install<span class="sc">-</span>recommends <span class="sc">$</span>package_list \</span>
+<span id="annotated-cell-6-80"><a href="#annotated-cell-6-80" aria-hidden="true" tabindex="-1"></a>        <span class="sc">&amp;&amp;</span> apt<span class="sc">-</span>get autoremove <span class="sc">--</span>purge \</span>
+<span id="annotated-cell-6-81"><a href="#annotated-cell-6-81" aria-hidden="true" tabindex="-1"></a>        <span class="sc">&amp;&amp;</span> apt<span class="sc">-</span>get clean \</span>
+<span id="annotated-cell-6-82"><a href="#annotated-cell-6-82" aria-hidden="true" tabindex="-1"></a>        <span class="sc">&amp;&amp;</span> rm <span class="sc">-</span>rf <span class="sc">/</span>var<span class="sc">/</span>lib<span class="sc">/</span>apt<span class="sc">/</span>lists<span class="sc">/</span><span class="er">*</span> \</span>
+<span id="annotated-cell-6-83"><a href="#annotated-cell-6-83" aria-hidden="true" tabindex="-1"></a>        ; fi</span>
+<span id="annotated-cell-6-84"><a href="#annotated-cell-6-84" aria-hidden="true" tabindex="-1"></a>        </span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="15">15</button><span id="annotated-cell-6-85" class="code-annotation-target"><a href="#annotated-cell-6-85" aria-hidden="true" tabindex="-1"></a>ONBUILD USER <span class="sc">$</span>{NB_USER}</span>
+<span id="annotated-cell-6-86"><a href="#annotated-cell-6-86" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-6-87"><a href="#annotated-cell-6-87" aria-hidden="true" tabindex="-1"></a><span class="co"># Add the conda environment</span></span>
+<span id="annotated-cell-6-88"><a href="#annotated-cell-6-88" aria-hidden="true" tabindex="-1"></a><span class="co"># sometimes package solving will get rid of pip installed packages. Make sure jupyter-remote-desktop-proxy does not disappear</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="16">16</button><span id="annotated-cell-6-89" class="code-annotation-target"><a href="#annotated-cell-6-89" aria-hidden="true" tabindex="-1"></a>ONBUILD RUN echo <span class="st">"Checking for 'conda-lock.yml' or 'environment.yml'..."</span> \</span>
+<span id="annotated-cell-6-90"><a href="#annotated-cell-6-90" aria-hidden="true" tabindex="-1"></a>        ; cd <span class="st">"${REPO_DIR}/childimage/"</span> \</span>
+<span id="annotated-cell-6-91"><a href="#annotated-cell-6-91" aria-hidden="true" tabindex="-1"></a>        ; <span class="cf">if</span> test <span class="sc">-</span>f <span class="st">"conda-lock.yml"</span> ; then echo <span class="st">"Using conda-lock.yml"</span> <span class="sc">&amp;</span> \</span>
+<span id="annotated-cell-6-92"><a href="#annotated-cell-6-92" aria-hidden="true" tabindex="-1"></a>        conda<span class="sc">-</span>lock install <span class="sc">--</span>name <span class="sc">$</span>{CONDA_ENV} \</span>
+<span id="annotated-cell-6-93"><a href="#annotated-cell-6-93" aria-hidden="true" tabindex="-1"></a>        <span class="sc">&amp;&amp;</span> pip install <span class="sc">--</span>no<span class="sc">-</span>deps jupyter<span class="sc">-</span>remote<span class="sc">-</span>desktop<span class="sc">-</span>proxy \</span>
+<span id="annotated-cell-6-94"><a href="#annotated-cell-6-94" aria-hidden="true" tabindex="-1"></a>        ; elif test <span class="sc">-</span>f <span class="st">"environment.yml"</span> ; then echo <span class="st">"Using environment.yml"</span> <span class="sc">&amp;</span> \</span>
+<span id="annotated-cell-6-95"><a href="#annotated-cell-6-95" aria-hidden="true" tabindex="-1"></a>        mamba env update <span class="sc">--</span>name <span class="sc">$</span>{CONDA_ENV} <span class="sc">-</span>f environment.yml  \</span>
+<span id="annotated-cell-6-96"><a href="#annotated-cell-6-96" aria-hidden="true" tabindex="-1"></a>        <span class="sc">&amp;&amp;</span> pip install <span class="sc">--</span>no<span class="sc">-</span>deps jupyter<span class="sc">-</span>remote<span class="sc">-</span>desktop<span class="sc">-</span>proxy \</span>
+<span id="annotated-cell-6-97"><a href="#annotated-cell-6-97" aria-hidden="true" tabindex="-1"></a>        ; fi \</span>
+<span id="annotated-cell-6-98"><a href="#annotated-cell-6-98" aria-hidden="true" tabindex="-1"></a>        <span class="sc">&amp;&amp;</span> mamba clean <span class="sc">-</span>yaf \</span>
+<span id="annotated-cell-6-99"><a href="#annotated-cell-6-99" aria-hidden="true" tabindex="-1"></a>        <span class="sc">&amp;&amp;</span> find <span class="sc">$</span>{CONDA_DIR} <span class="sc">-</span>follow <span class="sc">-</span>type f <span class="sc">-</span>name <span class="st">'*.a'</span> <span class="sc">-</span>delete \</span>
+<span id="annotated-cell-6-100"><a href="#annotated-cell-6-100" aria-hidden="true" tabindex="-1"></a>        <span class="sc">&amp;&amp;</span> find <span class="sc">$</span>{CONDA_DIR} <span class="sc">-</span>follow <span class="sc">-</span>type f <span class="sc">-</span>name <span class="st">'*.js.map'</span> <span class="sc">-</span>delete \</span>
+<span id="annotated-cell-6-101"><a href="#annotated-cell-6-101" aria-hidden="true" tabindex="-1"></a>        ; <span class="cf">if</span> ls <span class="sc">$</span>{NB_PYTHON_PREFIX}<span class="sc">/</span>lib<span class="sc">/</span>python<span class="sc">*</span><span class="er">/</span>site<span class="sc">-</span>packages<span class="sc">/</span>bokeh<span class="sc">/</span>server<span class="sc">/</span>static <span class="sc">&gt;</span> <span class="er">/</span>dev<span class="sc">/</span>null <span class="dv">2</span><span class="sc">&gt;</span><span class="er">&amp;</span><span class="dv">1</span>; then \</span>
+<span id="annotated-cell-6-102"><a href="#annotated-cell-6-102" aria-hidden="true" tabindex="-1"></a>        find <span class="sc">$</span>{NB_PYTHON_PREFIX}<span class="sc">/</span>lib<span class="sc">/</span>python<span class="sc">*</span><span class="er">/</span>site<span class="sc">-</span>packages<span class="sc">/</span>bokeh<span class="sc">/</span>server<span class="sc">/</span>static <span class="sc">-</span>follow <span class="sc">-</span>type f <span class="sc">-</span>name <span class="st">'*.js'</span> <span class="sc">!</span> <span class="sc">-</span>name <span class="st">'*.min.js'</span> <span class="sc">-</span>delete \</span>
+<span id="annotated-cell-6-103"><a href="#annotated-cell-6-103" aria-hidden="true" tabindex="-1"></a>        ; fi</span>
+<span id="annotated-cell-6-104"><a href="#annotated-cell-6-104" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-6-105"><a href="#annotated-cell-6-105" aria-hidden="true" tabindex="-1"></a><span class="co"># If a requirements.txt file exists, use pip to install packages</span></span>
+<span id="annotated-cell-6-106"><a href="#annotated-cell-6-106" aria-hidden="true" tabindex="-1"></a><span class="co"># listed there. We don't want to save cached wheels in the image</span></span>
+<span id="annotated-cell-6-107"><a href="#annotated-cell-6-107" aria-hidden="true" tabindex="-1"></a><span class="co"># to avoid wasting space.</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="17">17</button><span id="annotated-cell-6-108" class="code-annotation-target"><a href="#annotated-cell-6-108" aria-hidden="true" tabindex="-1"></a>ONBUILD RUN echo <span class="st">"Checking for pip 'requirements.txt'..."</span> \</span>
 <span id="annotated-cell-6-109"><a href="#annotated-cell-6-109" aria-hidden="true" tabindex="-1"></a>        ; cd <span class="st">"${REPO_DIR}/childimage/"</span> \</span>
-<span id="annotated-cell-6-110"><a href="#annotated-cell-6-110" aria-hidden="true" tabindex="-1"></a>        ; <span class="cf">if</span> test <span class="sc">-</span>f <span class="st">"install.R"</span> ; then echo <span class="st">"Using install.R"</span> <span class="sc">&amp;</span> \</span>
-<span id="annotated-cell-6-111"><a href="#annotated-cell-6-111" aria-hidden="true" tabindex="-1"></a>        Rscript install.R \</span>
+<span id="annotated-cell-6-110"><a href="#annotated-cell-6-110" aria-hidden="true" tabindex="-1"></a>        ; <span class="cf">if</span> test <span class="sc">-</span>f <span class="st">"requirements.txt"</span> ; then \</span>
+<span id="annotated-cell-6-111"><a href="#annotated-cell-6-111" aria-hidden="true" tabindex="-1"></a>        <span class="sc">$</span>{NB_PYTHON_PREFIX}<span class="sc">/</span>bin<span class="sc">/</span>pip install <span class="sc">--</span>no<span class="sc">-</span>cache <span class="sc">-</span>r requirements.txt \</span>
 <span id="annotated-cell-6-112"><a href="#annotated-cell-6-112" aria-hidden="true" tabindex="-1"></a>        ; fi</span>
 <span id="annotated-cell-6-113"><a href="#annotated-cell-6-113" aria-hidden="true" tabindex="-1"></a></span>
-<span id="annotated-cell-6-114"><a href="#annotated-cell-6-114" aria-hidden="true" tabindex="-1"></a><span class="co"># If a start file exists, put that under ${REPO_DIR}/childimage/start. </span></span>
-<span id="annotated-cell-6-115"><a href="#annotated-cell-6-115" aria-hidden="true" tabindex="-1"></a><span class="co"># This is sourced in ${REPO_DIR}/start</span></span>
-<button class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="19">19</button><span id="annotated-cell-6-116" class="code-annotation-target"><a href="#annotated-cell-6-116" aria-hidden="true" tabindex="-1"></a>ONBUILD RUN echo <span class="st">"Checking for 'start'..."</span> \</span>
-<span id="annotated-cell-6-117"><a href="#annotated-cell-6-117" aria-hidden="true" tabindex="-1"></a>        ; cd <span class="st">"${REPO_DIR}/childimage/"</span> \</span>
-<span id="annotated-cell-6-118"><a href="#annotated-cell-6-118" aria-hidden="true" tabindex="-1"></a>        ; <span class="cf">if</span> test <span class="sc">-</span>f <span class="st">"start"</span> ; then \</span>
-<span id="annotated-cell-6-119"><a href="#annotated-cell-6-119" aria-hidden="true" tabindex="-1"></a>        chmod <span class="sc">+</span>x start \</span>
-<span id="annotated-cell-6-120"><a href="#annotated-cell-6-120" aria-hidden="true" tabindex="-1"></a>        ; fi</span>
-<span id="annotated-cell-6-121"><a href="#annotated-cell-6-121" aria-hidden="true" tabindex="-1"></a></span>
-<span id="annotated-cell-6-122"><a href="#annotated-cell-6-122" aria-hidden="true" tabindex="-1"></a><span class="co"># If a postBuild file exists, run it!</span></span>
-<span id="annotated-cell-6-123"><a href="#annotated-cell-6-123" aria-hidden="true" tabindex="-1"></a><span class="co"># After it's done, we try to remove any possible cruft commands there</span></span>
-<span id="annotated-cell-6-124"><a href="#annotated-cell-6-124" aria-hidden="true" tabindex="-1"></a><span class="co"># left behind under $HOME - particularly stuff that jupyterlab extensions</span></span>
-<span id="annotated-cell-6-125"><a href="#annotated-cell-6-125" aria-hidden="true" tabindex="-1"></a><span class="co"># leave behind.</span></span>
-<button class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="20">20</button><span id="annotated-cell-6-126" class="code-annotation-target"><a href="#annotated-cell-6-126" aria-hidden="true" tabindex="-1"></a>ONBUILD RUN echo <span class="st">"Checking for 'postBuild'..."</span> \</span>
-<span id="annotated-cell-6-127"><a href="#annotated-cell-6-127" aria-hidden="true" tabindex="-1"></a>        ; cd <span class="st">"${REPO_DIR}/childimage/"</span> \</span>
-<span id="annotated-cell-6-128"><a href="#annotated-cell-6-128" aria-hidden="true" tabindex="-1"></a>        ; <span class="cf">if</span> test <span class="sc">-</span>f <span class="st">"postBuild"</span> ; then \</span>
-<span id="annotated-cell-6-129"><a href="#annotated-cell-6-129" aria-hidden="true" tabindex="-1"></a>        chmod <span class="sc">+</span>x postBuild \</span>
-<span id="annotated-cell-6-130"><a href="#annotated-cell-6-130" aria-hidden="true" tabindex="-1"></a>        <span class="sc">&amp;&amp;</span> .<span class="sc">/</span>postBuild \</span>
-<span id="annotated-cell-6-131"><a href="#annotated-cell-6-131" aria-hidden="true" tabindex="-1"></a>        <span class="sc">&amp;&amp;</span> rm <span class="sc">-</span>rf <span class="sc">/</span>tmp<span class="sc">/</span><span class="er">*</span> \</span>
-<span id="annotated-cell-6-132"><a href="#annotated-cell-6-132" aria-hidden="true" tabindex="-1"></a>        <span class="sc">&amp;&amp;</span> rm <span class="sc">-</span>rf <span class="sc">$</span>{HOME}<span class="sc">/</span>.cache <span class="sc">$</span>{HOME}<span class="sc">/</span>.npm <span class="sc">$</span>{HOME}<span class="sc">/</span>.yarn \</span>
-<span id="annotated-cell-6-133"><a href="#annotated-cell-6-133" aria-hidden="true" tabindex="-1"></a>        <span class="sc">&amp;&amp;</span> rm <span class="sc">-</span>rf <span class="sc">$</span>{NB_PYTHON_PREFIX}<span class="sc">/</span>share<span class="sc">/</span>jupyter<span class="sc">/</span>lab<span class="sc">/</span>staging \</span>
-<span id="annotated-cell-6-134"><a href="#annotated-cell-6-134" aria-hidden="true" tabindex="-1"></a>        <span class="sc">&amp;&amp;</span> find <span class="sc">$</span>{CONDA_DIR} <span class="sc">-</span>follow <span class="sc">-</span>type f <span class="sc">-</span>name <span class="st">'*.a'</span> <span class="sc">-</span>delete \</span>
-<span id="annotated-cell-6-135"><a href="#annotated-cell-6-135" aria-hidden="true" tabindex="-1"></a>        <span class="sc">&amp;&amp;</span> find <span class="sc">$</span>{CONDA_DIR} <span class="sc">-</span>follow <span class="sc">-</span>type f <span class="sc">-</span>name <span class="st">'*.js.map'</span> <span class="sc">-</span>delete \</span>
-<span id="annotated-cell-6-136"><a href="#annotated-cell-6-136" aria-hidden="true" tabindex="-1"></a>        ; fi</span>
-<span id="annotated-cell-6-137"><a href="#annotated-cell-6-137" aria-hidden="true" tabindex="-1"></a></span>
-<span id="annotated-cell-6-138"><a href="#annotated-cell-6-138" aria-hidden="true" tabindex="-1"></a><span class="do">## End ONBUILD section for child images</span></span>
-<span id="annotated-cell-6-139"><a href="#annotated-cell-6-139" aria-hidden="true" tabindex="-1"></a><span class="do">################################</span></span>
-<span id="annotated-cell-6-140"><a href="#annotated-cell-6-140" aria-hidden="true" tabindex="-1"></a></span>
-<span id="annotated-cell-6-141"><a href="#annotated-cell-6-141" aria-hidden="true" tabindex="-1"></a><span class="co"># Revert to default user and home as pwd</span></span>
-<button class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="21">21</button><span id="annotated-cell-6-142" class="code-annotation-target"><a href="#annotated-cell-6-142" aria-hidden="true" tabindex="-1"></a>USER <span class="sc">$</span>{NB_USER}</span>
-<span id="annotated-cell-6-143"><a href="#annotated-cell-6-143" aria-hidden="true" tabindex="-1"></a>WORKDIR <span class="sc">$</span>{HOME}</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="annotated-cell-6-114"><a href="#annotated-cell-6-114" aria-hidden="true" tabindex="-1"></a><span class="co"># Add the r packages</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="18">18</button><span id="annotated-cell-6-115" class="code-annotation-target"><a href="#annotated-cell-6-115" aria-hidden="true" tabindex="-1"></a>ONBUILD RUN echo <span class="st">"Checking for 'install.R"</span> \</span>
+<span id="annotated-cell-6-116"><a href="#annotated-cell-6-116" aria-hidden="true" tabindex="-1"></a>        ; cd <span class="st">"${REPO_DIR}/childimage/"</span> \</span>
+<span id="annotated-cell-6-117"><a href="#annotated-cell-6-117" aria-hidden="true" tabindex="-1"></a>        ; <span class="cf">if</span> test <span class="sc">-</span>f <span class="st">"install.R"</span> ; then echo <span class="st">"Using install.R"</span> <span class="sc">&amp;</span> \</span>
+<span id="annotated-cell-6-118"><a href="#annotated-cell-6-118" aria-hidden="true" tabindex="-1"></a>        Rscript install.R \</span>
+<span id="annotated-cell-6-119"><a href="#annotated-cell-6-119" aria-hidden="true" tabindex="-1"></a>        ; fi</span>
+<span id="annotated-cell-6-120"><a href="#annotated-cell-6-120" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-6-121"><a href="#annotated-cell-6-121" aria-hidden="true" tabindex="-1"></a><span class="co"># If a start file exists, put that under ${REPO_DIR}/childimage/start. </span></span>
+<span id="annotated-cell-6-122"><a href="#annotated-cell-6-122" aria-hidden="true" tabindex="-1"></a><span class="co"># This is sourced in ${REPO_DIR}/start</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="19">19</button><span id="annotated-cell-6-123" class="code-annotation-target"><a href="#annotated-cell-6-123" aria-hidden="true" tabindex="-1"></a>ONBUILD RUN echo <span class="st">"Checking for 'start'..."</span> \</span>
+<span id="annotated-cell-6-124"><a href="#annotated-cell-6-124" aria-hidden="true" tabindex="-1"></a>        ; cd <span class="st">"${REPO_DIR}/childimage/"</span> \</span>
+<span id="annotated-cell-6-125"><a href="#annotated-cell-6-125" aria-hidden="true" tabindex="-1"></a>        ; <span class="cf">if</span> test <span class="sc">-</span>f <span class="st">"start"</span> ; then \</span>
+<span id="annotated-cell-6-126"><a href="#annotated-cell-6-126" aria-hidden="true" tabindex="-1"></a>        chmod <span class="sc">+</span>x start \</span>
+<span id="annotated-cell-6-127"><a href="#annotated-cell-6-127" aria-hidden="true" tabindex="-1"></a>        ; fi</span>
+<span id="annotated-cell-6-128"><a href="#annotated-cell-6-128" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-6-129"><a href="#annotated-cell-6-129" aria-hidden="true" tabindex="-1"></a><span class="co"># If a postBuild file exists, run it!</span></span>
+<span id="annotated-cell-6-130"><a href="#annotated-cell-6-130" aria-hidden="true" tabindex="-1"></a><span class="co"># After it's done, we try to remove any possible cruft commands there</span></span>
+<span id="annotated-cell-6-131"><a href="#annotated-cell-6-131" aria-hidden="true" tabindex="-1"></a><span class="co"># left behind under $HOME - particularly stuff that jupyterlab extensions</span></span>
+<span id="annotated-cell-6-132"><a href="#annotated-cell-6-132" aria-hidden="true" tabindex="-1"></a><span class="co"># leave behind.</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="20">20</button><span id="annotated-cell-6-133" class="code-annotation-target"><a href="#annotated-cell-6-133" aria-hidden="true" tabindex="-1"></a>ONBUILD RUN echo <span class="st">"Checking for 'postBuild'..."</span> \</span>
+<span id="annotated-cell-6-134"><a href="#annotated-cell-6-134" aria-hidden="true" tabindex="-1"></a>        ; cd <span class="st">"${REPO_DIR}/childimage/"</span> \</span>
+<span id="annotated-cell-6-135"><a href="#annotated-cell-6-135" aria-hidden="true" tabindex="-1"></a>        ; <span class="cf">if</span> test <span class="sc">-</span>f <span class="st">"postBuild"</span> ; then \</span>
+<span id="annotated-cell-6-136"><a href="#annotated-cell-6-136" aria-hidden="true" tabindex="-1"></a>        chmod <span class="sc">+</span>x postBuild \</span>
+<span id="annotated-cell-6-137"><a href="#annotated-cell-6-137" aria-hidden="true" tabindex="-1"></a>        <span class="sc">&amp;&amp;</span> .<span class="sc">/</span>postBuild \</span>
+<span id="annotated-cell-6-138"><a href="#annotated-cell-6-138" aria-hidden="true" tabindex="-1"></a>        <span class="sc">&amp;&amp;</span> rm <span class="sc">-</span>rf <span class="sc">/</span>tmp<span class="sc">/</span><span class="er">*</span> \</span>
+<span id="annotated-cell-6-139"><a href="#annotated-cell-6-139" aria-hidden="true" tabindex="-1"></a>        <span class="sc">&amp;&amp;</span> rm <span class="sc">-</span>rf <span class="sc">$</span>{HOME}<span class="sc">/</span>.cache <span class="sc">$</span>{HOME}<span class="sc">/</span>.npm <span class="sc">$</span>{HOME}<span class="sc">/</span>.yarn \</span>
+<span id="annotated-cell-6-140"><a href="#annotated-cell-6-140" aria-hidden="true" tabindex="-1"></a>        <span class="sc">&amp;&amp;</span> rm <span class="sc">-</span>rf <span class="sc">$</span>{NB_PYTHON_PREFIX}<span class="sc">/</span>share<span class="sc">/</span>jupyter<span class="sc">/</span>lab<span class="sc">/</span>staging \</span>
+<span id="annotated-cell-6-141"><a href="#annotated-cell-6-141" aria-hidden="true" tabindex="-1"></a>        <span class="sc">&amp;&amp;</span> find <span class="sc">$</span>{CONDA_DIR} <span class="sc">-</span>follow <span class="sc">-</span>type f <span class="sc">-</span>name <span class="st">'*.a'</span> <span class="sc">-</span>delete \</span>
+<span id="annotated-cell-6-142"><a href="#annotated-cell-6-142" aria-hidden="true" tabindex="-1"></a>        <span class="sc">&amp;&amp;</span> find <span class="sc">$</span>{CONDA_DIR} <span class="sc">-</span>follow <span class="sc">-</span>type f <span class="sc">-</span>name <span class="st">'*.js.map'</span> <span class="sc">-</span>delete \</span>
+<span id="annotated-cell-6-143"><a href="#annotated-cell-6-143" aria-hidden="true" tabindex="-1"></a>        ; fi</span>
+<span id="annotated-cell-6-144"><a href="#annotated-cell-6-144" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-6-145"><a href="#annotated-cell-6-145" aria-hidden="true" tabindex="-1"></a><span class="do">## End ONBUILD section for child images</span></span>
+<span id="annotated-cell-6-146"><a href="#annotated-cell-6-146" aria-hidden="true" tabindex="-1"></a><span class="do">################################</span></span>
+<span id="annotated-cell-6-147"><a href="#annotated-cell-6-147" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-6-148"><a href="#annotated-cell-6-148" aria-hidden="true" tabindex="-1"></a><span class="co"># Revert to default user and home as pwd</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="21">21</button><span id="annotated-cell-6-149" class="code-annotation-target"><a href="#annotated-cell-6-149" aria-hidden="true" tabindex="-1"></a>USER <span class="sc">$</span>{NB_USER}</span>
+<span id="annotated-cell-6-150"><a href="#annotated-cell-6-150" aria-hidden="true" tabindex="-1"></a>WORKDIR <span class="sc">$</span>{HOME}</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <dl class="code-annotation-container-hidden code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-6" data-target-annotation="1">1</dt>
 <dd>
@@ -488,85 +495,84 @@ most of the work in py-rocket-base is done here. appendix calls rocker.sh and in
 </dd>
 <dt data-target-cell="annotated-cell-6" data-target-annotation="2">2</dt>
 <dd>
-<span data-code-cell="annotated-cell-6" data-code-lines="4" data-code-annotation="2">repo2docker does not set this environment variable and it is useful for child builds</span>
+<span data-code-cell="annotated-cell-6" data-code-lines="3,4,5,6,7" data-code-annotation="2">Set variables. CONDA_ENV is useful for child builds</span>
 </dd>
 <dt data-target-cell="annotated-cell-6" data-target-annotation="3">3</dt>
 <dd>
-<span data-code-cell="annotated-cell-6" data-code-lines="7,8,9,10,11,12,13,14" data-code-annotation="3">This section runs the script <code>rocker.sh</code> which installs R and RStudio using rocker scripts.</span>
+<span data-code-cell="annotated-cell-6" data-code-lines="10,11,12,13,14,15,16,17" data-code-annotation="3">This section runs the script <code>rocker.sh</code> which installs R and RStudio using rocker scripts.</span>
 </dd>
 <dt data-target-cell="annotated-cell-6" data-target-annotation="4">4</dt>
 <dd>
-<span data-code-cell="annotated-cell-6" data-code-lines="16,17,18,19,20,21,22,23" data-code-annotation="4">The rocker scripts build R from source and as part of clean up in the script, linux packages are removed that are not needed. repo2docker installs the packages in <code>apt.txt</code> automatically before the code in <code>appendix</code> thus the needed linux packages (which include packages for desktop) are put in <code>apt2.txt</code> (which repo2docker will not detect) and are installed separately here. The <code>grep -v</code> etc code is processing <code>apt2.txt</code> and removing comments and blank lines.</span>
+<span data-code-cell="annotated-cell-6" data-code-lines="19,20,21,22,23,24,25,26" data-code-annotation="4">The rocker scripts build R from source and as part of clean up in the script, linux packages are removed that are not needed. repo2docker installs the packages in <code>apt.txt</code> automatically before the code in <code>appendix</code> thus the needed linux packages (which include packages for the Xfce Desktop Environment in <code>\desktop</code>) are put in <code>apt2.txt</code>. repo2docker will not detect this file and we can install the packages here after R is built. The <code>grep -v</code> etc code is processing <code>apt2.txt</code> and removing comments and blank lines.</span>
 </dd>
 <dt data-target-cell="annotated-cell-6" data-target-annotation="5">5</dt>
 <dd>
-<span data-code-cell="annotated-cell-6" data-code-lines="27,28,29,30,31,32,33" data-code-annotation="5">Ubuntu does not have man pages installed by default. These lines activate <code>man</code> so users have the common help files.</span>
+<span data-code-cell="annotated-cell-6" data-code-lines="30,31,32,33,34,35,36" data-code-annotation="5">Ubuntu does not have man pages installed by default. These lines activate <code>man</code> so users have the common help files.</span>
 </dd>
 <dt data-target-cell="annotated-cell-6" data-target-annotation="6">6</dt>
 <dd>
-<span data-code-cell="annotated-cell-6" data-code-lines="36,37" data-code-annotation="6">This is some custom jupyter config to allow hidden files to be listed in the folder browser.</span>
+<span data-code-cell="annotated-cell-6" data-code-lines="39,40" data-code-annotation="6">This is some custom jupyter config to allow hidden files to be listed in the folder browser.</span>
 </dd>
 <dt data-target-cell="annotated-cell-6" data-target-annotation="7">7</dt>
 <dd>
-<span data-code-cell="annotated-cell-6" data-code-lines="40" data-code-annotation="7"><code>book</code> and <code>docs</code> are the documentation files and are not needed in the image.</span>
+<span data-code-cell="annotated-cell-6" data-code-lines="43" data-code-annotation="7"><code>book</code> and <code>docs</code> are the documentation files and are not needed in the image.</span>
 </dd>
 <dt data-target-cell="annotated-cell-6" data-target-annotation="8">8</dt>
 <dd>
-<span data-code-cell="annotated-cell-6" data-code-lines="45" data-code-annotation="8">The <code>NB_USER</code> environmental variable is not exported by repo2docker (it is an argument confined to the parent build) but is very useful for child builds. So it is converted to an environmental variable.</span>
+<span data-code-cell="annotated-cell-6" data-code-lines="48" data-code-annotation="8">The <code>NB_USER</code> environmental variable is not exported by repo2docker (it is an argument confined to the parent build) but is very useful for child builds. So it is converted to an environmental variable.</span>
 </dd>
 <dt data-target-cell="annotated-cell-6" data-target-annotation="9">9</dt>
 <dd>
-<span data-code-cell="annotated-cell-6" data-code-lines="47" data-code-annotation="9">This next section is a series of <code>ONBUILD</code> commands. These are only run if py-rocker-base is used in the <code>FROM</code> line in a child docker file.</span>
+<span data-code-cell="annotated-cell-6" data-code-lines="50" data-code-annotation="9">This next section is a series of <code>ONBUILD</code> commands. These are only run if py-rocker-base is used in the <code>FROM</code> line in a child docker file.</span>
 </dd>
 <dt data-target-cell="annotated-cell-6" data-target-annotation="10">10</dt>
 <dd>
-<span data-code-cell="annotated-cell-6" data-code-lines="49" data-code-annotation="10">Set the user to NB_USER. Not strictly necessary but helps ensure that we don’t accidentally create files that jovyan (NB_USER) cannot access.</span>
+<span data-code-cell="annotated-cell-6" data-code-lines="52" data-code-annotation="10">Set the user to NB_USER. Not strictly necessary but helps ensure that we don’t accidentally create files that jovyan (NB_USER) cannot access.</span>
 </dd>
 <dt data-target-cell="annotated-cell-6" data-target-annotation="11">11</dt>
 <dd>
-<span data-code-cell="annotated-cell-6" data-code-lines="53" data-code-annotation="11">Copy the child build context (files with the Docker file) into <code>${REPO_DIR}</code>. Make sure that jovyan owns the directory. Note, jovyan owns <code>${REPO_DIR}</code> (this is set by repo2docker).</span>
+<span data-code-cell="annotated-cell-6" data-code-lines="56" data-code-annotation="11">Copy the child build context (files with the Docker file) into <code>${REPO_DIR}</code>. Make sure that jovyan owns the directory. Note, jovyan owns <code>${REPO_DIR}</code> (this is set by repo2docker).</span>
 </dd>
 <dt data-target-cell="annotated-cell-6" data-target-annotation="13">13</dt>
 <dd>
-<span data-code-cell="annotated-cell-6" data-code-lines="58,59,60,61,62,63" data-code-annotation="13">The Desktop files are put in a directory called Desktop. Copy them into <code>${REPO_DIR}/Desktop</code>. The start script will copy these into the correct location for the Desktop server.</span>
+<span data-code-cell="annotated-cell-6" data-code-lines="61,62,63,64,65,66,67,68,69,70" data-code-annotation="13">The Desktop files are put in a directory called Desktop. Copy them into <code>${REPO_DIR}/Desktop</code>. The <code>desktop.sh</code> script will copy these into the correct location for the Desktop server.</span>
 </dd>
 <dt data-target-cell="annotated-cell-6" data-target-annotation="14">14</dt>
 <dd>
-<span data-code-cell="annotated-cell-6" data-code-lines="67,68,69,70,71,72,73,74,75,76" data-code-annotation="14">If <code>apt.txt</code> is present, then install the packages. The code processes any comments or blank lines in <code>apt.txt</code>. This must be run as root so we switch to root to install.</span>
+<span data-code-cell="annotated-cell-6" data-code-lines="74,75,76,77,78,79,80,81,82" data-code-annotation="14">If <code>apt.txt</code> is present, then install the packages. The code processes any comments or blank lines in <code>apt.txt</code>. This must be run as root so we switch to root to install.</span>
 </dd>
 <dt data-target-cell="annotated-cell-6" data-target-annotation="15">15</dt>
 <dd>
-<span data-code-cell="annotated-cell-6" data-code-lines="78" data-code-annotation="15">Switch back to jovyan so we don’t accidentally make files as belonging to root.</span>
+<span data-code-cell="annotated-cell-6" data-code-lines="85" data-code-annotation="15">Switch back to jovyan so we don’t accidentally make files as belonging to root.</span>
 </dd>
 <dt data-target-cell="annotated-cell-6" data-target-annotation="16">16</dt>
 <dd>
-<span data-code-cell="annotated-cell-6" data-code-lines="82,83,84,85,86,87,88,89,90,91,92,93,94,95,96" data-code-annotation="16">If <code>environment.yml</code> is present, install these into the conda environment and do some clean-up. Sometimes package solving will get rid of pip installed packages. We need to make sure that jupyter-remote-desktop-proxy does not disappear.</span>
+<span data-code-cell="annotated-cell-6" data-code-lines="89,90,91,92,93,94,95,96,97,98,99,100,101,102,103" data-code-annotation="16">If <code>environment.yml</code> is present, install these into the conda environment and do some clean-up. Sometimes package solving will get rid of pip installed packages. We need to make sure that jupyter-remote-desktop-proxy does not disappear.</span>
 </dd>
 <dt data-target-cell="annotated-cell-6" data-target-annotation="17">17</dt>
 <dd>
-<span data-code-cell="annotated-cell-6" data-code-lines="101,102,103,104,105" data-code-annotation="17">If <code>requirements.txt</code> is present, install with pip and do some clean-up.</span>
+<span data-code-cell="annotated-cell-6" data-code-lines="108,109,110,111,112" data-code-annotation="17">If <code>requirements.txt</code> is present, install with pip and do some clean-up.</span>
 </dd>
 <dt data-target-cell="annotated-cell-6" data-target-annotation="18">18</dt>
 <dd>
-<span data-code-cell="annotated-cell-6" data-code-lines="108,109,110,111,112" data-code-annotation="18"><code>install.R</code> is an R script where the user can specify how to install packages or run any other R code.</span>
+<span data-code-cell="annotated-cell-6" data-code-lines="115,116,117,118,119" data-code-annotation="18"><code>install.R</code> is an R script where the user can specify how to install packages or run any other R code.</span>
 </dd>
 <dt data-target-cell="annotated-cell-6" data-target-annotation="19">19</dt>
 <dd>
-<span data-code-cell="annotated-cell-6" data-code-lines="116,117,118,119,120" data-code-annotation="19"><code>start</code> is run in the <code>${REPO_DIR}/start</code> command in a subshell. The <code>${REPO_DIR}/start</code> command cannot be replaced since it contains code to move the Desktop files into the correct place.</span>
+<span data-code-cell="annotated-cell-6" data-code-lines="123,124,125,126,127" data-code-annotation="19"><code>start</code> is run in the <code>${REPO_DIR}/start</code> command in a subshell. The <code>${REPO_DIR}/start</code> command cannot be replaced since it contains code to move the Desktop files into the correct place.</span>
 </dd>
 <dt data-target-cell="annotated-cell-6" data-target-annotation="20">20</dt>
 <dd>
-<span data-code-cell="annotated-cell-6" data-code-lines="126,127,128,129,130,131,132,133,134,135,136" data-code-annotation="20"><code>postBuild</code> is a script. If present, run it and then do some clean-up. It is common to use <code>postBuild</code> to apply extensions or install packages that cannot be installed with <code>apt</code>.</span>
+<span data-code-cell="annotated-cell-6" data-code-lines="133,134,135,136,137,138,139,140,141,142,143" data-code-annotation="20"><code>postBuild</code> is a script. If present, run it and then do some clean-up. It is common to use <code>postBuild</code> to apply extensions or install packages that cannot be installed with <code>apt</code>.</span>
 </dd>
 <dt data-target-cell="annotated-cell-6" data-target-annotation="21">21</dt>
 <dd>
-<span data-code-cell="annotated-cell-6" data-code-lines="142,143" data-code-annotation="21">The parent docker build completes by setting the user to jovyan and the working directory to <code>${HOME}</code>. Within a JupyterHub deployment, <code>${HOME}</code> will often be re-mapped to the user persistent memory so it is important not to write anything that needs to be persistent to <code>${HOME}</code>, for example configuration. You can do this in the <code>start</code> script since that runs after the user directory is mapped or you can put configuration files in some place other than <code>${HOME}</code>.</span>
+<span data-code-cell="annotated-cell-6" data-code-lines="149,150" data-code-annotation="21">The parent docker build completes by setting the user to jovyan and the working directory to <code>${HOME}</code>. Within a JupyterHub deployment, <code>${HOME}</code> will often be re-mapped to the user persistent memory so it is important not to write anything that needs to be persistent to <code>${HOME}</code>, for example configuration. You can do this in the <code>start</code> script since that runs after the user directory is mapped or you can put configuration files in some place other than <code>${HOME}</code>.</span>
 </dd>
 </dl>
 </section>
-</section>
-<section id="rocker.sh" class="level2" data-number="7.7">
-<h2 data-number="7.7" class="anchored" data-anchor-id="rocker.sh"><span class="header-section-number">7.7</span> rocker.sh</h2>
+<section id="rocker.sh" class="level2" data-number="7.10">
+<h2 data-number="7.10" class="anchored" data-anchor-id="rocker.sh"><span class="header-section-number">7.10</span> rocker.sh</h2>
 <p>This script will copy in the rocker scripts from <a href="https://github.com/rocker-org/rocker-versioned2">rocker-versioned2</a> into <code>${REPO_DIR}</code> to install things. It will read in one of the rocker docker files using <code>R_DOCKERFILE</code> defined in the <code>appendix</code> file (which is inserted into the main docker file). Variables defined here will only be available in this script. Click on the numbers in the script to learn what each section is doing.</p>
 <pre id="annotated-cell-7" class="code-annotation-code"><code>#!/bin/bash
 set -e
@@ -665,40 +671,54 @@ fi</code></pre>
 </dd>
 </dl>
 </section>
-<section id="start" class="level2" data-number="7.8">
-<h2 data-number="7.8" class="anchored" data-anchor-id="start"><span class="header-section-number">7.8</span> start</h2>
-<p>Within a JupyterHub, the user home directory <code>$HOME</code> is typically re-mapped to the user persistent home directory. That means that the image build process cannot put things into <code>$HOME</code>, they would just be lost when <code>$HOME</code> is re-mapped. If a process needs to have something in the home directory, e.g.&nbsp;in some local user configuration, this must be done in the <code>start</code> script. The repo2docker docker image specifies that the start script is <code>${REPO_DIR}/start</code>.</p>
-<p>For py-rocket-base, the start script is used to move the Desktop files (<code>*.desktop</code>) to where the Desktop server expects them, which is <code>${HOME}/.local/share/applications/</code> and <code>${HOME}/Desktop</code>. Any <code>*.desktop</code> files found there will appear as clickable icons in <code>\desktop</code>. This must be done in start, since the files need to be put in <code>${HOME}</code> which not available until after the server starts.</p>
+<section id="start" class="level2" data-number="7.11">
+<h2 data-number="7.11" class="anchored" data-anchor-id="start"><span class="header-section-number">7.11</span> start</h2>
+<p>Within a JupyterHub, the user home directory <code>$HOME</code> is typically re-mapped to the user persistent home directory. That means that the image build process cannot put things into <code>$HOME</code>, they would just be lost when <code>$HOME</code> is re-mapped. If a process needs to have something in the home directory, e.g.&nbsp;in some local user configuration, this must be done in the <code>start</code> script. The repo2docker docker image specifies that the start script is <code>${REPO_DIR}/start</code>. In py-rocket-base, the start scripts in a child docker file is souces in a subshell from the py-rocket-base start script.</p>
 <pre id="annotated-cell-8" class="code-annotation-code"><code>#!/bin/bash
 set -euo pipefail
 
 # Start - Set any environment variables here
 # These are inherited by all processes, *except* RStudio
 # USE export &lt;parname&gt;=value
-# Tell applications where to open desktop apps - this allows notebooks to pop open GUIs
-export DISPLAY=":1.0"
 # source this file to get the variables defined in the rocker Dockerfile
 source ${REPO_DIR}/env.txt
 # End - Set any environment variables here
 
+# Run child start in a subshell to contain its environment
+[ -f ${REPO_DIR}/childimage/start ] &amp;&amp; ( source ${REPO_DIR}/childimage/start )
+
+exec "$@"</code></pre>
+<dl>
+<dt data-target-cell="annotated-cell-8" data-target-annotation="1">1</dt>
+<dd>
+<span data-code-cell="annotated-cell-8" data-code-lines="4,5,6,7,8,9" data-code-annotation="1">In a Docker file so no way to dynamically set environmental variables, so the <code>env.txt</code> file with the <code>export &lt;var&gt;=&lt;value&gt;</code> are source at start up.</span>
+</dd>
+<dt data-target-cell="annotated-cell-8" data-target-annotation="2">2</dt>
+<dd>
+<span data-code-cell="annotated-cell-8" data-code-lines="12" data-code-annotation="2">Run any child start script in a subshell. Run in a subshell to contain any <code>set</code> statements or similar.</span>
+</dd>
+</dl>
+</section>
+<section id="desktop.sh" class="level2" data-number="7.12">
+<h2 data-number="7.12" class="anchored" data-anchor-id="desktop.sh"><span class="header-section-number">7.12</span> desktop.sh</h2>
+<p>The default for XDG and xfce4 is for Desktop files to be in ~/Desktop but this leads to a variety of problems. First we are altering the user directiory which seems rude, second orphan desktop files might be in ~/Desktop so who knows what the user Desktop experience with be, here the Desktop dir is set to /usr/share/Desktop so is part of the image. Users that really want to customize Desktop can change <code>~/.config/user-dirs.dirs</code>. Though py-rocket-base might not respect that. Not sure why you’d do that instead of just using a different image that doesn’t have the py-rocket-base behavior.</p>
+<pre id="annotated-cell-9" class="code-annotation-code"><code>#!/bin/bash
+set -e
+
+# Copy in the Desktop files
+APPLICATIONS_DIR=/usr/share/applications
+DESKTOP_DIR=/usr/share/Desktop
+mkdir -p "${DESKTOP_DIR}"
+chown :staff /usr/share/Desktop
+chmod 775 /usr/share/Desktop
+# set the Desktop dir default for XDG
+echo 'XDG_DESKTOP_DIR="${DESKTOP_DIR}"' &gt; /etc/xdg/user-dirs.defaults
+
 # The for loops will fail if they return null (no files). Set shell option nullglob
 shopt -s nullglob
 
-# Add any .desktop files to the application database and desktop. This is done
-# at startup-time because it's expected that a remote filesystem will be
-# mounted at $HOME, which would overwrite the data if it was created at
-# build-time.
-APPLICATIONS_DIR="${HOME}/.local/share/applications"
-DESKTOP_DIR="${HOME}/Desktop"
-# Remove DESKTOP_DIR if it exists to avoid leftover files
-if [ -d "${DESKTOP_DIR}" ]; then
-    rm -rf "${DESKTOP_DIR}"
-fi
-mkdir -p "${APPLICATIONS_DIR}"
-mkdir -p "${DESKTOP_DIR}"
 for desktop_file_path in ${REPO_DIR}/Desktop/*.desktop; do
     cp "${desktop_file_path}" "${APPLICATIONS_DIR}/."
-
     # Symlink application to desktop and set execute permission so xfce (desktop) doesn't complain
     desktop_file_name="$(basename ${desktop_file_path})"
     # Set execute permissions on the copied .desktop file
@@ -708,7 +728,7 @@ done
 update-desktop-database "${APPLICATIONS_DIR}"
 
 # Add MIME Type data from XML files  to the MIME database.
-MIME_DIR="${HOME}/.local/share/mime"
+MIME_DIR="/usr/share/mime"
 MIME_PACKAGES_DIR="${MIME_DIR}/packages"
 mkdir -p "${MIME_PACKAGES_DIR}"
 for mime_file_path in ${REPO_DIR}/Desktop/*.xml; do
@@ -716,10 +736,43 @@ for mime_file_path in ${REPO_DIR}/Desktop/*.xml; do
 done
 update-mime-database "${MIME_DIR}"
 
-# Run child start in a subshell to contain its environment
-[ -f ${REPO_DIR}/childimage/start ] &amp;&amp; ( source ${REPO_DIR}/childimage/start )
-
-exec "$@"</code></pre>
+# Add icons
+ICON_DIR="/usr/share/icons"
+ICON_PACKAGES_DIR="${ICON_DIR}/packages"
+mkdir -p "${ICON_PACKAGES_DIR}"
+for icon_file_path in "${REPO_DIR}"/Desktop/*.png; do
+    cp "${icon_file_path}" "${ICON_PACKAGES_DIR}/" || echo "Failed to copy ${icon_file_path}"
+done
+for icon_file_path in "${REPO_DIR}"/Desktop/*.svg; do
+    cp "${icon_file_path}" "${ICON_PACKAGES_DIR}/" || echo "Failed to copy ${icon_file_path}"
+done
+gtk-update-icon-cache "${ICON_DIR}"</code></pre>
+<dl>
+<dt data-target-cell="annotated-cell-9" data-target-annotation="1">1</dt>
+<dd>
+<span data-code-cell="annotated-cell-9" data-code-lines="5" data-code-annotation="1">This is the default local for system applications.</span>
+</dd>
+<dt data-target-cell="annotated-cell-9" data-target-annotation="2">2</dt>
+<dd>
+<span data-code-cell="annotated-cell-9" data-code-lines="6,7,8,9" data-code-annotation="2">Create the Desktop directory and make sure jovyan can put files there. This is mainly for debugging.</span>
+</dd>
+<dt data-target-cell="annotated-cell-9" data-target-annotation="3">3</dt>
+<dd>
+<span data-code-cell="annotated-cell-9" data-code-lines="11" data-code-annotation="3">Set up the default XDG_DESKTOP_DIR value. This will be copied to the <code>~.config</code> (by xinitrc).</span>
+</dd>
+<dt data-target-cell="annotated-cell-9" data-target-annotation="4">4</dt>
+<dd>
+<span data-code-cell="annotated-cell-9" data-code-lines="16,17,18,19,20,21,22,23,24" data-code-annotation="4">Copy the .desktop file in the Desktop directory into the applications directory and make a symlink to the Desktop directory. The former means that the applications will appear in the menu in xfce4 desktop and the latter means there will be a desktop icon.</span>
+</dd>
+<dt data-target-cell="annotated-cell-9" data-target-annotation="5">5</dt>
+<dd>
+<span data-code-cell="annotated-cell-9" data-code-lines="26,27,28,29,30,31,32,33" data-code-annotation="5">Add any mime xml files to the mime folder and update the mime database.</span>
+</dd>
+<dt data-target-cell="annotated-cell-9" data-target-annotation="6">6</dt>
+<dd>
+<span data-code-cell="annotated-cell-9" data-code-lines="35,36,37,38,39,40,41,42,43,44,45" data-code-annotation="6">Add any png or svg icon files to the icon folder and update the icon database.</span>
+</dd>
+</dl>
 
 
 </section>
