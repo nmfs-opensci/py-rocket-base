@@ -5,12 +5,10 @@
 # users that really want to customize Desktop can change ~/.config/user-dirs.dirs. Though py-rocket-base might not respect that.
 set -e
 
-# set the Desktop dir to something in base
-echo 'XDG_DESKTOP_DIR="/usr/share/Desktop"' > /etc/xdg/user-dirs.defaults
-
 # Copy in the Desktop files
-APPLICATIONS_DIR=/usr/share/applications
+APPLICATIONS_DIR=/usr/share/applications/packages
 DESKTOP_DIR=/usr/share/Desktop
+mkdir -p "${APPLICATIONS_DIR}"
 mkdir -p "${DESKTOP_DIR}"
 chown :staff /usr/share/Desktop
 chmod 775 /usr/share/Desktop
@@ -49,5 +47,6 @@ for icon_file_path in "${REPO_DIR}"/Desktop/*.png; do
 done
 for icon_file_path in "${REPO_DIR}"/Desktop/*.svg; do
     cp "${icon_file_path}" "${ICON_PACKAGES_DIR}/" || echo "Failed to copy ${icon_file_path}"
-donegtk-update-icon-cache "${ICON_DIR}"
+done
+gtk-update-icon-cache "${ICON_DIR}"
 
