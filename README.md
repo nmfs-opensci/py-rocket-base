@@ -1,11 +1,13 @@
 # py-rocket-base: JupyterHub base image
 
-[![Build and push container image](https://github.com/nmfs-opensci/py-rocket-base/actions/workflows/build.yaml/badge.svg)](https://github.com/nmfs-opensci/py-rocket-base/actions/workflows/build.yaml)[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.13942617.svg)](https://doi.org/10.5281/zenodo.13942617)[![GitHub Release](https://img.shields.io/github/v/release/nmfs-opensci/py-rocket-base)](https://github.com/nmfs-opensci/py-rocket-base/releases)
-
+[![Build and push container image](https://github.com/nmfs-opensci/py-rocket-base/actions/workflows/build.yaml/badge.svg)](https://github.com/nmfs-opensci/py-rocket-base/actions/workflows/build.yaml)[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.13942617.svg)](https://doi.org/10.5281/zenodo.13942617)[![GitHub Release](https://img.shields.io/github/v/release/nmfs-opensci/py-rocket-base)](https://github.com/nmfs-opensci/py-rocket-base/releases) [packages for the repo](https://github.com/orgs/nmfs-opensci/packages?repo_name=py-rocket-base)
 
 The py-rocket-base image is a base image for the JupyterHubs with Python and RStudio. The py-rocket-base image is designed to install the Jupyter and JupyterHub environment with [repo2docker](https://repo2docker.readthedocs.io) and the R environment with [Rocker](https://rocker-project.org/) installation scripts. You can scroll through the Rocker [installation scripts](https://github.com/rocker-org/rocker-versioned2/blob/master/scripts/install_rstudio.sh) to see how the environment is set up.
 
-*There are many ways to install R and RStudio into an image designed for JupyterHubs.* The objective of py-rocket-base is to create a JupyterHub (or binder) image such when you click the RStudio button in the JupyterLab UI to enter the RStudio UI (`/rstudio`), you **enter an environment that is the same as if you had used a Rocker image** but if you are in the JupyterLab UI (`/lab`), the **environment is the same as if you had used repo2docker** to create the environment. There are many other ways to install R and RStudio in a JupyterHub image. See History below for other approaches we have used. 
+image url
+```
+ghcr.io/nmfs-opensci/py-rocket-base:latest
+```
 
 The base image has the following support:
 
@@ -14,15 +16,7 @@ The base image has the following support:
 * Desktop ready for installing applications, including Java-based applications
 * VSCode
 
-## Where are the images
-
-The `.github/workflows/build.yaml` is a GitHub Action to build the image with [repo2docker-action](https://github.com/jupyterhub/repo2docker-action). It builds to GitHub packages and you will find it in the [packages for the repo](https://github.com/orgs/nmfs-opensci/packages?repo_name=py-rocket-base). The URL will look like
-Your image URL in your repo will look like one of these
-```
-ghcr.io/nmfs-opensci/repo-name/image-name:latest
-ghcr.io/nmfs-opensci/image-name:latest
-```
-For example, for this repo the image is `ghcr.io/nmfs-opensci/py-rocket-base:latest`.
+*There are many ways to install R and RStudio into an image designed for JupyterHubs.* The objective of py-rocket-base is to create a JupyterHub (or binder) image such when you click the RStudio button in the JupyterLab UI to enter the RStudio UI (`/rstudio`), you **enter an environment that is the same as if you had used a Rocker image** but if you are in the JupyterLab UI (`/lab`), the **environment is the same as if you had used repo2docker** to create the environment. There are many other ways to install R and RStudio in a JupyterHub image. See History below for other approaches we have used. 
 
 ## Using this in a JupyterHub
 
@@ -32,7 +26,7 @@ If the JupyterHub has the **Bring your own image** feature, then you can paste i
 
 ## Using this as a base image
 
-py-rocket-base is designed like the Pangeo base-image. Your Docker file in your repo will look like
+py-rocket-base is designed like the Pangeo base-image. Your docker file in your repo will look like
 ```
 FROM ghcr.io/nmfs-opensci/py-rocket-base:latest
 ```
