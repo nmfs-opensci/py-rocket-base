@@ -26,6 +26,17 @@ quarto render .
 
 Set GitHub Pages to docs folder.
 
+## Building the images
+
+The `.github/workflows/build.yaml` is a GitHub Action to build the image with [repo2docker-action](https://github.com/jupyterhub/repo2docker-action). 
+The GitHub Action builds the image and the URL will look like one of these
+```
+ghcr.io/nmfs-opensci/repo-name/image-name:latest
+ghcr.io/nmfs-opensci/image-name:latest
+```
+For example, for this repo the image is `ghcr.io/nmfs-opensci/py-rocket-base:latest`.
+
+
 ## repo2docker
 
 [repo2docker-action](https://github.com/jupyterhub/repo2docker-action) is creating the image and publishing to `ghcr.io/nmfs-opensci/py-rocket-base` (image hosting like dockerhub or quay.io).

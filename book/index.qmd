@@ -1,4 +1,5 @@
 # Introduction {.unnumbered}
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.13942617.svg)](https://doi.org/10.5281/zenodo.13942617)[![GitHub Release](https://img.shields.io/github/v/release/nmfs-opensci/py-rocket-base)](https://github.com/nmfs-opensci/py-rocket-base/releases) `ghcr.io/nmfs-opensci/py-rocket-base:latest`
 
 The py-rocket-base image is a base image for JupyterHubs with Jupyter Lab, RStudio, Desktop, and VSCode UIs. What makes py-rocket-base unique, is that the RStudio UI (via `/rstudio`) is a R and RStudio environment installed with Rocker installation scripts[^1]. Thus all the Rocker design choices and R/RStudio environment choices are in that UI. Properly setting up environments to work properly with spatial libraries and HPC libraries is tricky. py-rocket-base solves this problem (and the associated maintenance of installation scripts) by using Rocker installation scripts. 
 
