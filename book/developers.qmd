@@ -67,34 +67,31 @@ The py-rocket-base docker build has the following structure:
 ```
 # base image and environment
 repo2docker sets this up
-repo2docker-action set the directory where the build files 
+repo2docker-action sets the directory where the build files 
   are put to /srv/repo (via $REPO_DIR in GitHub Action)
   and ownership is set to jovyan (via $NB_USER)
   
-# apt.txt
-repo2docker installs the linux packages in this file
-
 # environment.yml
-repo2docker add these packages to the conda notebook environment
+repo2docker adds these packages to the conda notebook environment
 
 # start
-repo2docker points the Docker image entrypoint (commant run on start) to this file
+repo2docker points the Docker image entrypoint (command run on start) to this file
 ${REPO_DIR}/start
 
 # appendix
-repo2docker-action adds the Docker commands here to the end of the Dockerfile
+repo2docker-action adds the Docker commands here to the end of Dockerfile
+most of the work in py-rocket-base is done here. appendix calls rocker.sh and install packages in apt2.txt
 ```
 
 Each file is described below.
 
-### apt.txt
+### apt2.txt
 
-Basic linux packages are here minus ones that will be installed
-when R is installed with `rocker.sh`. Do not put `build-essentials` here as it will interfere with R installation.  There are some packages that are required for Desktop (`/desktop`) to operate correctly. Packages needed for R and RStudio (`/rstudio`) are installed via the rocker install scripts.
+This is not named `apt.txt` because these packages need to be installed after R is installed because the R scripts uninstall packages as part of cleanup. There are some packages that are required for Desktop (`/desktop`) to operate correctly. Packages needed for R and RStudio building (`/rstudio`) are installed via the rocker install scripts.
 
 ### environment.yml
 
-These are added to the notebook conda environment and in py-rocket-base the basic packages needed for Jupyter Lab, RStudio and Desktop are added. Scientific packages are added via child images that use py-rocket-base as the base image (in the FROM line).
+These are added to the notebook conda environment and in py-rocket-base the basic packages needed for Jupyter Lab, RStudio and Desktop are added. Scientific packages are not added here. They will be added via child images that use py-rocket-base as the base image (in the FROM line).
 
 
 ### appendix

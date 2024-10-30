@@ -1,7 +1,7 @@
 # Using py-rocket-base
 
 py-rocket-base is designed to be used in the FROM line of a Dockerfile. It behaves like repo2docker in that it looks for special files and will 
-install Python package or R packages if those special files are present. You do not need to add anything to the Dockerfile to have it process these files. py-rocker-base does this automatically for you.
+install Python packages or R packages if those special files are present. You do not need to add anything to the Dockerfile to have it process these files. py-rocker-base does this automatically for you (via ONBUILD commands).
 
 If you don't want it to do this then do not name your files one of these names:
 
@@ -62,6 +62,17 @@ dependencies:
 
 Add an R script to install packages. **Important**: packages that have linux dependencies (e.g. all the spatial packages depend on GDAL) will not work if you use `install.packages()`. GDAL will not be installed.
 
+```
+your-repo/
+├── Dockerfile
+├── install.R
+```
+
+Dockerfile
+```
+FROM ghcr.io/nmfs-opensci/py-rocket-base:latest
+```
+
 install.R
 ```
 # to match rocker/verse:4.4 used in py-rocker-base
@@ -75,6 +86,7 @@ install.packages(list.of.packages, repos=repo)
 
 Geospatial packages require some linux packages. To get this working in your Docker image add this to your Docker file:
 
+Dockerfile
 ```
 FROM ghcr.io/nmfs-opensci/py-rocket-base:latest
 

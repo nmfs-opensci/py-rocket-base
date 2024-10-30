@@ -179,6 +179,7 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#create-the-desktop-directory" id="toc-create-the-desktop-directory" class="nav-link" data-scroll-target="#create-the-desktop-directory"><span class="header-section-number">4.1.1</span> Create the Desktop directory</a></li>
   <li><a href="#install-the-application" id="toc-install-the-application" class="nav-link" data-scroll-target="#install-the-application"><span class="header-section-number">4.1.2</span> Install the application</a></li>
   </ul></li>
+  <li><a href="#whats-happening" id="toc-whats-happening" class="nav-link" data-scroll-target="#whats-happening"><span class="header-section-number">4.2</span> What’s happening</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/nmfs-opensci/py-rocket-base/edit/main/desktop.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/nmfs-opensci/py-rocket-base/blob/main/desktop.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/nmfs-opensci/py-rocket-base/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
@@ -205,13 +206,6 @@ ul.task-list li input[type="checkbox"] {
 
 
 <p>py-rocket-base includes the <a href="https://www.xfce.org/">xfce4 Desktop UI</a> where you can run applications. A common application is to run QGIS or java-based applications. py-rocket-base looks for files with the ending <code>.desktop</code>, <code>.xml</code> (optional), and <code>.png</code> (optional) associated with an application in a directory called Desktop in your repo.</p>
-<p>To add new desktop applications<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>,</p>
-<ul>
-<li>Install the application. See examples below.</li>
-<li>Add a <code>.desktop</code> file to <code>${HOME}/.local/share/applications/</code>.</li>
-<li>To have an icon on the Desktop, you create a folder Desktop in the <code>${HOME}</code> and create a soft link to the <code>.desktop</code> files in <code>${HOME}/.local/share/applications/</code>.</li>
-</ul>
-<p>py-rocket-base does these steps automatically (via the start script) so that the user only has to put files into a Desktop directory in the docker build repo.</p>
 <section id="adding-an-application-in-your-child-docker-image" class="level2" data-number="4.1">
 <h2 data-number="4.1" class="anchored" data-anchor-id="adding-an-application-in-your-child-docker-image"><span class="header-section-number">4.1</span> Adding an application in your child docker image</h2>
 <section id="create-the-desktop-directory" class="level3" data-number="4.1.1">
@@ -226,7 +220,8 @@ ul.task-list li input[type="checkbox"] {
 │   └── qgis.png</code></pre>
 <section id="desktop-file" class="level4" data-number="4.1.1.1">
 <h4 data-number="4.1.1.1" class="anchored" data-anchor-id="desktop-file"><span class="header-section-number">4.1.1.1</span> .desktop file</h4>
-<p>Example <code>.desktop</code> file is a configuration file that describes how an application is launched. The required parts are Name, Exec and Type. MimeType specifies what types of files the application can use (optional).</p>
+<p>The <code>.desktop</code> file is a configuration file that describes how an application is launched. The required parts are Name, Exec and Type. MimeType specifies what types of files the application can use (optional).</p>
+<p>cdat.desktop</p>
 <pre><code>[Desktop Entry]
 Type=Application
 Name=CWUtils
@@ -255,8 +250,9 @@ Keywords=map;globe;</code></pre>
 <ul>
 <li>add <code>qgis</code> to <code>environment.yml</code></li>
 <li>add <code>libgl1-mesa-glx</code> to <code>apt.txt</code></li>
-<li>.desktop file</li>
+<li>add the .desktop file to Desktop directory</li>
 </ul>
+<p>qgis.desktop</p>
 <pre><code># From: https://github.com/qgis/QGIS/blob/ltr-3_28/linux/org.qgis.qgis.desktop.in
 [Desktop Entry]
 Type=Application
@@ -272,7 +268,7 @@ MimeType=application/x-qgis-project;application/x-qgis-project-container;applica
 Keywords=map;globe;postgis;wms;wfs;ogc;osgeo;
 StartupWMClass=QGIS3</code></pre>
 <p><strong>CoastWatch Utilities</strong></p>
-<p>Add this to the docker file</p>
+<p>Add this to the docker file to install</p>
 <pre><code>USER root
 # Install cwutils
 RUN cd /tmp &amp;&amp; \
@@ -296,15 +292,19 @@ StartupNotify=false
 Categories=Qt;Education;Science;Geography;
 Keywords=map;globe;</code></pre>
 <p>Add <code>cdat.png</code> icon to Desktop directory.</p>
-
-
 </section>
 </section>
-<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
-<hr>
-<ol>
-<li id="fn1"><p>See this <a href="https://medium.com/@zoldin/how-to-add-new-application-to-xfce-menu-list-d90955e101d5">Medium article</a> for a description.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-</ol>
+<section id="whats-happening" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="whats-happening"><span class="header-section-number">4.2</span> What’s happening</h2>
+<p>To add new desktop applications, one needs to do the following. py-rocket-base does these steps automatically (via the start script) so that the user only has to put files into a Desktop directory in the docker build repo.</p>
+<ul>
+<li>Install the application. See examples.</li>
+<li>Add a <code>.desktop</code> file to <code>${HOME}/.local/share/applications/</code>.</li>
+<li>To have an icon on the Desktop, you create a folder Desktop in the <code>${HOME}</code> and create a soft link to the <code>.desktop</code> files in <code>${HOME}/.local/share/applications/</code>.</li>
+</ul>
+<p>See this <a href="https://medium.com/@zoldin/how-to-add-new-application-to-xfce-menu-list-d90955e101d5">Medium article</a> for a description.</p>
+
+
 </section>
 
 </main> <!-- /main -->
