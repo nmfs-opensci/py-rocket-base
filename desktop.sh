@@ -5,9 +5,6 @@
 # users that really want to customize Desktop can change ~/.config/user-dirs.dirs. Though py-rocket-base might not respect that.
 set -e
 
-# set the Desktop dir to something in base
-echo 'XDG_DESKTOP_DIR="/usr/share/Desktop"' > /etc/xdg/user-dirs.defaults
-
 # Copy in the Desktop files
 APPLICATIONS_DIR=/usr/share/applications
 DESKTOP_DIR=/usr/share/Desktop
