@@ -55,5 +55,5 @@ done
 for icon_file_path in "${REPO_DIR}"/Desktop/*.svg; do
     cp "${icon_file_path}" "${ICON_PACKAGES_DIR}/" || echo "Failed to copy ${icon_file_path}"
 done
-gtk-update-icon-cache "${ICON_DIR}"
+gtk-update-icon-cache "${ICON_PACKAGES_DIR}"
 
