@@ -6,13 +6,13 @@ on:
     branches:
       - dev
     paths:
-      - 'apt.txt'
+      - 'apt2.txt'
       - 'environment.yml'
       - 'start'
       - 'postBuild'
       - 'appendix'
+      - 'desktop.sh'
       - 'rocker.sh'
-      - 'install_R_source.sh'
       - '.github/workflows/build-dev.yaml'
 
 jobs:
