@@ -48,6 +48,8 @@ dependencies:
   - nbgitpuller
   # More git tools from github-cli
   - gh
+  # conda-lock
+  - conda-lock
 
   # Resolves warning "No ICDs were found": https://github.com/CryoInTheCloud/hub-image/issues/50
   - ocl-icd-system
