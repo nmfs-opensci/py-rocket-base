@@ -39,21 +39,32 @@ done
 update-mime-database "${MIME_DIR}"
 
 # Add icons
-ICON_DIR="/usr/share/icons"
-ICON_PACKAGES_DIR="${ICON_DIR}/packages"
-mkdir -p "${ICON_PACKAGES_DIR}"
-# Create the required index.theme file
-cat <<EOF > "${ICON_PACKAGES_DIR}/index.theme"
-[Icon Theme]
-Name=xfce4 display icons
-Comment=User provided icons for applications
-EOF
-# Copy in the icons
+ICON_DIR="/usr/share/icons/hicolor"
+ICON_SIZES=("16x16" "22x22" "24x24" "32x32" "48x48")
+
+# Copy PNG icons only to existing size directories
 for icon_file_path in "${REPO_DIR}"/Desktop/*.png; do
-    cp "${icon_file_path}" "${ICON_PACKAGES_DIR}/" || echo "Failed to copy ${icon_file_path}"
+    for size in "${ICON_SIZES[@]}"; do
+        target_dir="${ICON_DIR}/${size}/apps"
+        if [ -d "${target_dir}" ]; then
+            cp "${icon_file_path}" "${target_dir}/$(basename "${icon_file_path}")" || echo "Failed to copy ${icon_file_path} to ${target_dir}"
+        else
+            echo "Directory ${target_dir} does not exist. Skipping."
+        fi
+    done
 done
+
+# Copy SVG icons only to the existing scalable directory, if it exists
+target_dir="${ICON_DIR}/scalable/apps"
 for icon_file_path in "${REPO_DIR}"/Desktop/*.svg; do
-    cp "${icon_file_path}" "${ICON_PACKAGES_DIR}/" || echo "Failed to copy ${icon_file_path}"
+    if [ -d "${target_dir}" ]; then
+        cp "${icon_file_path}" "${target_dir}/$(basename "${icon_file_path}")" || echo "Failed to copy ${icon_file_path} to ${target_dir}"
+    else
+        echo "Directory ${target_dir} does not exist. Skipping SVG."
+    fi
 done
-gtk-update-icon-cache "${ICON_PACKAGES_DIR}"
+# Update the icon cache for hicolor
+gtk-update-icon-cache "${ICON_DIR}"
+# Print a success message
+echo "Icons have been copied to existing hicolor directories, and the icon cache has been updated."
 
