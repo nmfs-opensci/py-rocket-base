@@ -1,6 +1,8 @@
 # R packages
 
-To install extra R packages, use `install.R`. This is treated as a R script which is run.  For example, you can have a script like
+To install extra R packages, use `install.R`. This is treated as an R script which is run.  For example, you can have a script like
+
+install.R
 ```
 repo <- "https://p3m.dev/cran/__linux__/jammy/2024-05-13"
 list.of.packages <- c("ggplot2","remotes")

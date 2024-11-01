@@ -1,24 +1,16 @@
 # Desktop
 
-py-rocket-base includes the [xfce4 Desktop UI](https://www.xfce.org/) where you can run applications. A common application is to run QGIS or java-based applications. py-rocket-base
-looks for files with the ending `.desktop`, `.xml` (optional), and `.png` (optional) associated with an application in a directory called Desktop in your repo.
+py-rocket-base includes the [xfce4 Desktop UI](https://www.xfce.org/) where you can run applications. It is built off [freedesktop](https://www.freedesktop.org/wiki/Software/) (which is helpful to know if you are debugging and configuring). A common application is to run QGIS or java-based applications. py-rocket-base
+looks for files with the ending `.desktop`, `.xml` (optional), and `.png` or `.svg` (optional) associated with an application in a directory called Desktop in your repo. 
 
-To add new desktop applications[^1], 
-
-* Install the application. See examples below.
-* Add a `.desktop` file to `${HOME}/.local/share/applications/`. 
-* To have an icon on the Desktop, you create a folder Desktop in the `${HOME}` and create a soft link to the `.desktop` files in `${HOME}/.local/share/applications/`. 
-
-py-rocket-base does these steps automatically (via the start script) so that the user only has to put files into a Desktop directory in the docker build repo.
-
-[^1]: See this [Medium article](https://medium.com/@zoldin/how-to-add-new-application-to-xfce-menu-list-d90955e101d5) for a description.
+py-rocket-base puts these `.desktop` files in `/usr/share/Desktop`. Typically these desktop files are in `~/Desktop`. But in a JupyterHub, the home directory is often persistent and py-rocket-base tries not to alter the user home directory. Also there might be orphaned desktop files in `~/Desktop` and so the user desktop UI would be inconsistent between users. Using `/usr/share/Desktop` does mean that users cannot add their own persistent applications to xfce4 Desktop but this would be difficult anyhow without root access in many cases.
 
 
 ## Adding an application in your child docker image
 
 ### Create the Desktop directory
 
-Create the directory and add the .desktop and optional .png and .xml files.
+Create the directory and add the .desktop and optional .png and .xml files. py-rocket-base will move them to the correct places (`/usr/share/applications` and `/usr/share/Desktop`, `/usr/share/mime/packages` and icon locations).
 
 ```
 your-repo/
@@ -33,8 +25,9 @@ your-repo/
 
 #### .desktop file
 
-Example `.desktop` file is a configuration file that describes how an application is launched. The required parts are Name, Exec and Type. MimeType specifies what types of files the application can use (optional).
+The `.desktop` file is a configuration file that describes how an application is launched. The required parts are Name, Exec and Type. MimeType specifies what types of files the application can use (optional).
 
+cdat.desktop
 ```
 [Desktop Entry]
 Type=Application
@@ -53,9 +46,19 @@ Keywords=map;globe;
 
 You can specify the mime types via xml.
 
-#### .png
+#### icons
 
-You can include a png for the icon. py-rocket-base will place this in `/srv/repo/Desktop/` so use a location like `/srv/repo/Desktop/my.png` for your png that you include in your Desktop folder.
+You can include a png or svg for the icon. py-rocket-base will place this in `/usr/share/icons/packages`. If you put your icon file in the Desktop directory in your repo, then in your desktop file, use the file name without the extension. 
+
+```
+Icon=cdat
+```
+
+You can also use an absolute file path.
+
+```
+Icon=/srv/conda/envs/notebook/share/qgis/images/icons/qgis-icon-512x512.png
+```
 
 
 ### Install the application
@@ -66,7 +69,9 @@ How you install the application really varies. Here are 2 examples.
 
 * add `qgis` to `environment.yml`
 * add `libgl1-mesa-glx` to `apt.txt`
-* .desktop file
+* add the .desktop file to Desktop directory
+
+qgis.desktop
 ```
 # From: https://github.com/qgis/QGIS/blob/ltr-3_28/linux/org.qgis.qgis.desktop.in
 [Desktop Entry]
@@ -86,7 +91,7 @@ StartupWMClass=QGIS3
 
 **CoastWatch Utilities**
 
-Add this to the docker file
+Add this to the docker file to install
 ```
 USER root
 # Install cwutils
@@ -116,3 +121,14 @@ Keywords=map;globe;
 ```
 
 Add `cdat.png` icon to Desktop directory.
+
+## What's happening
+
+To add new desktop applications, one needs to do the following. py-rocket-base does these steps automatically (via the start script) so that the user only has to put files into a Desktop directory in the docker build repo.
+
+* Install the application. See examples.
+* Add a `.desktop` file to an application directory. py-rocket-base puts these in `/usr/share/applications` but you will also see `${HOME}/.local/share/applications/`. 
+* To have an icon on the Desktop, you create a folder Desktop and tell XDG what directory to use. The directory is specified in `~/.config/user-dirs.dirs` which XDG sets. By default (XDG), this folder is `~/Desktop` but you can set it to something else. py-rocket-base sets a default value in `/etc/xdg/user-dirs.defaults`. This updates `~/.config/user-dirs.dirs` when the `/etc/xdg/xfce4/xinitrc` start script is run (when the `/desktop` button is clicked).
+* XDG looks for .desktop files in the Desktop directory. py-rocket-base creates a soft link to the `.desktop` files in `/usr/share/applications/` in `/usr/share/Desktop`. 
+
+See this [Medium article](https://medium.com/@zoldin/how-to-add-new-application-to-xfce-menu-list-d90955e101d5) for a description.

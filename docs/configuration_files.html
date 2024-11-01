@@ -240,6 +240,7 @@ USER ${NB_USER} </code></pre>
 </section>
 <section id="apt.txt" class="level2" data-number="2.3">
 <h2 data-number="2.3" class="anchored" data-anchor-id="apt.txt"><span class="header-section-number">2.3</span> apt.txt</h2>
+<p>Standard format. You can have comments.</p>
 <pre><code># Some useful stuff
 tk-dev
 
@@ -249,6 +250,7 @@ cmocean</code></pre>
 <section id="postbuild" class="level2" data-number="2.4">
 <h2 data-number="2.4" class="anchored" data-anchor-id="postbuild"><span class="header-section-number">2.4</span> postBuild</h2>
 <p>This is a script that will be run after all the other commands. This script is run as jovyan not as root. If you need commands run as root, you will need to add these to the Docker file.</p>
+<p>postBuild</p>
 <pre><code>#!/bin/bash -l
 set -e
 

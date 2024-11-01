@@ -206,7 +206,7 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>py-rocket-base is designed to be used in the FROM line of a Dockerfile. It behaves like repo2docker in that it looks for special files and will install Python package or R packages if those special files are present. You do not need to add anything to the Dockerfile to have it process these files. py-rocker-base does this automatically for you.</p>
+<p>py-rocket-base is designed to be used in the FROM line of a Dockerfile. It behaves like repo2docker in that it looks for special files and will install Python packages or R packages if those special files are present. You do not need to add anything to the Dockerfile to have it process these files. py-rocker-base does this automatically for you (via ONBUILD commands).</p>
 <p>If you don’t want it to do this then do not name your files one of these names:</p>
 <ul>
 <li>environment.yml</li>
@@ -252,6 +252,11 @@ dependencies:
 <section id="add-r-packages" class="level3" data-number="1.2.2">
 <h3 data-number="1.2.2" class="anchored" data-anchor-id="add-r-packages"><span class="header-section-number">1.2.2</span> Add R packages</h3>
 <p>Add an R script to install packages. <strong>Important</strong>: packages that have linux dependencies (e.g.&nbsp;all the spatial packages depend on GDAL) will not work if you use <code>install.packages()</code>. GDAL will not be installed.</p>
+<pre><code>your-repo/
+├── Dockerfile
+├── install.R</code></pre>
+<p>Dockerfile</p>
+<pre><code>FROM ghcr.io/nmfs-opensci/py-rocket-base:latest</code></pre>
 <p>install.R</p>
 <pre><code># to match rocker/verse:4.4 used in py-rocker-base
 # look up the date that the Rocker image was created and put that
@@ -262,6 +267,7 @@ install.packages(list.of.packages, repos=repo)</code></pre>
 <section id="add-r-geospatial-packages" class="level3" data-number="1.2.3">
 <h3 data-number="1.2.3" class="anchored" data-anchor-id="add-r-geospatial-packages"><span class="header-section-number">1.2.3</span> Add R geospatial packages</h3>
 <p>Geospatial packages require some linux packages. To get this working in your Docker image add this to your Docker file:</p>
+<p>Dockerfile</p>
 <pre><code>FROM ghcr.io/nmfs-opensci/py-rocket-base:latest
 
 USER root
