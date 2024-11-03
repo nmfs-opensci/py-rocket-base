@@ -48,7 +48,7 @@ You can specify the mime types via xml.
 
 #### icons
 
-You can include a png or svg for the icon. py-rocket-base will place this in `/usr/share/icons/packages`. If you put your icon file in the Desktop directory in your repo, then in your desktop file, use the file name without the extension. 
+You can include a png or svg for the icon. py-rocket-base will place this in `/usr/share/icons/hicolor`. If you put your icon file in the Desktop directory in your repo, then in your desktop file, use the file name without the extension. If for some reason, your icon is not showing up, use the direct url `/srv/repo/Desktop/your-icon-name.png`. If the icon cache does not update properly, you have the use the full url.
 
 ```
 Icon=cdat
@@ -56,8 +56,13 @@ Icon=cdat
 
 You can also use an absolute file path.
 
+If an icon is installed with your application, it will be in the installation files.
 ```
 Icon=/srv/conda/envs/notebook/share/qgis/images/icons/qgis-icon-512x512.png
+```
+or if you include an icon in your `Desktop` directory, it will be in `/srv/repo/Desktop`.
+```
+Icon=/srv/repo/Desktop/cdat.png
 ```
 
 
