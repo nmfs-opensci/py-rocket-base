@@ -10,8 +10,6 @@ fi
 # The rest of the script continues here, running as root
 echo "Running install-apt-packages.sh as root. Proceeding with installation..."
 
-/scripts/copy-files.sh
-
 echo "Checking for apt.txt..."
 cd "${REPO_DIR}/childimage/" || exit 1
 if test -f "apt.txt"; then
