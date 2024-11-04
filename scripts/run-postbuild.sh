@@ -1,5 +1,4 @@
 #!/bin/bash
-/scripts/copy-files.sh
 
 echo "Checking for postBuild..."
 cd "${REPO_DIR}/childimage/" || exit 1
