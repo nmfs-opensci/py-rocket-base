@@ -1,5 +1,8 @@
 USER root
 
+# Clean up extra files in ${REPO_DIR}
+RUN rm -rf ${REPO_DIR}/book ${REPO_DIR}/docs
+
 # repo2docker does not set this. This is the default env in repo2docker type images
 ENV CONDA_ENV=notebook
 # Tell applications where to open desktop apps - this allows notebooks to pop open GUIs
@@ -38,9 +41,6 @@ RUN mandb
 RUN cp ${REPO_DIR}/custom_jupyter_server_config.json ${NB_PYTHON_PREFIX}/etc/jupyter/jupyter_server_config.d/
 RUN cp ${REPO_DIR}/custom_jupyter_server_config.json ${NB_PYTHON_PREFIX}/etc/jupyter/jupyter_notebook_config.d/
 
-# Clean up extra files in ${REPO_DIR}
-RUN rm -rf ${REPO_DIR}/book ${REPO_DIR}/docs
-
 # Copy scripts into /pyrocket_scripts directory in the image
 RUN mkdir -p /pyrocket_scripts && cp -r ${REPO_DIR}/scripts /pyrocket_scripts
 
@@ -50,6 +50,9 @@ RUN chown -R root:root /pyrocket_scripts && \
 
 # Convert NB_USER to ENV (from ARG) so that it passes to the child dockerfile
 ENV NB_USER=${NB_USER}
+
+# Copy the child repo files into childimage so they are available to scripts
+ONBUILD COPY --chown=${NB_USER}:${NB_USER} . ${REPO_DIR}/childimage
 
 # Revert to default user and home as pwd
 USER ${NB_USER}
