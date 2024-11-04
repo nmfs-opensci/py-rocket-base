@@ -2,7 +2,15 @@
 
 echo "Checking for postBuild..."
 cd "${REPO_DIR}/childimage/" || exit 1
+
 if test -f "postBuild"; then
+    # Check the user and output which user the script is running as
+    if [[ $(id -u) -eq 0 ]]; then
+        echo "Running as root."
+    else
+        echo "Running as ${NB_USER}."
+    fi
+
     chmod +x postBuild
     ./postBuild
     rm -rf /tmp/*
