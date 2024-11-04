@@ -1,16 +1,12 @@
 #!/bin/bash
-# Required User: root
+# Required User: NB_USER
 
-# Check if the script is run as root
-if [[ $(id -u) -ne 0 ]]; then
-    echo "Error: This script must be run as root." >&2  # Output error message to standard error
-    exit 1  # Exit with a non-zero status to indicate failure
+if [[ $(id -u) -eq 0 ]]; then
+    echo "Switching to ${NB_USER} to run setup-desktop.sh"
+    exec su "${NB_USER}" -c "/bin/bash $0"  # Switches to NB_USER and reruns the script
 fi
 
-# The rest of the script continues here, running as root
-echo "Running setup-start.sh as root. Proceeding with installation..."
-
-/scripts/copy-files.sh
+echo "Running setup-start.sh as ${NB_USER}"
 
 echo "Checking for start..."
 cd "${REPO_DIR}/childimage/" || exit 1
