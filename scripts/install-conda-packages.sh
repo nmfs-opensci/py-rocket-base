@@ -8,8 +8,6 @@ fi
 
 echo "Running install-conda-packages.sh as ${NB_USER}"
 
-/scripts/copy-files.sh
-
 echo "Checking for conda-lock.yml or environment.yml..."
 cd "${REPO_DIR}/childimage/" || exit 1
 if test -f "conda-lock.yml"; then
