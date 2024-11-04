@@ -13,6 +13,7 @@ on:
       - 'appendix'
       - 'desktop.sh'
       - 'rocker.sh'
+      - 'scripts/**'
       - '.github/workflows/build-dev.yaml'
 
 jobs:
