@@ -8,8 +8,6 @@ fi
 
 echo "Running install-pip-packages.sh as ${NB_USER}"
 
-/scripts/copy-files.sh
-
 echo "Checking for pip requirements.txt..."
 cd "${REPO_DIR}/childimage/" || exit 1
 if test -f "requirements.txt"; then
