@@ -8,8 +8,6 @@ fi
 
 echo "Running install-r-package.sh as ${NB_USER}"
 
-/scripts/copy-files.sh
-
 echo "Checking for install.R..."
 cd "${REPO_DIR}/childimage/" || exit 1
 if test -f "install.R"; then
