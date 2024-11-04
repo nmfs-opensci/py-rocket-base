@@ -45,8 +45,8 @@ RUN cp ${REPO_DIR}/custom_jupyter_server_config.json ${NB_PYTHON_PREFIX}/etc/jup
 RUN mkdir -p /pyrocket_scripts && cp -r ${REPO_DIR}/scripts/* /pyrocket_scripts/
 
 # Set ownership to root and permissions to 755
-RUN chown -R root:root /pyrocket_scripts && \
-    chmod -R 755 /pyrocket_scripts
+RUN chown -R root:staff /pyrocket_scripts && \
+    chmod -R 775 /pyrocket_scripts
 
 # Convert NB_USER to ENV (from ARG) so that it passes to the child dockerfile
 ENV NB_USER=${NB_USER}
