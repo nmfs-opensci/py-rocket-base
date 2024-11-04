@@ -1,16 +1,18 @@
 #!/bin/bash
 
-echo "Checking for ${REPO_DIR}/childimage/..."
+echo "Running run-postbuild.sh"
+
+echo "  Checking for ${REPO_DIR}/childimage/..."
 if [ -d "${REPO_DIR}/childimage/" ]; then
     cd "${REPO_DIR}/childimage/" || exit 1
 
-    echo "Checking for postBuild..."
+    echo "  Checking for postBuild..."
     if test -f "postBuild"; then
         # Check the user and output which user the script is running as
         if [[ $(id -u) -eq 0 ]]; then
-            echo "Running run-postbuild.sh as root."
+            echo "  Running run-postbuild.sh as root."
         else
-            echo "Running run-postbuild.sh as ${NB_USER}."
+            echo "  Running run-postbuild.sh as ${NB_USER}."
         fi
 
         chmod +x postBuild
@@ -21,9 +23,8 @@ if [ -d "${REPO_DIR}/childimage/" ]; then
         find ${CONDA_DIR} -follow -type f -name '*.a' -delete
         find ${CONDA_DIR} -follow -type f -name '*.js.map' -delete
     else
-        echo "No postBuild file found. Skipping execution."
+        echo "  No postBuild file found. Skipping execution."
     fi
 else
-    echo "Directory ${REPO_DIR}/childimage/ does not exist. Exiting gracefully."
-    exit 0  # Exit with a success status
+    echo "  Directory ${REPO_DIR}/childimage/ does not exist. Skipping script."
 fi
