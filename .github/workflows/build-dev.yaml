@@ -11,11 +11,17 @@ on:
       - 'start'
       - 'postBuild'
       - 'appendix'
-      - 'desktop.sh'
       - 'rocker.sh'
+      - 'desktop.sh'
+      - 'custom_jupyter_server_config.json'
       - 'scripts/**'
       - '.github/workflows/build-dev.yaml'
-
+      - '!book/**'  # Ignore all changes in the /book directory
+      - '!docs/**'  # Ignore all changes in the /docs directory
+      - '!README.md'
+      - '!conda-lock.yml'
+      - '!LICENSE'
+      
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
