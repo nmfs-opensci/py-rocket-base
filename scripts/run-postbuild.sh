@@ -2,6 +2,11 @@
 
 echo "Running run-postbuild.sh"
 
+# Check if a filename argument is provided
+if [ -n "$1" ]; then
+    echo "   Warning: Passed-in file '$1' to run-postbuild.sh is ignored. Looking for a file named 'postBuild' in your repository." >&2
+fi
+
 echo "  Checking for ${REPO_DIR}/childimage/..."
 if [ -d "${REPO_DIR}/childimage/" ]; then
     cd "${REPO_DIR}/childimage/" || exit 1
