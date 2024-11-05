@@ -1,25 +1,38 @@
 #!/bin/bash
 # Required User: NB_USER
 
+# Check if running as root and switch to NB_USER if needed
+if [[ $(id -u) -eq 0 ]]; then
+    echo "Switching to ${NB_USER} to run install-r-packages.sh"
+    exec su "${NB_USER}" -c "/bin/bash $0 $1"  # Pass along the filename argument
+fi
+
+# Main script execution as NB_USER
 echo "Running install-r-packages.sh"
 
-echo "  Checking for ${REPO_DIR}/childimage/..."
-if [ -d "${REPO_DIR}/childimage/" ]; then
-    cd "${REPO_DIR}/childimage/" || exit 1
-
-    echo "  Checking for install.R in ${REPO_DIR}/childimage/..."
-    if test -f "install.R"; then
-        # Switch to NB_USER only if install.R exists
-        if [[ $(id -u) -eq 0 ]]; then
-            echo "Switching to ${NB_USER} to run install-r-packages.sh"
-            exec su "${NB_USER}" -c "/bin/bash $0"  # Switches to NB_USER and reruns the script
-        fi
-
-        echo "  Using install.R to install R packages as ${NB_USER}..."
-        Rscript install.R
-    else
-        echo "  No install.R found. Skipping R package installation."
-    fi
-else
-    echo "  Directory ${REPO_DIR}/childimage/ does not exist. Skipping script."
+# Check if a filename argument is provided
+if [ -z "$1" ]; then
+    echo "  Error: This script requires a file name (install.R)." >&2
+    echo "  Usage: RUN /pyrocket_scripts/install-r-packages.sh <install.R>" >&2
+    exit 1
 fi
+
+# Set the file variable to the provided argument
+INSTALL_FILE="$1"
+
+# Verify the file exists and is readable
+if [ ! -f "$INSTALL_FILE" ]; then
+    echo "  Error: File '$INSTALL_FILE' not found. Please provide a valid R script file." >&2
+    echo "  Usage: RUN /pyrocket_scripts/install-r-packages.sh <install.R>" >&2
+    exit 1
+fi
+
+echo "  Found file: $INSTALL_FILE"
+
+# Install R packages using the provided R script
+if ! Rscript "$INSTALL_FILE"; then
+    echo "  Error: Installation of packages from '$INSTALL_FILE' failed. Please check the script for errors." >&2
+    exit 1
+fi
+
+echo "  Success! install-r-packages.sh"
