@@ -20,7 +20,7 @@ on:
       - '!docs/**'  # Ignore all changes in the /docs directory
       - '!README.md'
       - '!conda-lock.yml'
-      - 'LICENSE'
+      - '!LICENSE'
 
 jobs:
   build-and-push:
