@@ -17,13 +17,13 @@ if [ -d "${REPO_DIR}/childimage/" ]; then
         
         if test -f "conda-lock.yml"; then
             echo "  Using conda-lock.yml"
-            conda-lock install --name ${CONDA_ENV}
-            pip install --no-deps jupyter-remote-desktop-proxy
+            ${NB_PYTHON_PREFIX}/bin/conda-lock install --name ${CONDA_ENV}
+            ${NB_PYTHON_PREFIX}/bin/pip install --no-deps jupyter-remote-desktop-proxy
             INSTALLATION_HAPPENED=true
         elif test -f "environment.yml"; then
             echo "  Using environment.yml"
             ${CONDA_DIR}/condabin/mamba env update --name ${CONDA_ENV} -f environment.yml
-            pip install --no-deps jupyter-remote-desktop-proxy
+            ${NB_PYTHON_PREFIX}/bin/pip install --no-deps jupyter-remote-desktop-proxy
             INSTALLATION_HAPPENED=true
         fi
 
