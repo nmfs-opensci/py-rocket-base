@@ -1,6 +1,13 @@
 #!/bin/bash
 # Required User: NB_USER
 
+# Check if a filename argument is provided
+if [ -z "$1" ]; then
+    echo "Error: install-r-packages.sh requires an input file (an R script and typically called install.R)." >&2
+    echo "Usage: RUN /pyrocket_scripts/install-r-packages.sh <filename>" >&2
+    exit 1
+fi
+
 # Check if running as root and switch to NB_USER if needed
 if [[ $(id -u) -eq 0 ]]; then
     echo "Switching to ${NB_USER} to run install-r-packages.sh"
@@ -8,14 +15,7 @@ if [[ $(id -u) -eq 0 ]]; then
 fi
 
 # Main script execution as NB_USER
-echo "Running install-r-packages.sh"
-
-# Check if a filename argument is provided
-if [ -z "$1" ]; then
-    echo "  Error: This script requires a file name (install.R)." >&2
-    echo "  Usage: RUN /pyrocket_scripts/install-r-packages.sh <install.R>" >&2
-    exit 1
-fi
+echo "Running install-r-packages.sh as ${NB_USER}"
 
 # Set the file variable to the provided argument
 INSTALL_FILE="$1"
@@ -23,7 +23,7 @@ INSTALL_FILE="$1"
 # Verify the file exists and is readable
 if [ ! -f "$INSTALL_FILE" ]; then
     echo "  Error: File '$INSTALL_FILE' not found. Please provide a valid R script file." >&2
-    echo "  Usage: RUN /pyrocket_scripts/install-r-packages.sh <install.R>" >&2
+    echo "  Usage: RUN /pyrocket_scripts/install-r-packages.sh <filename>" >&2
     exit 1
 fi
 
