@@ -4,7 +4,7 @@
 # Check if a filename argument is provided
 if [ -z "$1" ]; then
     echo "Error: setup-start.sh requires a script file to be provided as an argument." >&2
-    echo "Usage: setup-start.sh <filename>" >&2
+    echo "Usage: /pyrocket_scripts/setup-start.sh <filename>" >&2
     exit 1
 fi
 
