@@ -19,7 +19,7 @@ Include a Dockerfile in your repository with the following from line:
 ```
 FROM ghcr.io/nmfs-opensci/py-rocket-base:latest
 ```
-For simple extensions of py-rocket-base, this is the only line you need in the Dockerfile. py-rocket-base has `ONBUILD` statements that detect configuration files with the names: `environment.yml`, `install.R`, `apt.txt`, `postBuild`, `start`, and `Desktop` (directory). If those files are present, it triggers specific installation behavior. You can also add lines directory to the Dockerfile. See the documentation on using the base image.
+For simple extensions of py-rocket-base, this is the only line you need in the Dockerfile. py-rocket-base includes directories called `\pyrocket_scripts` and `\rocker_scripts` that will help you do common tasks for scientific docker images. You do not have to use these scripts, but they can help you do these standard tasks. If you are familiar with writing Docker files, you can also write your own code. The exception is installation of Desktop files. Properly adding Desktop applications to py-rocket-base requires the use of the `\pyrocket_scripts/install-desktop.sh` script. The start file is also an exception. See the discussion in the configuration files. See the documentation on using the base image.
 
 This work is related to the work on the [NMFS Open Science docker stack](https://nmfs-opensci.github.io/container-images/).
 

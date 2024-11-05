@@ -11,6 +11,8 @@ py-rocket-base is inspired by [repo2docker](https://github.com/jupyterhub/repo2d
 
 The Pangeo Docker stack does not use repo2docker, but mimics repo2docker's environment design. The Pangeo base-image behaves similar to repo2docker in that using the base-image in the `FROM` line of a Dockerfile causes the build to look for files with the same names as repo2docker's [configuration files](https://repo2docker.readthedocs.io/en/latest/config_files.html) and then do the proper action with those files. This means that routine users do not need to know how to write Dockerfile code in order to extend the image with new packages or applications. py-rocker-base Docker image uses this Pangeo base-image design. It is based on `ONBUILD` commands in the Dockerfile that trigger actions only when the image is used in the `FROM` line of another Dockerfile.
 
+py-rocket-base does not include this `ONBUILD` behavior. Instead it follows the [rocker docker stack](https://github.com/rocker-org/rocker-versioned2) design. py-rocket-base a directory called `\pyrocket_scripts`that will help you do common tasks for scientific docker images.These scripts are not required. If users are familiar with writing Docker files, they can write their own code. The use of helper scripts was used after feedback that the Pangeo ONBUILD behavior makes it harder to customize images that need very specific structure or order of operations.
+
 *There are many ways to install R and RStudio into an image designed for JupyterHubs* The objective of py-rocker-base is not to install R and RStudio, per se, and there are other leaner and faster ways to install R/RStudio if that is your goal[^1]. The objective of py-rocket-base is to create an JupyterHub image such when you click the RStudio button in the JupyterLab UI to enter the RStudio UI, you enter an environment that is the same as if you had used a Rocker image. If you are in the JupyterLab UI, the environment is the same as it you had used repo2docker (or Pangeo base-image) to create the environment.
 
 [^1]: See for example [repo2docker-r](https://github.com/boettiger-lab/repo2docker-r) and [conda-r](https://github.com/binder-examples/r-conda) in [binder-examples](https://github.com/binder-examples).
@@ -154,112 +156,22 @@ COPY custom_jupyter_server_config.json ${NB_PYTHON_PREFIX}/etc/jupyter/jupyter_n
 # Clean up extra files in ${REPO_DIR}
 RUN rm -rf ${REPO_DIR}/book ${REPO_DIR}/docs # <7>
 
-###################
-# Set up behavior for child dockerfiles
+# Copy scripts into /pyrocket_scripts directory in the image
+RUN mkdir -p /pyrocket_scripts && cp -r ${REPO_DIR}/scripts/* /pyrocket_scripts/ # <8>
+
+# Set ownership to root and permissions to 755 # <8>
+RUN chown -R root:staff /pyrocket_scripts && \ # <8>
+    chmod -R 775 /pyrocket_scripts # <8>
+
 # Convert NB_USER to ENV (from ARG) so that it passes to the child dockerfile
-ENV NB_USER=${NB_USER} # <8>
+ENV NB_USER=${NB_USER} # <9>
 
-## ONBUILD section. These commands are run in child Dockerfiles. These are run right after the FROM image is loaded # <9>
-
-ONBUILD USER ${NB_USER} # <10>
-
-# ${REPO_DIR} is owned by ${NB_USER}
-# copy all the files in the repo (i.e. ".") into ${REPO_DIR}
-ONBUILD COPY --chown=${NB_USER}:${NB_USER} . ${REPO_DIR}/childimage # <11>
-
-# Desktop and apt.txt installs need to be done by root
-ONBUILD USER root 
-
-# Copy Desktop files into ${REPO_DIR}/Desktop if they exist. start will copy to Application dir and Desktop  # <13>
-# Will not fail if Desktop dir exists but is empty  # <13>
-ONBUILD RUN echo "Checking for 'Desktop directory'..." \  # <13>
-        ; cd "${REPO_DIR}/childimage/" \  # <13>
-        ; if test -d Desktop ; then \  # <13>
-            mkdir -p "${REPO_DIR}/Desktop" && \  # <13>
-            cp -r Desktop/* "${REPO_DIR}/Desktop/" 2>/dev/null && \  # <13>
-            chmod +x "${REPO_DIR}/desktop.sh" ; \  # <13>
-        fi \  # <13>
-        ; "${REPO_DIR}/desktop.sh"  # <13>
-
-# Install apt packages specified in a apt.txt file if it exists.
-# blank lines and comments are supported in apt.txt
-ONBUILD RUN echo "Checking for 'apt.txt'..." \ # <14>
-        ; cd "${REPO_DIR}/childimage/" \ # <14>
-        ; if test -f "apt.txt" ; then \ # <14>
-        package_list=$(grep -v '^\s*#' apt.txt | grep -v '^\s*$' | sed 's/\r//g; s/#.*//; s/^[[:space:]]*//; s/[[:space:]]*$//' | awk '{$1=$1};1') \  # <14>
-        && apt-get update --fix-missing > /dev/null \ # <14>
-        && apt-get install --yes --no-install-recommends $package_list \ # <14>
-        && apt-get autoremove --purge \ # <14>
-        && apt-get clean \ # <14>
-        && rm -rf /var/lib/apt/lists/* \ # <14>
-        ; fi
-        
-ONBUILD USER ${NB_USER} # <15>
-
-# Add the conda environment
-# sometimes package solving will get rid of pip installed packages. Make sure jupyter-remote-desktop-proxy does not disappear
-ONBUILD RUN echo "Checking for 'conda-lock.yml' or 'environment.yml'..." \ # <16>
-        ; cd "${REPO_DIR}/childimage/" \ # <16>
-        ; if test -f "conda-lock.yml" ; then echo "Using conda-lock.yml" & \ # <16>
-        conda-lock install --name ${CONDA_ENV} \ # <16>
-        && pip install --no-deps jupyter-remote-desktop-proxy \ # <16>
-        ; elif test -f "environment.yml" ; then echo "Using environment.yml" & \ # <16>
-        mamba env update --name ${CONDA_ENV} -f environment.yml  \ # <16>
-        && pip install --no-deps jupyter-remote-desktop-proxy \ # <16>
-        ; fi \ # <16>
-        && mamba clean -yaf \ # <16>
-        && find ${CONDA_DIR} -follow -type f -name '*.a' -delete \ # <16>
-        && find ${CONDA_DIR} -follow -type f -name '*.js.map' -delete \ # <16>
-        ; if ls ${NB_PYTHON_PREFIX}/lib/python*/site-packages/bokeh/server/static > /dev/null 2>&1; then \ # <16>
-        find ${NB_PYTHON_PREFIX}/lib/python*/site-packages/bokeh/server/static -follow -type f -name '*.js' ! -name '*.min.js' -delete \ # <16>
-        ; fi # <16>
-
-# If a requirements.txt file exists, use pip to install packages
-# listed there. We don't want to save cached wheels in the image
-# to avoid wasting space.
-ONBUILD RUN echo "Checking for pip 'requirements.txt'..." \ # <17>
-        ; cd "${REPO_DIR}/childimage/" \ # <17>
-        ; if test -f "requirements.txt" ; then \ # <17>
-        ${NB_PYTHON_PREFIX}/bin/pip install --no-cache -r requirements.txt \ # <17>
-        ; fi # <17>
-
-# Add the r packages
-ONBUILD RUN echo "Checking for 'install.R" \ # <18>
-        ; cd "${REPO_DIR}/childimage/" \ # <18>
-        ; if test -f "install.R" ; then echo "Using install.R" & \ # <18>
-        Rscript install.R \ # <18>
-        ; fi # <18>
-
-# If a start file exists, put that under ${REPO_DIR}/childimage/start. 
-# This is sourced in ${REPO_DIR}/start
-ONBUILD RUN echo "Checking for 'start'..." \ # <19>
-        ; cd "${REPO_DIR}/childimage/" \ # <19>
-        ; if test -f "start" ; then \ # <19>
-        chmod +x start \ # <19>
-        ; fi # <19>
-
-# If a postBuild file exists, run it!
-# After it's done, we try to remove any possible cruft commands there
-# left behind under $HOME - particularly stuff that jupyterlab extensions
-# leave behind.
-ONBUILD RUN echo "Checking for 'postBuild'..." \ # <20>
-        ; cd "${REPO_DIR}/childimage/" \ # <20>
-        ; if test -f "postBuild" ; then \ # <20>
-        chmod +x postBuild \ # <20>
-        && ./postBuild \ # <20>
-        && rm -rf /tmp/* \ # <20>
-        && rm -rf ${HOME}/.cache ${HOME}/.npm ${HOME}/.yarn \ # <20>
-        && rm -rf ${NB_PYTHON_PREFIX}/share/jupyter/lab/staging \ # <20>
-        && find ${CONDA_DIR} -follow -type f -name '*.a' -delete \ # <20>
-        && find ${CONDA_DIR} -follow -type f -name '*.js.map' -delete \ # <20>
-        ; fi # <20>
-
-## End ONBUILD section for child images
-################################
+# Copy the child repo files into childimage so they are available to scripts
+ONBUILD COPY --chown=${NB_USER}:${NB_USER} . ${REPO_DIR}/childimage # <10>
 
 # Revert to default user and home as pwd
-USER ${NB_USER}  # <21>
-WORKDIR ${HOME} # <21>                                 
+USER ${NB_USER} # <11>
+WORKDIR ${HOME} # <11>
 ```
 1. Some commands need to be run as root, such as installing linux packages with `apt-get`
 2. Set variables. CONDA_ENV is useful for child builds
@@ -268,20 +180,10 @@ WORKDIR ${HOME} # <21>
 5. Ubuntu does not have man pages installed by default. These lines activate `man` so users have the common help files.
 6. This is some custom jupyter config to allow hidden files to be listed in the folder browser.
 7. `book` and `docs` are the documentation files and are not needed in the image.
-8. The `NB_USER` environmental variable is not exported by repo2docker (it is an argument confined to the parent build) but is very useful for child builds. So it is converted to an environmental variable.
-9. This next section is a series of `ONBUILD` commands. These are only run if py-rocker-base is used in the `FROM` line in a child docker file.
-10. Set the user to NB_USER. Not strictly necessary but helps ensure that we don't accidentally create files that jovyan (NB_USER) cannot access.
-11. Copy the child build context (files with the Docker file) into `${REPO_DIR}`. Make sure that jovyan owns the directory. Note, jovyan owns `${REPO_DIR}` (this is set by repo2docker).
-12. empty
-13. The Desktop files are put in a directory called Desktop. Copy them into `${REPO_DIR}/Desktop`. The `desktop.sh` script will copy these into the correct location for the Desktop server.
-14. If `apt.txt` is present, then install the packages. The code processes any comments or blank lines in `apt.txt`. This must be run as root so we switch to root to install.
-15. Switch back to jovyan so we don't accidentally make files as belonging to root.
-16. If `environment.yml` is present, install these into the conda environment and do some clean-up. Sometimes package solving will get rid of pip installed packages. We need to make sure that jupyter-remote-desktop-proxy does not disappear.
-17. If `requirements.txt` is present, install with pip and do some clean-up.
-18. `install.R` is an R script where the user can specify how to install packages or run any other R code.
-19. `start` is run in the `${REPO_DIR}/start` command in a subshell. The `${REPO_DIR}/start` command cannot be replaced since it contains code to move the Desktop files into the correct place.
-20. `postBuild` is a script. If present, run it and then do some clean-up. It is common to use `postBuild` to apply extensions or install packages that cannot be installed with `apt`.
-21. The parent docker build completes by setting the user to jovyan and the working directory to `${HOME}`. Within a JupyterHub deployment, `${HOME}` will often be re-mapped to the user persistent memory so it is important not to write anything that needs to be persistent to `${HOME}`, for example configuration. You can do this in the `start` script since that runs after the user directory is mapped or you can put configuration files in some place other than `${HOME}`.
+8. Copy the pyrocket helper scripts to the `/pyrocket_scripts` directory and set to executable.
+9. The `NB_USER` environmental variable is not exported by repo2docker (it is an argument confined to the parent build) but is very useful for child builds. So it is converted to an environmental variable.
+10. Copy the child build context (files with the Docker file) into `${REPO_DIR}`. Make sure that jovyan owns the directory. Note, jovyan owns `${REPO_DIR}` (this is set by repo2docker).
+11. The parent docker build completes by setting the user to jovyan and the working directory to `${HOME}`. Within a JupyterHub deployment, `${HOME}` will often be re-mapped to the user persistent memory so it is important not to write anything that needs to be persistent to `${HOME}`, for example configuration. You can do this in the `start` script since that runs after the user directory is mapped or you can put configuration files in some place other than `${HOME}`.
 
 ## rocker.sh
 

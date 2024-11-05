@@ -255,6 +255,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 data-number="7.1" class="anchored" data-anchor-id="design"><span class="header-section-number">7.1</span> Design</h2>
 <p>py-rocket-base is inspired by <a href="https://github.com/jupyterhub/repo2docker">repo2docker</a> and the <a href="https://pangeo-docker-images.readthedocs.io/en/latest/">Pangeo Docker stack</a> design. py-rocker-base is built using repo2docker (via <a href="https://github.com/jupyterhub/repo2docker-action">repo2docker-action</a>) and thus lets repo2docker make the choices regarding the environment design—things like how the conda environment is set-up and the base directory structure and permissions.</p>
 <p>The Pangeo Docker stack does not use repo2docker, but mimics repo2docker’s environment design. The Pangeo base-image behaves similar to repo2docker in that using the base-image in the <code>FROM</code> line of a Dockerfile causes the build to look for files with the same names as repo2docker’s <a href="https://repo2docker.readthedocs.io/en/latest/config_files.html">configuration files</a> and then do the proper action with those files. This means that routine users do not need to know how to write Dockerfile code in order to extend the image with new packages or applications. py-rocker-base Docker image uses this Pangeo base-image design. It is based on <code>ONBUILD</code> commands in the Dockerfile that trigger actions only when the image is used in the <code>FROM</code> line of another Dockerfile.</p>
+<p>py-rocket-base does not include this <code>ONBUILD</code> behavior. Instead it follows the <a href="https://github.com/rocker-org/rocker-versioned2">rocker docker stack</a> design. py-rocket-base a directory called <code>\pyrocket_scripts</code>that will help you do common tasks for scientific docker images.These scripts are not required. If users are familiar with writing Docker files, they can write their own code. The use of helper scripts was used after feedback that the Pangeo ONBUILD behavior makes it harder to customize images that need very specific structure or order of operations.</p>
 <p><em>There are many ways to install R and RStudio into an image designed for JupyterHubs</em> The objective of py-rocker-base is not to install R and RStudio, per se, and there are other leaner and faster ways to install R/RStudio if that is your goal<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>. The objective of py-rocket-base is to create an JupyterHub image such when you click the RStudio button in the JupyterLab UI to enter the RStudio UI, you enter an environment that is the same as if you had used a Rocker image. If you are in the JupyterLab UI, the environment is the same as it you had used repo2docker (or Pangeo base-image) to create the environment.</p>
 <aside id="footnotes" class="footnotes footnotes-end-of-block" role="doc-footnote">
 <ol>
@@ -382,112 +383,22 @@ most of the work in py-rocket-base is done here. appendix calls rocker.sh and in
 <span id="annotated-cell-6-42"><a href="#annotated-cell-6-42" aria-hidden="true" tabindex="-1"></a><span class="co"># Clean up extra files in ${REPO_DIR}</span></span>
 <button class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="7">7</button><span id="annotated-cell-6-43" class="code-annotation-target"><a href="#annotated-cell-6-43" aria-hidden="true" tabindex="-1"></a>RUN rm <span class="sc">-</span>rf <span class="sc">$</span>{REPO_DIR}<span class="sc">/</span>book <span class="sc">$</span>{REPO_DIR}<span class="sc">/</span>docs</span>
 <span id="annotated-cell-6-44"><a href="#annotated-cell-6-44" aria-hidden="true" tabindex="-1"></a></span>
-<span id="annotated-cell-6-45"><a href="#annotated-cell-6-45" aria-hidden="true" tabindex="-1"></a><span class="do">###################</span></span>
-<span id="annotated-cell-6-46"><a href="#annotated-cell-6-46" aria-hidden="true" tabindex="-1"></a><span class="co"># Set up behavior for child dockerfiles</span></span>
-<span id="annotated-cell-6-47"><a href="#annotated-cell-6-47" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert NB_USER to ENV (from ARG) so that it passes to the child dockerfile</span></span>
-<button class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="8">8</button><span id="annotated-cell-6-48" class="code-annotation-target"><a href="#annotated-cell-6-48" aria-hidden="true" tabindex="-1"></a>ENV NB_USER<span class="ot">=</span><span class="er">$</span>{NB_USER}</span>
-<span id="annotated-cell-6-49"><a href="#annotated-cell-6-49" aria-hidden="true" tabindex="-1"></a></span>
-<button class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="9">9</button><span id="annotated-cell-6-50" class="code-annotation-target"><a href="#annotated-cell-6-50" aria-hidden="true" tabindex="-1"></a><span class="do">## ONBUILD section. These commands are run in child Dockerfiles. These are run right after the FROM image is loaded</span></span>
+<span id="annotated-cell-6-45"><a href="#annotated-cell-6-45" aria-hidden="true" tabindex="-1"></a><span class="co"># Copy scripts into /pyrocket_scripts directory in the image</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="8">8</button><span id="annotated-cell-6-46" class="code-annotation-target"><a href="#annotated-cell-6-46" aria-hidden="true" tabindex="-1"></a>RUN mkdir <span class="sc">-</span>p <span class="sc">/</span>pyrocket_scripts <span class="sc">&amp;&amp;</span> cp <span class="sc">-</span>r <span class="sc">$</span>{REPO_DIR}<span class="sc">/</span>scripts<span class="sc">/</span><span class="er">*</span> <span class="er">/</span>pyrocket_scripts<span class="sc">/</span></span>
+<span id="annotated-cell-6-47"><a href="#annotated-cell-6-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-6-48"><a href="#annotated-cell-6-48" aria-hidden="true" tabindex="-1"></a><span class="co"># Set ownership to root and permissions to 755</span></span>
+<span id="annotated-cell-6-49"><a href="#annotated-cell-6-49" aria-hidden="true" tabindex="-1"></a>RUN chown <span class="sc">-</span>R root<span class="sc">:</span>staff <span class="sc">/</span>pyrocket_scripts <span class="sc">&amp;&amp;</span> \</span>
+<span id="annotated-cell-6-50"><a href="#annotated-cell-6-50" aria-hidden="true" tabindex="-1"></a>    chmod <span class="sc">-</span>R <span class="dv">775</span> <span class="sc">/</span>pyrocket_scripts</span>
 <span id="annotated-cell-6-51"><a href="#annotated-cell-6-51" aria-hidden="true" tabindex="-1"></a></span>
-<button class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="10">10</button><span id="annotated-cell-6-52" class="code-annotation-target"><a href="#annotated-cell-6-52" aria-hidden="true" tabindex="-1"></a>ONBUILD USER <span class="sc">$</span>{NB_USER}</span>
-<span id="annotated-cell-6-53"><a href="#annotated-cell-6-53" aria-hidden="true" tabindex="-1"></a></span>
-<span id="annotated-cell-6-54"><a href="#annotated-cell-6-54" aria-hidden="true" tabindex="-1"></a><span class="co"># ${REPO_DIR} is owned by ${NB_USER}</span></span>
-<span id="annotated-cell-6-55"><a href="#annotated-cell-6-55" aria-hidden="true" tabindex="-1"></a><span class="co"># copy all the files in the repo (i.e. ".") into ${REPO_DIR}</span></span>
-<button class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="11">11</button><span id="annotated-cell-6-56" class="code-annotation-target"><a href="#annotated-cell-6-56" aria-hidden="true" tabindex="-1"></a>ONBUILD COPY <span class="sc">--</span>chown<span class="ot">=</span><span class="er">$</span>{NB_USER}<span class="sc">:</span><span class="er">$</span>{NB_USER} . <span class="sc">$</span>{REPO_DIR}<span class="sc">/</span>childimage</span>
+<span id="annotated-cell-6-52"><a href="#annotated-cell-6-52" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert NB_USER to ENV (from ARG) so that it passes to the child dockerfile</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="9">9</button><span id="annotated-cell-6-53" class="code-annotation-target"><a href="#annotated-cell-6-53" aria-hidden="true" tabindex="-1"></a>ENV NB_USER<span class="ot">=</span><span class="er">$</span>{NB_USER}</span>
+<span id="annotated-cell-6-54"><a href="#annotated-cell-6-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-6-55"><a href="#annotated-cell-6-55" aria-hidden="true" tabindex="-1"></a><span class="co"># Copy the child repo files into childimage so they are available to scripts</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="10">10</button><span id="annotated-cell-6-56" class="code-annotation-target"><a href="#annotated-cell-6-56" aria-hidden="true" tabindex="-1"></a>ONBUILD COPY <span class="sc">--</span>chown<span class="ot">=</span><span class="er">$</span>{NB_USER}<span class="sc">:</span><span class="er">$</span>{NB_USER} . <span class="sc">$</span>{REPO_DIR}<span class="sc">/</span>childimage</span>
 <span id="annotated-cell-6-57"><a href="#annotated-cell-6-57" aria-hidden="true" tabindex="-1"></a></span>
-<span id="annotated-cell-6-58"><a href="#annotated-cell-6-58" aria-hidden="true" tabindex="-1"></a><span class="co"># Desktop and apt.txt installs need to be done by root</span></span>
-<span id="annotated-cell-6-59"><a href="#annotated-cell-6-59" aria-hidden="true" tabindex="-1"></a>ONBUILD USER root </span>
-<span id="annotated-cell-6-60"><a href="#annotated-cell-6-60" aria-hidden="true" tabindex="-1"></a></span>
-<button class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="13">13</button><span id="annotated-cell-6-61" class="code-annotation-target"><a href="#annotated-cell-6-61" aria-hidden="true" tabindex="-1"></a><span class="co"># Copy Desktop files into ${REPO_DIR}/Desktop if they exist. start will copy to Application dir and Desktop</span></span>
-<span id="annotated-cell-6-62"><a href="#annotated-cell-6-62" aria-hidden="true" tabindex="-1"></a><span class="co"># Will not fail if Desktop dir exists but is empty</span></span>
-<span id="annotated-cell-6-63"><a href="#annotated-cell-6-63" aria-hidden="true" tabindex="-1"></a>ONBUILD RUN echo <span class="st">"Checking for 'Desktop directory'..."</span> \</span>
-<span id="annotated-cell-6-64"><a href="#annotated-cell-6-64" aria-hidden="true" tabindex="-1"></a>        ; cd <span class="st">"${REPO_DIR}/childimage/"</span> \</span>
-<span id="annotated-cell-6-65"><a href="#annotated-cell-6-65" aria-hidden="true" tabindex="-1"></a>        ; <span class="cf">if</span> test <span class="sc">-</span>d Desktop ; then \</span>
-<span id="annotated-cell-6-66"><a href="#annotated-cell-6-66" aria-hidden="true" tabindex="-1"></a>            mkdir <span class="sc">-</span>p <span class="st">"${REPO_DIR}/Desktop"</span> <span class="sc">&amp;&amp;</span> \</span>
-<span id="annotated-cell-6-67"><a href="#annotated-cell-6-67" aria-hidden="true" tabindex="-1"></a>            cp <span class="sc">-</span>r Desktop<span class="sc">/</span><span class="er">*</span> <span class="st">"${REPO_DIR}/Desktop/"</span> <span class="dv">2</span><span class="sc">&gt;</span><span class="er">/</span>dev<span class="sc">/</span>null <span class="sc">&amp;&amp;</span> \</span>
-<span id="annotated-cell-6-68"><a href="#annotated-cell-6-68" aria-hidden="true" tabindex="-1"></a>            chmod <span class="sc">+</span>x <span class="st">"${REPO_DIR}/desktop.sh"</span> ; \</span>
-<span id="annotated-cell-6-69"><a href="#annotated-cell-6-69" aria-hidden="true" tabindex="-1"></a>        fi \</span>
-<span id="annotated-cell-6-70"><a href="#annotated-cell-6-70" aria-hidden="true" tabindex="-1"></a>        ; <span class="st">"${REPO_DIR}/desktop.sh"</span></span>
-<span id="annotated-cell-6-71"><a href="#annotated-cell-6-71" aria-hidden="true" tabindex="-1"></a></span>
-<span id="annotated-cell-6-72"><a href="#annotated-cell-6-72" aria-hidden="true" tabindex="-1"></a><span class="co"># Install apt packages specified in a apt.txt file if it exists.</span></span>
-<span id="annotated-cell-6-73"><a href="#annotated-cell-6-73" aria-hidden="true" tabindex="-1"></a><span class="co"># blank lines and comments are supported in apt.txt</span></span>
-<button class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="14">14</button><span id="annotated-cell-6-74" class="code-annotation-target"><a href="#annotated-cell-6-74" aria-hidden="true" tabindex="-1"></a>ONBUILD RUN echo <span class="st">"Checking for 'apt.txt'..."</span> \</span>
-<span id="annotated-cell-6-75"><a href="#annotated-cell-6-75" aria-hidden="true" tabindex="-1"></a>        ; cd <span class="st">"${REPO_DIR}/childimage/"</span> \</span>
-<span id="annotated-cell-6-76"><a href="#annotated-cell-6-76" aria-hidden="true" tabindex="-1"></a>        ; <span class="cf">if</span> test <span class="sc">-</span>f <span class="st">"apt.txt"</span> ; then \</span>
-<span id="annotated-cell-6-77"><a href="#annotated-cell-6-77" aria-hidden="true" tabindex="-1"></a>        package_list<span class="ot">=</span><span class="er">$</span>(grep <span class="sc">-</span>v <span class="st">'^\s*#'</span> apt.txt <span class="sc">|</span> grep <span class="sc">-</span>v <span class="st">'^\s*$'</span> <span class="sc">|</span> sed <span class="st">'s/</span><span class="sc">\r</span><span class="st">//g; s/#.*//; s/^[[:space:]]*//; s/[[:space:]]*$//'</span> <span class="sc">|</span> awk <span class="st">'{$1=$1};1'</span>) \</span>
-<span id="annotated-cell-6-78"><a href="#annotated-cell-6-78" aria-hidden="true" tabindex="-1"></a>        <span class="sc">&amp;&amp;</span> apt<span class="sc">-</span>get update <span class="sc">--</span>fix<span class="sc">-</span>missing <span class="sc">&gt;</span> <span class="er">/</span>dev<span class="sc">/</span>null \</span>
-<span id="annotated-cell-6-79"><a href="#annotated-cell-6-79" aria-hidden="true" tabindex="-1"></a>        <span class="sc">&amp;&amp;</span> apt<span class="sc">-</span>get install <span class="sc">--</span>yes <span class="sc">--</span>no<span class="sc">-</span>install<span class="sc">-</span>recommends <span class="sc">$</span>package_list \</span>
-<span id="annotated-cell-6-80"><a href="#annotated-cell-6-80" aria-hidden="true" tabindex="-1"></a>        <span class="sc">&amp;&amp;</span> apt<span class="sc">-</span>get autoremove <span class="sc">--</span>purge \</span>
-<span id="annotated-cell-6-81"><a href="#annotated-cell-6-81" aria-hidden="true" tabindex="-1"></a>        <span class="sc">&amp;&amp;</span> apt<span class="sc">-</span>get clean \</span>
-<span id="annotated-cell-6-82"><a href="#annotated-cell-6-82" aria-hidden="true" tabindex="-1"></a>        <span class="sc">&amp;&amp;</span> rm <span class="sc">-</span>rf <span class="sc">/</span>var<span class="sc">/</span>lib<span class="sc">/</span>apt<span class="sc">/</span>lists<span class="sc">/</span><span class="er">*</span> \</span>
-<span id="annotated-cell-6-83"><a href="#annotated-cell-6-83" aria-hidden="true" tabindex="-1"></a>        ; fi</span>
-<span id="annotated-cell-6-84"><a href="#annotated-cell-6-84" aria-hidden="true" tabindex="-1"></a>        </span>
-<button class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="15">15</button><span id="annotated-cell-6-85" class="code-annotation-target"><a href="#annotated-cell-6-85" aria-hidden="true" tabindex="-1"></a>ONBUILD USER <span class="sc">$</span>{NB_USER}</span>
-<span id="annotated-cell-6-86"><a href="#annotated-cell-6-86" aria-hidden="true" tabindex="-1"></a></span>
-<span id="annotated-cell-6-87"><a href="#annotated-cell-6-87" aria-hidden="true" tabindex="-1"></a><span class="co"># Add the conda environment</span></span>
-<span id="annotated-cell-6-88"><a href="#annotated-cell-6-88" aria-hidden="true" tabindex="-1"></a><span class="co"># sometimes package solving will get rid of pip installed packages. Make sure jupyter-remote-desktop-proxy does not disappear</span></span>
-<button class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="16">16</button><span id="annotated-cell-6-89" class="code-annotation-target"><a href="#annotated-cell-6-89" aria-hidden="true" tabindex="-1"></a>ONBUILD RUN echo <span class="st">"Checking for 'conda-lock.yml' or 'environment.yml'..."</span> \</span>
-<span id="annotated-cell-6-90"><a href="#annotated-cell-6-90" aria-hidden="true" tabindex="-1"></a>        ; cd <span class="st">"${REPO_DIR}/childimage/"</span> \</span>
-<span id="annotated-cell-6-91"><a href="#annotated-cell-6-91" aria-hidden="true" tabindex="-1"></a>        ; <span class="cf">if</span> test <span class="sc">-</span>f <span class="st">"conda-lock.yml"</span> ; then echo <span class="st">"Using conda-lock.yml"</span> <span class="sc">&amp;</span> \</span>
-<span id="annotated-cell-6-92"><a href="#annotated-cell-6-92" aria-hidden="true" tabindex="-1"></a>        conda<span class="sc">-</span>lock install <span class="sc">--</span>name <span class="sc">$</span>{CONDA_ENV} \</span>
-<span id="annotated-cell-6-93"><a href="#annotated-cell-6-93" aria-hidden="true" tabindex="-1"></a>        <span class="sc">&amp;&amp;</span> pip install <span class="sc">--</span>no<span class="sc">-</span>deps jupyter<span class="sc">-</span>remote<span class="sc">-</span>desktop<span class="sc">-</span>proxy \</span>
-<span id="annotated-cell-6-94"><a href="#annotated-cell-6-94" aria-hidden="true" tabindex="-1"></a>        ; elif test <span class="sc">-</span>f <span class="st">"environment.yml"</span> ; then echo <span class="st">"Using environment.yml"</span> <span class="sc">&amp;</span> \</span>
-<span id="annotated-cell-6-95"><a href="#annotated-cell-6-95" aria-hidden="true" tabindex="-1"></a>        mamba env update <span class="sc">--</span>name <span class="sc">$</span>{CONDA_ENV} <span class="sc">-</span>f environment.yml  \</span>
-<span id="annotated-cell-6-96"><a href="#annotated-cell-6-96" aria-hidden="true" tabindex="-1"></a>        <span class="sc">&amp;&amp;</span> pip install <span class="sc">--</span>no<span class="sc">-</span>deps jupyter<span class="sc">-</span>remote<span class="sc">-</span>desktop<span class="sc">-</span>proxy \</span>
-<span id="annotated-cell-6-97"><a href="#annotated-cell-6-97" aria-hidden="true" tabindex="-1"></a>        ; fi \</span>
-<span id="annotated-cell-6-98"><a href="#annotated-cell-6-98" aria-hidden="true" tabindex="-1"></a>        <span class="sc">&amp;&amp;</span> mamba clean <span class="sc">-</span>yaf \</span>
-<span id="annotated-cell-6-99"><a href="#annotated-cell-6-99" aria-hidden="true" tabindex="-1"></a>        <span class="sc">&amp;&amp;</span> find <span class="sc">$</span>{CONDA_DIR} <span class="sc">-</span>follow <span class="sc">-</span>type f <span class="sc">-</span>name <span class="st">'*.a'</span> <span class="sc">-</span>delete \</span>
-<span id="annotated-cell-6-100"><a href="#annotated-cell-6-100" aria-hidden="true" tabindex="-1"></a>        <span class="sc">&amp;&amp;</span> find <span class="sc">$</span>{CONDA_DIR} <span class="sc">-</span>follow <span class="sc">-</span>type f <span class="sc">-</span>name <span class="st">'*.js.map'</span> <span class="sc">-</span>delete \</span>
-<span id="annotated-cell-6-101"><a href="#annotated-cell-6-101" aria-hidden="true" tabindex="-1"></a>        ; <span class="cf">if</span> ls <span class="sc">$</span>{NB_PYTHON_PREFIX}<span class="sc">/</span>lib<span class="sc">/</span>python<span class="sc">*</span><span class="er">/</span>site<span class="sc">-</span>packages<span class="sc">/</span>bokeh<span class="sc">/</span>server<span class="sc">/</span>static <span class="sc">&gt;</span> <span class="er">/</span>dev<span class="sc">/</span>null <span class="dv">2</span><span class="sc">&gt;</span><span class="er">&amp;</span><span class="dv">1</span>; then \</span>
-<span id="annotated-cell-6-102"><a href="#annotated-cell-6-102" aria-hidden="true" tabindex="-1"></a>        find <span class="sc">$</span>{NB_PYTHON_PREFIX}<span class="sc">/</span>lib<span class="sc">/</span>python<span class="sc">*</span><span class="er">/</span>site<span class="sc">-</span>packages<span class="sc">/</span>bokeh<span class="sc">/</span>server<span class="sc">/</span>static <span class="sc">-</span>follow <span class="sc">-</span>type f <span class="sc">-</span>name <span class="st">'*.js'</span> <span class="sc">!</span> <span class="sc">-</span>name <span class="st">'*.min.js'</span> <span class="sc">-</span>delete \</span>
-<span id="annotated-cell-6-103"><a href="#annotated-cell-6-103" aria-hidden="true" tabindex="-1"></a>        ; fi</span>
-<span id="annotated-cell-6-104"><a href="#annotated-cell-6-104" aria-hidden="true" tabindex="-1"></a></span>
-<span id="annotated-cell-6-105"><a href="#annotated-cell-6-105" aria-hidden="true" tabindex="-1"></a><span class="co"># If a requirements.txt file exists, use pip to install packages</span></span>
-<span id="annotated-cell-6-106"><a href="#annotated-cell-6-106" aria-hidden="true" tabindex="-1"></a><span class="co"># listed there. We don't want to save cached wheels in the image</span></span>
-<span id="annotated-cell-6-107"><a href="#annotated-cell-6-107" aria-hidden="true" tabindex="-1"></a><span class="co"># to avoid wasting space.</span></span>
-<button class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="17">17</button><span id="annotated-cell-6-108" class="code-annotation-target"><a href="#annotated-cell-6-108" aria-hidden="true" tabindex="-1"></a>ONBUILD RUN echo <span class="st">"Checking for pip 'requirements.txt'..."</span> \</span>
-<span id="annotated-cell-6-109"><a href="#annotated-cell-6-109" aria-hidden="true" tabindex="-1"></a>        ; cd <span class="st">"${REPO_DIR}/childimage/"</span> \</span>
-<span id="annotated-cell-6-110"><a href="#annotated-cell-6-110" aria-hidden="true" tabindex="-1"></a>        ; <span class="cf">if</span> test <span class="sc">-</span>f <span class="st">"requirements.txt"</span> ; then \</span>
-<span id="annotated-cell-6-111"><a href="#annotated-cell-6-111" aria-hidden="true" tabindex="-1"></a>        <span class="sc">$</span>{NB_PYTHON_PREFIX}<span class="sc">/</span>bin<span class="sc">/</span>pip install <span class="sc">--</span>no<span class="sc">-</span>cache <span class="sc">-</span>r requirements.txt \</span>
-<span id="annotated-cell-6-112"><a href="#annotated-cell-6-112" aria-hidden="true" tabindex="-1"></a>        ; fi</span>
-<span id="annotated-cell-6-113"><a href="#annotated-cell-6-113" aria-hidden="true" tabindex="-1"></a></span>
-<span id="annotated-cell-6-114"><a href="#annotated-cell-6-114" aria-hidden="true" tabindex="-1"></a><span class="co"># Add the r packages</span></span>
-<button class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="18">18</button><span id="annotated-cell-6-115" class="code-annotation-target"><a href="#annotated-cell-6-115" aria-hidden="true" tabindex="-1"></a>ONBUILD RUN echo <span class="st">"Checking for 'install.R"</span> \</span>
-<span id="annotated-cell-6-116"><a href="#annotated-cell-6-116" aria-hidden="true" tabindex="-1"></a>        ; cd <span class="st">"${REPO_DIR}/childimage/"</span> \</span>
-<span id="annotated-cell-6-117"><a href="#annotated-cell-6-117" aria-hidden="true" tabindex="-1"></a>        ; <span class="cf">if</span> test <span class="sc">-</span>f <span class="st">"install.R"</span> ; then echo <span class="st">"Using install.R"</span> <span class="sc">&amp;</span> \</span>
-<span id="annotated-cell-6-118"><a href="#annotated-cell-6-118" aria-hidden="true" tabindex="-1"></a>        Rscript install.R \</span>
-<span id="annotated-cell-6-119"><a href="#annotated-cell-6-119" aria-hidden="true" tabindex="-1"></a>        ; fi</span>
-<span id="annotated-cell-6-120"><a href="#annotated-cell-6-120" aria-hidden="true" tabindex="-1"></a></span>
-<span id="annotated-cell-6-121"><a href="#annotated-cell-6-121" aria-hidden="true" tabindex="-1"></a><span class="co"># If a start file exists, put that under ${REPO_DIR}/childimage/start. </span></span>
-<span id="annotated-cell-6-122"><a href="#annotated-cell-6-122" aria-hidden="true" tabindex="-1"></a><span class="co"># This is sourced in ${REPO_DIR}/start</span></span>
-<button class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="19">19</button><span id="annotated-cell-6-123" class="code-annotation-target"><a href="#annotated-cell-6-123" aria-hidden="true" tabindex="-1"></a>ONBUILD RUN echo <span class="st">"Checking for 'start'..."</span> \</span>
-<span id="annotated-cell-6-124"><a href="#annotated-cell-6-124" aria-hidden="true" tabindex="-1"></a>        ; cd <span class="st">"${REPO_DIR}/childimage/"</span> \</span>
-<span id="annotated-cell-6-125"><a href="#annotated-cell-6-125" aria-hidden="true" tabindex="-1"></a>        ; <span class="cf">if</span> test <span class="sc">-</span>f <span class="st">"start"</span> ; then \</span>
-<span id="annotated-cell-6-126"><a href="#annotated-cell-6-126" aria-hidden="true" tabindex="-1"></a>        chmod <span class="sc">+</span>x start \</span>
-<span id="annotated-cell-6-127"><a href="#annotated-cell-6-127" aria-hidden="true" tabindex="-1"></a>        ; fi</span>
-<span id="annotated-cell-6-128"><a href="#annotated-cell-6-128" aria-hidden="true" tabindex="-1"></a></span>
-<span id="annotated-cell-6-129"><a href="#annotated-cell-6-129" aria-hidden="true" tabindex="-1"></a><span class="co"># If a postBuild file exists, run it!</span></span>
-<span id="annotated-cell-6-130"><a href="#annotated-cell-6-130" aria-hidden="true" tabindex="-1"></a><span class="co"># After it's done, we try to remove any possible cruft commands there</span></span>
-<span id="annotated-cell-6-131"><a href="#annotated-cell-6-131" aria-hidden="true" tabindex="-1"></a><span class="co"># left behind under $HOME - particularly stuff that jupyterlab extensions</span></span>
-<span id="annotated-cell-6-132"><a href="#annotated-cell-6-132" aria-hidden="true" tabindex="-1"></a><span class="co"># leave behind.</span></span>
-<button class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="20">20</button><span id="annotated-cell-6-133" class="code-annotation-target"><a href="#annotated-cell-6-133" aria-hidden="true" tabindex="-1"></a>ONBUILD RUN echo <span class="st">"Checking for 'postBuild'..."</span> \</span>
-<span id="annotated-cell-6-134"><a href="#annotated-cell-6-134" aria-hidden="true" tabindex="-1"></a>        ; cd <span class="st">"${REPO_DIR}/childimage/"</span> \</span>
-<span id="annotated-cell-6-135"><a href="#annotated-cell-6-135" aria-hidden="true" tabindex="-1"></a>        ; <span class="cf">if</span> test <span class="sc">-</span>f <span class="st">"postBuild"</span> ; then \</span>
-<span id="annotated-cell-6-136"><a href="#annotated-cell-6-136" aria-hidden="true" tabindex="-1"></a>        chmod <span class="sc">+</span>x postBuild \</span>
-<span id="annotated-cell-6-137"><a href="#annotated-cell-6-137" aria-hidden="true" tabindex="-1"></a>        <span class="sc">&amp;&amp;</span> .<span class="sc">/</span>postBuild \</span>
-<span id="annotated-cell-6-138"><a href="#annotated-cell-6-138" aria-hidden="true" tabindex="-1"></a>        <span class="sc">&amp;&amp;</span> rm <span class="sc">-</span>rf <span class="sc">/</span>tmp<span class="sc">/</span><span class="er">*</span> \</span>
-<span id="annotated-cell-6-139"><a href="#annotated-cell-6-139" aria-hidden="true" tabindex="-1"></a>        <span class="sc">&amp;&amp;</span> rm <span class="sc">-</span>rf <span class="sc">$</span>{HOME}<span class="sc">/</span>.cache <span class="sc">$</span>{HOME}<span class="sc">/</span>.npm <span class="sc">$</span>{HOME}<span class="sc">/</span>.yarn \</span>
-<span id="annotated-cell-6-140"><a href="#annotated-cell-6-140" aria-hidden="true" tabindex="-1"></a>        <span class="sc">&amp;&amp;</span> rm <span class="sc">-</span>rf <span class="sc">$</span>{NB_PYTHON_PREFIX}<span class="sc">/</span>share<span class="sc">/</span>jupyter<span class="sc">/</span>lab<span class="sc">/</span>staging \</span>
-<span id="annotated-cell-6-141"><a href="#annotated-cell-6-141" aria-hidden="true" tabindex="-1"></a>        <span class="sc">&amp;&amp;</span> find <span class="sc">$</span>{CONDA_DIR} <span class="sc">-</span>follow <span class="sc">-</span>type f <span class="sc">-</span>name <span class="st">'*.a'</span> <span class="sc">-</span>delete \</span>
-<span id="annotated-cell-6-142"><a href="#annotated-cell-6-142" aria-hidden="true" tabindex="-1"></a>        <span class="sc">&amp;&amp;</span> find <span class="sc">$</span>{CONDA_DIR} <span class="sc">-</span>follow <span class="sc">-</span>type f <span class="sc">-</span>name <span class="st">'*.js.map'</span> <span class="sc">-</span>delete \</span>
-<span id="annotated-cell-6-143"><a href="#annotated-cell-6-143" aria-hidden="true" tabindex="-1"></a>        ; fi</span>
-<span id="annotated-cell-6-144"><a href="#annotated-cell-6-144" aria-hidden="true" tabindex="-1"></a></span>
-<span id="annotated-cell-6-145"><a href="#annotated-cell-6-145" aria-hidden="true" tabindex="-1"></a><span class="do">## End ONBUILD section for child images</span></span>
-<span id="annotated-cell-6-146"><a href="#annotated-cell-6-146" aria-hidden="true" tabindex="-1"></a><span class="do">################################</span></span>
-<span id="annotated-cell-6-147"><a href="#annotated-cell-6-147" aria-hidden="true" tabindex="-1"></a></span>
-<span id="annotated-cell-6-148"><a href="#annotated-cell-6-148" aria-hidden="true" tabindex="-1"></a><span class="co"># Revert to default user and home as pwd</span></span>
-<button class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="21">21</button><span id="annotated-cell-6-149" class="code-annotation-target"><a href="#annotated-cell-6-149" aria-hidden="true" tabindex="-1"></a>USER <span class="sc">$</span>{NB_USER}</span>
-<span id="annotated-cell-6-150"><a href="#annotated-cell-6-150" aria-hidden="true" tabindex="-1"></a>WORKDIR <span class="sc">$</span>{HOME}</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="annotated-cell-6-58"><a href="#annotated-cell-6-58" aria-hidden="true" tabindex="-1"></a><span class="co"># Revert to default user and home as pwd</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="11">11</button><span id="annotated-cell-6-59" class="code-annotation-target"><a href="#annotated-cell-6-59" aria-hidden="true" tabindex="-1"></a>USER <span class="sc">$</span>{NB_USER}</span>
+<span id="annotated-cell-6-60"><a href="#annotated-cell-6-60" aria-hidden="true" tabindex="-1"></a>WORKDIR <span class="sc">$</span>{HOME}</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <dl class="code-annotation-container-hidden code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-6" data-target-annotation="1">1</dt>
 <dd>
@@ -519,55 +430,19 @@ most of the work in py-rocket-base is done here. appendix calls rocker.sh and in
 </dd>
 <dt data-target-cell="annotated-cell-6" data-target-annotation="8">8</dt>
 <dd>
-<span data-code-cell="annotated-cell-6" data-code-lines="48" data-code-annotation="8">The <code>NB_USER</code> environmental variable is not exported by repo2docker (it is an argument confined to the parent build) but is very useful for child builds. So it is converted to an environmental variable.</span>
+<span data-code-cell="annotated-cell-6" data-code-lines="46,48,49,50" data-code-annotation="8">Copy the pyrocket helper scripts to the <code>/pyrocket_scripts</code> directory and set to executable.</span>
 </dd>
 <dt data-target-cell="annotated-cell-6" data-target-annotation="9">9</dt>
 <dd>
-<span data-code-cell="annotated-cell-6" data-code-lines="50" data-code-annotation="9">This next section is a series of <code>ONBUILD</code> commands. These are only run if py-rocker-base is used in the <code>FROM</code> line in a child docker file.</span>
+<span data-code-cell="annotated-cell-6" data-code-lines="53" data-code-annotation="9">The <code>NB_USER</code> environmental variable is not exported by repo2docker (it is an argument confined to the parent build) but is very useful for child builds. So it is converted to an environmental variable.</span>
 </dd>
 <dt data-target-cell="annotated-cell-6" data-target-annotation="10">10</dt>
 <dd>
-<span data-code-cell="annotated-cell-6" data-code-lines="52" data-code-annotation="10">Set the user to NB_USER. Not strictly necessary but helps ensure that we don’t accidentally create files that jovyan (NB_USER) cannot access.</span>
+<span data-code-cell="annotated-cell-6" data-code-lines="56" data-code-annotation="10">Copy the child build context (files with the Docker file) into <code>${REPO_DIR}</code>. Make sure that jovyan owns the directory. Note, jovyan owns <code>${REPO_DIR}</code> (this is set by repo2docker).</span>
 </dd>
 <dt data-target-cell="annotated-cell-6" data-target-annotation="11">11</dt>
 <dd>
-<span data-code-cell="annotated-cell-6" data-code-lines="56" data-code-annotation="11">Copy the child build context (files with the Docker file) into <code>${REPO_DIR}</code>. Make sure that jovyan owns the directory. Note, jovyan owns <code>${REPO_DIR}</code> (this is set by repo2docker).</span>
-</dd>
-<dt data-target-cell="annotated-cell-6" data-target-annotation="13">13</dt>
-<dd>
-<span data-code-cell="annotated-cell-6" data-code-lines="61,62,63,64,65,66,67,68,69,70" data-code-annotation="13">The Desktop files are put in a directory called Desktop. Copy them into <code>${REPO_DIR}/Desktop</code>. The <code>desktop.sh</code> script will copy these into the correct location for the Desktop server.</span>
-</dd>
-<dt data-target-cell="annotated-cell-6" data-target-annotation="14">14</dt>
-<dd>
-<span data-code-cell="annotated-cell-6" data-code-lines="74,75,76,77,78,79,80,81,82" data-code-annotation="14">If <code>apt.txt</code> is present, then install the packages. The code processes any comments or blank lines in <code>apt.txt</code>. This must be run as root so we switch to root to install.</span>
-</dd>
-<dt data-target-cell="annotated-cell-6" data-target-annotation="15">15</dt>
-<dd>
-<span data-code-cell="annotated-cell-6" data-code-lines="85" data-code-annotation="15">Switch back to jovyan so we don’t accidentally make files as belonging to root.</span>
-</dd>
-<dt data-target-cell="annotated-cell-6" data-target-annotation="16">16</dt>
-<dd>
-<span data-code-cell="annotated-cell-6" data-code-lines="89,90,91,92,93,94,95,96,97,98,99,100,101,102,103" data-code-annotation="16">If <code>environment.yml</code> is present, install these into the conda environment and do some clean-up. Sometimes package solving will get rid of pip installed packages. We need to make sure that jupyter-remote-desktop-proxy does not disappear.</span>
-</dd>
-<dt data-target-cell="annotated-cell-6" data-target-annotation="17">17</dt>
-<dd>
-<span data-code-cell="annotated-cell-6" data-code-lines="108,109,110,111,112" data-code-annotation="17">If <code>requirements.txt</code> is present, install with pip and do some clean-up.</span>
-</dd>
-<dt data-target-cell="annotated-cell-6" data-target-annotation="18">18</dt>
-<dd>
-<span data-code-cell="annotated-cell-6" data-code-lines="115,116,117,118,119" data-code-annotation="18"><code>install.R</code> is an R script where the user can specify how to install packages or run any other R code.</span>
-</dd>
-<dt data-target-cell="annotated-cell-6" data-target-annotation="19">19</dt>
-<dd>
-<span data-code-cell="annotated-cell-6" data-code-lines="123,124,125,126,127" data-code-annotation="19"><code>start</code> is run in the <code>${REPO_DIR}/start</code> command in a subshell. The <code>${REPO_DIR}/start</code> command cannot be replaced since it contains code to move the Desktop files into the correct place.</span>
-</dd>
-<dt data-target-cell="annotated-cell-6" data-target-annotation="20">20</dt>
-<dd>
-<span data-code-cell="annotated-cell-6" data-code-lines="133,134,135,136,137,138,139,140,141,142,143" data-code-annotation="20"><code>postBuild</code> is a script. If present, run it and then do some clean-up. It is common to use <code>postBuild</code> to apply extensions or install packages that cannot be installed with <code>apt</code>.</span>
-</dd>
-<dt data-target-cell="annotated-cell-6" data-target-annotation="21">21</dt>
-<dd>
-<span data-code-cell="annotated-cell-6" data-code-lines="149,150" data-code-annotation="21">The parent docker build completes by setting the user to jovyan and the working directory to <code>${HOME}</code>. Within a JupyterHub deployment, <code>${HOME}</code> will often be re-mapped to the user persistent memory so it is important not to write anything that needs to be persistent to <code>${HOME}</code>, for example configuration. You can do this in the <code>start</code> script since that runs after the user directory is mapped or you can put configuration files in some place other than <code>${HOME}</code>.</span>
+<span data-code-cell="annotated-cell-6" data-code-lines="59,60" data-code-annotation="11">The parent docker build completes by setting the user to jovyan and the working directory to <code>${HOME}</code>. Within a JupyterHub deployment, <code>${HOME}</code> will often be re-mapped to the user persistent memory so it is important not to write anything that needs to be persistent to <code>${HOME}</code>, for example configuration. You can do this in the <code>start</code> script since that runs after the user directory is mapped or you can put configuration files in some place other than <code>${HOME}</code>.</span>
 </dd>
 </dl>
 </section>
