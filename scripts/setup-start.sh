@@ -1,7 +1,13 @@
 #!/bin/bash
 # Required User: NB_USER
 
-echo "Running setup-start.sh"
+# Check if running as root and switch to NB_USER if needed
+if [[ $(id -u) -eq 0 ]]; then
+    echo "Switching to ${NB_USER} to run start.sh"
+    exec su "${NB_USER}" -c "/bin/bash $0"  # Switches to NB_USER and reruns the script
+fi
+
+echo "Running setup-start.sh as ${NB_USER}"
 
 echo "  Checking for ${REPO_DIR}/childimage/..."
 if [ -d "${REPO_DIR}/childimage/" ]; then
