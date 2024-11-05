@@ -51,9 +51,6 @@ RUN chown -R root:staff /pyrocket_scripts && \
 # Convert NB_USER to ENV (from ARG) so that it passes to the child dockerfile
 ENV NB_USER=${NB_USER}
 
-# Copy the child repo files into childimage so they are available to scripts
-ONBUILD COPY --chown=${NB_USER}:${NB_USER} . ${REPO_DIR}/childimage
-
 # Revert to default user and home as pwd
 USER ${NB_USER}
 WORKDIR ${HOME}
