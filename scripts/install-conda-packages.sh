@@ -1,14 +1,14 @@
 #!/bin/bash
 # Required User: NB_USER
 
-# Main script execution as NB_USER
-echo "Running install-conda-packages.sh"
-
 # Check if running as root and switch to NB_USER if needed
 if [[ $(id -u) -eq 0 ]]; then
-    echo "  Switching to ${NB_USER} to run install-conda-packages.sh"
+    echo "Switching to ${NB_USER} to run install-conda-packages.sh"
     exec su "${NB_USER}" -c "/bin/bash $0 $1"  # Pass along the filename argument
 fi
+
+# Main script execution as NB_USER
+echo "Running install-conda-packages.sh"
 
 # Check if a filename argument is provided
 if [ -z "$1" ]; then
