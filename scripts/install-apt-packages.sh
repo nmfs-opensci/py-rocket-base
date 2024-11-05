@@ -5,9 +5,19 @@ echo "Running install-apt-packages.sh"
 
 # Check that a file name is provided
 if [ -z "$1" ]; then
-    echo "  Error: No file provided. Usage: RUN /pyrocket_scripts/install-apt-packages.sh <apt.txt>"
+    echo "Error: install-apt-packages.sh requires a file name (a list of apt packages and typically called apt.txt)." >&2
+    echo "Usage: RUN /pyrocket_scripts/install-apt-packages.sh <filename>" >&2
     exit 1
 fi
+
+# Check if the script is run as root
+if [[ $(id -u) -ne 0 ]]; then
+    echo "Error: install-apt-packages.sh must be run as root. Please use 'USER root' in your Dockerfile before running this script."
+    echo "Remember to switch back to the non-root user with 'USER ${NB_USER}' after running this script."
+    exit 1
+fi
+
+echo "Running install-apt-packages.sh as root..."
 
 # Set variable for the provided file
 apt_file="$1"
@@ -18,15 +28,6 @@ if [ ! -f "${apt_file}" ]; then
     echo "  Error: File '${apt_file}' not found. Ensure the file exists and try again."
     exit 1
 fi
-
-# Check if the script is run as root
-if [[ $(id -u) -ne 0 ]]; then
-    echo "  Error: This script must be run as root. Please use 'USER root' in your Dockerfile before running this script."
-    echo "  Remember to switch back to the non-root user with 'USER ${NB_USER}' after running this script."
-    exit 1
-fi
-
-echo "  Running install-apt-packages.sh as root. Proceeding with installation..."
 
 # Update package list and handle errors
 echo "  Updating package list..."
