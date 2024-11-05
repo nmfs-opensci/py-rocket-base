@@ -26,11 +26,11 @@ If the JupyterHub has the **Bring your own image** feature, then you can paste i
 
 ## Using this as a base image
 
-py-rocket-base is designed like the Pangeo base-image. Your docker file in your repo will look like
+py-rocket-base has basic structure like the pangeo base-image and repo2docker images. To use as a base image, include this in your Docker file
 ```
 FROM ghcr.io/nmfs-opensci/py-rocket-base:latest
 ```
-Then add `environment.yml`, `apt.txt` or `install.R` to the repo and those will be installed. Read the [documentation](https://nmfs-opensci.github.io/py-rocket-base/) for more examples. The behavior with files like `environment.yml` is triggered by `ONBUILD` statements in py-rocket-base. If you want to prevent this behavior, you will need to avoid the specific configuration file names.
+py-rocket-base has pyrocket and rocket scripts that you can use to help customize your image and add more conda, R or linux packages. See the documentation on customizing images.
 
 ## History and motivation
 

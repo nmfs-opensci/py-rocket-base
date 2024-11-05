@@ -6,13 +6,21 @@ on:
     branches:
       - main
     paths:
-      - 'apt-extras.txt'
+      - 'apt2.txt'
       - 'environment.yml'
       - 'start'
       - 'postBuild'
       - 'appendix'
       - 'rocker.sh'
+      - 'desktop.sh'
+      - 'custom_jupyter_server_config.json'
+      - 'scripts/**'
       - '.github/workflows/build.yaml'
+      - '!book/**'  # Ignore all changes in the /book directory
+      - '!docs/**'  # Ignore all changes in the /docs directory
+      - '!README.md'
+      - '!conda-lock.yml'
+      - 'LICENSE'
 
 jobs:
   build-and-push:
