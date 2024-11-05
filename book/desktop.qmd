@@ -8,6 +8,14 @@ py-rocket-base puts these `.desktop` files in `/usr/share/Desktop`. Typically th
 
 ## Adding an application in your child docker image
 
+Use the pyrocket script, `install-desktop.sh` to set up the desktop and move your files to the proper location. Here is the code for your Docker file. This script must be run as root. It does not take any arguments. Instead you include your desktop files in a directory called `Desktop` at the base level with your Docker file.
+
+```
+USER root
+RUN /pyrocket_scripts/install-desktop.sh
+USER ${NB_USER}
+```
+
 ### Create the Desktop directory
 
 Create the directory and add the .desktop and optional .png and .xml files. py-rocket-base will move them to the correct places (`/usr/share/applications` and `/usr/share/Desktop`, `/usr/share/mime/packages` and icon locations).
