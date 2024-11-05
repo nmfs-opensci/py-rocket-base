@@ -1,6 +1,13 @@
 #!/bin/bash
 # Required User: NB_USER
 
+# Check if a filename argument is provided
+if [ -z "$1" ]; then
+    echo "Error: install-conda-packages.sh requires a file name (either conda-lock.yml or environment.yml)." >&2
+    echo "Usage: RUN /pyrocket_scripts/install-conda-packages.sh <filename.yml>" >&2
+    exit 1
+fi
+
 # Check if running as root and switch to NB_USER if needed
 if [[ $(id -u) -eq 0 ]]; then
     echo "Switching to ${NB_USER} to run install-conda-packages.sh"
@@ -9,13 +16,6 @@ fi
 
 # Main script execution as NB_USER
 echo "Running install-conda-packages.sh as ${NB_USER}"
-
-# Check if a filename argument is provided
-if [ -z "$1" ]; then
-    echo "  Error: This script requires a file name (either conda-lock.yml or environment.yml)." >&2
-    echo "  Usage: RUN /pyrocket_scripts/install-conda-packages.sh <filename.yml>" >&2
-    exit 1
-fi
 
 # Set the file variable to the provided argument
 ENV_FILE="$1"
