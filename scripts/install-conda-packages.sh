@@ -8,7 +8,7 @@ if [[ $(id -u) -eq 0 ]]; then
 fi
 
 # Main script execution as NB_USER
-echo "Running install-conda-packages.sh"
+echo "Running install-conda-packages.sh as ${NB_USER}"
 
 # Check if a filename argument is provided
 if [ -z "$1" ]; then
