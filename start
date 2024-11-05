@@ -9,7 +9,16 @@ set -euo pipefail
 source ${REPO_DIR}/env.txt
 # End - Set any environment variables here
 
-# Run child start in a subshell to contain its environment
-[ -f ${REPO_DIR}/childimage/start ] && ( source ${REPO_DIR}/childimage/start )
-
+# Run child start scripts in a subshell to contain its environment
+# ${REPO_DIR}/childstart/ is created by setup-start.sh
+if [ -d "${REPO_DIR}/childstart/" ]; then
+    for script in ${REPO_DIR}/childstart/*; do
+        if [ -f "$script" ]; then
+            echo "Sourcing script: $script"
+            source "$script" || {
+                echo "Error: Failed to source $script. Moving on to the next script."
+            }
+        fi
+    done
+fi
 exec "$@"
