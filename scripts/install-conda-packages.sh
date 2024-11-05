@@ -17,19 +17,19 @@ if [ -d "${REPO_DIR}/childimage/" ]; then
         
         if test -f "conda-lock.yml"; then
             echo "  Using conda-lock.yml"
-            conda-lock install --name ${CONDA_ENV}
-            pip install --no-deps jupyter-remote-desktop-proxy
+            ${NB_PYTHON_PREFIX}/bin/conda-lock install --name ${CONDA_ENV}
+            ${NB_PYTHON_PREFIX}/bin/pip install --no-deps jupyter-remote-desktop-proxy
             INSTALLATION_HAPPENED=true
         elif test -f "environment.yml"; then
             echo "  Using environment.yml"
-            mamba env update --name ${CONDA_ENV} -f environment.yml
-            pip install --no-deps jupyter-remote-desktop-proxy
+            ${CONDA_DIR}/condabin/mamba env update --name ${CONDA_ENV} -f environment.yml
+            ${NB_PYTHON_PREFIX}/bin/pip install --no-deps jupyter-remote-desktop-proxy
             INSTALLATION_HAPPENED=true
         fi
 
         # Only run cleanup if installation occurred
         if [ "$INSTALLATION_HAPPENED" = true ]; then
-            mamba clean -yaf
+            ${CONDA_DIR}/condabin/mamba clean -yaf
             find ${CONDA_DIR} -follow -type f -name '*.a' -delete
             find ${CONDA_DIR} -follow -type f -name '*.js.map' -delete
             if ls ${NB_PYTHON_PREFIX}/lib/python*/site-packages/bokeh/server/static > /dev/null 2>&1; then
