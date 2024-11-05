@@ -175,14 +175,16 @@ ul.task-list li input[type="checkbox"] {
    
   <ul>
   <li><a href="#environment.yml" id="toc-environment.yml" class="nav-link active" data-scroll-target="#environment.yml"><span class="header-section-number">2.1</span> environment.yml</a></li>
-  <li><a href="#install.r" id="toc-install.r" class="nav-link" data-scroll-target="#install.r"><span class="header-section-number">2.2</span> install.R</a>
+  <li><a href="#conda-lock.yml" id="toc-conda-lock.yml" class="nav-link" data-scroll-target="#conda-lock.yml"><span class="header-section-number">2.2</span> conda-lock.yml</a></li>
+  <li><a href="#requirments.txt" id="toc-requirments.txt" class="nav-link" data-scroll-target="#requirments.txt"><span class="header-section-number">2.3</span> requirments.txt</a></li>
+  <li><a href="#install.r" id="toc-install.r" class="nav-link" data-scroll-target="#install.r"><span class="header-section-number">2.4</span> install.R</a>
   <ul class="collapse">
-  <li><a href="#add-r-geospatial-packages" id="toc-add-r-geospatial-packages" class="nav-link" data-scroll-target="#add-r-geospatial-packages"><span class="header-section-number">2.2.1</span> Add R geospatial packages</a></li>
+  <li><a href="#add-r-geospatial-packages" id="toc-add-r-geospatial-packages" class="nav-link" data-scroll-target="#add-r-geospatial-packages"><span class="header-section-number">2.4.1</span> Add R geospatial packages</a></li>
   </ul></li>
-  <li><a href="#apt.txt" id="toc-apt.txt" class="nav-link" data-scroll-target="#apt.txt"><span class="header-section-number">2.3</span> apt.txt</a></li>
-  <li><a href="#postbuild" id="toc-postbuild" class="nav-link" data-scroll-target="#postbuild"><span class="header-section-number">2.4</span> postBuild</a></li>
-  <li><a href="#start" id="toc-start" class="nav-link" data-scroll-target="#start"><span class="header-section-number">2.5</span> start</a></li>
-  <li><a href="#desktop-applications" id="toc-desktop-applications" class="nav-link" data-scroll-target="#desktop-applications"><span class="header-section-number">2.6</span> Desktop applications</a></li>
+  <li><a href="#apt.txt" id="toc-apt.txt" class="nav-link" data-scroll-target="#apt.txt"><span class="header-section-number">2.5</span> apt.txt</a></li>
+  <li><a href="#postbuild" id="toc-postbuild" class="nav-link" data-scroll-target="#postbuild"><span class="header-section-number">2.6</span> postBuild</a></li>
+  <li><a href="#start" id="toc-start" class="nav-link" data-scroll-target="#start"><span class="header-section-number">2.7</span> start</a></li>
+  <li><a href="#desktop-applications" id="toc-desktop-applications" class="nav-link" data-scroll-target="#desktop-applications"><span class="header-section-number">2.8</span> Desktop applications</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/nmfs-opensci/py-rocket-base/edit/main/configuration_files.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/nmfs-opensci/py-rocket-base/blob/main/configuration_files.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/nmfs-opensci/py-rocket-base/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
@@ -208,9 +210,11 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>The presence of these files will trigger the following behavior. Do not use these names if you do not want this behavior and you instead want to write you own code in your Docker file.</p>
 <section id="environment.yml" class="level2" data-number="2.1">
 <h2 data-number="2.1" class="anchored" data-anchor-id="environment.yml"><span class="header-section-number">2.1</span> environment.yml</h2>
+<p>The <code>install-conda-packages.sh</code> script will install conda packages to the conda notebook environment, the user environment in the py-rocket-base image (same as for pangeo and repo2docker images).</p>
+<p>Here is the code for your Docker file. You can name the conda package file to something other than <code>environment.yml</code>. Make sure your file has <code>name:</code>. The name is arbitrary. It is ignored but required for the script.</p>
+<pre><code>RUN /pyrocket_scripts/install-conda-packages.sh environment.yml</code></pre>
 <p>This is a standard format. You can add version pinning.</p>
 <p>environment.yml</p>
 <pre><code>name: optional
@@ -220,49 +224,75 @@ dependencies:
   - cmocean
   - numpy</code></pre>
 </section>
-<section id="install.r" class="level2" data-number="2.2">
-<h2 data-number="2.2" class="anchored" data-anchor-id="install.r"><span class="header-section-number">2.2</span> install.R</h2>
+<section id="conda-lock.yml" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="conda-lock.yml"><span class="header-section-number">2.2</span> conda-lock.yml</h2>
+<p>Instead of a list of conda packages (typically called environment.yml), you can use a conda lock file instead.</p>
+<p>Here is the code for your Docker file. You can name your conda lock file something other than <code>conda-lock.yml</code>.</p>
+<pre><code>RUN /pyrocket_scripts/install-conda-packages.sh conda-lock.yml</code></pre>
+</section>
+<section id="requirments.txt" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="requirments.txt"><span class="header-section-number">2.3</span> requirments.txt</h2>
+<p>The <code>install-pip-packages.sh</code> script will install packages using <code>pip</code>. Here is the code for your Docker file. You can name your pip package file something other than <code>requirements.txt</code>.</p>
+<pre><code>RUN /pyrocket_scripts/install-pip-packages.sh requirements.txt</code></pre>
+<p>requirements.txt</p>
+<pre><code>#a package
+harmony-py
+</code></pre>
+</section>
+<section id="install.r" class="level2" data-number="2.4">
+<h2 data-number="2.4" class="anchored" data-anchor-id="install.r"><span class="header-section-number">2.4</span> install.R</h2>
+<p>The <code>install-r-packages.sh</code> script will run the supplied R script which you can use to install R packages to the system library.</p>
+<p>Here is the code for your Docker file. You can name the R script file to something other than <code>install.R</code>. Make sure your file is an R script.</p>
+<pre><code>RUN /pyrocket_scripts/install-r-packages.sh install.R</code></pre>
 <p>install.R example</p>
 <pre><code># to match rocker/verse:4.4 used in py-rocker-base
 # look up the date that the Rocker image was created and put that
 repo &lt;- "https://p3m.dev/cran/__linux__/jammy/2024-05-13"
 list.of.packages &lt;- c("ncdf4", "httr", "plyr", "lubridate")
 install.packages(list.of.packages, repos=repo)</code></pre>
-<section id="add-r-geospatial-packages" class="level3" data-number="2.2.1">
-<h3 data-number="2.2.1" class="anchored" data-anchor-id="add-r-geospatial-packages"><span class="header-section-number">2.2.1</span> Add R geospatial packages</h3>
-<p>Geospatial packages require some linux packages. To get this working in your docker image add this to your Docker file:</p>
+<section id="add-r-geospatial-packages" class="level3" data-number="2.4.1">
+<h3 data-number="2.4.1" class="anchored" data-anchor-id="add-r-geospatial-packages"><span class="header-section-number">2.4.1</span> Add R geospatial packages</h3>
+<p>Geospatial packages require some linux packages. To get this working in your Docker image add this to your Docker file:</p>
+<p>Dockerfile</p>
 <pre><code>FROM ghcr.io/nmfs-opensci/py-rocket-base:latest
 
 USER root
-RUN /rocker_scripts/install_geospatial.sh
-USER ${NB_USER} </code></pre>
+RUN PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin &amp;&amp; \
+    /rocker_scripts/install_geospatial.sh
+USER ${NB_USER}</code></pre>
 </section>
 </section>
-<section id="apt.txt" class="level2" data-number="2.3">
-<h2 data-number="2.3" class="anchored" data-anchor-id="apt.txt"><span class="header-section-number">2.3</span> apt.txt</h2>
-<p>Standard format. You can have comments.</p>
+<section id="apt.txt" class="level2" data-number="2.5">
+<h2 data-number="2.5" class="anchored" data-anchor-id="apt.txt"><span class="header-section-number">2.5</span> apt.txt</h2>
+<p>The <code>install-apt-packages.sh</code> script will install packages with <code>apt-get</code>. Here is the code for your Docker file. You can name the apt file of packages names to something other than <code>apt.txt</code>. Comments and newlines are allowed. Installation requires root.</p>
+<pre><code>USER root
+RUN /pyrocket_scripts/install-apt-packages.sh apt.txt
+USER ${NB_USER}</code></pre>
+<p>apt.txt example</p>
 <pre><code># Some useful stuff
 tk-dev
 
 # Add some more
 cmocean</code></pre>
 </section>
-<section id="postbuild" class="level2" data-number="2.4">
-<h2 data-number="2.4" class="anchored" data-anchor-id="postbuild"><span class="header-section-number">2.4</span> postBuild</h2>
-<p>This is a script that will be run after all the other commands. This script is run as jovyan not as root. If you need commands run as root, you will need to add these to the Docker file.</p>
+<section id="postbuild" class="level2" data-number="2.6">
+<h2 data-number="2.6" class="anchored" data-anchor-id="postbuild"><span class="header-section-number">2.6</span> postBuild</h2>
+<p>The <code>run-postbuild.sh</code> script can be run as root or jovyan (<code>${NB_USER}</code>). This script does not accept a file name. You need to name your postBuild script <code>postBuild</code> and put at the base level with your Docker file.</p>
+<pre><code>RUN /pyrocket_scripts/run-postbuild.sh</code></pre>
 <p>postBuild</p>
 <pre><code>#!/bin/bash -l
 set -e
 
 &lt;bash commands&gt;</code></pre>
 </section>
-<section id="start" class="level2" data-number="2.5">
-<h2 data-number="2.5" class="anchored" data-anchor-id="start"><span class="header-section-number">2.5</span> start</h2>
-<p><code>start</code> bash code is run when the image starts. py-rocker-base has a start script at <code>${REPO_DIR}/start</code> which loads the Desktop applications. If you change that start file, then the Desktop apps will not be loaded properly.</p>
-<p>By default, if you include <code>start</code> in the child repo then that script is sourced within the <code>${REPO_DIR}/start</code> script at the end. If you don’t want that behavior and want the whole start script replaced, then you will need to do that in your Docker file by copying your start file onto <code>${REPO_DIR}/start</code>.</p>
+<section id="start" class="level2" data-number="2.7">
+<h2 data-number="2.7" class="anchored" data-anchor-id="start"><span class="header-section-number">2.7</span> start</h2>
+<p>The <code>start</code> bash code is run when the image starts. py-rocker-base has a start script at <code>${REPO_DIR}/start</code> which loads the Desktop applications. If you change that start file (by copying your start file onto that location), then the Desktop apps will not be loaded properly. Instead, the <code>setup-start.sh</code> will add your start file to the end of <code>${REPO_DIR}/start</code> so that the Desktop is still setup properly.</p>
+<p>The <code>setup-start.sh</code> script does not accept a file name. You need to name your start script <code>start</code> and put at the base level with your Docker file.</p>
+<pre><code>RUN /pyrocket_scripts/setup-start.sh</code></pre>
 </section>
-<section id="desktop-applications" class="level2" data-number="2.6">
-<h2 data-number="2.6" class="anchored" data-anchor-id="desktop-applications"><span class="header-section-number">2.6</span> Desktop applications</h2>
+<section id="desktop-applications" class="level2" data-number="2.8">
+<h2 data-number="2.8" class="anchored" data-anchor-id="desktop-applications"><span class="header-section-number">2.8</span> Desktop applications</h2>
 <p>See the <a href="desktop.html">chapter on Desktop applications</a>.</p>
 
 

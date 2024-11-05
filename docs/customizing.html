@@ -179,7 +179,8 @@ ul.task-list li input[type="checkbox"] {
   <ul class="collapse">
   <li><a href="#add-some-python-packages" id="toc-add-some-python-packages" class="nav-link" data-scroll-target="#add-some-python-packages"><span class="header-section-number">1.2.1</span> Add some Python packages</a></li>
   <li><a href="#add-r-packages" id="toc-add-r-packages" class="nav-link" data-scroll-target="#add-r-packages"><span class="header-section-number">1.2.2</span> Add R packages</a></li>
-  <li><a href="#add-r-geospatial-packages" id="toc-add-r-geospatial-packages" class="nav-link" data-scroll-target="#add-r-geospatial-packages"><span class="header-section-number">1.2.3</span> Add R geospatial packages</a></li>
+  <li><a href="#add-some-linux-packages" id="toc-add-some-linux-packages" class="nav-link" data-scroll-target="#add-some-linux-packages"><span class="header-section-number">1.2.3</span> Add some linux packages</a></li>
+  <li><a href="#add-r-geospatial-packages" id="toc-add-r-geospatial-packages" class="nav-link" data-scroll-target="#add-r-geospatial-packages"><span class="header-section-number">1.2.4</span> Add R geospatial packages</a></li>
   </ul></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/nmfs-opensci/py-rocket-base/edit/main/customizing.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/nmfs-opensci/py-rocket-base/blob/main/customizing.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/nmfs-opensci/py-rocket-base/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
@@ -206,30 +207,31 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>py-rocket-base is designed to be used in the FROM line of a Dockerfile. It behaves like repo2docker in that it looks for special files and will install Python packages or R packages if those special files are present. You do not need to add anything to the Dockerfile to have it process these files. py-rocker-base does this automatically for you (via ONBUILD commands).</p>
-<p>If you don’t want it to do this then do not name your files one of these names:</p>
-<ul>
-<li>environment.yml</li>
-<li>install.R</li>
-<li>postBuild</li>
-<li>apt.txt</li>
-<li>start</li>
-</ul>
+<p>py-rocket-base is designed to be used in the FROM line of a Dockerfile similar to rocker images. It includes directories called <code>\pyrocket_scripts</code> and <code>\rocker_scripts</code> that will help you do common tasks for scientific docker images. You do not have to use these scripts. If you are familiar with writing Docker files, you can write your own code. The exception is installation of Desktop files. Properly adding Desktop applications to py-rocket-base requires the use of the <code>\pyrocket_scripts/install-desktop.sh</code> script. The start file is also an exception. See the discussion in the configuration files.</p>
+<p><strong>Calling the scripts</strong></p>
+<p>The format for calling the pyrocket and rocker scripts is the following.</p>
+<pre><code>RUN /pyrocket_scripts/install-conda-packages.sh environment.yml</code></pre>
+<p>Note that PATH must be given for the subshell since rocker installation scripts will fail with conda on the path.</p>
+<pre><code>USER root
+RUN PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin &amp;&amp; \
+    /rocker_scripts/install_geospatial.sh
+USER ${NB_USER}</code></pre>
 <section id="file-structure" class="level2" data-number="1.1">
 <h2 data-number="1.1" class="anchored" data-anchor-id="file-structure"><span class="header-section-number">1.1</span> File structure</h2>
-<p>Only Dockerfile is required. The rest are optional.</p>
+<p>Here is a typical repo structure. Only the Dockerfile is required. The rest are optional. The files names, <code>apt.txt</code>, <code>environment.yml</code>, <code>requirements.txt</code> and <code>install.R</code> are optional. You can name these files other names and still use them in the pyrocket scripts. <code>Desktop</code>, <code>start</code> and <code>postBuild</code> must be named exactly this to use them in the pyrocket scripts (these scripts do not take filename arguments).</p>
 <pre><code>your-repo/
 ├── Dockerfile
 ├── apt.txt
 ├── environment.yml
 ├── install.R
+├── requirements.txt
 ├── postBuild
 ├── start
 ├── Desktop/
 │   ├── qgis.desktop
 │   ├── qgis.xml
 │   └── qgis.png</code></pre>
-<p>Read <a href="configuration_files.html">configuration_files</a> to learn about apt.txt, environment.yml, install.R, postBuild, and start. Read <a href="desktop.html">Desktop</a> to learn about the Desktop folder and files for applications.</p>
+<p>Read <a href="configuration_files.html">configuration_files</a> to learn about apt.txt, environment.yml, install.R, requirements.txt, postBuild, and start. Read <a href="desktop.html">Desktop</a> to learn about the Desktop folder and files for applications.</p>
 </section>
 <section id="examples" class="level2" data-number="1.2">
 <h2 data-number="1.2" class="anchored" data-anchor-id="examples"><span class="header-section-number">1.2</span> Examples</h2>
@@ -240,7 +242,9 @@ ul.task-list li input[type="checkbox"] {
 ├── Dockerfile
 ├── environment.yml</code></pre>
 <p>Dockerfile</p>
-<pre><code>FROM ghcr.io/nmfs-opensci/py-rocket-base:latest</code></pre>
+<pre><code>FROM ghcr.io/nmfs-opensci/py-rocket-base:latest
+
+RUN /pyrocket_scripts/install-conda-packages.sh environment.yml</code></pre>
 <p>environment.yml</p>
 <pre><code>name: optional
 channels:
@@ -256,7 +260,9 @@ dependencies:
 ├── Dockerfile
 ├── install.R</code></pre>
 <p>Dockerfile</p>
-<pre><code>FROM ghcr.io/nmfs-opensci/py-rocket-base:latest</code></pre>
+<pre><code>FROM ghcr.io/nmfs-opensci/py-rocket-base:latest
+
+RUN /pyrocket_scripts/install-r-packages.sh install.R</code></pre>
 <p>install.R</p>
 <pre><code># to match rocker/verse:4.4 used in py-rocker-base
 # look up the date that the Rocker image was created and put that
@@ -264,15 +270,35 @@ repo &lt;- "https://p3m.dev/cran/__linux__/jammy/2024-05-13"
 list.of.packages &lt;- c("ncdf4", "httr", "plyr", "lubridate")
 install.packages(list.of.packages, repos=repo)</code></pre>
 </section>
-<section id="add-r-geospatial-packages" class="level3" data-number="1.2.3">
-<h3 data-number="1.2.3" class="anchored" data-anchor-id="add-r-geospatial-packages"><span class="header-section-number">1.2.3</span> Add R geospatial packages</h3>
+<section id="add-some-linux-packages" class="level3" data-number="1.2.3">
+<h3 data-number="1.2.3" class="anchored" data-anchor-id="add-some-linux-packages"><span class="header-section-number">1.2.3</span> Add some linux packages</h3>
+<p>You want to add some linux packages with apt-get. <code>apt-get</code> requires root so you will need to switch to root and switch back to <code>${NB_USER}</code>.</p>
+<pre><code>your-repo/
+├── Dockerfile
+├── apt.txt</code></pre>
+<p>Dockerfile</p>
+<pre><code>FROM ghcr.io/nmfs-opensci/py-rocket-base:latest
+
+USER root
+RUN /pyrocket_scripts/install-apt-packages.sh apt.txt
+USER ${NB_USER}</code></pre>
+<p>apt.txt</p>
+<pre><code># a package
+libgl1-mesa-glx
+
+# Another
+vim</code></pre>
+</section>
+<section id="add-r-geospatial-packages" class="level3" data-number="1.2.4">
+<h3 data-number="1.2.4" class="anchored" data-anchor-id="add-r-geospatial-packages"><span class="header-section-number">1.2.4</span> Add R geospatial packages</h3>
 <p>Geospatial packages require some linux packages. To get this working in your Docker image add this to your Docker file:</p>
 <p>Dockerfile</p>
 <pre><code>FROM ghcr.io/nmfs-opensci/py-rocket-base:latest
 
 USER root
-RUN /rocker_scripts/install_geospatial.sh
-USER ${NB_USER} </code></pre>
+RUN PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin &amp;&amp; \
+    /rocker_scripts/install_geospatial.sh
+USER ${NB_USER}</code></pre>
 <p>You have access to all the rocker_scripts and you can run these similar to the line above.</p>
 
 
