@@ -1,5 +1,8 @@
 USER root
 
+# Clean up extra files in ${REPO_DIR}
+RUN rm -rf ${REPO_DIR}/book ${REPO_DIR}/docs
+
 # repo2docker does not set this. This is the default env in repo2docker type images
 ENV CONDA_ENV=notebook
 # Tell applications where to open desktop apps - this allows notebooks to pop open GUIs
@@ -38,112 +41,18 @@ RUN mandb
 RUN cp ${REPO_DIR}/custom_jupyter_server_config.json ${NB_PYTHON_PREFIX}/etc/jupyter/jupyter_server_config.d/
 RUN cp ${REPO_DIR}/custom_jupyter_server_config.json ${NB_PYTHON_PREFIX}/etc/jupyter/jupyter_notebook_config.d/
 
-# Clean up extra files in ${REPO_DIR}
-RUN rm -rf ${REPO_DIR}/book ${REPO_DIR}/docs
+# Copy scripts into /pyrocket_scripts directory in the image
+RUN mkdir -p /pyrocket_scripts && cp -r ${REPO_DIR}/scripts/* /pyrocket_scripts/
 
-###################
-# Set up behavior for child dockerfiles
+# Set ownership to root and permissions to 755
+RUN chown -R root:staff /pyrocket_scripts && \
+    chmod -R 775 /pyrocket_scripts
+
 # Convert NB_USER to ENV (from ARG) so that it passes to the child dockerfile
 ENV NB_USER=${NB_USER}
 
-## ONBUILD section. These commands are run in child Dockerfiles. These are run right after the FROM image is loaded
-
-ONBUILD RUN echo "py-rocket-base: looking for configuration files to use"
-
-ONBUILD USER ${NB_USER}
-
-# ${REPO_DIR} is owned by ${NB_USER}
+# Copy the child repo files into childimage so they are available to scripts
 ONBUILD COPY --chown=${NB_USER}:${NB_USER} . ${REPO_DIR}/childimage
-
-# The Desktop and apt.txt installs need to be root
-ONBUILD USER root
-
-# Copy Desktop files into ${REPO_DIR}/Desktop if they exist. start will copy to Application dir and Desktop
-# Will not fail if Desktop dir exists but is empty
-ONBUILD RUN echo "Checking for 'Desktop directory'..." \
-        ; cd "${REPO_DIR}/childimage/" \
-        ; if test -d Desktop ; then \
-            mkdir -p "${REPO_DIR}/Desktop" && \
-            cp -r Desktop/* "${REPO_DIR}/Desktop/" 2>/dev/null && \
-            chmod +x "${REPO_DIR}/desktop.sh" ; \
-        fi \
-        ; "${REPO_DIR}/desktop.sh"
-
-# Install apt packages specified in a apt.txt file if it exists.
-# blank lines and comments are supported in apt.txt
-ONBUILD RUN echo "Checking for 'apt.txt'..." \
-        ; cd "${REPO_DIR}/childimage/" \
-        ; if test -f "apt.txt" ; then \
-        package_list=$(grep -v '^\s*#' apt.txt | grep -v '^\s*$' | sed 's/\r//g; s/#.*//; s/^[[:space:]]*//; s/[[:space:]]*$//' | awk '{$1=$1};1') \
-        && apt-get update --fix-missing > /dev/null \
-        && apt-get install --yes --no-install-recommends $package_list \
-        && apt-get autoremove --purge \
-        && apt-get clean \
-        && rm -rf /var/lib/apt/lists/* \
-        ; fi
-
-ONBUILD USER ${NB_USER}
-
-# Add the conda environment
-# sometimes package solving will get rid of pip installed packages. Make sure jupyter-remote-desktop-proxy does not disappear
-ONBUILD RUN echo "Checking for 'conda-lock.yml' or 'environment.yml'..." \
-        ; cd "${REPO_DIR}/childimage/" \
-        ; if test -f "conda-lock.yml" ; then echo "Using conda-lock.yml" & \
-        conda-lock install --name ${CONDA_ENV} \
-        && pip install --no-deps jupyter-remote-desktop-proxy \
-        ; elif test -f "environment.yml" ; then echo "Using environment.yml" & \
-        mamba env update --name ${CONDA_ENV} -f environment.yml  \
-        && pip install --no-deps jupyter-remote-desktop-proxy \
-        ; fi \
-        && mamba clean -yaf \
-        && find ${CONDA_DIR} -follow -type f -name '*.a' -delete \
-        && find ${CONDA_DIR} -follow -type f -name '*.js.map' -delete \
-        ; if ls ${NB_PYTHON_PREFIX}/lib/python*/site-packages/bokeh/server/static > /dev/null 2>&1; then \
-        find ${NB_PYTHON_PREFIX}/lib/python*/site-packages/bokeh/server/static -follow -type f -name '*.js' ! -name '*.min.js' -delete \
-        ; fi
-
-# If a requirements.txt file exists, use pip to install packages
-# listed there. We don't want to save cached wheels in the image
-# to avoid wasting space.
-ONBUILD RUN echo "Checking for pip 'requirements.txt'..." \
-        ; cd "${REPO_DIR}/childimage/" \
-        ; if test -f "requirements.txt" ; then \
-        ${NB_PYTHON_PREFIX}/bin/pip install --no-cache -r requirements.txt \
-        ; fi
-
-# Add the r packages
-ONBUILD RUN echo "Checking for 'install.R" \
-        ; cd "${REPO_DIR}/childimage/" \
-        ; if test -f "install.R" ; then echo "Using install.R" & \
-        Rscript install.R \
-        ; fi
-
-# If a start file exists, put that under ${REPO_DIR}/childimage/start. 
-# This is sourced in ${REPO_DIR}/start
-ONBUILD RUN echo "Checking for 'start'..." \
-        ; cd "${REPO_DIR}/childimage/" \
-        ; if test -f "start" ; then \
-        chmod +x start \
-        ; fi
-
-# If a postBuild file exists, run it!
-# After it's done, we try to remove any possible cruft commands there
-# left behind under $HOME - particularly stuff that jupyterlab extensions
-# leave behind.
-ONBUILD RUN echo "Checking for 'postBuild'..." \
-        ; cd "${REPO_DIR}/childimage/" \
-        ; if test -f "postBuild" ; then \
-        chmod +x postBuild \
-        && ./postBuild \
-        && rm -rf /tmp/* \
-        && rm -rf ${HOME}/.cache ${HOME}/.npm ${HOME}/.yarn \
-        && rm -rf ${NB_PYTHON_PREFIX}/share/jupyter/lab/staging \
-        && find ${CONDA_DIR} -follow -type f -name '*.a' -delete \
-        && find ${CONDA_DIR} -follow -type f -name '*.js.map' -delete \
-        ; fi
-
-## End ONBUILD section for child images
-################################
 
 # Revert to default user and home as pwd
 USER ${NB_USER}
