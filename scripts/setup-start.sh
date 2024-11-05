@@ -1,6 +1,11 @@
 #!/bin/bash
 # Required User: NB_USER
 
+# Check if a filename argument is provided
+if [ -n "$1" ]; then
+    echo "Warning: Passed-in file '$1' to setup-start.sh is ignored. Looking for a file named 'start' in your repository." >&2
+fi
+
 # Check if running as root and switch to NB_USER if needed
 if [[ $(id -u) -eq 0 ]]; then
     echo "Switching to ${NB_USER} to run start.sh"
@@ -8,11 +13,6 @@ if [[ $(id -u) -eq 0 ]]; then
 fi
 
 echo "Running setup-start.sh as ${NB_USER}"
-
-# Check if a filename argument is provided
-if [ -n "$1" ]; then
-    echo "  Warning: Passed-in file '$1' is ignored. Looking for a file named 'start' in your repository." >&2
-fi
 
 echo "  Checking for ${REPO_DIR}/childimage/..."
 if [ -d "${REPO_DIR}/childimage/" ]; then
