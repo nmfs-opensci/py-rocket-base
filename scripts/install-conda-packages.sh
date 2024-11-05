@@ -55,3 +55,5 @@ if [ "$INSTALLATION_HAPPENED" = true ]; then
         find ${NB_PYTHON_PREFIX}/lib/python*/site-packages/bokeh/server/static -follow -type f -name '*.js' ! -name '*.min.js' -delete
     fi
 fi
+
+echo "  Success! install-conda-packages.sh"
