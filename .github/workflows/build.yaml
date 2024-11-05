@@ -13,6 +13,8 @@ on:
       - 'appendix'
       - 'rocker.sh'
       - '.github/workflows/build.yaml'
+      - '!book/**'  # Ignore all changes in the /book directory
+      - '!docs/**'  # Ignore all changes in the /docs directory
 
 jobs:
   build-and-push:
