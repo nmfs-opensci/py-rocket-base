@@ -1,6 +1,13 @@
 #!/bin/bash
 # Required User: NB_USER
 
+# Check if a filename argument is provided
+if [ -z "$1" ]; then
+    echo "Error: install-pip-packages.sh requires an input file of package names (typically called requirements.txt)." >&2
+    echo "Usage: RUN /pyrocket_scripts/install-pip-packages.sh <filename>" >&2
+    exit 1
+fi
+
 # Check if running as root and switch to NB_USER if needed
 if [[ $(id -u) -eq 0 ]]; then
     echo "Switching to ${NB_USER} to run install-pip-packages.sh"
@@ -10,12 +17,6 @@ fi
 # Main script execution as NB_USER
 echo "Running install-pip-packages.sh as ${NB_USER}"
 
-# Check if a filename argument is provided
-if [ -z "$1" ]; then
-    echo "  Error: This script requires a requirements.txt file." >&2
-    echo "  Usage: RUN /pyrocket_scripts/install-pip-packages.sh <filename.yml>" >&2
-    exit 1
-fi
 
 # Set variable for the provided file
 requirements_file="$1"
