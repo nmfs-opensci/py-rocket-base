@@ -8,22 +8,22 @@ if [ -z "$1" ]; then
     exit 1
 fi
 
+# Check if running as root and switch to NB_USER if needed
+if [[ $(id -u) -eq 0 ]]; then
+    echo "Switching to ${NB_USER} to run setup-start.sh"
+    exec su "${NB_USER}" -c "/bin/bash $0 $1"  # Pass the script file as an argument
+fi
+
+echo "Running setup-start.sh as ${NB_USER}"
+
 SCRIPT_FILE="$1"
 
 # Check if the specified file exists
 if [ ! -f "$SCRIPT_FILE" ]; then
-    echo "Error: The file '$SCRIPT_FILE' does not exist." >&2
-    echo "Did you use COPY to copy the file into the Docker build context?"
+    echo "  Error: The file '$SCRIPT_FILE' does not exist." >&2
+    echo "  Did you use COPY to copy the file into the Docker build context?"
     exit 1
 fi
-
-# Check if running as root and switch to NB_USER if needed
-if [[ $(id -u) -eq 0 ]]; then
-    echo "Switching to ${NB_USER} to run setup-start.sh"
-    exec su "${NB_USER}" -c "/bin/bash $0 $SCRIPT_FILE"  # Pass the script file as an argument
-fi
-
-echo "Running setup-start.sh as ${NB_USER}"
 
 # Ensure ${REPO_DIR}/childstarts exists
 mkdir -p "${REPO_DIR}/childstarts"
