@@ -7,7 +7,9 @@ The `install-conda-packages.sh` script will install conda packages to the conda 
 Here is the code for your Docker file. You can name the conda package file to something other than `environment.yml`. Make sure your file has `name:`. The name is arbitrary. It is ignored but required for the script.
 
 ```
+COPY environment.yml environment.yml
 RUN /pyrocket_scripts/install-conda-packages.sh environment.yml
+RUN rm environment.yml
 ```
 
 This is a standard format. You can add version pinning.
@@ -27,16 +29,21 @@ dependencies:
 Instead of a list of conda packages (typically called environment.yml), you can use a conda lock file instead.
 
 Here is the code for your Docker file. You can name your conda lock file something other than `conda-lock.yml`.
+
 ```
+COPY conda-lock.yml conda-lock.yml
 RUN /pyrocket_scripts/install-conda-packages.sh conda-lock.yml
+RUN rm conda-lock.yml
 ```
 
-## requirments.txt
+## requirements.txt
 
 The `install-pip-packages.sh` script will install packages using `pip`.  Here is the code for your Docker file. You can name your pip package file something other than `requirements.txt`.
 
 ```
+COPY requirements.txt requirements.txt
 RUN /pyrocket_scripts/install-pip-packages.sh requirements.txt
+RUN rm requirements.txt
 ```
 
 requirements.txt
@@ -53,7 +60,9 @@ The `install-r-packages.sh` script will run the supplied R script which you can 
 Here is the code for your Docker file. You can name the R script file to something other than `install.R`. Make sure your file is an R script.
 
 ```
+COPY install.R install.R
 RUN /pyrocket_scripts/install-r-packages.sh install.R
+RUN rm install.R
 ```
 
 install.R example
@@ -85,7 +94,9 @@ The `install-apt-packages.sh` script will install packages with `apt-get`. Here 
 
 ```
 USER root
+COPY apt.txt apt.txt
 RUN /pyrocket_scripts/install-apt-packages.sh apt.txt
+RUN rm apt.txt
 USER ${NB_USER}
 ```
 
@@ -100,10 +111,12 @@ cmocean
 
 ## postBuild
 
-The `run-postbuild.sh` script can be run as root or jovyan (`${NB_USER}`). This script does not accept a file name. You need to name your postBuild script `postBuild` and put at the base level with your Docker file.
+The `run-postbuild.sh` script can be run as root or jovyan (`${NB_USER}`). The script has some extra code to remove leftover files after installing Python extensions.
 
 ```
-RUN /pyrocket_scripts/run-postbuild.sh
+COPY postBuild postBuild
+RUN /pyrocket_scripts/run-postbuild.sh postBuild
+RUN rm postBuild
 ```
 
 postBuild
@@ -116,12 +129,14 @@ set -e
 
 ## start
 
-The `start` bash code is run when the image starts. py-rocker-base has a start script at `${REPO_DIR}/start` which loads the Desktop applications. If you change that start file (by copying your start file onto that location), then the Desktop apps will not be loaded properly. Instead, the `setup-start.sh` will add your start file to the end of `${REPO_DIR}/start` so that the Desktop is still setup properly.
+The `start` bash code is run when the image starts. py-rocker-base has a start script at `${REPO_DIR}/start` which loads the Desktop applications. If you change that start file (by copying your start file onto that location), then the Desktop apps will not be loaded properly. Instead, the `setup-start.sh` will add your start file to a directory `${REPO_DIR}/childstarts` and will run all those scripts after `${REPO_DIR}/start`.
 
-The `setup-start.sh` script does not accept a file name. You need to name your start script `start` and put at the base level with your Docker file.
+The `setup-start.sh` script will move the file you provide into `${REPO_DIR}/childstarts`. As usual you can name your script something other than `start`.
 
 ```
-RUN /pyrocket_scripts/setup-start.sh
+COPY start start
+RUN /pyrocket_scripts/setup-start.sh start
+RUN rm start
 ```
 
 ## Desktop applications

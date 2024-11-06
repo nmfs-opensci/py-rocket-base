@@ -393,12 +393,9 @@ most of the work in py-rocket-base is done here. appendix calls rocker.sh and in
 <span id="annotated-cell-6-52"><a href="#annotated-cell-6-52" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert NB_USER to ENV (from ARG) so that it passes to the child dockerfile</span></span>
 <button class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="9">9</button><span id="annotated-cell-6-53" class="code-annotation-target"><a href="#annotated-cell-6-53" aria-hidden="true" tabindex="-1"></a>ENV NB_USER<span class="ot">=</span><span class="er">$</span>{NB_USER}</span>
 <span id="annotated-cell-6-54"><a href="#annotated-cell-6-54" aria-hidden="true" tabindex="-1"></a></span>
-<span id="annotated-cell-6-55"><a href="#annotated-cell-6-55" aria-hidden="true" tabindex="-1"></a><span class="co"># Copy the child repo files into childimage so they are available to scripts</span></span>
-<button class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="10">10</button><span id="annotated-cell-6-56" class="code-annotation-target"><a href="#annotated-cell-6-56" aria-hidden="true" tabindex="-1"></a>ONBUILD COPY <span class="sc">--</span>chown<span class="ot">=</span><span class="er">$</span>{NB_USER}<span class="sc">:</span><span class="er">$</span>{NB_USER} . <span class="sc">$</span>{REPO_DIR}<span class="sc">/</span>childimage</span>
-<span id="annotated-cell-6-57"><a href="#annotated-cell-6-57" aria-hidden="true" tabindex="-1"></a></span>
-<span id="annotated-cell-6-58"><a href="#annotated-cell-6-58" aria-hidden="true" tabindex="-1"></a><span class="co"># Revert to default user and home as pwd</span></span>
-<button class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="11">11</button><span id="annotated-cell-6-59" class="code-annotation-target"><a href="#annotated-cell-6-59" aria-hidden="true" tabindex="-1"></a>USER <span class="sc">$</span>{NB_USER}</span>
-<span id="annotated-cell-6-60"><a href="#annotated-cell-6-60" aria-hidden="true" tabindex="-1"></a>WORKDIR <span class="sc">$</span>{HOME}</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="annotated-cell-6-55"><a href="#annotated-cell-6-55" aria-hidden="true" tabindex="-1"></a><span class="co"># Revert to default user and home as pwd</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="10">10</button><span id="annotated-cell-6-56" class="code-annotation-target"><a href="#annotated-cell-6-56" aria-hidden="true" tabindex="-1"></a>USER <span class="sc">$</span>{NB_USER}</span>
+<span id="annotated-cell-6-57"><a href="#annotated-cell-6-57" aria-hidden="true" tabindex="-1"></a>WORKDIR <span class="sc">$</span>{HOME}</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <dl class="code-annotation-container-hidden code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-6" data-target-annotation="1">1</dt>
 <dd>
@@ -438,11 +435,7 @@ most of the work in py-rocket-base is done here. appendix calls rocker.sh and in
 </dd>
 <dt data-target-cell="annotated-cell-6" data-target-annotation="10">10</dt>
 <dd>
-<span data-code-cell="annotated-cell-6" data-code-lines="56" data-code-annotation="10">Copy the child build context (files with the Docker file) into <code>${REPO_DIR}</code>. Make sure that jovyan owns the directory. Note, jovyan owns <code>${REPO_DIR}</code> (this is set by repo2docker).</span>
-</dd>
-<dt data-target-cell="annotated-cell-6" data-target-annotation="11">11</dt>
-<dd>
-<span data-code-cell="annotated-cell-6" data-code-lines="59,60" data-code-annotation="11">The parent docker build completes by setting the user to jovyan and the working directory to <code>${HOME}</code>. Within a JupyterHub deployment, <code>${HOME}</code> will often be re-mapped to the user persistent memory so it is important not to write anything that needs to be persistent to <code>${HOME}</code>, for example configuration. You can do this in the <code>start</code> script since that runs after the user directory is mapped or you can put configuration files in some place other than <code>${HOME}</code>.</span>
+<span data-code-cell="annotated-cell-6" data-code-lines="56,57" data-code-annotation="10">The parent docker build completes by setting the user to jovyan and the working directory to <code>${HOME}</code>. Within a JupyterHub deployment, <code>${HOME}</code> will often be re-mapped to the user persistent memory so it is important not to write anything that needs to be persistent to <code>${HOME}</code>, for example configuration. You can do this in the <code>start</code> script since that runs after the user directory is mapped or you can put configuration files in some place other than <code>${HOME}</code>.</span>
 </dd>
 </dl>
 </section>
@@ -559,9 +552,18 @@ set -euo pipefail
 source ${REPO_DIR}/env.txt
 # End - Set any environment variables here
 
-# Run child start in a subshell to contain its environment
-[ -f ${REPO_DIR}/childimage/start ] &amp;&amp; ( source ${REPO_DIR}/childimage/start )
-
+# Run child start scripts in a subshell to contain its environment
+# ${REPO_DIR}/childstart/ is created by setup-start.sh
+if [ -d "${REPO_DIR}/childstart/" ]; then
+    for script in ${REPO_DIR}/childstart/*; do
+        if [ -f "$script" ]; then
+            echo "Sourcing script: $script"
+            source "$script" || {
+                echo "Error: Failed to source $script. Moving on to the next script."
+            }
+        fi
+    done
+fi
 exec "$@"</code></pre>
 <dl>
 <dt data-target-cell="annotated-cell-8" data-target-annotation="1">1</dt>
@@ -570,7 +572,7 @@ exec "$@"</code></pre>
 </dd>
 <dt data-target-cell="annotated-cell-8" data-target-annotation="2">2</dt>
 <dd>
-<span data-code-cell="annotated-cell-8" data-code-lines="12" data-code-annotation="2">Run any child start script in a subshell. Run in a subshell to contain any <code>set</code> statements or similar.</span>
+<span data-code-cell="annotated-cell-8" data-code-lines="13,14,15,16,17,18,19,20,21,22" data-code-annotation="2">Run any child start script in a subshell. Run in a subshell to contain any <code>set</code> statements or similar. start scripts are moved into <code>childstarts</code> by the <code>setup-start.sh</code> pyrocket script.</span>
 </dd>
 </dl>
 </section>
