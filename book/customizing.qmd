@@ -2,7 +2,25 @@
 
 py-rocket-base is designed to be used in the FROM line of a Dockerfile similar to rocker images. It includes directories called `\pyrocket_scripts` and `\rocker_scripts` that will help you do common tasks for scientific docker images. You do not have to use these scripts. If you are familiar with writing Docker files, you can write your own code. The exception is installation of Desktop files. Properly adding Desktop applications to py-rocket-base requires the use of the `\pyrocket_scripts/install-desktop.sh` script. The start file is also an exception. See the discussion in the configuration files.
 
-**Calling the scripts**
+## helper scripts
+
+### pyrocket scripts
+
+How to use the helper scripts is shown in [configuration files](configuration_files.html). The helper scripts provide code to do common tasks. Users can write their own Docker file code to do these tasks but the helper scripts provide standardized code. The scripts are
+
+* `install-conda-packages.sh`
+* `install-pip-packages.sh`
+* `install-r-packages.sh`
+* `install-apt-packages.sh`
+* `install-desktop.sh`
+* `setup-start.sh`
+* `run-postbuild.sh`
+
+### rocker scripts
+
+The rocker docker stack also includes a set of scripts for extending rocker packages. These are included py-rocket-base.
+
+### Calling the scripts
 
 The format for calling the pyrocket and rocker scripts is the following. 
 
@@ -21,7 +39,7 @@ RUN PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin && \
 USER ${NB_USER}
 ```
 
-## File structure
+## Repository file structure
 
 Here is a typical repo structure. Only the Dockerfile is required. The rest are optional. The files names, `apt.txt`, `environment.yml`, `requirements.txt` and `install.R` are optional. You can name these files other names and still use them in the pyrocket scripts. `Desktop`, `start` and `postBuild` must be named exactly this to use them in the pyrocket scripts (these scripts do not take filename arguments).
 
