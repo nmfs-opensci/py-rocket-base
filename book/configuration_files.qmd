@@ -1,6 +1,16 @@
-# Configuration files
+# Customization scripts
 
-## environment.yml
+The helper scripts at `/pyrocket_scripts` in the image scripts to help do common tasks for extending the py-rocket-base image. Users can write their own Docker file code to do these tasks but the helper scripts provide standardized code for these tasks. The scripts are
+
+* `install-conda-packages.sh`
+* `install-pip-packages.sh`
+* `install-r-packages.sh`
+* `install-apt-packages.sh`
+* `install-desktop.sh`
+* `setup-start.sh`
+* `run-postbuild.sh`
+
+## install-conda-packages.sh
 
 The `install-conda-packages.sh` script will install conda packages to the conda notebook environment, the user environment in the py-rocket-base image (same as for pangeo and repo2docker images). 
 
@@ -24,8 +34,6 @@ dependencies:
   - numpy
 ```
 
-## conda-lock.yml
-
 Instead of a list of conda packages (typically called environment.yml), you can use a conda lock file instead.
 
 Here is the code for your Docker file. You can name your conda lock file something other than `conda-lock.yml`.
@@ -36,7 +44,7 @@ RUN /pyrocket_scripts/install-conda-packages.sh conda-lock.yml
 RUN rm conda-lock.yml
 ```
 
-## requirements.txt
+## install-pip-packages.sh
 
 The `install-pip-packages.sh` script will install packages using `pip`.  Here is the code for your Docker file. You can name your pip package file something other than `requirements.txt`.
 
@@ -53,7 +61,7 @@ harmony-py
 
 ```
 
-## install.R
+## install-r-packages.sh
 
 The `install-r-packages.sh` script will run the supplied R script which you can use to install R packages to the system library. 
 
@@ -88,7 +96,7 @@ RUN PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin && \
 USER ${NB_USER}
 ```
 
-## apt.txt
+## install-apt-packages.sh
 
 The `install-apt-packages.sh` script will install packages with `apt-get`. Here is the code for your Docker file. You can name the apt file of packages names to something other than `apt.txt`. Comments and newlines are allowed. Installation requires root.
 
@@ -109,7 +117,7 @@ tk-dev
 cmocean
 ```
 
-## postBuild
+## run-postbuild.sh
 
 The `run-postbuild.sh` script can be run as root or jovyan (`${NB_USER}`). The script has some extra code to remove leftover files after installing Python extensions.
 
@@ -127,7 +135,7 @@ set -e
 <bash commands>
 ```
 
-## start
+## setup-start.sh
 
 The `start` bash code is run when the image starts. py-rocker-base has a start script at `${REPO_DIR}/start` which loads the Desktop applications. If you change that start file (by copying your start file onto that location), then the Desktop apps will not be loaded properly. Instead, the `setup-start.sh` will add your start file to a directory `${REPO_DIR}/childstarts` and will run all those scripts after `${REPO_DIR}/start`.
 

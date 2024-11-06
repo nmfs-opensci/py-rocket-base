@@ -72,91 +72,81 @@
   {
     "objectID": "configuration_files.html",
     "href": "configuration_files.html",
-    "title": "2  Configuration files",
+    "title": "2  Customization scripts",
     "section": "",
-    "text": "2.1 environment.yml\nThe install-conda-packages.sh script will install conda packages to the conda notebook environment, the user environment in the py-rocket-base image (same as for pangeo and repo2docker images).\nHere is the code for your Docker file. You can name the conda package file to something other than environment.yml. Make sure your file has name:. The name is arbitrary. It is ignored but required for the script.\nThis is a standard format. You can add version pinning.\nenvironment.yml",
+    "text": "2.1 install-conda-packages.sh\nThe install-conda-packages.sh script will install conda packages to the conda notebook environment, the user environment in the py-rocket-base image (same as for pangeo and repo2docker images).\nHere is the code for your Docker file. You can name the conda package file to something other than environment.yml. Make sure your file has name:. The name is arbitrary. It is ignored but required for the script.\nThis is a standard format. You can add version pinning.\nenvironment.yml\nInstead of a list of conda packages (typically called environment.yml), you can use a conda lock file instead.\nHere is the code for your Docker file. You can name your conda lock file something other than conda-lock.yml.",
     "crumbs": [
-      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Configuration files</span>"
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Customization scripts</span>"
     ]
   },
   {
-    "objectID": "configuration_files.html#environment.yml",
-    "href": "configuration_files.html#environment.yml",
-    "title": "2  Configuration files",
+    "objectID": "configuration_files.html#install-conda-packages.sh",
+    "href": "configuration_files.html#install-conda-packages.sh",
+    "title": "2  Customization scripts",
     "section": "",
-    "text": "COPY environment.yml environment.yml\nRUN /pyrocket_scripts/install-conda-packages.sh environment.yml\nRUN rm environment.yml\n\n\nname: optional\nchannels:\n  - conda-forge\ndependencies:\n  - cmocean\n  - numpy",
+    "text": "COPY environment.yml environment.yml\nRUN /pyrocket_scripts/install-conda-packages.sh environment.yml\nRUN rm environment.yml\n\n\nname: optional\nchannels:\n  - conda-forge\ndependencies:\n  - cmocean\n  - numpy\n\n\nCOPY conda-lock.yml conda-lock.yml\nRUN /pyrocket_scripts/install-conda-packages.sh conda-lock.yml\nRUN rm conda-lock.yml",
     "crumbs": [
-      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Configuration files</span>"
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Customization scripts</span>"
     ]
   },
   {
-    "objectID": "configuration_files.html#conda-lock.yml",
-    "href": "configuration_files.html#conda-lock.yml",
-    "title": "2  Configuration files",
-    "section": "2.2 conda-lock.yml",
-    "text": "2.2 conda-lock.yml\nInstead of a list of conda packages (typically called environment.yml), you can use a conda lock file instead.\nHere is the code for your Docker file. You can name your conda lock file something other than conda-lock.yml.\nCOPY conda-lock.yml conda-lock.yml\nRUN /pyrocket_scripts/install-conda-packages.sh conda-lock.yml\nRUN rm conda-lock.yml",
+    "objectID": "configuration_files.html#install-pip-packages.sh",
+    "href": "configuration_files.html#install-pip-packages.sh",
+    "title": "2  Customization scripts",
+    "section": "2.2 install-pip-packages.sh",
+    "text": "2.2 install-pip-packages.sh\nThe install-pip-packages.sh script will install packages using pip. Here is the code for your Docker file. You can name your pip package file something other than requirements.txt.\nCOPY requirements.txt requirements.txt\nRUN /pyrocket_scripts/install-pip-packages.sh requirements.txt\nRUN rm requirements.txt\nrequirements.txt\n#a package\nharmony-py",
     "crumbs": [
-      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Configuration files</span>"
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Customization scripts</span>"
     ]
   },
   {
-    "objectID": "configuration_files.html#requirements.txt",
-    "href": "configuration_files.html#requirements.txt",
-    "title": "2  Configuration files",
-    "section": "2.3 requirements.txt",
-    "text": "2.3 requirements.txt\nThe install-pip-packages.sh script will install packages using pip. Here is the code for your Docker file. You can name your pip package file something other than requirements.txt.\nCOPY requirements.txt requirements.txt\nRUN /pyrocket_scripts/install-pip-packages.sh requirements.txt\nRUN rm requirements.txt\nrequirements.txt\n#a package\nharmony-py",
+    "objectID": "configuration_files.html#install-r-packages.sh",
+    "href": "configuration_files.html#install-r-packages.sh",
+    "title": "2  Customization scripts",
+    "section": "2.3 install-r-packages.sh",
+    "text": "2.3 install-r-packages.sh\nThe install-r-packages.sh script will run the supplied R script which you can use to install R packages to the system library.\nHere is the code for your Docker file. You can name the R script file to something other than install.R. Make sure your file is an R script.\nCOPY install.R install.R\nRUN /pyrocket_scripts/install-r-packages.sh install.R\nRUN rm install.R\ninstall.R example\n# to match rocker/verse:4.4 used in py-rocker-base\n# look up the date that the Rocker image was created and put that\nrepo &lt;- \"https://p3m.dev/cran/__linux__/jammy/2024-05-13\"\nlist.of.packages &lt;- c(\"ncdf4\", \"httr\", \"plyr\", \"lubridate\")\ninstall.packages(list.of.packages, repos=repo)\n\n2.3.1 Add R geospatial packages\nGeospatial packages require some linux packages. To get this working in your Docker image add this to your Docker file:\nDockerfile\nFROM ghcr.io/nmfs-opensci/py-rocket-base:latest\n\nUSER root\nRUN PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin && \\\n    /rocker_scripts/install_geospatial.sh\nUSER ${NB_USER}",
     "crumbs": [
-      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Configuration files</span>"
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Customization scripts</span>"
     ]
   },
   {
-    "objectID": "configuration_files.html#install.r",
-    "href": "configuration_files.html#install.r",
-    "title": "2  Configuration files",
-    "section": "2.4 install.R",
-    "text": "2.4 install.R\nThe install-r-packages.sh script will run the supplied R script which you can use to install R packages to the system library.\nHere is the code for your Docker file. You can name the R script file to something other than install.R. Make sure your file is an R script.\nCOPY install.R install.R\nRUN /pyrocket_scripts/install-r-packages.sh install.R\nRUN rm install.R\ninstall.R example\n# to match rocker/verse:4.4 used in py-rocker-base\n# look up the date that the Rocker image was created and put that\nrepo &lt;- \"https://p3m.dev/cran/__linux__/jammy/2024-05-13\"\nlist.of.packages &lt;- c(\"ncdf4\", \"httr\", \"plyr\", \"lubridate\")\ninstall.packages(list.of.packages, repos=repo)\n\n2.4.1 Add R geospatial packages\nGeospatial packages require some linux packages. To get this working in your Docker image add this to your Docker file:\nDockerfile\nFROM ghcr.io/nmfs-opensci/py-rocket-base:latest\n\nUSER root\nRUN PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin && \\\n    /rocker_scripts/install_geospatial.sh\nUSER ${NB_USER}",
+    "objectID": "configuration_files.html#install-apt-packages.sh",
+    "href": "configuration_files.html#install-apt-packages.sh",
+    "title": "2  Customization scripts",
+    "section": "2.4 install-apt-packages.sh",
+    "text": "2.4 install-apt-packages.sh\nThe install-apt-packages.sh script will install packages with apt-get. Here is the code for your Docker file. You can name the apt file of packages names to something other than apt.txt. Comments and newlines are allowed. Installation requires root.\nUSER root\nCOPY apt.txt apt.txt\nRUN /pyrocket_scripts/install-apt-packages.sh apt.txt\nRUN rm apt.txt\nUSER ${NB_USER}\napt.txt example\n# Some useful stuff\ntk-dev\n\n# Add some more\ncmocean",
     "crumbs": [
-      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Configuration files</span>"
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Customization scripts</span>"
     ]
   },
   {
-    "objectID": "configuration_files.html#apt.txt",
-    "href": "configuration_files.html#apt.txt",
-    "title": "2  Configuration files",
-    "section": "2.5 apt.txt",
-    "text": "2.5 apt.txt\nThe install-apt-packages.sh script will install packages with apt-get. Here is the code for your Docker file. You can name the apt file of packages names to something other than apt.txt. Comments and newlines are allowed. Installation requires root.\nUSER root\nCOPY apt.txt apt.txt\nRUN /pyrocket_scripts/install-apt-packages.sh apt.txt\nRUN rm apt.txt\nUSER ${NB_USER}\napt.txt example\n# Some useful stuff\ntk-dev\n\n# Add some more\ncmocean",
+    "objectID": "configuration_files.html#run-postbuild.sh",
+    "href": "configuration_files.html#run-postbuild.sh",
+    "title": "2  Customization scripts",
+    "section": "2.5 run-postbuild.sh",
+    "text": "2.5 run-postbuild.sh\nThe run-postbuild.sh script can be run as root or jovyan (${NB_USER}). The script has some extra code to remove leftover files after installing Python extensions.\nCOPY postBuild postBuild\nRUN /pyrocket_scripts/run-postbuild.sh postBuild\nRUN rm postBuild\npostBuild\n#!/bin/bash -l\nset -e\n\n&lt;bash commands&gt;",
     "crumbs": [
-      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Configuration files</span>"
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Customization scripts</span>"
     ]
   },
   {
-    "objectID": "configuration_files.html#postbuild",
-    "href": "configuration_files.html#postbuild",
-    "title": "2  Configuration files",
-    "section": "2.6 postBuild",
-    "text": "2.6 postBuild\nThe run-postbuild.sh script can be run as root or jovyan (${NB_USER}). The script has some extra code to remove leftover files after installing Python extensions.\nCOPY postBuild postBuild\nRUN /pyrocket_scripts/run-postbuild.sh postBuild\nRUN rm postBuild\npostBuild\n#!/bin/bash -l\nset -e\n\n&lt;bash commands&gt;",
+    "objectID": "configuration_files.html#setup-start.sh",
+    "href": "configuration_files.html#setup-start.sh",
+    "title": "2  Customization scripts",
+    "section": "2.6 setup-start.sh",
+    "text": "2.6 setup-start.sh\nThe start bash code is run when the image starts. py-rocker-base has a start script at ${REPO_DIR}/start which loads the Desktop applications. If you change that start file (by copying your start file onto that location), then the Desktop apps will not be loaded properly. Instead, the setup-start.sh will add your start file to a directory ${REPO_DIR}/childstarts and will run all those scripts after ${REPO_DIR}/start.\nThe setup-start.sh script will move the file you provide into ${REPO_DIR}/childstarts. As usual you can name your script something other than start.\nCOPY start start\nRUN /pyrocket_scripts/setup-start.sh start\nRUN rm start",
     "crumbs": [
-      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Configuration files</span>"
-    ]
-  },
-  {
-    "objectID": "configuration_files.html#start",
-    "href": "configuration_files.html#start",
-    "title": "2  Configuration files",
-    "section": "2.7 start",
-    "text": "2.7 start\nThe start bash code is run when the image starts. py-rocker-base has a start script at ${REPO_DIR}/start which loads the Desktop applications. If you change that start file (by copying your start file onto that location), then the Desktop apps will not be loaded properly. Instead, the setup-start.sh will add your start file to a directory ${REPO_DIR}/childstarts and will run all those scripts after ${REPO_DIR}/start.\nThe setup-start.sh script will move the file you provide into ${REPO_DIR}/childstarts. As usual you can name your script something other than start.\nCOPY start start\nRUN /pyrocket_scripts/setup-start.sh start\nRUN rm start",
-    "crumbs": [
-      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Configuration files</span>"
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Customization scripts</span>"
     ]
   },
   {
     "objectID": "configuration_files.html#desktop-applications",
     "href": "configuration_files.html#desktop-applications",
-    "title": "2  Configuration files",
-    "section": "2.8 Desktop applications",
-    "text": "2.8 Desktop applications\nSee the chapter on Desktop applications.",
+    "title": "2  Customization scripts",
+    "section": "2.7 Desktop applications",
+    "text": "2.7 Desktop applications\nSee the chapter on Desktop applications.",
     "crumbs": [
-      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Configuration files</span>"
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Customization scripts</span>"
     ]
   },
   {
