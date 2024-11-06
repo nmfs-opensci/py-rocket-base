@@ -217,7 +217,7 @@ RUN rm -rf /tmp/Desktop
 USER ${NB_USER}</code></pre>
 <section id="create-the-desktop-directory" class="level3" data-number="4.1.1">
 <h3 data-number="4.1.1" class="anchored" data-anchor-id="create-the-desktop-directory"><span class="header-section-number">4.1.1</span> Create the Desktop directory</h3>
-<p>Create the directory and add the .desktop and optional .png and .xml files. py-rocket-base will move them to the correct places (<code>/usr/share/applications</code> and <code>/usr/share/Desktop</code>, <code>/usr/share/mime/packages</code> and icon locations).</p>
+<p>Create the directory and add the .desktop and optional .png and .xml files. The pyrocket script <code>install_desktop.sh</code> will move them to the correct places (<code>/usr/share/applications</code> and <code>/usr/share/Desktop</code>, <code>/usr/share/mime/packages</code> and icon locations).</p>
 <pre><code>your-repo/
 ├── Dockerfile
 ├── optional extra files

@@ -20,7 +20,7 @@ USER ${NB_USER}
 
 ### Create the Desktop directory
 
-Create the directory and add the .desktop and optional .png and .xml files. py-rocket-base will move them to the correct places (`/usr/share/applications` and `/usr/share/Desktop`, `/usr/share/mime/packages` and icon locations).
+Create the directory and add the .desktop and optional .png and .xml files. The pyrocket script `install_desktop.sh` will move them to the correct places (`/usr/share/applications` and `/usr/share/Desktop`, `/usr/share/mime/packages` and icon locations).
 
 ```
 your-repo/
