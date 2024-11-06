@@ -10,36 +10,46 @@ if [[ $(id -u) -ne 0 ]]; then
     exit 1
 fi
 
-# Check if a filename argument is provided
-if [ -n "$1" ]; then
-    echo "  Warning: Passed-in file '$1' is ignored. Looking for Desktop files in the 'Desktop' directory in your repository." >&2
+# Check if a directory argument is provided
+if [ -z "$1" ]; then
+    echo "  Error: No directory provided. Please provide a directory path where the script can find .desktop, .png, and .xml files."
+    echo "  Usage: RUN /pyrocket_scripts/setup-desktop.sh <directory path>"
+    exit 1
 fi
 
-echo "  Checking for ${REPO_DIR}/childimage/..."
-if [ -d "${REPO_DIR}/childimage/" ]; then
-    cd "${REPO_DIR}/childimage/" || exit 1
+# Set TARGET_DIR to the user-provided argument
+TARGET_DIR="$1"
 
-    echo "  Checking for Desktop directory..."
-    if test -d "${REPO_DIR}/childimage/Desktop"; then
+# Verify that TARGET_DIR exists and is a directory
+if [ ! -d "${TARGET_DIR}" ]; then
+    echo "  Error: Provided directory '${TARGET_DIR}' does not exist."
+    echo "  Did you run COPY first to copy the directory into the Docker build context?"
+    exit 1
+fi
 
-        echo "  ${REPO_DIR}/childimage/Desktop directory found. Proceeding with installation..."
+# Proceed to copy .desktop, .png, and .xml files from the specified directory
+echo "  Looking for Desktop-related files in '${TARGET_DIR}'..."
 
-        mkdir -p "${REPO_DIR}/Desktop"
-        cp -r ${REPO_DIR}/childimage/Desktop/* "${REPO_DIR}/Desktop/" 2>/dev/null
+mkdir -p "${REPO_DIR}/Desktop"
 
-        # Check if desktop.sh exists before executing
-        if test -f "${REPO_DIR}/desktop.sh"; then
-            echo "  Running ${REPO_DIR}/desktop.sh."
-            chmod +x "${REPO_DIR}/desktop.sh"
-            "${REPO_DIR}/desktop.sh"
-        else
-            echo "  Warning: desktop.sh not found. Skipping execution."
-        fi
-    else
-        echo "  No Desktop directory found in ${REPO_DIR}/childimage/. Skipping setup."
-    fi
+# Find and copy .desktop, .png, and .xml files from TARGET_DIR to ${REPO_DIR}/Desktop
+find "${TARGET_DIR}" -type f \( -name "*.desktop" -o -name "*.png" -o -name "*.xml" \) -exec cp {} "${REPO_DIR}/Desktop/" \;
+
+# Check if any files were copied and provide feedback
+if [ "$(ls -A "${REPO_DIR}/Desktop" 2>/dev/null)" ]; then
+    echo "  Successfully copied Desktop-related files to '${REPO_DIR}/Desktop'."
 else
-    echo "  Directory ${REPO_DIR}/childimage/ does not exist. Skipping script."
+    echo "  Warning: No .desktop, .png, or .xml files found in '${TARGET_DIR}'. Nothing was copied."
 fi
 
-echo "  Success! install-desktop.sh"
+# Check if desktop.sh exists before executing
+if [ -f "${REPO_DIR}/desktop.sh" ]; then
+    echo "  Running ${REPO_DIR}/desktop.sh to move Desktop files to appropriate directories and register as applications."
+    chmod +x "${REPO_DIR}/desktop.sh"
+    "${REPO_DIR}/desktop.sh"
+else
+    echo "  Warning: desktop.sh not found. Skipping execution."
+fi
+
+echo "  Success! setup-desktop.sh"
+

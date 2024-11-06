@@ -11,7 +11,7 @@ py-rocket-base is inspired by [repo2docker](https://github.com/jupyterhub/repo2d
 
 The Pangeo Docker stack does not use repo2docker, but mimics repo2docker's environment design. The Pangeo base-image behaves similar to repo2docker in that using the base-image in the `FROM` line of a Dockerfile causes the build to look for files with the same names as repo2docker's [configuration files](https://repo2docker.readthedocs.io/en/latest/config_files.html) and then do the proper action with those files. This means that routine users do not need to know how to write Dockerfile code in order to extend the image with new packages or applications. py-rocker-base Docker image uses this Pangeo base-image design. It is based on `ONBUILD` commands in the Dockerfile that trigger actions only when the image is used in the `FROM` line of another Dockerfile.
 
-py-rocket-base does not include this `ONBUILD` behavior. Instead it follows the [rocker docker stack](https://github.com/rocker-org/rocker-versioned2) design. py-rocket-base a directory called `\pyrocket_scripts`that will help you do common tasks for scientific docker images.These scripts are not required. If users are familiar with writing Docker files, they can write their own code. The use of helper scripts was used after feedback that the Pangeo ONBUILD behavior makes it harder to customize images that need very specific structure or order of operations.
+py-rocket-base does not include this `ONBUILD` behavior. Instead it follows the [rocker docker stack](https://github.com/rocker-org/rocker-versioned2) design and provides helper scripts for building on the base image. py-rocket-base a directory called `\pyrocket_scripts`that will help you do common tasks for scientific docker images.These scripts are not required. If users are familiar with writing Docker files, they can write their own code. The use of helper scripts was used after feedback that the Pangeo ONBUILD behavior makes it harder to customize images that need very specific structure or order of operations.
 
 *There are many ways to install R and RStudio into an image designed for JupyterHubs* The objective of py-rocker-base is not to install R and RStudio, per se, and there are other leaner and faster ways to install R/RStudio if that is your goal[^1]. The objective of py-rocket-base is to create an JupyterHub image such when you click the RStudio button in the JupyterLab UI to enter the RStudio UI, you enter an environment that is the same as if you had used a Rocker image. If you are in the JupyterLab UI, the environment is the same as it you had used repo2docker (or Pangeo base-image) to create the environment.
 
@@ -166,12 +166,9 @@ RUN chown -R root:staff /pyrocket_scripts && \ # <8>
 # Convert NB_USER to ENV (from ARG) so that it passes to the child dockerfile
 ENV NB_USER=${NB_USER} # <9>
 
-# Copy the child repo files into childimage so they are available to scripts
-ONBUILD COPY --chown=${NB_USER}:${NB_USER} . ${REPO_DIR}/childimage # <10>
-
 # Revert to default user and home as pwd
-USER ${NB_USER} # <11>
-WORKDIR ${HOME} # <11>
+USER ${NB_USER} # <10>
+WORKDIR ${HOME} # <10>
 ```
 1. Some commands need to be run as root, such as installing linux packages with `apt-get`
 2. Set variables. CONDA_ENV is useful for child builds
@@ -182,7 +179,6 @@ WORKDIR ${HOME} # <11>
 7. `book` and `docs` are the documentation files and are not needed in the image.
 8. Copy the pyrocket helper scripts to the `/pyrocket_scripts` directory and set to executable.
 9. The `NB_USER` environmental variable is not exported by repo2docker (it is an argument confined to the parent build) but is very useful for child builds. So it is converted to an environmental variable.
-10. Copy the child build context (files with the Docker file) into `${REPO_DIR}`. Make sure that jovyan owns the directory. Note, jovyan owns `${REPO_DIR}` (this is set by repo2docker).
 11. The parent docker build completes by setting the user to jovyan and the working directory to `${HOME}`. Within a JupyterHub deployment, `${HOME}` will often be re-mapped to the user persistent memory so it is important not to write anything that needs to be persistent to `${HOME}`, for example configuration. You can do this in the `start` script since that runs after the user directory is mapped or you can put configuration files in some place other than `${HOME}`.
 
 ## rocker.sh
@@ -263,13 +259,22 @@ set -euo pipefail
 source ${REPO_DIR}/env.txt  # <1>
 # End - Set any environment variables here  # <1>
 
-# Run child start in a subshell to contain its environment
-[ -f ${REPO_DIR}/childimage/start ] && ( source ${REPO_DIR}/childimage/start )  # <2>
-
+# Run child start scripts in a subshell to contain its environment
+# ${REPO_DIR}/childstart/ is created by setup-start.sh
+if [ -d "${REPO_DIR}/childstart/" ]; then  # <2>
+    for script in ${REPO_DIR}/childstart/*; do  # <2>
+        if [ -f "$script" ]; then  # <2>
+            echo "Sourcing script: $script"  # <2>
+            source "$script" || {  # <2>
+                echo "Error: Failed to source $script. Moving on to the next script."  # <2>
+            }  # <2>
+        fi  # <2>
+    done  # <2>
+fi  # <2>
 exec "$@"
 ```
 1. In a Docker file so no way to dynamically set environmental variables, so the `env.txt` file with the `export <var>=<value>` are source at start up.
-2. Run any child start script in a subshell. Run in a subshell to contain any `set` statements or similar.
+2. Run any child start script in a subshell. Run in a subshell to contain any `set` statements or similar. start scripts are moved into `childstarts` by the `setup-start.sh` pyrocket script.
 
 ## desktop.sh
 

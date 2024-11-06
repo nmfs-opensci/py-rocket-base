@@ -209,13 +209,15 @@ ul.task-list li input[type="checkbox"] {
 <p>py-rocket-base puts these <code>.desktop</code> files in <code>/usr/share/Desktop</code>. Typically these desktop files are in <code>~/Desktop</code>. But in a JupyterHub, the home directory is often persistent and py-rocket-base tries not to alter the user home directory. Also there might be orphaned desktop files in <code>~/Desktop</code> and so the user desktop UI would be inconsistent between users. Using <code>/usr/share/Desktop</code> does mean that users cannot add their own persistent applications to xfce4 Desktop but this would be difficult anyhow without root access in many cases.</p>
 <section id="adding-an-application-in-your-child-docker-image" class="level2" data-number="4.1">
 <h2 data-number="4.1" class="anchored" data-anchor-id="adding-an-application-in-your-child-docker-image"><span class="header-section-number">4.1</span> Adding an application in your child docker image</h2>
-<p>Use the pyrocket script, <code>install-desktop.sh</code> to set up the desktop and move your files to the proper location. Here is the code for your Docker file. This script must be run as root. It does not take any arguments. Instead you include your desktop files in a directory called <code>Desktop</code> at the base level with your Docker file.</p>
+<p>Use the pyrocket script <code>install-desktop.sh</code> to set up the desktop and move your files to the proper location. Provide a path to a directory with your Desktop files as the argument to the script. Here is the code for your Docker file. This script must be run as root.</p>
 <pre><code>USER root
-RUN /pyrocket_scripts/install-desktop.sh
+COPY ./Desktop /tmp/Desktop
+RUN /pyrocket_scripts/install-desktop.sh  /tmp/Desktop
+RUN rm -rf /tmp/Desktop
 USER ${NB_USER}</code></pre>
 <section id="create-the-desktop-directory" class="level3" data-number="4.1.1">
 <h3 data-number="4.1.1" class="anchored" data-anchor-id="create-the-desktop-directory"><span class="header-section-number">4.1.1</span> Create the Desktop directory</h3>
-<p>Create the directory and add the .desktop and optional .png and .xml files. py-rocket-base will move them to the correct places (<code>/usr/share/applications</code> and <code>/usr/share/Desktop</code>, <code>/usr/share/mime/packages</code> and icon locations).</p>
+<p>Create the directory and add the .desktop and optional .png and .xml files. The pyrocket script <code>install_desktop.sh</code> will move them to the correct places (<code>/usr/share/applications</code> and <code>/usr/share/Desktop</code>, <code>/usr/share/mime/packages</code> and icon locations).</p>
 <pre><code>your-repo/
 ├── Dockerfile
 ├── optional extra files
