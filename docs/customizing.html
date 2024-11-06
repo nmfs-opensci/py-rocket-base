@@ -210,8 +210,11 @@ ul.task-list li input[type="checkbox"] {
 <p>py-rocket-base is designed to be used in the FROM line of a Dockerfile similar to rocker images. It includes directories called <code>\pyrocket_scripts</code> and <code>\rocker_scripts</code> that will help you do common tasks for scientific docker images. You do not have to use these scripts. If you are familiar with writing Docker files, you can write your own code. The exception is installation of Desktop files. Properly adding Desktop applications to py-rocket-base requires the use of the <code>\pyrocket_scripts/install-desktop.sh</code> script. The start file is also an exception. See the discussion in the configuration files.</p>
 <p><strong>Calling the scripts</strong></p>
 <p>The format for calling the pyrocket and rocker scripts is the following.</p>
-<pre><code>RUN /pyrocket_scripts/install-conda-packages.sh environment.yml</code></pre>
-<p>Note that PATH must be given for the subshell since rocker installation scripts will fail with conda on the path.</p>
+<p>pyrocket scripts take files (or a path to a directory with Desktop files) as arguments. The <code>COPY</code> command is needed to copy the file into the Docker build context where it can be used in <code>RUN</code> commands. Without this you will get a “file not found” error. Removing the file after you are done with it will clean up your image files.</p>
+<pre><code>COPY environment.yml environment.yml
+RUN /pyrocket_scripts/install-conda-packages.sh environment.yml
+RUN rm environment.yml</code></pre>
+<p>Rocker scripts do not take arguments. Note that PATH must be given since rocker installation scripts will fail with conda on the path. The path specification is only within the specific RUN context.</p>
 <pre><code>USER root
 RUN PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin &amp;&amp; \
     /rocker_scripts/install_geospatial.sh
@@ -244,7 +247,9 @@ USER ${NB_USER}</code></pre>
 <p>Dockerfile</p>
 <pre><code>FROM ghcr.io/nmfs-opensci/py-rocket-base:latest
 
-RUN /pyrocket_scripts/install-conda-packages.sh environment.yml</code></pre>
+COPY environment.yml environment.yml
+RUN /pyrocket_scripts/install-conda-packages.sh environment.yml
+RUN rm environment.yml</code></pre>
 <p>environment.yml</p>
 <pre><code>name: optional
 channels:
@@ -262,7 +267,9 @@ dependencies:
 <p>Dockerfile</p>
 <pre><code>FROM ghcr.io/nmfs-opensci/py-rocket-base:latest
 
-RUN /pyrocket_scripts/install-r-packages.sh install.R</code></pre>
+COPY install.R install.R
+RUN /pyrocket_scripts/install-r-packages.sh install.R
+RUN rm install.R</code></pre>
 <p>install.R</p>
 <pre><code># to match rocker/verse:4.4 used in py-rocker-base
 # look up the date that the Rocker image was created and put that
@@ -280,7 +287,9 @@ install.packages(list.of.packages, repos=repo)</code></pre>
 <pre><code>FROM ghcr.io/nmfs-opensci/py-rocket-base:latest
 
 USER root
+COPY apt.txt apt.txt
 RUN /pyrocket_scripts/install-apt-packages.sh apt.txt
+RUN rm apt.txt
 USER ${NB_USER}</code></pre>
 <p>apt.txt</p>
 <pre><code># a package
