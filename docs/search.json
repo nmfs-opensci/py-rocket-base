@@ -223,8 +223,8 @@
     "objectID": "publishing.html#myst",
     "href": "publishing.html#myst",
     "title": "5  Publishing",
-    "section": "5.2 Myst",
-    "text": "5.2 Myst\njupyterlab-myst extension is installed. This is a full-featured markdown renderer.\nCreating PDFs with Myst\njupyter nbconvert --to pdf test.ipynb\nTexLive packages will not install on the fly and you will need to do tlmgr install packagename for any missing package errors you get.",
+    "section": "5.2 MyST",
+    "text": "5.2 MyST\n\n\n\n\nMyST is an Python ecosystem of tools for creating interactive scientific publications for the web or export to PDF, LaTeX and Microsoft Word. jupyterlab-myst extension is installed. Read more about MyST in JupyterLab here. The MyST VSCode extension is also installed if you are editting MyST markdown in VSCode.\n\nCreating PDFs with Myst\nYou can output to PDF like so from a terminal: jupyter nbconvert --to pdf test.ipynb. However. TexLive packages will not install on the fly and you will need to do tlmgr install packagename for any missing package errors you get.",
     "crumbs": [
       "<span class='chapter-number'>5</span>  <span class='chapter-title'>Publishing</span>"
     ]
@@ -234,7 +234,7 @@
     "href": "publishing.html#sphinx",
     "title": "5  Publishing",
     "section": "5.3 Sphinx",
-    "text": "5.3 Sphinx\nSphinx is a commonly used package for creating documentation for Python packages.",
+    "text": "5.3 Sphinx\n\n\n\n\nSphinx is a commonly used package for creating documentation for Python packages.",
     "crumbs": [
       "<span class='chapter-number'>5</span>  <span class='chapter-title'>Publishing</span>"
     ]

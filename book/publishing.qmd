@@ -31,19 +31,30 @@ quarto render --to html test.ipynb
 
 For PDF output, TexLive packages will not install on the fly and you will need to do `tlmgr install packagename` for any missing package errors you get.
 
-## Myst
+## MyST
 
-[jupyterlab-myst](https://jupyter-book.github.io/jupyterlab-myst/) extension is installed. This is a full-featured markdown renderer. 
+<div>
+<div style="float: right; position: relative; top: 0px; padding: 2px;">
+![](assets/myst.svg){width=200px}
+</div>
+
+[MyST](https://mystmd.org/) is an Python ecosystem of tools for creating interactive scientific publications for the web or export to PDF, LaTeX and Microsoft Word. [jupyterlab-myst](https://jupyter-book.github.io/jupyterlab-myst/) extension is installed. Read more about MyST in JupyterLab [here](https://mystmd.org/guide/quickstart-jupyter-lab-myst). The [MyST VSCode extension](https://marketplace.visualstudio.com/items?itemName=ExecutableBookProject.myst-highlight) is also installed if you are editting MyST markdown in VSCode.
+</div>
 
 **Creating PDFs with Myst**
 
-`jupyter nbconvert --to pdf test.ipynb`
-
-TexLive packages will not install on the fly and you will need to do `tlmgr install packagename` for any missing package errors you get.
+You can output to PDF like so from a terminal: `jupyter nbconvert --to pdf test.ipynb`.
+However. TexLive packages will not install on the fly and you will need to do `tlmgr install packagename` for any missing package errors you get.
 
 ## Sphinx
 
+<div>
+<div style="float: right; position: relative; top: 0px; padding: 2px;">
+![](assets/sphinx.png){width=200px}
+</div>
+
 [Sphinx](https://www.sphinx-doc.org/en/master/) is a commonly used package for creating documentation for Python packages.
+</div>
 
 ## TexLive
 

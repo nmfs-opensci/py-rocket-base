@@ -180,7 +180,7 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#vscode" id="toc-vscode" class="nav-link" data-scroll-target="#vscode"><span class="header-section-number">5.1.2</span> VSCode</a></li>
   <li><a href="#jupyter-lab" id="toc-jupyter-lab" class="nav-link" data-scroll-target="#jupyter-lab"><span class="header-section-number">5.1.3</span> Jupyter Lab</a></li>
   </ul></li>
-  <li><a href="#myst" id="toc-myst" class="nav-link" data-scroll-target="#myst"><span class="header-section-number">5.2</span> Myst</a></li>
+  <li><a href="#myst" id="toc-myst" class="nav-link" data-scroll-target="#myst"><span class="header-section-number">5.2</span> MyST</a></li>
   <li><a href="#sphinx" id="toc-sphinx" class="nav-link" data-scroll-target="#sphinx"><span class="header-section-number">5.3</span> Sphinx</a></li>
   <li><a href="#texlive" id="toc-texlive" class="nav-link" data-scroll-target="#texlive"><span class="header-section-number">5.4</span> TexLive</a>
   <ul class="collapse">
@@ -235,15 +235,24 @@ quarto render --to html test.ipynb</code></pre>
 </section>
 </section>
 <section id="myst" class="level2" data-number="5.2">
-<h2 data-number="5.2" class="anchored" data-anchor-id="myst"><span class="header-section-number">5.2</span> Myst</h2>
-<p><a href="https://jupyter-book.github.io/jupyterlab-myst/">jupyterlab-myst</a> extension is installed. This is a full-featured markdown renderer.</p>
+<h2 data-number="5.2" class="anchored" data-anchor-id="myst"><span class="header-section-number">5.2</span> MyST</h2>
+<div>
+<div style="float: right; position: relative; top: 0px; padding: 2px;">
+<p><img src="assets/myst.svg" class="img-fluid" width="200"></p>
+</div>
+<p><a href="https://mystmd.org/">MyST</a> is an Python ecosystem of tools for creating interactive scientific publications for the web or export to PDF, LaTeX and Microsoft Word. <a href="https://jupyter-book.github.io/jupyterlab-myst/">jupyterlab-myst</a> extension is installed. Read more about MyST in JupyterLab <a href="https://mystmd.org/guide/quickstart-jupyter-lab-myst">here</a>. The <a href="https://marketplace.visualstudio.com/items?itemName=ExecutableBookProject.myst-highlight">MyST VSCode extension</a> is also installed if you are editting MyST markdown in VSCode.</p>
+</div>
 <p><strong>Creating PDFs with Myst</strong></p>
-<p><code>jupyter nbconvert --to pdf test.ipynb</code></p>
-<p>TexLive packages will not install on the fly and you will need to do <code>tlmgr install packagename</code> for any missing package errors you get.</p>
+<p>You can output to PDF like so from a terminal: <code>jupyter nbconvert --to pdf test.ipynb</code>. However. TexLive packages will not install on the fly and you will need to do <code>tlmgr install packagename</code> for any missing package errors you get.</p>
 </section>
 <section id="sphinx" class="level2" data-number="5.3">
 <h2 data-number="5.3" class="anchored" data-anchor-id="sphinx"><span class="header-section-number">5.3</span> Sphinx</h2>
+<div>
+<div style="float: right; position: relative; top: 0px; padding: 2px;">
+<p><img src="assets/sphinx.png" class="img-fluid" width="200"></p>
+</div>
 <p><a href="https://www.sphinx-doc.org/en/master/">Sphinx</a> is a commonly used package for creating documentation for Python packages.</p>
+</div>
 </section>
 <section id="texlive" class="level2" data-number="5.4">
 <h2 data-number="5.4" class="anchored" data-anchor-id="texlive"><span class="header-section-number">5.4</span> TexLive</h2>
