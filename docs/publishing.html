@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>3&nbsp; R packages – py-rocket-base documentation</title>
+<title>5&nbsp; Publishing – py-rocket-base documentation</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -29,8 +29,8 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./desktop.html" rel="next">
-<link href="./configuration_files.html" rel="prev">
+<link href="./jupyter-config.html" rel="next">
+<link href="./desktop.html" rel="prev">
 <link href="./assets/favicon.ico" rel="icon">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -83,7 +83,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./r-packages.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">R packages</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./publishing.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Publishing</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -136,7 +136,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./r-packages.html" class="sidebar-item-text sidebar-link active">
+  <a href="./r-packages.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">R packages</span></span></a>
   </div>
 </li>
@@ -148,7 +148,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./publishing.html" class="sidebar-item-text sidebar-link">
+  <a href="./publishing.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Publishing</span></span></a>
   </div>
 </li>
@@ -174,17 +174,27 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#spatial-libraries" id="toc-spatial-libraries" class="nav-link active" data-scroll-target="#spatial-libraries"><span class="header-section-number">3.0.1</span> Spatial libraries</a></li>
-  <li><a href="#default-cran-repository" id="toc-default-cran-repository" class="nav-link" data-scroll-target="#default-cran-repository"><span class="header-section-number">3.0.2</span> Default CRAN repository</a></li>
+  <li><a href="#quarto" id="toc-quarto" class="nav-link active" data-scroll-target="#quarto"><span class="header-section-number">5.1</span> Quarto</a>
+  <ul class="collapse">
+  <li><a href="#rstudio" id="toc-rstudio" class="nav-link" data-scroll-target="#rstudio"><span class="header-section-number">5.1.1</span> RStudio</a></li>
+  <li><a href="#vscode" id="toc-vscode" class="nav-link" data-scroll-target="#vscode"><span class="header-section-number">5.1.2</span> VSCode</a></li>
+  <li><a href="#jupyter-lab" id="toc-jupyter-lab" class="nav-link" data-scroll-target="#jupyter-lab"><span class="header-section-number">5.1.3</span> Jupyter Lab</a></li>
+  </ul></li>
+  <li><a href="#myst" id="toc-myst" class="nav-link" data-scroll-target="#myst"><span class="header-section-number">5.2</span> Myst</a></li>
+  <li><a href="#sphinx" id="toc-sphinx" class="nav-link" data-scroll-target="#sphinx"><span class="header-section-number">5.3</span> Sphinx</a></li>
+  <li><a href="#texlive" id="toc-texlive" class="nav-link" data-scroll-target="#texlive"><span class="header-section-number">5.4</span> TexLive</a>
+  <ul class="collapse">
+  <li><a href="#installing-new-texlive-packages" id="toc-installing-new-texlive-packages" class="nav-link" data-scroll-target="#installing-new-texlive-packages"><span class="header-section-number">5.4.1</span> Installing new TexLive packages</a></li>
+  </ul></li>
   </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/nmfs-opensci/py-rocket-base/edit/main/r-packages.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/nmfs-opensci/py-rocket-base/blob/main/r-packages.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/nmfs-opensci/py-rocket-base/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+<div class="toc-actions"><ul><li><a href="https://github.com/nmfs-opensci/py-rocket-base/edit/main/publishing.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/nmfs-opensci/py-rocket-base/blob/main/publishing.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/nmfs-opensci/py-rocket-base/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">R packages</span></h1>
+<h1 class="title"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Publishing</span></h1>
 </div>
 
 
@@ -201,36 +211,66 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>To install extra R packages, use <code>install.R</code>. This is treated as an R script which is run. For example, you can have a script like</p>
-<p>install.R</p>
-<pre><code>repo &lt;- "https://p3m.dev/cran/__linux__/jammy/2024-05-13"
-list.of.packages &lt;- c("ggplot2","remotes")
-install.packages(list.of.packages, repos=repo)
-remotes::install_github("hadley/httr@v0.4")</code></pre>
-<section id="spatial-libraries" class="level3" data-number="3.0.1">
-<h3 data-number="3.0.1" class="anchored" data-anchor-id="spatial-libraries"><span class="header-section-number">3.0.1</span> Spatial libraries</h3>
-<p>Some packages depend on linux packages. One example are spatial packages like <code>sf</code> which depend on GDAL. In this case</p>
-<pre><code>install.packages("sf")</code></pre>
-<p>will not work because it will not install the linux package dependencies.</p>
-<p>There are a few ways to get around this.</p>
-<ul>
-<li><p>Install the necessary linux packages via apt-get. This can be hard.</p></li>
-<li><p>Install via via /rocker_scipts/install_geospatial.sh To do this include</p>
-<pre><code>RUN /rocker_scipts/install_geospatial.sh</code></pre>
-<p>in your Dockerfile.</p></li>
-<li><p>Use r2u which has Ubuntu binaries with all the dependencies included.</p></li>
-</ul>
+<p>py-rocket-base has a number of packages to help with creation of documentation, books and webpages from content: Sphinx, Quarto, and Myst. Pandoc is installed which allows output to many different formats including html, Word, markdown and PDF. TexLive (for PDF output) is installed with tlmgr to handle package installation.</p>
+<section id="quarto" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="quarto"><span class="header-section-number">5.1</span> Quarto</h2>
+<p><img src="assets/quarto-illustration.png" class="img-fluid"></p>
+<p>Quarto is a full-feature platform for creation of documents, books and webpages in a variety of formats. Explore the documentation at <a href="https://quarto.org/">https://quarto.org/</a>. You can use Quarto in JupyterLab, RStudio or VSCode. RStudio has the most featured integration followed by VSCode. JupyterLab integration is somewhat minimal.</p>
+<section id="rstudio" class="level3" data-number="5.1.1">
+<h3 data-number="5.1.1" class="anchored" data-anchor-id="rstudio"><span class="header-section-number">5.1.1</span> RStudio</h3>
+<p>Quarto is fully integrated with RStudio. Use the Render and Build buttons.</p>
+<p><strong>Special note regarding creating pdfs</strong></p>
+<p>Rendering to PDF or <code>format: pdf</code> should work fine and packages will be installed on the fly. But the package installations will not persist and you will need to install them again after you restart the server.</p>
 </section>
-<section id="default-cran-repository" class="level3" data-number="3.0.2">
-<h3 data-number="3.0.2" class="anchored" data-anchor-id="default-cran-repository"><span class="header-section-number">3.0.2</span> Default CRAN repository</h3>
-<p>The default CRAN repository is set in ${R_HOME}/etc/Rprofile.site and the CRAN environmental variable to</p>
-<pre><code>https://p3m.dev/cran/__linux__/jammy/latest</code></pre>
-<p>To set a different repo, edit ${R_HOME}/etc/Rprofile.site or specify the repo to use in <code>install.packages()</code> like so</p>
-<pre><code>repo &lt;- "https://p3m.dev/cran/__linux__/jammy/2024-05-13"
-list.of.packages &lt;- c("maps", "mapdata", "RColorBrewer")
-install.packages(list.of.packages, repos=repo)</code></pre>
+<section id="vscode" class="level3" data-number="5.1.2">
+<h3 data-number="5.1.2" class="anchored" data-anchor-id="vscode"><span class="header-section-number">5.1.2</span> VSCode</h3>
+<p>The VSCode Quarto extension is installed. This provides many nice features. Read about them on the Quarto <a href="https://quarto.org/docs/tools/vscode.html">VSCode</a> page. The extension includes keyboard shortcuts for rendering or you can render from a terminal.</p>
+</section>
+<section id="jupyter-lab" class="level3" data-number="5.1.3">
+<h3 data-number="5.1.3" class="anchored" data-anchor-id="jupyter-lab"><span class="header-section-number">5.1.3</span> Jupyter Lab</h3>
+<p>The <code>jupyterlab-quarto</code> package is installed which allows Quarto markdown to be rendered in markdown cells in Jupyter notebooks (ipynb). But you will need to render from a terminal. Quarto render both <code>qmd</code> and <code>ipynb</code> files. Read about using Quarto with JupyterLab on this Quarto <a href="https://quarto.org/docs/tools/jupyter-lab.html">page</a>. For example,</p>
+<pre><code>quarto render --to pdf test.qmd
+quarto render --to html test.ipynb</code></pre>
+<p>For PDF output, TexLive packages will not install on the fly and you will need to do <code>tlmgr install packagename</code> for any missing package errors you get.</p>
+</section>
+</section>
+<section id="myst" class="level2" data-number="5.2">
+<h2 data-number="5.2" class="anchored" data-anchor-id="myst"><span class="header-section-number">5.2</span> Myst</h2>
+<p><a href="https://jupyter-book.github.io/jupyterlab-myst/">jupyterlab-myst</a> extension is installed. This is a full-featured markdown renderer.</p>
+<p><strong>Creating PDFs with Myst</strong></p>
+<p><code>jupyter nbconvert --to pdf test.ipynb</code></p>
+<p>TexLive packages will not install on the fly and you will need to do <code>tlmgr install packagename</code> for any missing package errors you get.</p>
+</section>
+<section id="sphinx" class="level2" data-number="5.3">
+<h2 data-number="5.3" class="anchored" data-anchor-id="sphinx"><span class="header-section-number">5.3</span> Sphinx</h2>
+<p><a href="https://www.sphinx-doc.org/en/master/">Sphinx</a> is a commonly used package for creating documentation for Python packages.</p>
+</section>
+<section id="texlive" class="level2" data-number="5.4">
+<h2 data-number="5.4" class="anchored" data-anchor-id="texlive"><span class="header-section-number">5.4</span> TexLive</h2>
+<div>
+<div style="float: right; position: relative; top: 0px; padding: 2px;">
+<p><img src="assets/texlive.png" class="img-fluid"></p>
+</div>
+<p>py-rocket-base has Quarto and Myst installed along with pandoc and TeXLive for output to PDF. The tlmgr is used (and must be used) to manage packages.</p>
+</div>
+<section id="installing-new-texlive-packages" class="level3" data-number="5.4.1">
+<h3 data-number="5.4.1" class="anchored" data-anchor-id="installing-new-texlive-packages"><span class="header-section-number">5.4.1</span> Installing new TexLive packages</h3>
+<p>tlmgr must be used.</p>
+<ul>
+<li>Do not use <code>apt-get</code> to install texlive packages. This will turn off tlmgr (the TeX package manager). Instead use</li>
+</ul>
+<pre><code>tlmgr install &lt;package&gt;</code></pre>
+<ul>
+<li>Run <code>tlmgr option</code> to make sure tlmgr is working.</li>
+</ul>
+<p>Unfortunately any packages you install will be in the <code>/opt</code> directory and this gets recreated every time you restart your server. So if you need a particular package you will need to keep installing it. Or create your own image based on py-rocket-base:</p>
+<p>Dockerfile</p>
+<pre><code>FROM ghcr.io/nmfs-opensci/py-rocket-base:latest
+
+RUN tlmgr install collection-latexrecommended &amp;&amp; tlmgr clean --all</code></pre>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->
@@ -800,13 +840,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./configuration_files.html" class="pagination-link" aria-label="Customization scripts">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Customization scripts</span></span>
+      <a href="./desktop.html" class="pagination-link" aria-label="Desktop">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Desktop</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./desktop.html" class="pagination-link" aria-label="Desktop">
-        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Desktop</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./jupyter-config.html" class="pagination-link" aria-label="Customizing Jupyter">
+        <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Customizing Jupyter</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
@@ -815,4 +855,4 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 
 
 
-<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/nmfs-opensci/py-rocket-base/edit/main/r-packages.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/nmfs-opensci/py-rocket-base/blob/main/r-packages.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/nmfs-opensci/py-rocket-base/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/nmfs-opensci/py-rocket-base/edit/main/publishing.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/nmfs-opensci/py-rocket-base/blob/main/publishing.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/nmfs-opensci/py-rocket-base/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>

@@ -200,53 +200,53 @@
     ]
   },
   {
-    "objectID": "tex.html",
-    "href": "tex.html",
-    "title": "5  Creating PDFs",
+    "objectID": "publishing.html",
+    "href": "publishing.html",
+    "title": "5  Publishing",
     "section": "",
-    "text": "5.1 tlmgr",
+    "text": "5.1 Quarto\nQuarto is a full-feature platform for creation of documents, books and webpages in a variety of formats. Explore the documentation at https://quarto.org/. You can use Quarto in JupyterLab, RStudio or VSCode. RStudio has the most featured integration followed by VSCode. JupyterLab integration is somewhat minimal.",
     "crumbs": [
-      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Creating PDFs</span>"
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Publishing</span>"
     ]
   },
   {
-    "objectID": "tex.html#tlmgr",
-    "href": "tex.html#tlmgr",
-    "title": "5  Creating PDFs",
+    "objectID": "publishing.html#quarto",
+    "href": "publishing.html#quarto",
+    "title": "5  Publishing",
     "section": "",
-    "text": "Do not use apt-get to install texlive packages. This will turn off tlmgr (the TeX package manager). Instead use\n\ntlmgr install &lt;package&gt;\n\nRun tlmgr option to make sure tlmgr is working.",
+    "text": "5.1.1 RStudio\nQuarto is fully integrated with RStudio. Use the Render and Build buttons.\nSpecial note regarding creating pdfs\nRendering to PDF or format: pdf should work fine and packages will be installed on the fly. But the package installations will not persist and you will need to install them again after you restart the server.\n\n\n5.1.2 VSCode\nThe VSCode Quarto extension is installed. This provides many nice features. Read about them on the Quarto VSCode page. The extension includes keyboard shortcuts for rendering or you can render from a terminal.\n\n\n5.1.3 Jupyter Lab\nThe jupyterlab-quarto package is installed which allows Quarto markdown to be rendered in markdown cells in Jupyter notebooks (ipynb). But you will need to render from a terminal. Quarto render both qmd and ipynb files. Read about using Quarto with JupyterLab on this Quarto page. For example,\nquarto render --to pdf test.qmd\nquarto render --to html test.ipynb\nFor PDF output, TexLive packages will not install on the fly and you will need to do tlmgr install packagename for any missing package errors you get.",
     "crumbs": [
-      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Creating PDFs</span>"
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Publishing</span>"
     ]
   },
   {
-    "objectID": "tex.html#installing-packages",
-    "href": "tex.html#installing-packages",
-    "title": "5  Creating PDFs",
-    "section": "5.2 Installing packages",
-    "text": "5.2 Installing packages\nUnfortunately any packages you install will be in the /opt directory and this gets recreated every time you restart your server. So if you need a particular package you will need to keep installing it. Or create your own image based on py-rocket-base:\nDockerfile\nFROM ghcr.io/nmfs-opensci/py-rocket-base:latest\n\nRUN tlmgr install collection-latexrecommended && tlmgr clean --all",
+    "objectID": "publishing.html#myst",
+    "href": "publishing.html#myst",
+    "title": "5  Publishing",
+    "section": "5.2 Myst",
+    "text": "5.2 Myst\njupyterlab-myst extension is installed. This is a full-featured markdown renderer.\nCreating PDFs with Myst\njupyter nbconvert --to pdf test.ipynb\nTexLive packages will not install on the fly and you will need to do tlmgr install packagename for any missing package errors you get.",
     "crumbs": [
-      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Creating PDFs</span>"
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Publishing</span>"
     ]
   },
   {
-    "objectID": "tex.html#rstudio-creating-pdfs-with-quarto-or-rmarkdown",
-    "href": "tex.html#rstudio-creating-pdfs-with-quarto-or-rmarkdown",
-    "title": "5  Creating PDFs",
-    "section": "5.3 RStudio: Creating pdfs with Quarto or RMarkdown",
-    "text": "5.3 RStudio: Creating pdfs with Quarto or RMarkdown\nKnit to PDF or format: pdf should work fine and packages will be installed on the fly. But the package installations will not persist and you will need to install them again after you restart the server.",
+    "objectID": "publishing.html#sphinx",
+    "href": "publishing.html#sphinx",
+    "title": "5  Publishing",
+    "section": "5.3 Sphinx",
+    "text": "5.3 Sphinx\nSphinx is a commonly used package for creating documentation for Python packages.",
     "crumbs": [
-      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Creating PDFs</span>"
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Publishing</span>"
     ]
   },
   {
-    "objectID": "tex.html#jupyter-lab",
-    "href": "tex.html#jupyter-lab",
-    "title": "5  Creating PDFs",
-    "section": "5.4 Jupyter Lab",
-    "text": "5.4 Jupyter Lab\nMyst and Quarto are installed so this works:\nCreating pdfs from a Jupyter notebook: jupyter nbconvert --to pdf test.ipynb\nCreating pdfs from a Quarto notebook: quarto render --to pdf test.qmd\nPackages will not install on the fly and you will need to do tlmgr install packagename for any missing package errors you get.",
+    "objectID": "publishing.html#texlive",
+    "href": "publishing.html#texlive",
+    "title": "5  Publishing",
+    "section": "5.4 TexLive",
+    "text": "5.4 TexLive\n\n\n\n\npy-rocket-base has Quarto and Myst installed along with pandoc and TeXLive for output to PDF. The tlmgr is used (and must be used) to manage packages.\n\n\n5.4.1 Installing new TexLive packages\ntlmgr must be used.\n\nDo not use apt-get to install texlive packages. This will turn off tlmgr (the TeX package manager). Instead use\n\ntlmgr install &lt;package&gt;\n\nRun tlmgr option to make sure tlmgr is working.\n\nUnfortunately any packages you install will be in the /opt directory and this gets recreated every time you restart your server. So if you need a particular package you will need to keep installing it. Or create your own image based on py-rocket-base:\nDockerfile\nFROM ghcr.io/nmfs-opensci/py-rocket-base:latest\n\nRUN tlmgr install collection-latexrecommended && tlmgr clean --all",
     "crumbs": [
-      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Creating PDFs</span>"
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Publishing</span>"
     ]
   },
   {

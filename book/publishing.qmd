@@ -1,0 +1,79 @@
+# Publishing
+
+py-rocket-base has a number of packages to help with creation of documentation, books and webpages from content: Sphinx, Quarto, and Myst. Pandoc is installed which allows output to many different formats including html, Word, markdown and PDF. TexLive (for PDF output) is installed with tlmgr to handle package installation.
+
+## Quarto
+
+![](assets/quarto-illustration.png)
+
+Quarto is a full-feature platform for creation of documents, books and webpages in a variety of formats. Explore the documentation at [https://quarto.org/](https://quarto.org/). You can use Quarto in JupyterLab, RStudio or VSCode. RStudio has the most featured integration followed by VSCode. JupyterLab integration is somewhat minimal.
+
+### RStudio
+
+Quarto is fully integrated with RStudio. Use the Render and Build buttons.
+
+**Special note regarding creating pdfs**
+
+Rendering to PDF or `format: pdf` should work fine and packages will be installed on the fly. But the package installations will not persist and you will need to install them again after you restart the server.
+
+### VSCode
+
+The VSCode Quarto extension is installed. This provides many nice features. Read about them on the Quarto [VSCode](https://quarto.org/docs/tools/vscode.html) page. The extension includes keyboard shortcuts for rendering or you can render from a terminal.
+
+### Jupyter Lab
+
+The `jupyterlab-quarto` package is installed which allows Quarto markdown to be rendered in markdown cells in Jupyter notebooks (ipynb). But you will need to render from a terminal. Quarto render both `qmd` and `ipynb` files. Read about using Quarto with JupyterLab on this Quarto [page](https://quarto.org/docs/tools/jupyter-lab.html). For example,
+
+```
+quarto render --to pdf test.qmd
+quarto render --to html test.ipynb
+```
+
+For PDF output, TexLive packages will not install on the fly and you will need to do `tlmgr install packagename` for any missing package errors you get.
+
+## Myst
+
+[jupyterlab-myst](https://jupyter-book.github.io/jupyterlab-myst/) extension is installed. This is a full-featured markdown renderer. 
+
+**Creating PDFs with Myst**
+
+`jupyter nbconvert --to pdf test.ipynb`
+
+TexLive packages will not install on the fly and you will need to do `tlmgr install packagename` for any missing package errors you get.
+
+## Sphinx
+
+[Sphinx](https://www.sphinx-doc.org/en/master/) is a commonly used package for creating documentation for Python packages.
+
+## TexLive
+
+<div>
+<div style="float: right; position: relative; top: 0px; padding: 2px;">
+![](assets/texlive.png)
+</div>
+
+py-rocket-base has Quarto and Myst installed along with pandoc and TeXLive for output to PDF. The tlmgr is used (and must be used) to manage packages. 
+
+</div>
+
+
+### Installing new TexLive packages
+
+tlmgr must be used.
+
+* Do not use `apt-get` to install texlive packages. This will turn off tlmgr (the TeX package manager). Instead use
+```
+tlmgr install <package>
+```
+* Run `tlmgr option` to make sure tlmgr is working.
+
+Unfortunately any packages you install will be in the `/opt` directory and this gets recreated every time you restart your server. So if you need a
+particular package you will need to keep installing it. Or create your own image based on py-rocket-base:
+
+Dockerfile
+```
+FROM ghcr.io/nmfs-opensci/py-rocket-base:latest
+
+RUN tlmgr install collection-latexrecommended && tlmgr clean --all
+```
+
