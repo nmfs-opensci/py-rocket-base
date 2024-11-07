@@ -14,9 +14,9 @@ SCRIPT_FILE="$1"
 
 # Check the user and output which user the script is running as
 if [[ $(id -u) -eq 0 ]]; then
-    echo "  Running run-postbuild.sh as root."
+    echo "Running run-postbuild.sh as root."
 else
-    echo "  Running run-postbuild.sh as ${NB_USER}."
+    echo "Running run-postbuild.sh as ${NB_USER}."
 fi
 
 # Verify that SCRIPT_FILE exists and is a file
