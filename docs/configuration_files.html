@@ -148,8 +148,8 @@ ul.task-list li input[type="checkbox"] {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./tex.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Creating PDFs</span></span></a>
+  <a href="./publishing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Publishing</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -183,7 +183,8 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#install-apt-packages.sh" id="toc-install-apt-packages.sh" class="nav-link" data-scroll-target="#install-apt-packages.sh"><span class="header-section-number">2.4</span> install-apt-packages.sh</a></li>
   <li><a href="#run-postbuild.sh" id="toc-run-postbuild.sh" class="nav-link" data-scroll-target="#run-postbuild.sh"><span class="header-section-number">2.5</span> run-postbuild.sh</a></li>
   <li><a href="#setup-start.sh" id="toc-setup-start.sh" class="nav-link" data-scroll-target="#setup-start.sh"><span class="header-section-number">2.6</span> setup-start.sh</a></li>
-  <li><a href="#desktop-applications" id="toc-desktop-applications" class="nav-link" data-scroll-target="#desktop-applications"><span class="header-section-number">2.7</span> Desktop applications</a></li>
+  <li><a href="#install-vscode-extensions.sh" id="toc-install-vscode-extensions.sh" class="nav-link" data-scroll-target="#install-vscode-extensions.sh"><span class="header-section-number">2.7</span> install-vscode-extensions.sh</a></li>
+  <li><a href="#desktop-applications" id="toc-desktop-applications" class="nav-link" data-scroll-target="#desktop-applications"><span class="header-section-number">2.8</span> Desktop applications</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/nmfs-opensci/py-rocket-base/edit/main/configuration_files.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/nmfs-opensci/py-rocket-base/blob/main/configuration_files.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/nmfs-opensci/py-rocket-base/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
@@ -215,6 +216,7 @@ ul.task-list li input[type="checkbox"] {
 <li><code>install-pip-packages.sh</code></li>
 <li><code>install-r-packages.sh</code></li>
 <li><code>install-apt-packages.sh</code></li>
+<li><code>install-vscode-extensions.sh</code></li>
 <li><code>install-desktop.sh</code></li>
 <li><code>setup-start.sh</code></li>
 <li><code>run-postbuild.sh</code></li>
@@ -311,8 +313,20 @@ set -e
 RUN /pyrocket_scripts/setup-start.sh start
 RUN rm start</code></pre>
 </section>
-<section id="desktop-applications" class="level2" data-number="2.7">
-<h2 data-number="2.7" class="anchored" data-anchor-id="desktop-applications"><span class="header-section-number">2.7</span> Desktop applications</h2>
+<section id="install-vscode-extensions.sh" class="level2" data-number="2.7">
+<h2 data-number="2.7" class="anchored" data-anchor-id="install-vscode-extensions.sh"><span class="header-section-number">2.7</span> install-vscode-extensions.sh</h2>
+<p>The <code>install-vscode-extensions.sh</code> script will add VSCode extensions.</p>
+<pre><code>COPY vscode-extensions.txt vscode-extensions.txt
+RUN /pyrocket_scripts/install-vscode-extensions.sh vscode-extensions.txt
+RUN rm vscode-extensions.txt</code></pre>
+<p>vscode-extensions.txt</p>
+<pre><code>gitlens
+indent-rainbow
+code-spell-checker
+prettier</code></pre>
+</section>
+<section id="desktop-applications" class="level2" data-number="2.8">
+<h2 data-number="2.8" class="anchored" data-anchor-id="desktop-applications"><span class="header-section-number">2.8</span> Desktop applications</h2>
 <p>See the <a href="desktop.html">chapter on Desktop applications</a>.</p>
 
 

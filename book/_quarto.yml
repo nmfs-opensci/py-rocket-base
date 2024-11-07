@@ -21,7 +21,7 @@ book:
     - configuration_files.qmd
     - r-packages.qmd
     - desktop.qmd
-    - tex.qmd
+    - publishing.qmd
     - jupyter-config.qmd
     - developers.qmd
 

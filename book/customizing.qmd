@@ -12,6 +12,7 @@ How to use the helper scripts is shown in [configuration files](configuration_fi
 * `install-pip-packages.sh`
 * `install-r-packages.sh`
 * `install-apt-packages.sh`
+* `install-vscode-extensions.sh`
 * `install-desktop.sh`
 * `setup-start.sh`
 * `run-postbuild.sh`
