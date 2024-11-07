@@ -1,4 +1,4 @@
 ms-python.python
 ms-toolsai.jupyter
 quarto.quarto
-MyST-Markdown
+ExecutableBookProject.myst-highlight
