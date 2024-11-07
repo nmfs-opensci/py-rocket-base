@@ -65,3 +65,4 @@ dependencies:
   - pip:
     # Access linux desktop from inside JupyterHub
     - jupyter-remote-desktop-proxy
+    - jupyterlab-quarto # enable quarto features in markdown cells
