@@ -12,6 +12,12 @@ fi
 
 ext_file="$1"
 
+# Verify that ext_file exists and is a file
+if [ ! -f "${SCRIPT_FILE}" ]; then
+    echo "  Error: Specified file '$ext_file' does not exist."
+    exit 1
+fi
+
 echo "Checking for '$ext_file'..."
 
 if test -f "$ext_file"
