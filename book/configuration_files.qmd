@@ -6,6 +6,7 @@ The helper scripts at `/pyrocket_scripts` in the image scripts to help do common
 * `install-pip-packages.sh`
 * `install-r-packages.sh`
 * `install-apt-packages.sh`
+* `install-vscode-extensions.sh`
 * `install-desktop.sh`
 * `setup-start.sh`
 * `run-postbuild.sh`
@@ -145,6 +146,24 @@ The `setup-start.sh` script will move the file you provide into `${REPO_DIR}/chi
 COPY start start
 RUN /pyrocket_scripts/setup-start.sh start
 RUN rm start
+```
+
+## install-vscode-extensions.sh
+
+The `install-vscode-extensions.sh` script will add VSCode extensions.
+
+```
+COPY vscode-extensions.txt vscode-extensions.txt
+RUN /pyrocket_scripts/install-vscode-extensions.sh vscode-extensions.txt
+RUN rm vscode-extensions.txt
+```
+
+vscode-extensions.txt
+```
+gitlens
+indent-rainbow
+code-spell-checker
+prettier
 ```
 
 ## Desktop applications

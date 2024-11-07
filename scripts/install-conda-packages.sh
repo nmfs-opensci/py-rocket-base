@@ -40,9 +40,9 @@ elif grep -q "name:" "$ENV_FILE"; then
     INSTALLATION_HAPPENED=true
 else
     # If neither condition matches, output a helpful error message
-    echo "Error: Unrecognized file format in '${env_file}'."
-    echo "  - For an environment.yml file, ensure it includes a 'name:' entry. Any name is acceptable."
-    echo "  - For a conda-lock.yml file, ensure it includes a 'lock_set:' entry."
+    echo "  Error: Unrecognized file format in '${env_file}'."
+    echo "    - For an environment.yml file, ensure it includes a 'name:' entry. Any name is acceptable."
+    echo "    - For a conda-lock.yml file, ensure it includes a 'lock_set:' entry."
     exit 1
 fi
 
@@ -53,6 +53,20 @@ if [ "$INSTALLATION_HAPPENED" = true ]; then
     find ${CONDA_DIR} -follow -type f -name '*.js.map' -delete
     if ls ${NB_PYTHON_PREFIX}/lib/python*/site-packages/bokeh/server/static > /dev/null 2>&1; then
         find ${NB_PYTHON_PREFIX}/lib/python*/site-packages/bokeh/server/static -follow -type f -name '*.js' ! -name '*.min.js' -delete
+    fi
+
+    # Updating the notebook environment sometimes gets rid of pip installed packages.
+    # Make sure the core environment didn't get damaged.
+    # Check if jupyterlab-quarto is installed, and reinstall if missing
+    if ! python -m pip show jupyterlab-quarto > /dev/null 2>&1; then
+        echo "  Reinstalling jupyterlab-quarto..."
+        python -m pip install jupyterlab-quarto
+    fi
+
+    # Check if jupyter-remote-desktop-proxy is installed, and reinstall if missing
+    if ! python -m pip show jupyter-remote-desktop-proxy > /dev/null 2>&1; then
+        echo "  Reinstalling jupyter-remote-desktop-proxy..."
+        python -m pip install jupyter-remote-desktop-proxy
     fi
 fi
 
