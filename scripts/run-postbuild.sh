@@ -12,18 +12,19 @@ fi
 # Set SCRIPT_FILE to the provided argument
 SCRIPT_FILE="$1"
 
+# Check the user and output which user the script is running as
+if [[ $(id -u) -eq 0 ]]; then
+    echo "Running run-postbuild.sh as root."
+else
+    echo "Running run-postbuild.sh as ${NB_USER}."
+fi
+
 # Verify that SCRIPT_FILE exists and is a file
 if [ ! -f "${SCRIPT_FILE}" ]; then
     echo "  Error: Specified script file '${SCRIPT_FILE}' does not exist."
     exit 1
 fi
 
-# Check the user and output which user the script is running as
-if [[ $(id -u) -eq 0 ]]; then
-    echo "  Running run-postbuild.sh as root."
-else
-    echo "  Running run-postbuild.sh as ${NB_USER}."
-fi
 
 # Make the script executable and run it
 chmod +x "${SCRIPT_FILE}"
