@@ -44,7 +44,7 @@
     "href": "customizing.html#helper-scripts",
     "title": "1  Using py-rocket-base",
     "section": "",
-    "text": "1.1.1 pyrocket scripts\nHow to use the helper scripts is shown in configuration files. The helper scripts provide code to do common tasks. Users can write their own Docker file code to do these tasks but the helper scripts provide standardized code. The scripts are\n\ninstall-conda-packages.sh\ninstall-pip-packages.sh\ninstall-r-packages.sh\ninstall-apt-packages.sh\ninstall-desktop.sh\nsetup-start.sh\nrun-postbuild.sh\n\n\n\n1.1.2 rocker scripts\nThe rocker docker stack also includes a set of scripts for extending rocker packages. These are included py-rocket-base.\n\n\n1.1.3 Calling the scripts\nThe format for calling the pyrocket and rocker scripts is the following.\npyrocket scripts take files (or a path to a directory with Desktop files) as arguments. The COPY command is needed to copy the file into the Docker build context where it can be used in RUN commands. Without this you will get a “file not found” error. Removing the file after you are done with it will clean up your image files.\nCOPY environment.yml environment.yml\nRUN /pyrocket_scripts/install-conda-packages.sh environment.yml\nRUN rm environment.yml\nRocker scripts do not take arguments. Note that PATH must be given since rocker installation scripts will fail with conda on the path. The path specification is only within the specific RUN context.\nUSER root\nRUN PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin && \\\n    /rocker_scripts/install_geospatial.sh\nUSER ${NB_USER}",
+    "text": "1.1.1 pyrocket scripts\nHow to use the helper scripts is shown in configuration files. The helper scripts provide code to do common tasks. Users can write their own Docker file code to do these tasks but the helper scripts provide standardized code. The scripts are\n\ninstall-conda-packages.sh\ninstall-pip-packages.sh\ninstall-r-packages.sh\ninstall-apt-packages.sh\ninstall-vscode-extensions.sh\ninstall-desktop.sh\nsetup-start.sh\nrun-postbuild.sh\n\n\n\n1.1.2 rocker scripts\nThe rocker docker stack also includes a set of scripts for extending rocker packages. These are included py-rocket-base.\n\n\n1.1.3 Calling the scripts\nThe format for calling the pyrocket and rocker scripts is the following.\npyrocket scripts take files (or a path to a directory with Desktop files) as arguments. The COPY command is needed to copy the file into the Docker build context where it can be used in RUN commands. Without this you will get a “file not found” error. Removing the file after you are done with it will clean up your image files.\nCOPY environment.yml environment.yml\nRUN /pyrocket_scripts/install-conda-packages.sh environment.yml\nRUN rm environment.yml\nRocker scripts do not take arguments. Note that PATH must be given since rocker installation scripts will fail with conda on the path. The path specification is only within the specific RUN context.\nUSER root\nRUN PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin && \\\n    /rocker_scripts/install_geospatial.sh\nUSER ${NB_USER}",
     "crumbs": [
       "<span class='chapter-number'>1</span>  <span class='chapter-title'>Using py-rocket-base</span>"
     ]
@@ -140,11 +140,21 @@
     ]
   },
   {
+    "objectID": "configuration_files.html#install-vscode-extensions.sh",
+    "href": "configuration_files.html#install-vscode-extensions.sh",
+    "title": "2  Customization scripts",
+    "section": "2.7 install-vscode-extensions.sh",
+    "text": "2.7 install-vscode-extensions.sh\nThe install-vscode-extensions.sh script will add VSCode extensions.\nCOPY vscode-extensions.txt vscode-extensions.txt\nRUN /pyrocket_scripts/install-vscode-extensions.sh vscode-extensions.txt\nRUN rm vscode-extensions.txt\nvscode-extensions.txt\ngitlens\nindent-rainbow\ncode-spell-checker\nprettier",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Customization scripts</span>"
+    ]
+  },
+  {
     "objectID": "configuration_files.html#desktop-applications",
     "href": "configuration_files.html#desktop-applications",
     "title": "2  Customization scripts",
-    "section": "2.7 Desktop applications",
-    "text": "2.7 Desktop applications\nSee the chapter on Desktop applications.",
+    "section": "2.8 Desktop applications",
+    "text": "2.8 Desktop applications\nSee the chapter on Desktop applications.",
     "crumbs": [
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Customization scripts</span>"
     ]
