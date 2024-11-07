@@ -56,7 +56,7 @@ RUN chown -R root:staff /pyrocket_scripts && \
     chmod -R 775 /pyrocket_scripts
 
 # Some basic VS Code extensions
-RUN /pyrocket_scripts/install-vscode-ext.sh ${REPO_DIR}/vscode-extensions.txt
+RUN /pyrocket_scripts/install-vscode-extensions.sh ${REPO_DIR}/vscode-extensions.txt
 
 # Convert NB_USER to ENV (from ARG) so that it passes to the child dockerfile
 ENV NB_USER=${NB_USER}
