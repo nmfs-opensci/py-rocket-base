@@ -4,7 +4,7 @@
     "href": "index.html",
     "title": "py-rocket-base documentation",
     "section": "",
-    "text": "Introduction\nghcr.io/nmfs-opensci/py-rocket-base:latest\nThe py-rocket-base image is a base image for JupyterHubs with Jupyter Lab, RStudio, Desktop, and VSCode UIs. What makes py-rocket-base unique, is that the RStudio UI (via /rstudio) is a R and RStudio environment installed with Rocker installation scripts1. Thus all the Rocker design choices and R/RStudio environment choices are in that UI. Properly setting up environments to work properly with spatial libraries and HPC libraries is tricky. py-rocket-base solves this problem (and the associated maintenance of installation scripts) by using Rocker installation scripts.\nThe base image has the following support:",
+    "text": "Introduction\nghcr.io/nmfs-opensci/py-rocket-base:latest\nThe base image has the following support:",
     "crumbs": [
       "Introduction"
     ]
@@ -14,7 +14,7 @@
     "href": "index.html#using-the-image",
     "title": "py-rocket-base documentation",
     "section": "Using the image",
-    "text": "Using the image\nInclude a Dockerfile in your repository with the following from line:\nFROM ghcr.io/nmfs-opensci/py-rocket-base:latest\nFor simple extensions of py-rocket-base, this is the only line you need in the Dockerfile. py-rocket-base includes directories called \\pyrocket_scripts and \\rocker_scripts that will help you do common tasks for scientific docker images. You do not have to use these scripts, but they can help you do these standard tasks. If you are familiar with writing Docker files, you can also write your own code. The exception is installation of Desktop files. Properly adding Desktop applications to py-rocket-base requires the use of the \\pyrocket_scripts/install-desktop.sh script. The start file is also an exception. See the discussion in the configuration files. See the documentation on using the base image.\nThis work is related to the work on the NMFS Open Science docker stack.",
+    "text": "Using the image\nInclude a Dockerfile in your repository with the following from line:\nFROM ghcr.io/nmfs-opensci/py-rocket-base:latest\nTo extend the base image, see the documentation on using the base image. py-rocket-base includes directories called \\pyrocket_scripts and \\rocker_scripts that will help you do common tasks for extending scientific docker images. You do not have to use these scripts, but they can help you do standard installation tasks (and some tasks like properly setting up GDAL) require some experience. If you are familiar with writing Docker files, you can write your own code in your Docker file.\nThere is one exception and that is the installation of Desktop files. Properly adding Desktop applications to py-rocket-base requires the use of the \\pyrocket_scripts/install-desktop.sh script. Setting up the start file (a script that runs after the user server is started) is also unique. See the documentation.\nThis work is part of a large effort: the NMFS Open Science docker stack.",
     "crumbs": [
       "Introduction"
     ]
@@ -24,7 +24,7 @@
     "href": "index.html#footnotes",
     "title": "py-rocket-base documentation",
     "section": "",
-    "text": "See the Developer section other approaches for installing R/RStudio and the design goals for py-rocket-base.↩︎",
+    "text": "See the Developer section of the documentation for other approaches for installing R/RStudio and the design goals for py-rocket-base.↩︎",
     "crumbs": [
       "Introduction"
     ]
