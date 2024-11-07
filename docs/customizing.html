@@ -249,7 +249,7 @@ USER ${NB_USER}</code></pre>
 </section>
 <section id="repository-file-structure" class="level2" data-number="1.2">
 <h2 data-number="1.2" class="anchored" data-anchor-id="repository-file-structure"><span class="header-section-number">1.2</span> Repository file structure</h2>
-<p>Here is a typical repo structure. Only the Dockerfile is required. The rest are optional. The files names, <code>apt.txt</code>, <code>environment.yml</code>, <code>requirements.txt</code> and <code>install.R</code> are optional. You can name these files other names and still use them in the pyrocket scripts. <code>Desktop</code>, <code>start</code> and <code>postBuild</code> must be named exactly this to use them in the pyrocket scripts (these scripts do not take filename arguments).</p>
+<p>Here is a typical repo structure. Only the Dockerfile is required. The rest are optional. The exact files names, <code>apt.txt</code>, <code>environment.yml</code>, <code>requirements.txt</code>, <code>install.R</code>, etc are optional, meaning you can name these files whatever you want. The pyrocket scripts take filename or directory arguments.</p>
 <pre><code>your-repo/
 ├── Dockerfile
 ├── apt.txt
@@ -262,7 +262,7 @@ USER ${NB_USER}</code></pre>
 │   ├── qgis.desktop
 │   ├── qgis.xml
 │   └── qgis.png</code></pre>
-<p>Read <a href="configuration_files.html">configuration_files</a> to learn about apt.txt, environment.yml, install.R, requirements.txt, postBuild, and start. Read <a href="desktop.html">Desktop</a> to learn about the Desktop folder and files for applications.</p>
+<p>Read <a href="configuration_files.html">configuration_files</a> to learn about the files. Read <a href="desktop.html">Desktop</a> to learn about the Desktop folder and files for applications.</p>
 </section>
 <section id="examples" class="level2" data-number="1.3">
 <h2 data-number="1.3" class="anchored" data-anchor-id="examples"><span class="header-section-number">1.3</span> Examples</h2>
@@ -279,7 +279,7 @@ COPY environment.yml environment.yml
 RUN /pyrocket_scripts/install-conda-packages.sh environment.yml
 RUN rm environment.yml</code></pre>
 <p>environment.yml</p>
-<pre><code>name: optional
+<pre><code>name: required
 channels:
   - conda-forge
 dependencies:
@@ -336,7 +336,7 @@ USER root
 RUN PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin &amp;&amp; \
     /rocker_scripts/install_geospatial.sh
 USER ${NB_USER}</code></pre>
-<p>You have access to all the rocker_scripts and you can run these similar to the line above.</p>
+<p>You have access to all the rocker scripts and you can run these similar to the line above.</p>
 
 
 </section>

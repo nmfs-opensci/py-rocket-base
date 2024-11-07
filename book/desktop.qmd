@@ -5,6 +5,12 @@ looks for files with the ending `.desktop`, `.xml` (optional), and `.png` or `.s
 
 py-rocket-base puts these `.desktop` files in `/usr/share/Desktop`. Typically these desktop files are in `~/Desktop`. But in a JupyterHub, the home directory is often persistent and py-rocket-base tries not to alter the user home directory. Also there might be orphaned desktop files in `~/Desktop` and so the user desktop UI would be inconsistent between users. Using `/usr/share/Desktop` does mean that users cannot add their own persistent applications to xfce4 Desktop but this would be difficult anyhow without root access in many cases.
 
+py-rocket-base has Java (`openjdk-11-jdk` and `openjdk-11-jre`) pre-installed as part of the rocker R/RStudio installation. So Java applications do work as long as they work with this version of Java.
+```
+openjdk version "11.0.24" 2024-07-16
+OpenJDK Runtime Environment (build 11.0.24+8-post-Ubuntu-1ubuntu322.04)
+OpenJDK 64-Bit Server VM (build 11.0.24+8-post-Ubuntu-1ubuntu322.04, mixed mode, sharing)
+```
 
 ## Adding an application in your child docker image
 
@@ -20,7 +26,7 @@ USER ${NB_USER}
 
 ### Create the Desktop directory
 
-Create the directory and add the .desktop and optional .png and .xml files. The pyrocket script `install_desktop.sh` will move them to the correct places (`/usr/share/applications` and `/usr/share/Desktop`, `/usr/share/mime/packages` and icon locations).
+Create a directory for the Desktop file and add the .desktop and optional .png and .xml files. The pyrocket script `install_desktop.sh` will move them to the correct places (`/usr/share/applications` and `/usr/share/Desktop`, `/usr/share/mime/packages` and icon locations).
 
 ```
 your-repo/
@@ -35,7 +41,7 @@ your-repo/
 
 #### .desktop file
 
-The `.desktop` file is a configuration file that describes how an application is launched. The required parts are Name, Exec and Type. MimeType specifies what types of files the application can use (optional).
+The `.desktop` file is a configuration file that describes how an application is launched. The required parts are Name, Exec and Type. MimeType specifies what types of files the application can use (optional). If you included an icon in your Desktop directory, then that will be registered and you can use the filename without a path. However, sometimes the icon is installed with the application and in that case you need the full path. See the icon section below.
 
 cdat.desktop
 ```
@@ -43,7 +49,7 @@ cdat.desktop
 Type=Application
 Name=CWUtils
 GenericName=CoastWatch Data Analysis Tool
-Icon=/srv/repo/Desktop/cdat.png
+Icon=cdat
 TryExec=cdat
 Exec=cdat %F
 Terminal=false
@@ -70,7 +76,7 @@ If an icon is installed with your application, it will be in the installation fi
 ```
 Icon=/srv/conda/envs/notebook/share/qgis/images/icons/qgis-icon-512x512.png
 ```
-or if you include an icon in your `Desktop` directory, it will be in `/srv/repo/Desktop`.
+or if you include an icon in your `Desktop` directory, it will be in `/srv/repo/Desktop` (but in that case it is also registered as an icon so you can just use `cdat`).
 ```
 Icon=/srv/repo/Desktop/cdat.png
 ```
@@ -84,7 +90,7 @@ How you install the application really varies. Here are 2 examples.
 
 * add `qgis` to `environment.yml`
 * add `libgl1-mesa-glx` to `apt.txt`
-* add the .desktop file to Desktop directory
+* add the `qgis.desktop` file to your Desktop directory
 
 qgis.desktop
 ```
@@ -135,7 +141,7 @@ Categories=Qt;Education;Science;Geography;
 Keywords=map;globe;
 ```
 
-Add `cdat.png` icon to Desktop directory.
+Add `cdat.png` icon to Desktop directory. How do you know that the command to open the application is `cdat`? You read the application installation documentation and it will tell you how to open the application from a terminal (command line).
 
 ## What's happening
 

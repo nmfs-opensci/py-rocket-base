@@ -26,7 +26,7 @@ This is a standard format. You can add version pinning.
 
 environment.yml
 ```
-name: optional
+name: required
 channels:
   - conda-forge
 dependencies:

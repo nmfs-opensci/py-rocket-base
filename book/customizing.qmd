@@ -41,7 +41,7 @@ USER ${NB_USER}
 
 ## Repository file structure
 
-Here is a typical repo structure. Only the Dockerfile is required. The rest are optional. The files names, `apt.txt`, `environment.yml`, `requirements.txt` and `install.R` are optional. You can name these files other names and still use them in the pyrocket scripts. `Desktop`, `start` and `postBuild` must be named exactly this to use them in the pyrocket scripts (these scripts do not take filename arguments).
+Here is a typical repo structure. Only the Dockerfile is required. The rest are optional. The exact files names, `apt.txt`, `environment.yml`, `requirements.txt`, `install.R`, etc are optional, meaning you can name these files whatever you want. The pyrocket scripts take filename or directory arguments.
 
 ```
 your-repo/
@@ -58,7 +58,7 @@ your-repo/
 │   └── qgis.png
 ```
 
-Read [configuration_files](configuration_files.html) to learn about apt.txt, environment.yml, install.R, requirements.txt, postBuild, and start. Read [Desktop](desktop.html) to learn about the Desktop folder and files for applications.
+Read [configuration_files](configuration_files.html) to learn about the files. Read [Desktop](desktop.html) to learn about the Desktop folder and files for applications.
 
 ## Examples
 
@@ -83,7 +83,7 @@ RUN rm environment.yml
 
 environment.yml
 ```
-name: optional
+name: required
 channels:
   - conda-forge
 dependencies:
@@ -163,7 +163,7 @@ RUN PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin && \
 USER ${NB_USER}
 ```
 
-You have access to all the rocker_scripts and you can run these similar to the line above.
+You have access to all the rocker scripts and you can run these similar to the line above.
 
 
 

@@ -207,6 +207,10 @@ ul.task-list li input[type="checkbox"] {
 
 <p>py-rocket-base includes the <a href="https://www.xfce.org/">xfce4 Desktop UI</a> where you can run applications. It is built off <a href="https://www.freedesktop.org/wiki/Software/">freedesktop</a> (which is helpful to know if you are debugging and configuring). A common application is to run QGIS or java-based applications. py-rocket-base looks for files with the ending <code>.desktop</code>, <code>.xml</code> (optional), and <code>.png</code> or <code>.svg</code> (optional) associated with an application in a directory called Desktop in your repo.</p>
 <p>py-rocket-base puts these <code>.desktop</code> files in <code>/usr/share/Desktop</code>. Typically these desktop files are in <code>~/Desktop</code>. But in a JupyterHub, the home directory is often persistent and py-rocket-base tries not to alter the user home directory. Also there might be orphaned desktop files in <code>~/Desktop</code> and so the user desktop UI would be inconsistent between users. Using <code>/usr/share/Desktop</code> does mean that users cannot add their own persistent applications to xfce4 Desktop but this would be difficult anyhow without root access in many cases.</p>
+<p>py-rocket-base has Java (<code>openjdk-11-jdk</code> and <code>openjdk-11-jre</code>) pre-installed as part of the rocker R/RStudio installation. So Java applications do work as long as they work with this version of Java.</p>
+<pre><code>openjdk version "11.0.24" 2024-07-16
+OpenJDK Runtime Environment (build 11.0.24+8-post-Ubuntu-1ubuntu322.04)
+OpenJDK 64-Bit Server VM (build 11.0.24+8-post-Ubuntu-1ubuntu322.04, mixed mode, sharing)</code></pre>
 <section id="adding-an-application-in-your-child-docker-image" class="level2" data-number="4.1">
 <h2 data-number="4.1" class="anchored" data-anchor-id="adding-an-application-in-your-child-docker-image"><span class="header-section-number">4.1</span> Adding an application in your child docker image</h2>
 <p>Use the pyrocket script <code>install-desktop.sh</code> to set up the desktop and move your files to the proper location. Provide a path to a directory with your Desktop files as the argument to the script. Here is the code for your Docker file. This script must be run as root.</p>
@@ -217,7 +221,7 @@ RUN rm -rf /tmp/Desktop
 USER ${NB_USER}</code></pre>
 <section id="create-the-desktop-directory" class="level3" data-number="4.1.1">
 <h3 data-number="4.1.1" class="anchored" data-anchor-id="create-the-desktop-directory"><span class="header-section-number">4.1.1</span> Create the Desktop directory</h3>
-<p>Create the directory and add the .desktop and optional .png and .xml files. The pyrocket script <code>install_desktop.sh</code> will move them to the correct places (<code>/usr/share/applications</code> and <code>/usr/share/Desktop</code>, <code>/usr/share/mime/packages</code> and icon locations).</p>
+<p>Create a directory for the Desktop file and add the .desktop and optional .png and .xml files. The pyrocket script <code>install_desktop.sh</code> will move them to the correct places (<code>/usr/share/applications</code> and <code>/usr/share/Desktop</code>, <code>/usr/share/mime/packages</code> and icon locations).</p>
 <pre><code>your-repo/
 ├── Dockerfile
 ├── optional extra files
@@ -227,13 +231,13 @@ USER ${NB_USER}</code></pre>
 │   └── qgis.png</code></pre>
 <section id="desktop-file" class="level4" data-number="4.1.1.1">
 <h4 data-number="4.1.1.1" class="anchored" data-anchor-id="desktop-file"><span class="header-section-number">4.1.1.1</span> .desktop file</h4>
-<p>The <code>.desktop</code> file is a configuration file that describes how an application is launched. The required parts are Name, Exec and Type. MimeType specifies what types of files the application can use (optional).</p>
+<p>The <code>.desktop</code> file is a configuration file that describes how an application is launched. The required parts are Name, Exec and Type. MimeType specifies what types of files the application can use (optional). If you included an icon in your Desktop directory, then that will be registered and you can use the filename without a path. However, sometimes the icon is installed with the application and in that case you need the full path. See the icon section below.</p>
 <p>cdat.desktop</p>
 <pre><code>[Desktop Entry]
 Type=Application
 Name=CWUtils
 GenericName=CoastWatch Data Analysis Tool
-Icon=/srv/repo/Desktop/cdat.png
+Icon=cdat
 TryExec=cdat
 Exec=cdat %F
 Terminal=false
@@ -252,7 +256,7 @@ Keywords=map;globe;</code></pre>
 <p>You can also use an absolute file path.</p>
 <p>If an icon is installed with your application, it will be in the installation files.</p>
 <pre><code>Icon=/srv/conda/envs/notebook/share/qgis/images/icons/qgis-icon-512x512.png</code></pre>
-<p>or if you include an icon in your <code>Desktop</code> directory, it will be in <code>/srv/repo/Desktop</code>.</p>
+<p>or if you include an icon in your <code>Desktop</code> directory, it will be in <code>/srv/repo/Desktop</code> (but in that case it is also registered as an icon so you can just use <code>cdat</code>).</p>
 <pre><code>Icon=/srv/repo/Desktop/cdat.png</code></pre>
 </section>
 </section>
@@ -263,7 +267,7 @@ Keywords=map;globe;</code></pre>
 <ul>
 <li>add <code>qgis</code> to <code>environment.yml</code></li>
 <li>add <code>libgl1-mesa-glx</code> to <code>apt.txt</code></li>
-<li>add the .desktop file to Desktop directory</li>
+<li>add the <code>qgis.desktop</code> file to your Desktop directory</li>
 </ul>
 <p>qgis.desktop</p>
 <pre><code># From: https://github.com/qgis/QGIS/blob/ltr-3_28/linux/org.qgis.qgis.desktop.in
@@ -304,7 +308,7 @@ Terminal=false
 StartupNotify=false
 Categories=Qt;Education;Science;Geography;
 Keywords=map;globe;</code></pre>
-<p>Add <code>cdat.png</code> icon to Desktop directory.</p>
+<p>Add <code>cdat.png</code> icon to Desktop directory. How do you know that the command to open the application is <code>cdat</code>? You read the application installation documentation and it will tell you how to open the application from a terminal (command line).</p>
 </section>
 </section>
 <section id="whats-happening" class="level2" data-number="4.2">
