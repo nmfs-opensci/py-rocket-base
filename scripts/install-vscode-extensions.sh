@@ -29,11 +29,9 @@ fi
 
 # Install each extension listed in the file
 while IFS= read -r EXT; do
-    if code-server --install-extension "$EXT"; then
+    if ${NB_PYTHON_PREFIX}/bin/code-server --install-extension "$EXT"; then
         echo "  Successfully installed extension: $EXT"
     else
         echo "  Failed to install extension: $EXT" >&2
     fi
 done < "$ext_file"
-
-echo "  Success! install-vscode-extensions.sh"
