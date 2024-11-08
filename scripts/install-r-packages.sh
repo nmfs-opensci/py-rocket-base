@@ -16,6 +16,7 @@ fi
 
 # Main script execution as NB_USER
 echo "Running install-r-packages.sh as ${NB_USER}"
+echo "Rscript location: $(which Rscript)"
 
 # Set the file variable to the provided argument
 INSTALL_FILE="$1"
@@ -29,7 +30,7 @@ fi
 
 echo "  Found file: $INSTALL_FILE"
 
-# Install R packages using the provided R script
+# Install R packages using the provided R script; should be /usr/local/bin/Rscript
 if ! Rscript "$INSTALL_FILE"; then
     echo "  Error: Installation of packages from '$INSTALL_FILE' failed. Please check the script for errors." >&2
     exit 1
