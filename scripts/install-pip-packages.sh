@@ -16,7 +16,7 @@ fi
 
 # Main script execution as NB_USER
 echo "Running install-pip-packages.sh as ${NB_USER}"
-
+echo "NB_PYTHON_PREFIX: $NB_PYTHON_PREFIX, CONDA_ENV: $CONDA_ENV, CONDA_DIR: $CONDA_DIR"
 
 # Set variable for the provided file
 requirements_file="$1"
