@@ -58,15 +58,19 @@ if [ "$INSTALLATION_HAPPENED" = true ]; then
     # Updating the notebook environment sometimes gets rid of pip installed packages.
     # Make sure the core environment didn't get damaged.
     # Check if jupyterlab-quarto is installed, and reinstall if missing
-    if ! python -m pip show jupyterlab-quarto > /dev/null 2>&1; then
+    if ! ${NB_PYTHON_PREFIX}/bin/pip show jupyterlab-quarto > /dev/null 2>&1; then
         echo "  Reinstalling jupyterlab-quarto..."
-        python -m pip install jupyterlab-quarto
+        if ! ${NB_PYTHON_PREFIX}/bin/pip install jupyterlab-quarto; then
+           echo "  Error: Failed to reinstall jupyterlab-quarto. Continuing with the process." >&2
+        fi    
     fi
 
     # Check if jupyter-remote-desktop-proxy is installed, and reinstall if missing
-    if ! python -m pip show jupyter-remote-desktop-proxy > /dev/null 2>&1; then
+    if ! ${NB_PYTHON_PREFIX}/bin/pip show jupyter-remote-desktop-proxy > /dev/null 2>&1; then
         echo "  Reinstalling jupyter-remote-desktop-proxy..."
-        python -m pip install jupyter-remote-desktop-proxy
+        if ! ${NB_PYTHON_PREFIX}/bin/pip install jupyter-remote-desktop-proxy; then
+           echo "  Error: Failed to reinstall jupyter-remote-desktop-proxy. Continuing with the process." >&2
+        fi    
     fi
 fi
 
