@@ -1,4 +1,5 @@
 #!/bin/bash
+# Required User: NB_USER
 
 # Install VSCode extensions. 
 # These get installed to $CONDA_PREFIX/envs/notebook/share/code-server/extensions/
@@ -10,12 +11,13 @@ if [ -z "$1" ]; then
     exit 1
 fi
 
-# Check the user and output which user the script is running as
+# Check if running as root and switch to NB_USER if needed
 if [[ $(id -u) -eq 0 ]]; then
-    echo "Running install-vscode-extensions.sh as root."
-else
-    echo "Running install-vscode-extensions.sh as ${NB_USER}."
+    echo "Switching to ${NB_USER} to run install-vscode-extensions.sh"
+    exec su "${NB_USER}" -c "/bin/bash $0 $1"  # Pass along the filename argument
 fi
+
+echo "Running install-vscode-extensions.sh as ${NB_USER}"
 
 ext_file="$1"
 
