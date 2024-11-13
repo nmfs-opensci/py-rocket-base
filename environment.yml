@@ -1,15 +1,12 @@
-name: py-rocket-base
+name: py-rocket-base-extras
 
 channels:
   - conda-forge
   - nodefaults
 
 dependencies:
-  - python~=3.11.0
-  - jupyterlab>=4.0
   - jupyter-resource-usage
   - jupyterlab-git
-  # gh-scoped-creds allows users to securely push to GitHub from their repo.
   - gh-scoped-creds==4.1
 
   # R/RStudio Support
@@ -25,8 +22,6 @@ dependencies:
   #- syncthing~=1.22.1
 
   # Extra Jupyter tools
-  - ipython
-  - ipywidgets
   - jupyter-ai
   - jupyter-book
   - jupyter-offlinenotebook
@@ -35,21 +30,15 @@ dependencies:
   - jupyterlab-geojson
   - jupyterlab-h5web
   - jupyterlab-myst
-  - jupyterlab_pygments>=0.3.0
   - jupytext
   - nbdime
+  
   # JupyterBook Addons
   - sphinx
   - sphinxcontrib-bibtex
-  # Interactive apps
-  - itables
-  - voila
-  # nbgitpuller is very helpful when distributing user content
-  - nbgitpuller
+
   # More git tools from github-cli
   - gh
-  # conda-lock
-  - conda-lock
 
   # Resolves warning "No ICDs were found": https://github.com/CryoInTheCloud/hub-image/issues/50
   - ocl-icd-system
