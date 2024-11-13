@@ -119,14 +119,20 @@ RUN /pyrocket_scripts/install-apt-packages.sh ${REPO_DIR}/apt.txt
 
 # Re-enable man pages disabled in Ubuntu 18 minimal image
 # https://wiki.ubuntu.com/Minimal
-# Enable man pages and configure MANPATH for JupyterLab integration
+RUN yes | unminimize
+# NOTE: $NB_PYTHON_PREFIX is the same as $CONDA_PREFIX at run-time.
+# $CONDA_PREFIX isn't available in this context.
+# NOTE: Prepending ensures a working path; if $MANPATH was previously empty,
+# the trailing colon ensures that system paths are searched.
 ENV MANPATH="${NB_PYTHON_PREFIX}/share/man:${MANPATH}"
-RUN yes | unminimize && mandb
+RUN mandb
 
 # Add custom Jupyter server configurations
-RUN cp ${REPO_DIR}/custom_jupyter_server_config.json ${NB_PYTHON_PREFIX}/etc/jupyter/jupyter_server_config.d/ && \
+RUN mkdir -p ${NB_PYTHON_PREFIX}/etc/jupyter/jupyter_server_config.d/ && \
+    mkdir -p ${NB_PYTHON_PREFIX}/etc/jupyter/jupyter_notebook_config.d/ && \
+    cp ${REPO_DIR}/custom_jupyter_server_config.json ${NB_PYTHON_PREFIX}/etc/jupyter/jupyter_server_config.d/ && \
     cp ${REPO_DIR}/custom_jupyter_server_config.json ${NB_PYTHON_PREFIX}/etc/jupyter/jupyter_notebook_config.d/
-
+    
 # Revert to default user and home as pwd
 USER ${NB_USER}
 WORKDIR ${HOME}
