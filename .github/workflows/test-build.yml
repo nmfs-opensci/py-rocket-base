@@ -1,0 +1,27 @@
+name: Docker Image CI coastwatch
+on:
+  workflow_dispatch: null
+  push:
+    branches: test
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions: write-all
+    steps:
+      - uses: actions/checkout@v3
+      - name: Login to GitHub Container Registry
+        if: github.repository == 'nmfs-opensci/py-rocket-base'
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{github.actor}}
+          password: ${{secrets.GITHUB_TOKEN}}
+      - name: Build the Docker image
+        if: github.repository == 'nmfs-opensci/py-rocket-base'
+        run: |
+          docker build images/coastwatch -f images/coastwatch/Dockerfile  --tag ghcr.io/nmfs-opensci/container-images/coastwatch:latest
+      - name: Publish
+        if: github.repository == 'nmfs-opensci/py-rocket-base'
+        run: |
+          docker push ghcr.io/nmfs-opensci/py-rocket-base/test:latest
