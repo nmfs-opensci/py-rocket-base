@@ -53,6 +53,9 @@ RUN mkdir -p /pyrocket_scripts && cp -r ${REPO_DIR}/scripts/* /pyrocket_scripts/
 RUN chown -R root:staff /pyrocket_scripts && \
     chmod -R 775 /pyrocket_scripts
 
+# Install extra conda packages
+RUN /pyrocket_scripts/install-conda-packages.sh ${REPO_DIR}/environment.yml
+
 # Convert NB_USER to ENV (from ARG) so that it passes to the child dockerfile
 ENV NB_USER=${NB_USER}
 
