@@ -3,9 +3,10 @@ FROM pangeo/base-notebook
 USER root
 
 # Define environment variables
+# DISPLAY Tell applications where to open desktop apps - this allows notebooks to pop open GUIs
 ENV REPO_DIR="/srv/repo" \
-    CONDA_ENV="notebook" \ # repo2docker does not set this. This is the default env in repo2docker type images
-    DISPLAY=":1.0" \ # Tell applications where to open desktop apps - this allows notebooks to pop open GUIs
+    CONDA_ENV="notebook"
+    DISPLAY=":1.0" \
     R_VERSION="4.4.1" \
     R_DOCKERFILE="verse_${R_VERSION}" \
     NB_USER="${NB_USER}"
