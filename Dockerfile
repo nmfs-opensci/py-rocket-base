@@ -2,62 +2,49 @@ FROM pangeo/base-notebook
 
 USER root
 
-ENV REPO_DIR="/srv/repo"
+# Define environment variables
+ENV REPO_DIR="/srv/repo" \
+    CONDA_ENV="notebook" \ # repo2docker does not set this. This is the default env in repo2docker type images
+    DISPLAY=":1.0" \ # Tell applications where to open desktop apps - this allows notebooks to pop open GUIs
+    R_VERSION="4.4.1" \
+    R_DOCKERFILE="verse_${R_VERSION}" \
+    NB_USER="${NB_USER}"
+
 COPY . ${REPO_DIR}
 RUN chgrp -R staff ${REPO_DIR} && \
     chmod -R g+rwx ${REPO_DIR} && \
     rm -rf ${REPO_DIR}/book ${REPO_DIR}/docs
 
-# repo2docker does not set this. This is the default env in repo2docker type images
-ENV CONDA_ENV=notebook
-# Tell applications where to open desktop apps - this allows notebooks to pop open GUIs
-ENV DISPLAY=":1.0"
+# Copy scripts to /pyrocket_scripts and set permissions
+RUN mkdir -p /pyrocket_scripts && \
+    cp -r ${REPO_DIR}/scripts/* /pyrocket_scripts/ && \
+    chown -R root:staff /pyrocket_scripts && \
+    chmod -R 775 /pyrocket_scripts
+
+# Add NB_USER to staff group (required for rocker script)
+RUN usermod -a -G staff "${NB_USER}"
 
 # Install R, RStudio via Rocker scripts
-ENV R_VERSION="4.4.1"
-ENV R_DOCKERFILE="verse_${R_VERSION}"
-# This is in the rocker script but will not run since ${NB_USER} already exists
-# Needed because rocker scripts set permissions based on the staff group
-RUN usermod -a -G staff "${NB_USER}"
 RUN PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin && \
   chmod +x ${REPO_DIR}/rocker.sh && \
   ${REPO_DIR}/rocker.sh
 
-# Install linux packages after R installation since the R install scripts get rid of packages
-# The package_list part is reading the file and doing clean-up to just have the list of packages
-RUN package_list=$(grep -v '^\s*#' ${REPO_DIR}/apt2.txt | grep -v '^\s*$' | sed 's/\r//g; s/#.*//; s/^[[:space:]]*//; s/[[:space:]]*$//' | awk '{$1=$1};1') && \
-  apt-get update && \
-  apt-get install --yes --no-install-recommends $package_list && \
-  apt-get autoremove --purge && \
-  apt-get clean && \
-  rm -rf /var/lib/apt/lists/*
-
-# Re-enable man pages disabled in Ubuntu 18 minimal image
-# https://wiki.ubuntu.com/Minimal
-RUN yes | unminimize
-# NOTE: $NB_PYTHON_PREFIX is the same as $CONDA_PREFIX at run-time.
-# $CONDA_PREFIX isn't available in this context.
-# NOTE: Prepending ensures a working path; if $MANPATH was previously empty,
-# the trailing colon ensures that system paths are searched.
-ENV MANPATH="${NB_PYTHON_PREFIX}/share/man:${MANPATH}"
-RUN mandb
-
-# Add custom jupyter config. You can also put config.py files in the same place
-RUN cp ${REPO_DIR}/custom_jupyter_server_config.json ${NB_PYTHON_PREFIX}/etc/jupyter/jupyter_server_config.d/
-RUN cp ${REPO_DIR}/custom_jupyter_server_config.json ${NB_PYTHON_PREFIX}/etc/jupyter/jupyter_notebook_config.d/
-
-# Copy scripts into /pyrocket_scripts directory in the image
-RUN mkdir -p /pyrocket_scripts && cp -r ${REPO_DIR}/scripts/* /pyrocket_scripts/
-
-# Set ownership to root and permissions to 755
-RUN chown -R root:staff /pyrocket_scripts && \
-    chmod -R 775 /pyrocket_scripts
-
 # Install extra conda packages
 RUN /pyrocket_scripts/install-conda-packages.sh ${REPO_DIR}/environment.yml
 
-# Convert NB_USER to ENV (from ARG) so that it passes to the child dockerfile
-ENV NB_USER=${NB_USER}
+# Install extra apt packages
+# Install linux packages after R installation since the R install scripts get rid of packages
+RUN /pyrocket_scripts/install-apt-packages.sh ${REPO_DIR}/apt.txt
+
+# Re-enable man pages disabled in Ubuntu 18 minimal image
+# https://wiki.ubuntu.com/Minimal
+# Enable man pages and configure MANPATH for JupyterLab integration
+ENV MANPATH="${NB_PYTHON_PREFIX}/share/man:${MANPATH}"
+RUN yes | unminimize && mandb
+
+# Add custom Jupyter server configurations
+RUN cp ${REPO_DIR}/custom_jupyter_server_config.json ${NB_PYTHON_PREFIX}/etc/jupyter/jupyter_server_config.d/ && \
+    cp ${REPO_DIR}/custom_jupyter_server_config.json ${NB_PYTHON_PREFIX}/etc/jupyter/jupyter_notebook_config.d/
 
 # Revert to default user and home as pwd
 USER ${NB_USER}
