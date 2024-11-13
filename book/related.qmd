@@ -1,0 +1,8 @@
+# Related Docker Stacks
+
+- [NASA Openscapes corn](https://github.com/NASA-Openscapes/corn) and [NASA Openscapes py-rocket](https://github.com/NASA-Openscapes/py-rocket)
+- [Rocker](https://rocker-project.org/images/devcontainer/images.html) R docker stack
+- [Pangeo](https://github.com/pangeo-data/pangeo-docker-images) geosciences docker stack
+- [Jupyter](https://jupyter-docker-stacks.readthedocs.io/en/latest/) data science docker stack
+- [geocompx](https://github.com/geocompx/docker)
+- [b-data](https://github.com/b-data) GPU accelerated docker images and devcontainers

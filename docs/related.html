@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>4&nbsp; Desktop – py-rocket-base documentation</title>
+<title>8&nbsp; Related Docker Stacks – py-rocket-base documentation</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -29,8 +29,7 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./publishing.html" rel="next">
-<link href="./r-packages.html" rel="prev">
+<link href="./developers.html" rel="prev">
 <link href="./assets/favicon.ico" rel="icon">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -83,7 +82,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./desktop.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Desktop</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./related.html"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Related Docker Stacks</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -142,7 +141,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./desktop.html" class="sidebar-item-text sidebar-link active">
+  <a href="./desktop.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Desktop</span></span></a>
   </div>
 </li>
@@ -166,7 +165,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./related.html" class="sidebar-item-text sidebar-link">
+  <a href="./related.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Related Docker Stacks</span></span></a>
   </div>
 </li>
@@ -175,26 +174,15 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">Table of contents</h2>
-   
-  <ul>
-  <li><a href="#adding-an-application-in-your-child-docker-image" id="toc-adding-an-application-in-your-child-docker-image" class="nav-link active" data-scroll-target="#adding-an-application-in-your-child-docker-image"><span class="header-section-number">4.1</span> Adding an application in your child docker image</a>
-  <ul class="collapse">
-  <li><a href="#create-the-desktop-directory" id="toc-create-the-desktop-directory" class="nav-link" data-scroll-target="#create-the-desktop-directory"><span class="header-section-number">4.1.1</span> Create the Desktop directory</a></li>
-  <li><a href="#install-the-application" id="toc-install-the-application" class="nav-link" data-scroll-target="#install-the-application"><span class="header-section-number">4.1.2</span> Install the application</a></li>
-  </ul></li>
-  <li><a href="#whats-happening" id="toc-whats-happening" class="nav-link" data-scroll-target="#whats-happening"><span class="header-section-number">4.2</span> What’s happening</a></li>
-  </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/nmfs-opensci/py-rocket-base/edit/main/desktop.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/nmfs-opensci/py-rocket-base/blob/main/desktop.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/nmfs-opensci/py-rocket-base/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+        
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Desktop</span></h1>
+<h1 class="title"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Related Docker Stacks</span></h1>
 </div>
 
 
@@ -211,125 +199,16 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>py-rocket-base includes the <a href="https://www.xfce.org/">xfce4 Desktop UI</a> where you can run applications. It is built off <a href="https://www.freedesktop.org/wiki/Software/">freedesktop</a> (which is helpful to know if you are debugging and configuring). A common application is to run QGIS or java-based applications. py-rocket-base looks for files with the ending <code>.desktop</code>, <code>.xml</code> (optional), and <code>.png</code> or <code>.svg</code> (optional) associated with an application in a directory called Desktop in your repo.</p>
-<p>py-rocket-base puts these <code>.desktop</code> files in <code>/usr/share/Desktop</code>. Typically these desktop files are in <code>~/Desktop</code>. But in a JupyterHub, the home directory is often persistent and py-rocket-base tries not to alter the user home directory. Also there might be orphaned desktop files in <code>~/Desktop</code> and so the user desktop UI would be inconsistent between users. Using <code>/usr/share/Desktop</code> does mean that users cannot add their own persistent applications to xfce4 Desktop but this would be difficult anyhow without root access in many cases.</p>
-<p>py-rocket-base has Java (<code>openjdk-11-jdk</code> and <code>openjdk-11-jre</code>) pre-installed as part of the rocker R/RStudio installation. So Java applications do work as long as they work with this version of Java.</p>
-<pre><code>openjdk version "11.0.24" 2024-07-16
-OpenJDK Runtime Environment (build 11.0.24+8-post-Ubuntu-1ubuntu322.04)
-OpenJDK 64-Bit Server VM (build 11.0.24+8-post-Ubuntu-1ubuntu322.04, mixed mode, sharing)</code></pre>
-<section id="adding-an-application-in-your-child-docker-image" class="level2" data-number="4.1">
-<h2 data-number="4.1" class="anchored" data-anchor-id="adding-an-application-in-your-child-docker-image"><span class="header-section-number">4.1</span> Adding an application in your child docker image</h2>
-<p>Use the pyrocket script <code>install-desktop.sh</code> to set up the desktop and move your files to the proper location. Provide a path to a directory with your Desktop files as the argument to the script. Here is the code for your Docker file. This script must be run as root.</p>
-<pre><code>USER root
-COPY ./Desktop /tmp/Desktop
-RUN /pyrocket_scripts/install-desktop.sh  /tmp/Desktop
-RUN rm -rf /tmp/Desktop
-USER ${NB_USER}</code></pre>
-<section id="create-the-desktop-directory" class="level3" data-number="4.1.1">
-<h3 data-number="4.1.1" class="anchored" data-anchor-id="create-the-desktop-directory"><span class="header-section-number">4.1.1</span> Create the Desktop directory</h3>
-<p>Create a directory for the Desktop file and add the .desktop and optional .png and .xml files. The pyrocket script <code>install_desktop.sh</code> will move them to the correct places (<code>/usr/share/applications</code> and <code>/usr/share/Desktop</code>, <code>/usr/share/mime/packages</code> and icon locations).</p>
-<pre><code>your-repo/
-├── Dockerfile
-├── optional extra files
-├── Desktop/
-│   ├── qgis.desktop
-│   ├── qgis.xml
-│   └── qgis.png</code></pre>
-<section id="desktop-file" class="level4" data-number="4.1.1.1">
-<h4 data-number="4.1.1.1" class="anchored" data-anchor-id="desktop-file"><span class="header-section-number">4.1.1.1</span> .desktop file</h4>
-<p>The <code>.desktop</code> file is a configuration file that describes how an application is launched. The required parts are Name, Exec and Type. MimeType specifies what types of files the application can use (optional). If you included an icon in your Desktop directory, then that will be registered and you can use the filename without a path. However, sometimes the icon is installed with the application and in that case you need the full path. See the icon section below.</p>
-<p>cdat.desktop</p>
-<pre><code>[Desktop Entry]
-Type=Application
-Name=CWUtils
-GenericName=CoastWatch Data Analysis Tool
-Icon=cdat
-TryExec=cdat
-Exec=cdat %F
-Terminal=false
-StartupNotify=false
-Categories=Qt;Education;Science;Geography;
-Keywords=map;globe;</code></pre>
-</section>
-<section id="xml" class="level4" data-number="4.1.1.2">
-<h4 data-number="4.1.1.2" class="anchored" data-anchor-id="xml"><span class="header-section-number">4.1.1.2</span> .xml</h4>
-<p>You can specify the mime types via xml.</p>
-</section>
-<section id="icons" class="level4" data-number="4.1.1.3">
-<h4 data-number="4.1.1.3" class="anchored" data-anchor-id="icons"><span class="header-section-number">4.1.1.3</span> icons</h4>
-<p>You can include a png or svg for the icon. py-rocket-base will place this in <code>/usr/share/icons/hicolor</code>. If you put your icon file in the Desktop directory in your repo, then in your desktop file, use the file name without the extension. If for some reason, your icon is not showing up, use the direct url <code>/srv/repo/Desktop/your-icon-name.png</code>. If the icon cache does not update properly, you have the use the full url.</p>
-<pre><code>Icon=cdat</code></pre>
-<p>You can also use an absolute file path.</p>
-<p>If an icon is installed with your application, it will be in the installation files.</p>
-<pre><code>Icon=/srv/conda/envs/notebook/share/qgis/images/icons/qgis-icon-512x512.png</code></pre>
-<p>or if you include an icon in your <code>Desktop</code> directory, it will be in <code>/srv/repo/Desktop</code> (but in that case it is also registered as an icon so you can just use <code>cdat</code>).</p>
-<pre><code>Icon=/srv/repo/Desktop/cdat.png</code></pre>
-</section>
-</section>
-<section id="install-the-application" class="level3" data-number="4.1.2">
-<h3 data-number="4.1.2" class="anchored" data-anchor-id="install-the-application"><span class="header-section-number">4.1.2</span> Install the application</h3>
-<p>How you install the application really varies. Here are 2 examples.</p>
-<p><strong>QGIS</strong></p>
 <ul>
-<li>add <code>qgis</code> to <code>environment.yml</code></li>
-<li>add <code>libgl1-mesa-glx</code> to <code>apt.txt</code></li>
-<li>add the <code>qgis.desktop</code> file to your Desktop directory</li>
+<li><a href="https://github.com/NASA-Openscapes/corn">NASA Openscapes corn</a> and <a href="https://github.com/NASA-Openscapes/py-rocket">NASA Openscapes py-rocket</a></li>
+<li><a href="https://rocker-project.org/images/devcontainer/images.html">Rocker</a> R docker stack</li>
+<li><a href="https://github.com/pangeo-data/pangeo-docker-images">Pangeo</a> geosciences docker stack</li>
+<li><a href="https://jupyter-docker-stacks.readthedocs.io/en/latest/">Jupyter</a> data science docker stack</li>
+<li><a href="https://github.com/geocompx/docker">geocompx</a></li>
+<li><a href="https://github.com/b-data">b-data</a> GPU accelerated docker images and devcontainers</li>
 </ul>
-<p>qgis.desktop</p>
-<pre><code># From: https://github.com/qgis/QGIS/blob/ltr-3_28/linux/org.qgis.qgis.desktop.in
-[Desktop Entry]
-Type=Application
-Name=QGIS Desktop
-GenericName=Geographic Information System
-Icon=/srv/conda/envs/notebook/share/qgis/images/icons/qgis-icon-512x512.png
-TryExec=qgis
-Exec=qgis %F
-Terminal=false
-StartupNotify=false
-Categories=Qt;Education;Science;Geography;
-MimeType=application/x-qgis-project;application/x-qgis-project-container;application/x-qgis-layer-settings;application/x-qgis-layer-definition;application/x-qgis-composer-template;image/tiff;image/jpeg;image/jp2;application/x-raster-aig;application/x-raster-ecw;application/x-raster-mrsid;application/x-mapinfo-mif;application/x-esri-shape;application/vnd.google-earth.kml+xml;application/vnd.google-earth.kmz;application/geopackage+sqlite3;
-Keywords=map;globe;postgis;wms;wfs;ogc;osgeo;
-StartupWMClass=QGIS3</code></pre>
-<p><strong>CoastWatch Utilities</strong></p>
-<p>Add this to the docker file to install</p>
-<pre><code>USER root
-# Install cwutils
-RUN cd /tmp &amp;&amp; \
-    wget https://www.star.nesdis.noaa.gov/socd/coastwatch/cwf/cwutils-4_0_0_198-linux-x86_64.tar.gz &amp;&amp; \
-    tar -zxf cwutils-4_0_0_198-linux-x86_64.tar.gz &amp;&amp; \
-    rm -rf cwutils-4_0_0_198-linux-x86_64.tar.gz
-ENV PATH=${PATH}:/tmp/cwutils_4.0.0.198/bin
-ENV MANPATH=${MANPATH}:/tmp/cwutils_4.0.0.198/doc/man
-ENV INSTALL4J ADD VM PARAMS=-Dsun.java2d.uiScale=2.0
-USER ${NB_USER}</code></pre>
-<p>Add this <code>cdat.desktop</code> file to Desktop directory</p>
-<pre><code>[Desktop Entry]
-Type=Application
-Name=CWUtils
-GenericName=CoastWatch Data Analysis Tool
-Icon=/srv/repo/Desktop/cdat.png
-TryExec=cdat
-Exec=cdat %F
-Terminal=false
-StartupNotify=false
-Categories=Qt;Education;Science;Geography;
-Keywords=map;globe;</code></pre>
-<p>Add <code>cdat.png</code> icon to Desktop directory. How do you know that the command to open the application is <code>cdat</code>? You read the application installation documentation and it will tell you how to open the application from a terminal (command line).</p>
-</section>
-</section>
-<section id="whats-happening" class="level2" data-number="4.2">
-<h2 data-number="4.2" class="anchored" data-anchor-id="whats-happening"><span class="header-section-number">4.2</span> What’s happening</h2>
-<p>To add new desktop applications, one needs to do the following. py-rocket-base does these steps automatically (via the start script) so that the user only has to put files into a Desktop directory in the docker build repo.</p>
-<ul>
-<li>Install the application. See examples.</li>
-<li>Add a <code>.desktop</code> file to an application directory. py-rocket-base puts these in <code>/usr/share/applications</code> but you will also see <code>${HOME}/.local/share/applications/</code>.</li>
-<li>To have an icon on the Desktop, you create a folder Desktop and tell XDG what directory to use. The directory is specified in <code>~/.config/user-dirs.dirs</code> which XDG sets. By default (XDG), this folder is <code>~/Desktop</code> but you can set it to something else. py-rocket-base sets a default value in <code>/etc/xdg/user-dirs.defaults</code>. This updates <code>~/.config/user-dirs.dirs</code> when the <code>/etc/xdg/xfce4/xinitrc</code> start script is run (when the <code>/desktop</code> button is clicked).</li>
-<li>XDG looks for .desktop files in the Desktop directory. py-rocket-base creates a soft link to the <code>.desktop</code> files in <code>/usr/share/applications/</code> in <code>/usr/share/Desktop</code>.</li>
-</ul>
-<p>See this <a href="https://medium.com/@zoldin/how-to-add-new-application-to-xfce-menu-list-d90955e101d5">Medium article</a> for a description.</p>
 
 
-</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -898,14 +777,11 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./r-packages.html" class="pagination-link" aria-label="R packages">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">R packages</span></span>
+      <a href="./developers.html" class="pagination-link" aria-label="Developer notes">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Developer notes</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./publishing.html" class="pagination-link" aria-label="Publishing">
-        <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Publishing</span></span> <i class="bi bi-arrow-right-short"></i>
-      </a>
   </div>
 </nav>
 </div> <!-- /content -->
@@ -913,4 +789,4 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 
 
 
-<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/nmfs-opensci/py-rocket-base/edit/main/desktop.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/nmfs-opensci/py-rocket-base/blob/main/desktop.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/nmfs-opensci/py-rocket-base/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions"><ul><li><a href="https://github.com/nmfs-opensci/py-rocket-base/edit/main/related.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/nmfs-opensci/py-rocket-base/blob/main/related.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/nmfs-opensci/py-rocket-base/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>

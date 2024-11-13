@@ -19,8 +19,7 @@ Here is the code for your Docker file. You can name the conda package file to so
 
 ```
 COPY environment.yml environment.yml
-RUN /pyrocket_scripts/install-conda-packages.sh environment.yml
-RUN rm environment.yml
+RUN /pyrocket_scripts/install-conda-packages.sh environment.yml && rm environment.yml
 ```
 
 This is a standard format. You can add version pinning.
@@ -41,8 +40,7 @@ Here is the code for your Docker file. You can name your conda lock file somethi
 
 ```
 COPY conda-lock.yml conda-lock.yml
-RUN /pyrocket_scripts/install-conda-packages.sh conda-lock.yml
-RUN rm conda-lock.yml
+RUN /pyrocket_scripts/install-conda-packages.sh conda-lock.yml && rm conda-lock.yml
 ```
 
 ## install-pip-packages.sh
@@ -51,8 +49,7 @@ The `install-pip-packages.sh` script will install packages using `pip`.  Here is
 
 ```
 COPY requirements.txt requirements.txt
-RUN /pyrocket_scripts/install-pip-packages.sh requirements.txt
-RUN rm requirements.txt
+RUN /pyrocket_scripts/install-pip-packages.sh requirements.txt && rm requirements.txt
 ```
 
 requirements.txt
@@ -70,8 +67,7 @@ Here is the code for your Docker file. You can name the R script file to somethi
 
 ```
 COPY install.R install.R
-RUN /pyrocket_scripts/install-r-packages.sh install.R
-RUN rm install.R
+RUN /pyrocket_scripts/install-r-packages.sh install.R && rm install.R
 ```
 
 install.R example
@@ -104,8 +100,7 @@ The `install-apt-packages.sh` script will install packages with `apt-get`. Here 
 ```
 USER root
 COPY apt.txt apt.txt
-RUN /pyrocket_scripts/install-apt-packages.sh apt.txt
-RUN rm apt.txt
+RUN /pyrocket_scripts/install-apt-packages.sh apt.txt && rm apt.txt
 USER ${NB_USER}
 ```
 
@@ -124,8 +119,7 @@ The `run-postbuild.sh` script can be run as root or jovyan (`${NB_USER}`). The s
 
 ```
 COPY postBuild postBuild
-RUN /pyrocket_scripts/run-postbuild.sh postBuild
-RUN rm postBuild
+RUN /pyrocket_scripts/run-postbuild.sh postBuild && rm postBuild
 ```
 
 postBuild
@@ -144,8 +138,7 @@ The `setup-start.sh` script will move the file you provide into `${REPO_DIR}/chi
 
 ```
 COPY start start
-RUN /pyrocket_scripts/setup-start.sh start
-RUN rm start
+RUN /pyrocket_scripts/setup-start.sh start && rm start
 ```
 
 ## install-vscode-extensions.sh
@@ -154,8 +147,8 @@ The `install-vscode-extensions.sh` script will add VSCode extensions.
 
 ```
 COPY vscode-extensions.txt vscode-extensions.txt
-RUN /pyrocket_scripts/install-vscode-extensions.sh vscode-extensions.txt
-RUN rm vscode-extensions.txt
+RUN /pyrocket_scripts/install-vscode-extensions.sh vscode-extensions.txt && \
+  rm vscode-extensions.txt
 ```
 
 vscode-extensions.txt
