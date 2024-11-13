@@ -1,7 +1,12 @@
-USER root
+FROM pangeo/base-notebook
 
-# Clean up extra files in ${REPO_DIR}
-RUN rm -rf ${REPO_DIR}/book ${REPO_DIR}/docs
+ENV REPO_DIR="/srv/repo"
+COPY . ${REPO_DIR}
+RUN chgrp -R staff ${REPO_DIR} && \
+    chmod -R g+rwx ${REPO_DIR} && \
+    rm -rf ${REPO_DIR}/book ${REPO_DIR}/docs
+
+USER root
 
 # repo2docker does not set this. This is the default env in repo2docker type images
 ENV CONDA_ENV=notebook
