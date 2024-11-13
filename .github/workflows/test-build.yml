@@ -8,6 +8,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     permissions: write-all
+    env:
+      SHORT_SHA: "${{ github.sha::7 }}"
     steps:
       - uses: actions/checkout@v3
         with:
@@ -23,8 +25,11 @@ jobs:
       - name: Build the Docker image
         if: github.repository == 'nmfs-opensci/py-rocket-base'
         run: |
-          docker build . -f Dockerfile --tag ghcr.io/nmfs-opensci/py-rocket-base/test:latest
+          docker build . -f Dockerfile \
+            --tag ghcr.io/nmfs-opensci/py-rocket-base/test:latest \
+            --tag ghcr.io/nmfs-opensci/py-rocket-base/test:${SHORT_SHA} 
       - name: Publish
         if: github.repository == 'nmfs-opensci/py-rocket-base'
         run: |
           docker push ghcr.io/nmfs-opensci/py-rocket-base/test:latest
+          docker push ghcr.io/nmfs-opensci/py-rocket-base/test:${SHORT_SHA}
