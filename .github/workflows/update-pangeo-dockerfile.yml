@@ -1,4 +1,5 @@
 name: Update Dockerfile from Source
+# For this to work, you must all actions to create PRs at the org level
 
 on:
   push:
@@ -58,9 +59,11 @@ jobs:
 
       - name: Create Pull Request
         if: env.changed == 'true'
-        uses: peter-evans/create-pull-request@v5
+        uses: peter-evans/create-pull-request@v7
         with:
           title: "Update Dockerfile from Source"
           body: "This PR updates the Dockerfile in base-image directory to the latest version from the source repo."
           base: ${{ github.ref }}  # Base branch (main or dev)
           branch: "update-dockerfile"
+          reviewers: |
+            eeholmes
