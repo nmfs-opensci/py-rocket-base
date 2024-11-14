@@ -1,0 +1,12 @@
+# Ignore documentation
+book/
+docs/
+
+# Ignore version control folder
+.git/
+.gitignore
+
+# Ignore R stuff
+.Rhistory
+.Rproj.user
+py-rocket-base.Rproj
