@@ -40,7 +40,7 @@ if ! ${CONDA_DIR}/condabin/conda env list | grep -q "^${CONDA_ENV} "; then
         INSTALLATION_HAPPENED=true
     elif grep -q "name:" "$ENV_FILE"; then
         echo "  Detected environment.yml file."
-        ${CONDA_DIR}/condabin/mamba env create -f "$ENV_FILE"
+        ${CONDA_DIR}/condabin/mamba env create --name ${CONDA_ENV} -f "$ENV_FILE"
         INSTALLATION_HAPPENED=true
     else
         echo "Error: Unrecognized file format in '${ENV_FILE}'."
@@ -61,7 +61,7 @@ else
         ${CONDA_DIR}/condabin/mamba env update --name ${CONDA_ENV} -f "$ENV_FILE"
         INSTALLATION_HAPPENED=true
     else
-        echo "Error: Unrecognized file format in '${ENV_FILE}'."
+        echo "  Error: Unrecognized file format in '${ENV_FILE}'."
         echo "  - For an environment.yml file, ensure it includes a 'name:' entry. Any name is acceptable."
         echo "  - For a conda-lock.yml file, ensure it includes a 'lock_set:' entry."
         exit 1
@@ -70,6 +70,7 @@ fi
 
 # Run cleanup if installation occurred
 if [ "$INSTALLATION_HAPPENED" = true ]; then
+    echo "Installation clean-up."
     ${CONDA_DIR}/condabin/mamba clean -yaf
     find ${CONDA_DIR} -follow -type f -name '*.a' -delete
     find ${CONDA_DIR} -follow -type f -name '*.js.map' -delete
