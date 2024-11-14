@@ -117,6 +117,9 @@ RUN PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin && \
     chmod +x ${REPO_DIR}/rocker.sh && \
     ${REPO_DIR}/rocker.sh
 
+# Install test conda packages
+RUN /pyrocket_scripts/install-conda-packages.sh ${REPO_DIR}/test.yml
+
 # Install extra apt packages
 # Install linux packages after R installation since the R install scripts get rid of packages
 RUN /pyrocket_scripts/install-apt-packages.sh ${REPO_DIR}/apt.txt
