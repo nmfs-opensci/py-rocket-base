@@ -1,4 +1,4 @@
-name: py-rocket-base-extras
+name: py-rocket-base
 
 channels:
   - conda-forge
