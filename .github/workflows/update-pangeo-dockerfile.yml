@@ -57,7 +57,7 @@ jobs:
           git push origin update-dockerfile --force
 
       - name: Create Pull Request
-        if: senv.changed == 'true'
+        if: env.changed == 'true'
         uses: peter-evans/create-pull-request@v5
         with:
           title: "Update Dockerfile from Source"
