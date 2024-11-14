@@ -23,7 +23,7 @@ RUN mkdir -p /pyrocket_scripts && \
     chown -R root:staff /pyrocket_scripts && \
     chmod -R 775 /pyrocket_scripts
 
-# Install extra conda packages
+# Install conda packages
 RUN /pyrocket_scripts/install-conda-packages.sh ${REPO_DIR}/environment.yml
 
 # Install R, RStudio via Rocker scripts. Requires the prefix for a rocker Dockerfile
@@ -36,10 +36,6 @@ RUN /pyrocket_scripts/install-apt-packages.sh ${REPO_DIR}/apt.txt
 # Re-enable man pages disabled in Ubuntu 18 minimal image
 # https://wiki.ubuntu.com/Minimal
 RUN yes | unminimize
-# NOTE: $NB_PYTHON_PREFIX is the same as $CONDA_PREFIX at run-time.
-# $CONDA_PREFIX isn't available in this context.
-# NOTE: Prepending ensures a working path; if $MANPATH was previously empty,
-# the trailing colon ensures that system paths are searched.
 ENV MANPATH="${NB_PYTHON_PREFIX}/share/man:${MANPATH}"
 RUN mandb
 
