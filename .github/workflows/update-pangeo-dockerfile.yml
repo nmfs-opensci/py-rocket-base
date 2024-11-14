@@ -48,7 +48,7 @@ jobs:
           git checkout -b update-dockerfile
           git add base-image/Dockerfile
           git commit -m "Update Dockerfile from source"
-          git push -u origin update-dockerfile
+          git push -u origin update-dockerfile --force
 
       - name: Create Pull Request
         if: steps.fetch_dockerfile.outputs.changed == 'true'
