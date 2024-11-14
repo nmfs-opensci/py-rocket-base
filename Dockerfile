@@ -105,17 +105,17 @@ RUN mkdir -p /pyrocket_scripts && \
 RUN usermod -a -G staff "${NB_USER}"
 
 # Install R, RStudio via Rocker scripts
-ENV R_DOCKERFILE="verse_${R_VERSION}"
-RUN PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin && \
-  chmod +x ${REPO_DIR}/rocker.sh && \
-  ${REPO_DIR}/rocker.sh
+# ENV R_DOCKERFILE="verse_${R_VERSION}"
+# RUN PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin && \
+#  chmod +x ${REPO_DIR}/rocker.sh && \
+#  ${REPO_DIR}/rocker.sh
 
 # Install extra conda packages
 RUN /pyrocket_scripts/install-conda-packages.sh ${REPO_DIR}/environment.yml
 
 # Install extra apt packages
 # Install linux packages after R installation since the R install scripts get rid of packages
-RUN /pyrocket_scripts/install-apt-packages.sh ${REPO_DIR}/apt.txt
+# RUN /pyrocket_scripts/install-apt-packages.sh ${REPO_DIR}/apt.txt
 
 # Re-enable man pages disabled in Ubuntu 18 minimal image
 # https://wiki.ubuntu.com/Minimal
