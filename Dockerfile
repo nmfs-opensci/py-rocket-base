@@ -28,9 +28,7 @@ RUN /pyrocket_scripts/install-conda-packages.sh ${REPO_DIR}/environment.yml
 
 # Install R, RStudio via Rocker scripts
 ENV R_DOCKERFILE="verse_${R_VERSION}"
-RUN PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin && \
-    chmod +x ${REPO_DIR}/rocker.sh && \
-    ${REPO_DIR}/rocker.sh
+RUN /pyrocket_scripts/install-rocker.sh
 
 # Install extra apt packages
 # Install linux packages after R installation since the R install scripts get rid of packages
