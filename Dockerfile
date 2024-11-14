@@ -81,7 +81,10 @@ RUN echo "Installing Miniforge..." \
 EXPOSE 8888
 ENTRYPOINT ["/srv/start"]
 
-# appendix
+### END OF BASE IMAGE
+
+### APPENDIX
+
 USER root
 
 # Define environment variables
@@ -90,7 +93,11 @@ ENV REPO_DIR="/srv/repo" \
     DISPLAY=":1.0" \
     R_VERSION="4.4.1"
 
-COPY . ${REPO_DIR}
+# Add NB_USER to staff group (required for rocker script)
+# Ensure the staff group exists first
+RUN groupadd -f staff && usermod -a -G staff "${NB_USER}"
+
+COPY --chown=${NB_USER}:${NB_USER} . ${REPO_DIR}
 RUN chgrp -R staff ${REPO_DIR} && \
     chmod -R g+rwx ${REPO_DIR} && \
     rm -rf ${REPO_DIR}/book ${REPO_DIR}/docs
@@ -101,17 +108,14 @@ RUN mkdir -p /pyrocket_scripts && \
     chown -R root:staff /pyrocket_scripts && \
     chmod -R 775 /pyrocket_scripts
 
-# Add NB_USER to staff group (required for rocker script)
-RUN usermod -a -G staff "${NB_USER}"
-
-# Install R, RStudio via Rocker scripts
-# ENV R_DOCKERFILE="verse_${R_VERSION}"
-# RUN PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin && \
-#  chmod +x ${REPO_DIR}/rocker.sh && \
-#  ${REPO_DIR}/rocker.sh
-
 # Install extra conda packages
 RUN /pyrocket_scripts/install-conda-packages.sh ${REPO_DIR}/environment.yml
+
+# Install R, RStudio via Rocker scripts
+ENV R_DOCKERFILE="verse_${R_VERSION}"
+RUN PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin && \
+    chmod +x ${REPO_DIR}/rocker.sh && \
+    ${REPO_DIR}/rocker.sh
 
 # Install extra apt packages
 # Install linux packages after R installation since the R install scripts get rid of packages
@@ -133,6 +137,8 @@ RUN mkdir -p ${NB_PYTHON_PREFIX}/etc/jupyter/jupyter_server_config.d/ && \
     cp ${REPO_DIR}/custom_jupyter_server_config.json ${NB_PYTHON_PREFIX}/etc/jupyter/jupyter_server_config.d/ && \
     cp ${REPO_DIR}/custom_jupyter_server_config.json ${NB_PYTHON_PREFIX}/etc/jupyter/jupyter_notebook_config.d/
 
+# Set up the start command 
+USER ${NB_USER}
 RUN chmod +x ${REPO_DIR}/start \
     && cp ${REPO_DIR}/start /srv/start
     

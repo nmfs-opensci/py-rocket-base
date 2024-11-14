@@ -164,6 +164,12 @@ ul.task-list li input[type="checkbox"] {
  <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Developer notes</span></span></a>
   </div>
 </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./related.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Related Docker Stacks</span></span></a>
+  </div>
+</li>
     </ul>
     </div>
 </nav>
@@ -226,8 +232,7 @@ ul.task-list li input[type="checkbox"] {
 <p>The <code>install-conda-packages.sh</code> script will install conda packages to the conda notebook environment, the user environment in the py-rocket-base image (same as for pangeo and repo2docker images).</p>
 <p>Here is the code for your Docker file. You can name the conda package file to something other than <code>environment.yml</code>. Make sure your file has <code>name:</code>. The name is arbitrary. It is ignored but required for the script.</p>
 <pre><code>COPY environment.yml environment.yml
-RUN /pyrocket_scripts/install-conda-packages.sh environment.yml
-RUN rm environment.yml</code></pre>
+RUN /pyrocket_scripts/install-conda-packages.sh environment.yml &amp;&amp; rm environment.yml</code></pre>
 <p>This is a standard format. You can add version pinning.</p>
 <p>environment.yml</p>
 <pre><code>name: required
@@ -239,15 +244,13 @@ dependencies:
 <p>Instead of a list of conda packages (typically called environment.yml), you can use a conda lock file instead.</p>
 <p>Here is the code for your Docker file. You can name your conda lock file something other than <code>conda-lock.yml</code>.</p>
 <pre><code>COPY conda-lock.yml conda-lock.yml
-RUN /pyrocket_scripts/install-conda-packages.sh conda-lock.yml
-RUN rm conda-lock.yml</code></pre>
+RUN /pyrocket_scripts/install-conda-packages.sh conda-lock.yml &amp;&amp; rm conda-lock.yml</code></pre>
 </section>
 <section id="install-pip-packages.sh" class="level2" data-number="2.2">
 <h2 data-number="2.2" class="anchored" data-anchor-id="install-pip-packages.sh"><span class="header-section-number">2.2</span> install-pip-packages.sh</h2>
 <p>The <code>install-pip-packages.sh</code> script will install packages using <code>pip</code>. Here is the code for your Docker file. You can name your pip package file something other than <code>requirements.txt</code>.</p>
 <pre><code>COPY requirements.txt requirements.txt
-RUN /pyrocket_scripts/install-pip-packages.sh requirements.txt
-RUN rm requirements.txt</code></pre>
+RUN /pyrocket_scripts/install-pip-packages.sh requirements.txt &amp;&amp; rm requirements.txt</code></pre>
 <p>requirements.txt</p>
 <pre><code>#a package
 harmony-py
@@ -258,8 +261,7 @@ harmony-py
 <p>The <code>install-r-packages.sh</code> script will run the supplied R script which you can use to install R packages to the system library.</p>
 <p>Here is the code for your Docker file. You can name the R script file to something other than <code>install.R</code>. Make sure your file is an R script.</p>
 <pre><code>COPY install.R install.R
-RUN /pyrocket_scripts/install-r-packages.sh install.R
-RUN rm install.R</code></pre>
+RUN /pyrocket_scripts/install-r-packages.sh install.R &amp;&amp; rm install.R</code></pre>
 <p>install.R example</p>
 <pre><code># to match rocker/verse:4.4 used in py-rocker-base
 # look up the date that the Rocker image was created and put that
@@ -283,8 +285,7 @@ USER ${NB_USER}</code></pre>
 <p>The <code>install-apt-packages.sh</code> script will install packages with <code>apt-get</code>. Here is the code for your Docker file. You can name the apt file of packages names to something other than <code>apt.txt</code>. Comments and newlines are allowed. Installation requires root.</p>
 <pre><code>USER root
 COPY apt.txt apt.txt
-RUN /pyrocket_scripts/install-apt-packages.sh apt.txt
-RUN rm apt.txt
+RUN /pyrocket_scripts/install-apt-packages.sh apt.txt &amp;&amp; rm apt.txt
 USER ${NB_USER}</code></pre>
 <p>apt.txt example</p>
 <pre><code># Some useful stuff
@@ -297,8 +298,7 @@ cmocean</code></pre>
 <h2 data-number="2.5" class="anchored" data-anchor-id="run-postbuild.sh"><span class="header-section-number">2.5</span> run-postbuild.sh</h2>
 <p>The <code>run-postbuild.sh</code> script can be run as root or jovyan (<code>${NB_USER}</code>). The script has some extra code to remove leftover files after installing Python extensions.</p>
 <pre><code>COPY postBuild postBuild
-RUN /pyrocket_scripts/run-postbuild.sh postBuild
-RUN rm postBuild</code></pre>
+RUN /pyrocket_scripts/run-postbuild.sh postBuild &amp;&amp; rm postBuild</code></pre>
 <p>postBuild</p>
 <pre><code>#!/bin/bash -l
 set -e
@@ -310,15 +310,14 @@ set -e
 <p>The <code>start</code> bash code is run when the image starts. py-rocker-base has a start script at <code>${REPO_DIR}/start</code> which loads the Desktop applications. If you change that start file (by copying your start file onto that location), then the Desktop apps will not be loaded properly. Instead, the <code>setup-start.sh</code> will add your start file to a directory <code>${REPO_DIR}/childstarts</code> and will run all those scripts after <code>${REPO_DIR}/start</code>.</p>
 <p>The <code>setup-start.sh</code> script will move the file you provide into <code>${REPO_DIR}/childstarts</code>. As usual you can name your script something other than <code>start</code>.</p>
 <pre><code>COPY start start
-RUN /pyrocket_scripts/setup-start.sh start
-RUN rm start</code></pre>
+RUN /pyrocket_scripts/setup-start.sh start &amp;&amp; rm start</code></pre>
 </section>
 <section id="install-vscode-extensions.sh" class="level2" data-number="2.7">
 <h2 data-number="2.7" class="anchored" data-anchor-id="install-vscode-extensions.sh"><span class="header-section-number">2.7</span> install-vscode-extensions.sh</h2>
 <p>The <code>install-vscode-extensions.sh</code> script will add VSCode extensions.</p>
 <pre><code>COPY vscode-extensions.txt vscode-extensions.txt
-RUN /pyrocket_scripts/install-vscode-extensions.sh vscode-extensions.txt
-RUN rm vscode-extensions.txt</code></pre>
+RUN /pyrocket_scripts/install-vscode-extensions.sh vscode-extensions.txt &amp;&amp; \
+  rm vscode-extensions.txt</code></pre>
 <p>vscode-extensions.txt</p>
 <pre><code>gitlens
 indent-rainbow

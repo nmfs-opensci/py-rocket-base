@@ -24,6 +24,7 @@ book:
     - publishing.qmd
     - jupyter-config.qmd
     - developers.qmd
+    - related.qmd
 
   sidebar:
     background: "#D9E3E4"
@@ -47,3 +48,9 @@ format:
     code-copy: true
     code-overflow: wrap
     toc: true
+    
+crossref:
+  chapters: true
+  labels: roman
+  subref-labels: roman i
+

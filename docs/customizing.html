@@ -164,6 +164,12 @@ ul.task-list li input[type="checkbox"] {
  <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Developer notes</span></span></a>
   </div>
 </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./related.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Related Docker Stacks</span></span></a>
+  </div>
+</li>
     </ul>
     </div>
 </nav>
@@ -239,8 +245,8 @@ ul.task-list li input[type="checkbox"] {
 <p>The format for calling the pyrocket and rocker scripts is the following.</p>
 <p>pyrocket scripts take files (or a path to a directory with Desktop files) as arguments. The <code>COPY</code> command is needed to copy the file into the Docker build context where it can be used in <code>RUN</code> commands. Without this you will get a “file not found” error. Removing the file after you are done with it will clean up your image files.</p>
 <pre><code>COPY environment.yml environment.yml
-RUN /pyrocket_scripts/install-conda-packages.sh environment.yml
-RUN rm environment.yml</code></pre>
+RUN /pyrocket_scripts/install-conda-packages.sh environment.yml &amp;&amp; \
+  rm environment.yml</code></pre>
 <p>Rocker scripts do not take arguments. Note that PATH must be given since rocker installation scripts will fail with conda on the path. The path specification is only within the specific RUN context.</p>
 <pre><code>USER root
 RUN PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin &amp;&amp; \
@@ -277,8 +283,8 @@ USER ${NB_USER}</code></pre>
 <pre><code>FROM ghcr.io/nmfs-opensci/py-rocket-base:latest
 
 COPY environment.yml environment.yml
-RUN /pyrocket_scripts/install-conda-packages.sh environment.yml
-RUN rm environment.yml</code></pre>
+RUN /pyrocket_scripts/install-conda-packages.sh environment.yml &amp;&amp; \
+  rm environment.yml</code></pre>
 <p>environment.yml</p>
 <pre><code>name: required
 channels:
@@ -297,8 +303,7 @@ dependencies:
 <pre><code>FROM ghcr.io/nmfs-opensci/py-rocket-base:latest
 
 COPY install.R install.R
-RUN /pyrocket_scripts/install-r-packages.sh install.R
-RUN rm install.R</code></pre>
+RUN /pyrocket_scripts/install-r-packages.sh install.R &amp;&amp; rm install.R</code></pre>
 <p>install.R</p>
 <pre><code># to match rocker/verse:4.4 used in py-rocker-base
 # look up the date that the Rocker image was created and put that
@@ -317,8 +322,7 @@ install.packages(list.of.packages, repos=repo)</code></pre>
 
 USER root
 COPY apt.txt apt.txt
-RUN /pyrocket_scripts/install-apt-packages.sh apt.txt
-RUN rm apt.txt
+RUN /pyrocket_scripts/install-apt-packages.sh apt.txt &amp;&amp; rm apt.txt
 USER ${NB_USER}</code></pre>
 <p>apt.txt</p>
 <pre><code># a package

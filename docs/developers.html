@@ -63,6 +63,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
+<link href="./related.html" rel="next">
 <link href="./jupyter-config.html" rel="prev">
 <link href="./assets/favicon.ico" rel="icon">
 <script src="site_libs/quarto-html/quarto.js"></script>
@@ -195,6 +196,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <div class="sidebar-item-container"> 
   <a href="./developers.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Developer notes</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./related.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Related Docker Stacks</span></span></a>
   </div>
 </li>
     </ul>
@@ -442,49 +449,49 @@ most of the work in py-rocket-base is done here. appendix calls rocker.sh and in
 <section id="rocker.sh" class="level2" data-number="7.10">
 <h2 data-number="7.10" class="anchored" data-anchor-id="rocker.sh"><span class="header-section-number">7.10</span> rocker.sh</h2>
 <p>This script will copy in the rocker scripts from <a href="https://github.com/rocker-org/rocker-versioned2">rocker-versioned2</a> into <code>${REPO_DIR}</code> to install things. It will read in one of the rocker docker files using <code>R_DOCKERFILE</code> defined in the <code>appendix</code> file (which is inserted into the main docker file). Variables defined here will only be available in this script. Click on the numbers in the script to learn what each section is doing.</p>
-<pre id="annotated-cell-7" class="code-annotation-code"><code>#!/bin/bash
-set -e
-
-# Copy in the rocker files. Work in ${REPO_DIR} to make sure I don't clobber anything
-cd ${REPO_DIR}
-wget https://github.com/rocker-org/rocker-versioned2/archive/refs/tags/R${R_VERSION}.tar.gz
-tar zxvf R${R_VERSION}.tar.gz &amp;&amp; \
-mv rocker-versioned2-R${R_VERSION}/scripts /rocker_scripts &amp;&amp; \
-ROCKER_DOCKERFILE_NAME="${R_DOCKERFILE}.Dockerfile"
-mv rocker-versioned2-R${R_VERSION}/dockerfiles/${ROCKER_DOCKERFILE_NAME}  /rocker_scripts/original.Dockerfile &amp;&amp; \
-rm R${R_VERSION}.tar.gz &amp;&amp; \
-rm -rf rocker-versioned2-R${R_VERSION}
-
-cd /
-# Read the Dockerfile and process each line
-while IFS= read -r line; do
-    # Check if the line starts with ENV or RUN
-    if [[ "$line" == ENV* ]]; then
-        # Assign variable
-        var_assignment=$(echo "$line" | sed 's/^ENV //g')
-        # Replace ENV DEFAULT_USER="jovyan"
-        if [[ "$var_assignment" == DEFAULT_USER* ]]; then
-            var_assignment="DEFAULT_USER=${NB_USER}"
-        fi
-        # Run this way eval "export ..." otherwise the " will get turned to %22
-        eval "export $var_assignment"
-        # Write the exported variable to env.txt
-        echo "export $var_assignment" &gt;&gt; ${REPO_DIR}/env.txt
-    elif [[ "$line" == RUN* ]]; then
-        # Run the command from the RUN line
-        cmd=$(echo "$line" | sed 's/^RUN //g')
-        echo "Executing: $cmd"
-        eval "$cmd" # || echo ${cmd}" encountered an error, but continuing..."
-    fi
-done &lt; /rocker_scripts/original.Dockerfile
-
-# Install extra tex packages that are not installed by default
-if command -v tlmgr &amp;&gt; /dev/null; then
-    echo "Installing texlive collection-latexrecommended..."
-    tlmgr install collection-latexrecommended
-    tlmgr install pdfcol tcolorbox eurosym upquote adjustbox titling enumitem ulem soul rsfs
-fi</code></pre>
-<dl>
+<div class="sourceCode" id="annotated-cell-7"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-7-1"><a href="#annotated-cell-7-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="annotated-cell-7-2"><a href="#annotated-cell-7-2" aria-hidden="true" tabindex="-1"></a>set <span class="sc">-</span>e</span>
+<span id="annotated-cell-7-3"><a href="#annotated-cell-7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-7-4"><a href="#annotated-cell-7-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Copy in the rocker files. Work in ${REPO_DIR} to make sure I don't clobber anything</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-7" data-target-annotation="1">1</button><span id="annotated-cell-7-5" class="code-annotation-target"><a href="#annotated-cell-7-5" aria-hidden="true" tabindex="-1"></a>cd <span class="sc">$</span>{REPO_DIR}</span>
+<span id="annotated-cell-7-6"><a href="#annotated-cell-7-6" aria-hidden="true" tabindex="-1"></a>wget https<span class="sc">:</span><span class="er">//</span>github.com<span class="sc">/</span>rocker<span class="sc">-</span>org<span class="sc">/</span>rocker<span class="sc">-</span>versioned2<span class="sc">/</span>archive<span class="sc">/</span>refs<span class="sc">/</span>tags<span class="sc">/</span>R<span class="sc">$</span>{R_VERSION}.tar.gz</span>
+<span id="annotated-cell-7-7"><a href="#annotated-cell-7-7" aria-hidden="true" tabindex="-1"></a>tar zxvf R<span class="sc">$</span>{R_VERSION}.tar.gz <span class="sc">&amp;&amp;</span> \</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-7" data-target-annotation="2">2</button><span id="annotated-cell-7-8" class="code-annotation-target"><a href="#annotated-cell-7-8" aria-hidden="true" tabindex="-1"></a>mv rocker<span class="sc">-</span>versioned2<span class="sc">-</span>R<span class="sc">$</span>{R_VERSION}<span class="sc">/</span>scripts <span class="sc">/</span>rocker_scripts <span class="sc">&amp;&amp;</span> \</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-7" data-target-annotation="3">3</button><span id="annotated-cell-7-9" class="code-annotation-target"><a href="#annotated-cell-7-9" aria-hidden="true" tabindex="-1"></a>ROCKER_DOCKERFILE_NAME<span class="ot">=</span><span class="st">"${R_DOCKERFILE}.Dockerfile"</span></span>
+<span id="annotated-cell-7-10"><a href="#annotated-cell-7-10" aria-hidden="true" tabindex="-1"></a>mv rocker<span class="sc">-</span>versioned2<span class="sc">-</span>R<span class="sc">$</span>{R_VERSION}<span class="sc">/</span>dockerfiles<span class="sc">/</span><span class="er">$</span>{ROCKER_DOCKERFILE_NAME}  <span class="sc">/</span>rocker_scripts<span class="sc">/</span>original.Dockerfile <span class="sc">&amp;&amp;</span> \</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-7" data-target-annotation="4">4</button><span id="annotated-cell-7-11" class="code-annotation-target"><a href="#annotated-cell-7-11" aria-hidden="true" tabindex="-1"></a>rm R<span class="sc">$</span>{R_VERSION}.tar.gz <span class="sc">&amp;&amp;</span> \</span>
+<span id="annotated-cell-7-12"><a href="#annotated-cell-7-12" aria-hidden="true" tabindex="-1"></a>rm <span class="sc">-</span>rf rocker<span class="sc">-</span>versioned2<span class="sc">-</span>R<span class="sc">$</span>{R_VERSION}</span>
+<span id="annotated-cell-7-13"><a href="#annotated-cell-7-13" aria-hidden="true" tabindex="-1"></a></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-7" data-target-annotation="5">5</button><span id="annotated-cell-7-14" class="code-annotation-target"><a href="#annotated-cell-7-14" aria-hidden="true" tabindex="-1"></a>cd <span class="sc">/</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-7" data-target-annotation="6">6</button><span id="annotated-cell-7-15" class="code-annotation-target"><a href="#annotated-cell-7-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Read the Dockerfile and process each line</span></span>
+<span id="annotated-cell-7-16"><a href="#annotated-cell-7-16" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> IFS<span class="ot">=</span> read <span class="sc">-</span>r line; do</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-7" data-target-annotation="7">7</button><span id="annotated-cell-7-17" class="code-annotation-target"><a href="#annotated-cell-7-17" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Check if the line starts with ENV or RUN</span></span>
+<span id="annotated-cell-7-18"><a href="#annotated-cell-7-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> [[ <span class="st">"$line"</span> <span class="sc">==</span> ENV<span class="sc">*</span> ]]; then</span>
+<span id="annotated-cell-7-19"><a href="#annotated-cell-7-19" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Assign variable</span></span>
+<span id="annotated-cell-7-20"><a href="#annotated-cell-7-20" aria-hidden="true" tabindex="-1"></a>        var_assignment<span class="ot">=</span><span class="er">$</span>(echo <span class="st">"$line"</span> <span class="sc">|</span> sed <span class="st">'s/^ENV //g'</span>)</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-7" data-target-annotation="8">8</button><span id="annotated-cell-7-21" class="code-annotation-target"><a href="#annotated-cell-7-21" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Replace ENV DEFAULT_USER="jovyan"</span></span>
+<span id="annotated-cell-7-22"><a href="#annotated-cell-7-22" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> [[ <span class="st">"$var_assignment"</span> <span class="sc">==</span> DEFAULT_USER<span class="sc">*</span> ]]; then</span>
+<span id="annotated-cell-7-23"><a href="#annotated-cell-7-23" aria-hidden="true" tabindex="-1"></a>            var_assignment<span class="ot">=</span><span class="st">"DEFAULT_USER=${NB_USER}"</span></span>
+<span id="annotated-cell-7-24"><a href="#annotated-cell-7-24" aria-hidden="true" tabindex="-1"></a>        fi</span>
+<span id="annotated-cell-7-25"><a href="#annotated-cell-7-25" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Run this way eval "export ..." otherwise the " will get turned to %22</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-7" data-target-annotation="9">9</button><span id="annotated-cell-7-26" class="code-annotation-target"><a href="#annotated-cell-7-26" aria-hidden="true" tabindex="-1"></a>        eval <span class="st">"export $var_assignment"</span></span>
+<span id="annotated-cell-7-27"><a href="#annotated-cell-7-27" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Write the exported variable to env.txt</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-7" data-target-annotation="10">10</button><span id="annotated-cell-7-28" class="code-annotation-target"><a href="#annotated-cell-7-28" aria-hidden="true" tabindex="-1"></a>        echo <span class="st">"export $var_assignment"</span> <span class="sc">&gt;</span><span class="er">&gt;</span> <span class="er">$</span>{REPO_DIR}<span class="sc">/</span>env.txt</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-7" data-target-annotation="11">11</button><span id="annotated-cell-7-29" class="code-annotation-target"><a href="#annotated-cell-7-29" aria-hidden="true" tabindex="-1"></a>    elif [[ <span class="st">"$line"</span> <span class="sc">==</span> RUN<span class="sc">*</span> ]]; then</span>
+<span id="annotated-cell-7-30"><a href="#annotated-cell-7-30" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Run the command from the RUN line</span></span>
+<span id="annotated-cell-7-31"><a href="#annotated-cell-7-31" aria-hidden="true" tabindex="-1"></a>        cmd<span class="ot">=</span><span class="er">$</span>(echo <span class="st">"$line"</span> <span class="sc">|</span> sed <span class="st">'s/^RUN //g'</span>)</span>
+<span id="annotated-cell-7-32"><a href="#annotated-cell-7-32" aria-hidden="true" tabindex="-1"></a>        echo <span class="st">"Executing: $cmd"</span></span>
+<span id="annotated-cell-7-33"><a href="#annotated-cell-7-33" aria-hidden="true" tabindex="-1"></a>        eval <span class="st">"$cmd"</span> <span class="co"># || echo ${cmd}" encountered an error, but continuing..."</span></span>
+<span id="annotated-cell-7-34"><a href="#annotated-cell-7-34" aria-hidden="true" tabindex="-1"></a>    fi</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-7" data-target-annotation="12">12</button><span id="annotated-cell-7-35" class="code-annotation-target"><a href="#annotated-cell-7-35" aria-hidden="true" tabindex="-1"></a>done <span class="sc">&lt;</span> <span class="er">/</span>rocker_scripts<span class="sc">/</span>original.Dockerfile</span>
+<span id="annotated-cell-7-36"><a href="#annotated-cell-7-36" aria-hidden="true" tabindex="-1"></a></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-7" data-target-annotation="13">13</button><span id="annotated-cell-7-37" class="code-annotation-target"><a href="#annotated-cell-7-37" aria-hidden="true" tabindex="-1"></a><span class="co"># Install extra tex packages that are not installed by default</span></span>
+<span id="annotated-cell-7-38"><a href="#annotated-cell-7-38" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> command <span class="sc">-</span>v tlmgr <span class="sc">&amp;</span><span class="er">&gt;</span> <span class="er">/</span>dev<span class="sc">/</span>null; then</span>
+<span id="annotated-cell-7-39"><a href="#annotated-cell-7-39" aria-hidden="true" tabindex="-1"></a>    echo <span class="st">"Installing texlive collection-latexrecommended..."</span></span>
+<span id="annotated-cell-7-40"><a href="#annotated-cell-7-40" aria-hidden="true" tabindex="-1"></a>    tlmgr install collection<span class="sc">-</span>latexrecommended</span>
+<span id="annotated-cell-7-41"><a href="#annotated-cell-7-41" aria-hidden="true" tabindex="-1"></a>    tlmgr install pdfcol tcolorbox eurosym upquote adjustbox titling enumitem ulem soul rsfs</span>
+<span id="annotated-cell-7-42"><a href="#annotated-cell-7-42" aria-hidden="true" tabindex="-1"></a>fi</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<dl class="code-annotation-container-hidden code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-7" data-target-annotation="1">1</dt>
 <dd>
 <span data-code-cell="annotated-cell-7" data-code-lines="5,6,7" data-code-annotation="1">The <a href="https://github.com/rocker-org/rocker-versioned2">rocker-versioned2</a> repository for a particular R version is copied into <code>{REPO_DIR}</code> and unzipped. <code>R_VERSION</code> is defined in <code>appendix</code>.</span>
@@ -542,30 +549,30 @@ fi</code></pre>
 <section id="start" class="level2" data-number="7.11">
 <h2 data-number="7.11" class="anchored" data-anchor-id="start"><span class="header-section-number">7.11</span> start</h2>
 <p>Within a JupyterHub, the user home directory <code>$HOME</code> is typically re-mapped to the user persistent home directory. That means that the image build process cannot put things into <code>$HOME</code>, they would just be lost when <code>$HOME</code> is re-mapped. If a process needs to have something in the home directory, e.g.&nbsp;in some local user configuration, this must be done in the <code>start</code> script. The repo2docker docker image specifies that the start script is <code>${REPO_DIR}/start</code>. In py-rocket-base, the start scripts in a child docker file is souces in a subshell from the py-rocket-base start script.</p>
-<pre id="annotated-cell-8" class="code-annotation-code"><code>#!/bin/bash
-set -euo pipefail
-
-# Start - Set any environment variables here
-# These are inherited by all processes, *except* RStudio
-# USE export &lt;parname&gt;=value
-# source this file to get the variables defined in the rocker Dockerfile
-source ${REPO_DIR}/env.txt
-# End - Set any environment variables here
-
-# Run child start scripts in a subshell to contain its environment
-# ${REPO_DIR}/childstart/ is created by setup-start.sh
-if [ -d "${REPO_DIR}/childstart/" ]; then
-    for script in ${REPO_DIR}/childstart/*; do
-        if [ -f "$script" ]; then
-            echo "Sourcing script: $script"
-            source "$script" || {
-                echo "Error: Failed to source $script. Moving on to the next script."
-            }
-        fi
-    done
-fi
-exec "$@"</code></pre>
-<dl>
+<div class="sourceCode" id="annotated-cell-8"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-8-1"><a href="#annotated-cell-8-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="annotated-cell-8-2"><a href="#annotated-cell-8-2" aria-hidden="true" tabindex="-1"></a>set <span class="sc">-</span>euo pipefail</span>
+<span id="annotated-cell-8-3"><a href="#annotated-cell-8-3" aria-hidden="true" tabindex="-1"></a></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-8" data-target-annotation="1">1</button><span id="annotated-cell-8-4" class="code-annotation-target"><a href="#annotated-cell-8-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Start - Set any environment variables here</span></span>
+<span id="annotated-cell-8-5"><a href="#annotated-cell-8-5" aria-hidden="true" tabindex="-1"></a><span class="co"># These are inherited by all processes, *except* RStudio</span></span>
+<span id="annotated-cell-8-6"><a href="#annotated-cell-8-6" aria-hidden="true" tabindex="-1"></a><span class="co"># USE export &lt;parname&gt;=value</span></span>
+<span id="annotated-cell-8-7"><a href="#annotated-cell-8-7" aria-hidden="true" tabindex="-1"></a><span class="co"># source this file to get the variables defined in the rocker Dockerfile</span></span>
+<span id="annotated-cell-8-8"><a href="#annotated-cell-8-8" aria-hidden="true" tabindex="-1"></a>source <span class="sc">$</span>{REPO_DIR}<span class="sc">/</span>env.txt</span>
+<span id="annotated-cell-8-9"><a href="#annotated-cell-8-9" aria-hidden="true" tabindex="-1"></a><span class="co"># End - Set any environment variables here</span></span>
+<span id="annotated-cell-8-10"><a href="#annotated-cell-8-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-8-11"><a href="#annotated-cell-8-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Run child start scripts in a subshell to contain its environment</span></span>
+<span id="annotated-cell-8-12"><a href="#annotated-cell-8-12" aria-hidden="true" tabindex="-1"></a><span class="co"># ${REPO_DIR}/childstart/ is created by setup-start.sh</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-8" data-target-annotation="2">2</button><span id="annotated-cell-8-13" class="code-annotation-target"><a href="#annotated-cell-8-13" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> [ <span class="sc">-</span>d <span class="st">"${REPO_DIR}/childstart/"</span> ]; then</span>
+<span id="annotated-cell-8-14"><a href="#annotated-cell-8-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> script <span class="cf">in</span> <span class="sc">$</span>{REPO_DIR}<span class="sc">/</span>childstart<span class="sc">/</span><span class="er">*</span>; do</span>
+<span id="annotated-cell-8-15"><a href="#annotated-cell-8-15" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> [ <span class="sc">-</span>f <span class="st">"$script"</span> ]; then</span>
+<span id="annotated-cell-8-16"><a href="#annotated-cell-8-16" aria-hidden="true" tabindex="-1"></a>            echo <span class="st">"Sourcing script: $script"</span></span>
+<span id="annotated-cell-8-17"><a href="#annotated-cell-8-17" aria-hidden="true" tabindex="-1"></a>            source <span class="st">"$script"</span> <span class="sc">||</span> {</span>
+<span id="annotated-cell-8-18"><a href="#annotated-cell-8-18" aria-hidden="true" tabindex="-1"></a>                echo <span class="st">"Error: Failed to source $script. Moving on to the next script."</span></span>
+<span id="annotated-cell-8-19"><a href="#annotated-cell-8-19" aria-hidden="true" tabindex="-1"></a>            }</span>
+<span id="annotated-cell-8-20"><a href="#annotated-cell-8-20" aria-hidden="true" tabindex="-1"></a>        fi</span>
+<span id="annotated-cell-8-21"><a href="#annotated-cell-8-21" aria-hidden="true" tabindex="-1"></a>    done</span>
+<span id="annotated-cell-8-22"><a href="#annotated-cell-8-22" aria-hidden="true" tabindex="-1"></a>fi</span>
+<span id="annotated-cell-8-23"><a href="#annotated-cell-8-23" aria-hidden="true" tabindex="-1"></a>exec <span class="st">"$@"</span></span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<dl class="code-annotation-container-hidden code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-8" data-target-annotation="1">1</dt>
 <dd>
 <span data-code-cell="annotated-cell-8" data-code-lines="4,5,6,7,8,9" data-code-annotation="1">In a Docker file so no way to dynamically set environmental variables, so the <code>env.txt</code> file with the <code>export &lt;var&gt;=&lt;value&gt;</code> are source at start up.</span>
@@ -579,52 +586,52 @@ exec "$@"</code></pre>
 <section id="desktop.sh" class="level2" data-number="7.12">
 <h2 data-number="7.12" class="anchored" data-anchor-id="desktop.sh"><span class="header-section-number">7.12</span> desktop.sh</h2>
 <p>The default for XDG and xfce4 is for Desktop files to be in ~/Desktop but this leads to a variety of problems. First we are altering the user directiory which seems rude, second orphan desktop files might be in ~/Desktop so who knows what the user Desktop experience with be, here the Desktop dir is set to /usr/share/Desktop so is part of the image. Users that really want to customize Desktop can change <code>~/.config/user-dirs.dirs</code>. Though py-rocket-base might not respect that. Not sure why you’d do that instead of just using a different image that doesn’t have the py-rocket-base behavior.</p>
-<pre id="annotated-cell-9" class="code-annotation-code"><code>#!/bin/bash
-set -e
-
-# Copy in the Desktop files
-APPLICATIONS_DIR=/usr/share/applications
-DESKTOP_DIR=/usr/share/Desktop
-mkdir -p "${DESKTOP_DIR}"
-chown :staff /usr/share/Desktop
-chmod 775 /usr/share/Desktop
-# set the Desktop dir default for XDG
-echo 'XDG_DESKTOP_DIR="${DESKTOP_DIR}"' &gt; /etc/xdg/user-dirs.defaults
-
-# The for loops will fail if they return null (no files). Set shell option nullglob
-shopt -s nullglob
-
-for desktop_file_path in ${REPO_DIR}/Desktop/*.desktop; do
-    cp "${desktop_file_path}" "${APPLICATIONS_DIR}/."
-    # Symlink application to desktop and set execute permission so xfce (desktop) doesn't complain
-    desktop_file_name="$(basename ${desktop_file_path})"
-    # Set execute permissions on the copied .desktop file
-    chmod +x "${APPLICATIONS_DIR}/${desktop_file_name}"
-    ln -sf "${APPLICATIONS_DIR}/${desktop_file_name}" "${DESKTOP_DIR}/${desktop_file_name}"
-done
-update-desktop-database "${APPLICATIONS_DIR}"
-
-# Add MIME Type data from XML files  to the MIME database.
-MIME_DIR="/usr/share/mime"
-MIME_PACKAGES_DIR="${MIME_DIR}/packages"
-mkdir -p "${MIME_PACKAGES_DIR}"
-for mime_file_path in ${REPO_DIR}/Desktop/*.xml; do
-    cp "${mime_file_path}" "${MIME_PACKAGES_DIR}/."
-done
-update-mime-database "${MIME_DIR}"
-
-# Add icons
-ICON_DIR="/usr/share/icons"
-ICON_PACKAGES_DIR="${ICON_DIR}/packages"
-mkdir -p "${ICON_PACKAGES_DIR}"
-for icon_file_path in "${REPO_DIR}"/Desktop/*.png; do
-    cp "${icon_file_path}" "${ICON_PACKAGES_DIR}/" || echo "Failed to copy ${icon_file_path}"
-done
-for icon_file_path in "${REPO_DIR}"/Desktop/*.svg; do
-    cp "${icon_file_path}" "${ICON_PACKAGES_DIR}/" || echo "Failed to copy ${icon_file_path}"
-done
-gtk-update-icon-cache "${ICON_DIR}"</code></pre>
-<dl>
+<div class="sourceCode" id="annotated-cell-9"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-9-1"><a href="#annotated-cell-9-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="annotated-cell-9-2"><a href="#annotated-cell-9-2" aria-hidden="true" tabindex="-1"></a>set <span class="sc">-</span>e</span>
+<span id="annotated-cell-9-3"><a href="#annotated-cell-9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-9-4"><a href="#annotated-cell-9-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Copy in the Desktop files</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-9" data-target-annotation="1">1</button><span id="annotated-cell-9-5" class="code-annotation-target"><a href="#annotated-cell-9-5" aria-hidden="true" tabindex="-1"></a>APPLICATIONS_DIR<span class="ot">=</span><span class="er">/</span>usr<span class="sc">/</span>share<span class="sc">/</span>applications</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-9" data-target-annotation="2">2</button><span id="annotated-cell-9-6" class="code-annotation-target"><a href="#annotated-cell-9-6" aria-hidden="true" tabindex="-1"></a>DESKTOP_DIR<span class="ot">=</span><span class="er">/</span>usr<span class="sc">/</span>share<span class="sc">/</span>Desktop</span>
+<span id="annotated-cell-9-7"><a href="#annotated-cell-9-7" aria-hidden="true" tabindex="-1"></a>mkdir <span class="sc">-</span>p <span class="st">"${DESKTOP_DIR}"</span></span>
+<span id="annotated-cell-9-8"><a href="#annotated-cell-9-8" aria-hidden="true" tabindex="-1"></a>chown <span class="sc">:</span>staff <span class="sc">/</span>usr<span class="sc">/</span>share<span class="sc">/</span>Desktop</span>
+<span id="annotated-cell-9-9"><a href="#annotated-cell-9-9" aria-hidden="true" tabindex="-1"></a>chmod <span class="dv">775</span> <span class="sc">/</span>usr<span class="sc">/</span>share<span class="sc">/</span>Desktop</span>
+<span id="annotated-cell-9-10"><a href="#annotated-cell-9-10" aria-hidden="true" tabindex="-1"></a><span class="co"># set the Desktop dir default for XDG</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-9" data-target-annotation="3">3</button><span id="annotated-cell-9-11" class="code-annotation-target"><a href="#annotated-cell-9-11" aria-hidden="true" tabindex="-1"></a>echo <span class="st">'XDG_DESKTOP_DIR="${DESKTOP_DIR}"'</span> <span class="sc">&gt;</span> <span class="er">/</span>etc<span class="sc">/</span>xdg<span class="sc">/</span>user<span class="sc">-</span>dirs.defaults</span>
+<span id="annotated-cell-9-12"><a href="#annotated-cell-9-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-9-13"><a href="#annotated-cell-9-13" aria-hidden="true" tabindex="-1"></a><span class="co"># The for loops will fail if they return null (no files). Set shell option nullglob</span></span>
+<span id="annotated-cell-9-14"><a href="#annotated-cell-9-14" aria-hidden="true" tabindex="-1"></a>shopt <span class="sc">-</span>s nullglob</span>
+<span id="annotated-cell-9-15"><a href="#annotated-cell-9-15" aria-hidden="true" tabindex="-1"></a></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-9" data-target-annotation="4">4</button><span id="annotated-cell-9-16" class="code-annotation-target"><a href="#annotated-cell-9-16" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> desktop_file_path <span class="cf">in</span> <span class="sc">$</span>{REPO_DIR}<span class="sc">/</span>Desktop<span class="sc">/</span><span class="er">*</span>.desktop; do</span>
+<span id="annotated-cell-9-17"><a href="#annotated-cell-9-17" aria-hidden="true" tabindex="-1"></a>    cp <span class="st">"${desktop_file_path}"</span> <span class="st">"${APPLICATIONS_DIR}/."</span></span>
+<span id="annotated-cell-9-18"><a href="#annotated-cell-9-18" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Symlink application to desktop and set execute permission so xfce (desktop) doesn't complain</span></span>
+<span id="annotated-cell-9-19"><a href="#annotated-cell-9-19" aria-hidden="true" tabindex="-1"></a>    desktop_file_name<span class="ot">=</span><span class="st">"$(basename ${desktop_file_path})"</span></span>
+<span id="annotated-cell-9-20"><a href="#annotated-cell-9-20" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Set execute permissions on the copied .desktop file</span></span>
+<span id="annotated-cell-9-21"><a href="#annotated-cell-9-21" aria-hidden="true" tabindex="-1"></a>    chmod <span class="sc">+</span>x <span class="st">"${APPLICATIONS_DIR}/${desktop_file_name}"</span></span>
+<span id="annotated-cell-9-22"><a href="#annotated-cell-9-22" aria-hidden="true" tabindex="-1"></a>    ln <span class="sc">-</span>sf <span class="st">"${APPLICATIONS_DIR}/${desktop_file_name}"</span> <span class="st">"${DESKTOP_DIR}/${desktop_file_name}"</span></span>
+<span id="annotated-cell-9-23"><a href="#annotated-cell-9-23" aria-hidden="true" tabindex="-1"></a>done</span>
+<span id="annotated-cell-9-24"><a href="#annotated-cell-9-24" aria-hidden="true" tabindex="-1"></a>update<span class="sc">-</span>desktop<span class="sc">-</span>database <span class="st">"${APPLICATIONS_DIR}"</span></span>
+<span id="annotated-cell-9-25"><a href="#annotated-cell-9-25" aria-hidden="true" tabindex="-1"></a></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-9" data-target-annotation="5">5</button><span id="annotated-cell-9-26" class="code-annotation-target"><a href="#annotated-cell-9-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Add MIME Type data from XML files  to the MIME database.</span></span>
+<span id="annotated-cell-9-27"><a href="#annotated-cell-9-27" aria-hidden="true" tabindex="-1"></a>MIME_DIR<span class="ot">=</span><span class="st">"/usr/share/mime"</span></span>
+<span id="annotated-cell-9-28"><a href="#annotated-cell-9-28" aria-hidden="true" tabindex="-1"></a>MIME_PACKAGES_DIR<span class="ot">=</span><span class="st">"${MIME_DIR}/packages"</span></span>
+<span id="annotated-cell-9-29"><a href="#annotated-cell-9-29" aria-hidden="true" tabindex="-1"></a>mkdir <span class="sc">-</span>p <span class="st">"${MIME_PACKAGES_DIR}"</span></span>
+<span id="annotated-cell-9-30"><a href="#annotated-cell-9-30" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> mime_file_path <span class="cf">in</span> <span class="sc">$</span>{REPO_DIR}<span class="sc">/</span>Desktop<span class="sc">/</span><span class="er">*</span>.xml; do</span>
+<span id="annotated-cell-9-31"><a href="#annotated-cell-9-31" aria-hidden="true" tabindex="-1"></a>    cp <span class="st">"${mime_file_path}"</span> <span class="st">"${MIME_PACKAGES_DIR}/."</span></span>
+<span id="annotated-cell-9-32"><a href="#annotated-cell-9-32" aria-hidden="true" tabindex="-1"></a>done</span>
+<span id="annotated-cell-9-33"><a href="#annotated-cell-9-33" aria-hidden="true" tabindex="-1"></a>update<span class="sc">-</span>mime<span class="sc">-</span>database <span class="st">"${MIME_DIR}"</span></span>
+<span id="annotated-cell-9-34"><a href="#annotated-cell-9-34" aria-hidden="true" tabindex="-1"></a></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-9" data-target-annotation="6">6</button><span id="annotated-cell-9-35" class="code-annotation-target"><a href="#annotated-cell-9-35" aria-hidden="true" tabindex="-1"></a><span class="co"># Add icons</span></span>
+<span id="annotated-cell-9-36"><a href="#annotated-cell-9-36" aria-hidden="true" tabindex="-1"></a>ICON_DIR<span class="ot">=</span><span class="st">"/usr/share/icons"</span></span>
+<span id="annotated-cell-9-37"><a href="#annotated-cell-9-37" aria-hidden="true" tabindex="-1"></a>ICON_PACKAGES_DIR<span class="ot">=</span><span class="st">"${ICON_DIR}/packages"</span></span>
+<span id="annotated-cell-9-38"><a href="#annotated-cell-9-38" aria-hidden="true" tabindex="-1"></a>mkdir <span class="sc">-</span>p <span class="st">"${ICON_PACKAGES_DIR}"</span></span>
+<span id="annotated-cell-9-39"><a href="#annotated-cell-9-39" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> icon_file_path <span class="cf">in</span> <span class="st">"${REPO_DIR}"</span><span class="sc">/</span>Desktop<span class="sc">/</span><span class="er">*</span>.png; do</span>
+<span id="annotated-cell-9-40"><a href="#annotated-cell-9-40" aria-hidden="true" tabindex="-1"></a>    cp <span class="st">"${icon_file_path}"</span> <span class="st">"${ICON_PACKAGES_DIR}/"</span> <span class="sc">||</span> echo <span class="st">"Failed to copy ${icon_file_path}"</span></span>
+<span id="annotated-cell-9-41"><a href="#annotated-cell-9-41" aria-hidden="true" tabindex="-1"></a>done</span>
+<span id="annotated-cell-9-42"><a href="#annotated-cell-9-42" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> icon_file_path <span class="cf">in</span> <span class="st">"${REPO_DIR}"</span><span class="sc">/</span>Desktop<span class="sc">/</span><span class="er">*</span>.svg; do</span>
+<span id="annotated-cell-9-43"><a href="#annotated-cell-9-43" aria-hidden="true" tabindex="-1"></a>    cp <span class="st">"${icon_file_path}"</span> <span class="st">"${ICON_PACKAGES_DIR}/"</span> <span class="sc">||</span> echo <span class="st">"Failed to copy ${icon_file_path}"</span></span>
+<span id="annotated-cell-9-44"><a href="#annotated-cell-9-44" aria-hidden="true" tabindex="-1"></a>done</span>
+<span id="annotated-cell-9-45"><a href="#annotated-cell-9-45" aria-hidden="true" tabindex="-1"></a>gtk<span class="sc">-</span>update<span class="sc">-</span>icon<span class="sc">-</span>cache <span class="st">"${ICON_DIR}"</span></span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<dl class="code-annotation-container-hidden code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-9" data-target-annotation="1">1</dt>
 <dd>
 <span data-code-cell="annotated-cell-9" data-code-lines="5" data-code-annotation="1">This is the default local for system applications.</span>
@@ -1267,6 +1274,9 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
+      <a href="./related.html" class="pagination-link" aria-label="Related Docker Stacks">
+        <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Related Docker Stacks</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
   </div>
 </nav>
 </div> <!-- /content -->
