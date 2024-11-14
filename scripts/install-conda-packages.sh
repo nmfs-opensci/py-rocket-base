@@ -29,25 +29,48 @@ fi
 
 echo "  Found file: $ENV_FILE"
 
-# Determine file type based on content
-if grep -q "lock_set" "$ENV_FILE"; then
-    echo "  Detected conda-lock.yml file."
-    ${NB_PYTHON_PREFIX}/bin/conda-lock install --name ${CONDA_ENV} -f "$ENV_FILE"
-    INSTALLATION_HAPPENED=true
-elif grep -q "name:" "$ENV_FILE"; then
-    echo "  Detected environment.yml file."
-    ${CONDA_DIR}/condabin/mamba env update --name ${CONDA_ENV} -f "$ENV_FILE"
-    INSTALLATION_HAPPENED=true
+# Check if the Conda environment exists
+if ! ${CONDA_DIR}/condabin/conda env list | grep -q "^${CONDA_ENV} "; then
+    echo "  Environment '${CONDA_ENV}' not found. Creating it."
+
+    # Create environment if conda-lock.yml file is provided
+    if grep -q "lock_set" "$ENV_FILE"; then
+        echo "  Detected conda-lock.yml file."
+        ${NB_PYTHON_PREFIX}/bin/conda-lock install --name ${CONDA_ENV} -f "$ENV_FILE"
+        INSTALLATION_HAPPENED=true
+    elif grep -q "name:" "$ENV_FILE"; then
+        echo "  Detected environment.yml file."
+        ${CONDA_DIR}/condabin/mamba env create --name ${CONDA_ENV} -f "$ENV_FILE"
+        INSTALLATION_HAPPENED=true
+    else
+        echo "Error: Unrecognized file format in '${ENV_FILE}'."
+        echo "  - For an environment.yml file, ensure it includes a 'name:' entry. Any name is acceptable."
+        echo "  - For a conda-lock.yml file, ensure it includes a 'lock_set:' entry."
+        exit 1
+    fi
 else
-    # If neither condition matches, output a helpful error message
-    echo "Error: Unrecognized file format in '${env_file}'."
-    echo "  - For an environment.yml file, ensure it includes a 'name:' entry. Any name is acceptable."
-    echo "  - For a conda-lock.yml file, ensure it includes a 'lock_set:' entry."
-    exit 1
+    echo "  Environment '${CONDA_ENV}' exists. Updating it."
+
+    # Update environment if conda-lock.yml or environment.yml file is provided
+    if grep -q "lock_set" "$ENV_FILE"; then
+        echo "  Detected conda-lock.yml file."
+        ${NB_PYTHON_PREFIX}/bin/conda-lock install --name ${CONDA_ENV} -f "$ENV_FILE"
+        INSTALLATION_HAPPENED=true
+    elif grep -q "name:" "$ENV_FILE"; then
+        echo "  Detected environment.yml file."
+        ${CONDA_DIR}/condabin/mamba env update --name ${CONDA_ENV} -f "$ENV_FILE"
+        INSTALLATION_HAPPENED=true
+    else
+        echo "  Error: Unrecognized file format in '${ENV_FILE}'."
+        echo "  - For an environment.yml file, ensure it includes a 'name:' entry. Any name is acceptable."
+        echo "  - For a conda-lock.yml file, ensure it includes a 'lock_set:' entry."
+        exit 1
+    fi
 fi
 
 # Run cleanup if installation occurred
 if [ "$INSTALLATION_HAPPENED" = true ]; then
+    echo "Installation clean-up."
     ${CONDA_DIR}/condabin/mamba clean -yaf
     find ${CONDA_DIR} -follow -type f -name '*.a' -delete
     find ${CONDA_DIR} -follow -type f -name '*.js.map' -delete
@@ -57,3 +80,4 @@ if [ "$INSTALLATION_HAPPENED" = true ]; then
 fi
 
 echo "  Success! install-conda-packages.sh"
+
