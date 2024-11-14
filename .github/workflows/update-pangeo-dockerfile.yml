@@ -4,8 +4,9 @@ on:
   push:
     branches:
       - main
+      - dev
     paths:
-      - '.github/workflows/update-pangeo-dockerfile.yml'
+      - '.github/workflows/update-pangeo-dockerfile.yml' 
   workflow_dispatch:  # Manual trigger
   schedule:
     - cron: '0 3 * * *'  # Runs daily at 3:00 AM UTC
@@ -53,6 +54,7 @@ jobs:
         with:
           title: "Update Dockerfile from Source"
           body: "This PR updates the Dockerfile in base-image directory to the latest version from the source repo."
+          base: ${{ github.ref }}  # Base branch (main or dev)
           branch: "update-dockerfile"
           reviewers: |
             eeholmes
