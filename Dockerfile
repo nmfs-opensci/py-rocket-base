@@ -115,7 +115,7 @@ RUN /pyrocket_scripts/install-conda-packages.sh ${REPO_DIR}/environment.yml
 
 # Install extra apt packages
 # Install linux packages after R installation since the R install scripts get rid of packages
-# RUN /pyrocket_scripts/install-apt-packages.sh ${REPO_DIR}/apt.txt
+RUN /pyrocket_scripts/install-apt-packages.sh ${REPO_DIR}/apt.txt
 
 # Re-enable man pages disabled in Ubuntu 18 minimal image
 # https://wiki.ubuntu.com/Minimal
