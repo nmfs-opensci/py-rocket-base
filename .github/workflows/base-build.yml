@@ -1,0 +1,41 @@
+name: Docker Image base-image
+on:
+  workflow_dispatch: null
+  push:
+    branches: main
+    paths:
+      - 'base-image/Dockerfile'
+      - '.github/workflows/base-build.yml'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions: write-all
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: main
+      - name: Login to GitHub Container Registry
+        if: github.repository == 'nmfs-opensci/py-rocket-base'
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{github.actor}}
+          password: ${{secrets.GITHUB_TOKEN}}
+      - name: Create short_sha tag
+        shell: bash
+        run: |
+          short_sha=$(echo "${{ github.sha }}" | cut -c1-7)
+          echo "tag=${short_sha}" >> $GITHUB_ENV
+      - name: Build the Docker image
+        if: github.repository == 'nmfs-opensci/py-rocket-base'
+        run: |
+          docker build base-image -f base-image/Dockerfile \
+            --tag ghcr.io/nmfs-opensci/py-rocket-base/base-image:latest \
+            --tag ghcr.io/nmfs-opensci/py-rocket-base/base-image:${{ env.tag }}
+      - name: Publish
+        if: github.repository == 'nmfs-opensci/py-rocket-base'
+        run: |
+          docker push ghcr.io/nmfs-opensci/py-rocket-base/base-image:latest
+          docker push ghcr.io/nmfs-opensci/py-rocket-base/base-image:${{ env.tag }}
+          

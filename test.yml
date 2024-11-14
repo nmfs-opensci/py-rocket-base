@@ -1,9 +1,0 @@
-name: test
-
-channels:
-  - conda-forge
-  - nodefaults
-
-dependencies:
-  - cmocean
-  
