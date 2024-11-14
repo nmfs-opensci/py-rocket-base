@@ -105,10 +105,10 @@ RUN mkdir -p /pyrocket_scripts && \
 RUN usermod -a -G staff "${NB_USER}"
 
 # Install R, RStudio via Rocker scripts
-ENV R_DOCKERFILE="verse_${R_VERSION}"
-RUN PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin && \
-  chmod +x ${REPO_DIR}/rocker.sh && \
-  ${REPO_DIR}/rocker.sh
+# ENV R_DOCKERFILE="verse_${R_VERSION}"
+# RUN PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin && \
+#  chmod +x ${REPO_DIR}/rocker.sh && \
+#  ${REPO_DIR}/rocker.sh
 
 # Install extra conda packages
 RUN /pyrocket_scripts/install-conda-packages.sh ${REPO_DIR}/environment.yml
@@ -132,6 +132,9 @@ RUN mkdir -p ${NB_PYTHON_PREFIX}/etc/jupyter/jupyter_server_config.d/ && \
     mkdir -p ${NB_PYTHON_PREFIX}/etc/jupyter/jupyter_notebook_config.d/ && \
     cp ${REPO_DIR}/custom_jupyter_server_config.json ${NB_PYTHON_PREFIX}/etc/jupyter/jupyter_server_config.d/ && \
     cp ${REPO_DIR}/custom_jupyter_server_config.json ${NB_PYTHON_PREFIX}/etc/jupyter/jupyter_notebook_config.d/
+
+RUN chmod +x ${REPO_DIR}/start \
+    && cp ${REPO_DIR}/start /srv/start
     
 # Revert to default user and home as pwd
 USER ${NB_USER}
