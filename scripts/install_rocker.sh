@@ -5,10 +5,25 @@ echo "Running install-rocker.sh"
 
 # Check if the script is run as root
 if [[ $(id -u) -ne 0 ]]; then
-    echo "Error: install-rocker.sh must be run as root. Please use 'USER root' in your Dockerfile before running this script."
+    echo "Error: install-rocker.sh must be run as root. Please use 'USER root' in your Dockerfile before running this script. Exiting"
     echo "Remember to switch back to the non-root user with 'USER ${NB_USER}' after running this script."
     exit 1
 fi
+
+if [ -z "$R_VERSION" ]; then
+  echo "Error: install-rocker.sh requires that the environment variable R_VERSION is set. Exiting."
+  exit 1
+fi
+
+# Check if a filename argument is provided
+if [ -z "$1" ]; then
+    echo "Error: install-rocker.sh requires a rocker Dockerfile prefix. Will looke like verse.4.1.1. Exiting." >&2
+    echo "Usage: RUN /pyrocket_scripts/install-conda-packages.sh <filename>" >&2
+    exit 1
+fi
+
+# Set the Docker name
+R_DOCKERFILE="$1"
 
 # This script will copy in the rocker_scripts to install things and
 # Install rocker-verse using the TAG_${R_VERSION}.Dockerfile file
