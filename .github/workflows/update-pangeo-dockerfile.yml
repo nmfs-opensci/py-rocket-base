@@ -2,6 +2,8 @@ name: Update Dockerfile from Source
 
 on:
   push:
+    branches:
+      - main
     paths:
       - '.github/workflows/update-pangeo-dockerfile.yml'
   workflow_dispatch:  # Manual trigger
