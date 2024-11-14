@@ -1,6 +1,15 @@
 #!/bin/bash
 set -e
 
+echo "Running install-rocker.sh"
+
+# Check if the script is run as root
+if [[ $(id -u) -ne 0 ]]; then
+    echo "Error: install-rocker.sh must be run as root. Please use 'USER root' in your Dockerfile before running this script."
+    echo "Remember to switch back to the non-root user with 'USER ${NB_USER}' after running this script."
+    exit 1
+fi
+
 # This script will copy in the rocker_scripts to install things and
 # Install rocker-verse using the TAG_${R_VERSION}.Dockerfile file
 # It will run just the ENV and RUN commands in that file
