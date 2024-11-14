@@ -18,6 +18,8 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
+        with:
+          ref: ${{ github.ref }}  # Base branch (main or dev)
 
       - name: Fetch Raw Dockerfile
         id: fetch_dockerfile
