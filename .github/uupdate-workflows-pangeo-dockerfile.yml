@@ -1,0 +1,55 @@
+name: Update Dockerfile from Source
+
+on:
+  push:
+    paths:
+      - '.github/workflows/update-pangeo-dockerfile.yml'
+  workflow_dispatch:  # Manual trigger
+  schedule:
+    - cron: '0 3 * * *'  # Runs daily at 3:00 AM UTC
+
+jobs:
+  update-dockerfile:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Fetch Raw Dockerfile
+        id: fetch_dockerfile
+        run: |
+          URL="https://raw.githubusercontent.com/pangeo-data/pangeo-docker-images/master/base-image/Dockerfile"
+          curl -o base-image/Dockerfile.new $URL
+          if cmp -s base-image/Dockerfile base-image/Dockerfile.new; then
+            echo "No changes in Dockerfile."
+            echo "::set-output name=changed::false"
+          else
+            echo "Dockerfile has changed."
+            echo "::set-output name=changed::true"
+          fi
+
+      - name: Modify Dockerfile if Changed
+        if: steps.fetch_dockerfile.outputs.changed == 'true'
+        run: |
+          sed '/ENTRYPOINT/d' base-image/Dockerfile.new > base-image/Dockerfile
+          rm base-image/Dockerfile.new
+
+      - name: Commit and Push Changes
+        if: steps.fetch_dockerfile.outputs.changed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout -b update-dockerfile
+          git add base-image/Dockerfile
+          git commit -m "Update Dockerfile from source"
+          git push -u origin update-dockerfile
+
+      - name: Create Pull Request
+        if: steps.fetch_dockerfile.outputs.changed == 'true'
+        uses: peter-evans/create-pull-request@v5
+        with:
+          title: "Update Dockerfile from Source"
+          body: "This PR updates the Dockerfile in base-image directory to the latest version from the source repo."
+          branch: "update-dockerfile"
+          reviewers: ['<username>']  # Replace with a GitHub username if needed
