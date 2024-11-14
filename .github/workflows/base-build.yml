@@ -29,7 +29,7 @@ jobs:
       - name: Build the Docker image
         if: github.repository == 'nmfs-opensci/py-rocket-base'
         run: |
-          docker build . -f Dockerfile \
+          docker build base-image -f base-image/Dockerfile \
             --tag ghcr.io/nmfs-opensci/py-rocket-base/base-image:latest \
             --tag ghcr.io/nmfs-opensci/py-rocket-base/base-image:${{ env.tag }}
       - name: Publish
