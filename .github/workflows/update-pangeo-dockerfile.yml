@@ -40,12 +40,6 @@ jobs:
             echo "Dockerfile has changed."
             echo "changed=true" >> $GITHUB_ENV
           fi
-
-      - name: Modify Dockerfile if Changed
-        if: env.changed == 'true'
-        run: |
-          sed '/ENTRYPOINT/d' base-image/Dockerfile.new > base-image/Dockerfile
-          rm base-image/Dockerfile.new
     
       - name: Create Pull Request
         if: env.changed == 'true'
