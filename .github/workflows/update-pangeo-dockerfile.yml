@@ -28,7 +28,7 @@ jobs:
           URL="https://raw.githubusercontent.com/pangeo-data/pangeo-docker-images/master/base-image/Dockerfile"
           curl -o base-image/Dockerfile.temp $URL
           # Strip everything after ENTRYPOINT and save it to a new file
-          sed '/ENTRYPOINT/,$d' base-image/Dockerfile.temp > base-image/Dockerfile.new
+          awk '/ENTRYPOINT/ {print; exit} {print}' base-image/Dockerfile.temp > base-image/Dockerfile.new
           rm base-image/Dockerfile.temp
 
           # Compare the downloaded version with the existing Dockerfile
