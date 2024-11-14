@@ -54,4 +54,4 @@ jobs:
           title: "Update Dockerfile from Source"
           body: "This PR updates the Dockerfile in base-image directory to the latest version from the source repo."
           branch: "update-dockerfile"
-          reviewers: ['eeholmes']  # Replace with a GitHub username if needed
+          reviewers: [eeholmes]  
