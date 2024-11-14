@@ -25,38 +25,42 @@ jobs:
         id: fetch_dockerfile
         run: |
           URL="https://raw.githubusercontent.com/pangeo-data/pangeo-docker-images/master/base-image/Dockerfile"
-          curl -o base-image/Dockerfile.new $URL
+          curl -o base-image/Dockerfile.temp $URL
+          # Strip everything after ENTRYPOINT and save it to a new file
+          sed '/ENTRYPOINT/Q' base-image/Dockerfile.temp > base-image/Dockerfile.new
+          rm base-image/Dockerfile.temp
+
+          # Compare the downloaded version with the existing Dockerfile
           if cmp -s base-image/Dockerfile base-image/Dockerfile.new; then
             echo "No changes in Dockerfile."
-            echo "::set-output name=changed::false"
+            echo "changed=false" >> $GITHUB_ENV
+            rm base-image/Dockerfile.new
           else
             echo "Dockerfile has changed."
-            echo "::set-output name=changed::true"
+            echo "changed=true" >> $GITHUB_ENV
           fi
 
       - name: Modify Dockerfile if Changed
-        if: steps.fetch_dockerfile.outputs.changed == 'true'
+        if: env.changed == 'true'
         run: |
           sed '/ENTRYPOINT/d' base-image/Dockerfile.new > base-image/Dockerfile
           rm base-image/Dockerfile.new
-
+    
       - name: Commit and Push Changes
-        if: steps.fetch_dockerfile.outputs.changed == 'true'
+        if: env.changed == 'true'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git checkout -b update-dockerfile
           git add base-image/Dockerfile
-          git commit -m "Update Dockerfile from source"
-          git push -u origin update-dockerfile --force
+          git commit -m "Update Dockerfile from pangeo github"
+          git push origin update-dockerfile --force
 
       - name: Create Pull Request
-        if: steps.fetch_dockerfile.outputs.changed == 'true'
+        if: senv.changed == 'true'
         uses: peter-evans/create-pull-request@v5
         with:
           title: "Update Dockerfile from Source"
           body: "This PR updates the Dockerfile in base-image directory to the latest version from the source repo."
           base: ${{ github.ref }}  # Base branch (main or dev)
           branch: "update-dockerfile"
-          reviewers: |
-            eeholmes
