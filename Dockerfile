@@ -26,9 +26,8 @@ RUN mkdir -p /pyrocket_scripts && \
 # Install extra conda packages
 RUN /pyrocket_scripts/install-conda-packages.sh ${REPO_DIR}/environment.yml
 
-# Install R, RStudio via Rocker scripts
-ENV R_DOCKERFILE="verse_${R_VERSION}"
-RUN /pyrocket_scripts/install-rocker.sh
+# Install R, RStudio via Rocker scripts. Requires the prefix for a rocker Dockerfile
+RUN /pyrocket_scripts/install-rocker.sh "verse_${R_VERSION}"
 
 # Install extra apt packages
 # Install linux packages after R installation since the R install scripts get rid of packages
