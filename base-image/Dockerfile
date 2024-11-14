@@ -61,4 +61,24 @@ RUN echo "Installing Apt-get packages..." \
 
 # Add TZ configuration - https://github.com/PrefectHQ/prefect/issues/3061
 ENV TZ=UTC
-# 
+# ========================
+
+USER ${NB_USER}
+WORKDIR ${HOME}
+
+# Install latest mambaforge in ${CONDA_DIR}
+RUN echo "Installing Miniforge..." \
+    && URL="https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-Linux-$(uname -m).sh" \
+    && wget --quiet ${URL} -O installer.sh \
+    && /bin/bash installer.sh -u -b -p ${CONDA_DIR} \
+    && rm installer.sh \
+    && mamba install conda-lock -y \
+    && mamba clean -afy \
+    # After installing the packages, we cleanup some unnecessary files
+    # to try reduce image size - see https://jcristharif.com/conda-docker-tips.html
+    # Although we explicitly do *not* delete .pyc files, as that seems to slow down startup
+    # quite a bit unfortunately - see https://github.com/2i2c-org/infrastructure/issues/2047
+    && find ${CONDA_DIR} -follow -type f -name '*.a' -delete
+
+EXPOSE 8888
+ENTRYPOINT ["/srv/start"]
