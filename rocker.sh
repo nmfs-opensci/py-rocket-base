@@ -6,6 +6,9 @@ set -e
 # It will run just the ENV and RUN commands in that file
 # Variables defined here will only be available in this script.
 
+# Set the PATH. REQUIRED to avoid conda in the path
+export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+
 # Copy in the rocker files. Work in ${REPO_DIR} to make sure I don't clobber anything
 cd ${REPO_DIR}
 ROCKER_DOCKERFILE_NAME="${R_DOCKERFILE}.Dockerfile"
