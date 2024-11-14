@@ -38,6 +38,8 @@ jobs:
             rm base-image/Dockerfile.new
           else
             echo "Dockerfile has changed."
+            mv base-image/Dockerfile.new base-image/Dockerfile
+            rm base-image/Dockerfile.new
             echo "changed=true" >> $GITHUB_ENV
           fi
     
