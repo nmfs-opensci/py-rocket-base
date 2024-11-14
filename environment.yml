@@ -5,8 +5,11 @@ channels:
   - nodefaults
 
 dependencies:
+  # Core JupyterHub packages
+  - python=3.12
+  - pangeo-notebook=2024.11.11
+  - pip
   - jupyter-resource-usage
-  - jupyterlab-git
   - gh-scoped-creds==4.1
 
   # R/RStudio Support
@@ -22,6 +25,7 @@ dependencies:
   #- syncthing~=1.22.1
 
   # Extra Jupyter tools
+  - jupyterlab-git
   - jupyter-ai
   - jupyter-book
   - jupyter-offlinenotebook
