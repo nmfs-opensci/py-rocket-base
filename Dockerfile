@@ -45,13 +45,15 @@ RUN mkdir -p ${NB_PYTHON_PREFIX}/etc/jupyter/jupyter_server_config.d/ && \
     cp ${REPO_DIR}/custom_jupyter_server_config.json ${NB_PYTHON_PREFIX}/etc/jupyter/jupyter_server_config.d/ && \
     cp ${REPO_DIR}/custom_jupyter_server_config.json ${NB_PYTHON_PREFIX}/etc/jupyter/jupyter_notebook_config.d/
 
+# Set up the defaults for Desktop. Keep config in the base so doesn't trash user environment
+ENV XDG_CONFIG_HOME=/etc/xdg/.config
+RUN chmod +x "${REPO_DIR}/desktop.sh" \
+    && "${REPO_DIR}/desktop.sh"
+
 # Set up the start command 
 USER ${NB_USER}
 RUN chmod +x ${REPO_DIR}/start \
     && cp ${REPO_DIR}/start /srv/start
-
-# Set the defaults for Desktop. Keep in the base so doesn't trash user environment
-ENV XDG_CONFIG_HOME=/etc/xdg/.config
     
 # Revert to default user and home as pwd
 USER ${NB_USER}
