@@ -27,7 +27,7 @@ RUN mkdir -p /pyrocket_scripts && \
 RUN /pyrocket_scripts/install-conda-packages.sh ${REPO_DIR}/environment.yml
 
 # Install R, RStudio via Rocker scripts. Requires the prefix for a rocker Dockerfile
-RUN /pyrocket_scripts/install-rocker.sh "verse_${R_VERSION}"
+# RUN /pyrocket_scripts/install-rocker.sh "verse_${R_VERSION}"
 
 # Install extra apt packages
 # Install linux packages after R installation since the R install scripts get rid of packages
@@ -51,7 +51,7 @@ RUN apt-get update && apt-get install -y xdg-user-dirs && rm -rf /var/lib/apt/li
 RUN mkdir -p /etc/xdg/userconfig && \
     chown -R ${NB_USER}:${NB_USER} /etc/xdg/userconfig && \
     chmod -R u+rwx,g+rwX,o+rX /etc/xdg/userconfig && \
-    echo 'XDG_DESKTOP_DIR="/usr/share/Desktop"' > /etc/xdg/userconfig/user-dirs.defaults && \
+    echo 'DESKTOP="/usr/share/Desktop"' > /etc/xdg/userconfig/user-dirs.defaults && \
     xdg-user-dirs-update
 
 # Set up the start command 
