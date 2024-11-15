@@ -13,7 +13,7 @@ mkdir -p "${DESKTOP_DIR}"
 chown :staff /usr/share/Desktop
 chmod 775 /usr/share/Desktop
 # set the Desktop dir default for XDG
-echo 'XDG_DESKTOP_DIR="${DESKTOP_DIR}"' > /etc/xdg/user-dirs.defaults
+echo "XDG_DESKTOP_DIR=\"${DESKTOP_DIR}\"" > /etc/xdg/user-dirs.defaults
 
 # The for loops will fail if they return null (no files). Set shell option nullglob
 shopt -s nullglob
