@@ -46,9 +46,12 @@ RUN mkdir -p ${NB_PYTHON_PREFIX}/etc/jupyter/jupyter_server_config.d/ && \
     cp ${REPO_DIR}/custom_jupyter_server_config.json ${NB_PYTHON_PREFIX}/etc/jupyter/jupyter_notebook_config.d/
 
 # Set up the defaults for Desktop. Keep config in the base so doesn't trash user environment
-ENV XDG_CONFIG_HOME=/etc/xdg/.config
-RUN chmod +x "${REPO_DIR}/desktop.sh" \
-    && "${REPO_DIR}/desktop.sh"
+ENV XDG_CONFIG_HOME=/etc/xdg/userconfig
+RUN mkdir -p /etc/xdg/userconfig && \
+    chown -R ${NB_USER}:${NB_USER} /etc/xdg/userconfig && \
+    chmod -R u+rwx,g+rwX,o+rX /etc/xdg/userconfig && \
+    chmod +x "${REPO_DIR}/desktop.sh" && \
+    "${REPO_DIR}/desktop.sh"
 
 # Set up the start command 
 USER ${NB_USER}
