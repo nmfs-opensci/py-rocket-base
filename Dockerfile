@@ -47,11 +47,12 @@ RUN mkdir -p ${NB_PYTHON_PREFIX}/etc/jupyter/jupyter_server_config.d/ && \
 
 # Set up the defaults for Desktop. Keep config in the base so doesn't trash user environment
 ENV XDG_CONFIG_HOME=/etc/xdg/userconfig
+RUN apt-get update && apt-get install -y xdg-user-dirs && rm -rf /var/lib/apt/lists/*
 RUN mkdir -p /etc/xdg/userconfig && \
     chown -R ${NB_USER}:${NB_USER} /etc/xdg/userconfig && \
     chmod -R u+rwx,g+rwX,o+rX /etc/xdg/userconfig && \
-    chmod +x "${REPO_DIR}/desktop.sh" && \
-    "${REPO_DIR}/desktop.sh"
+    echo 'XDG_DESKTOP_DIR="/usr/share/Desktop"' > /etc/xdg/userconfig/user-dirs.defaults && \
+    xdg-user-dirs-update
 
 # Set up the start command 
 USER ${NB_USER}
