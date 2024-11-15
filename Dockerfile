@@ -12,6 +12,7 @@ ENV REPO_DIR="/srv/repo" \
 # Ensure the staff group exists first
 RUN groupadd -f staff && usermod -a -G staff "${NB_USER}"
 
+# Copy files into REPO_DIR and make sure staff group can edit (use staff for rocker)
 COPY --chown=${NB_USER}:${NB_USER} . ${REPO_DIR}
 RUN chgrp -R staff ${REPO_DIR} && \
     chmod -R g+rwx ${REPO_DIR} && \
@@ -33,6 +34,9 @@ RUN /pyrocket_scripts/install-rocker.sh "verse_${R_VERSION}"
 # Install linux packages after R installation since the R install scripts get rid of packages
 RUN /pyrocket_scripts/install-apt-packages.sh ${REPO_DIR}/apt.txt
 
+# Install some basic VS Code extensions
+RUN /pyrocket_scripts/install-vscode-extensions.sh ${REPO_DIR}/vscode-extensions.txt
+
 # Re-enable man pages disabled in Ubuntu 18 minimal image
 # https://wiki.ubuntu.com/Minimal
 RUN yes | unminimize
@@ -45,7 +49,7 @@ RUN mkdir -p ${NB_PYTHON_PREFIX}/etc/jupyter/jupyter_server_config.d/ && \
     cp ${REPO_DIR}/custom_jupyter_server_config.json ${NB_PYTHON_PREFIX}/etc/jupyter/jupyter_server_config.d/ && \
     cp ${REPO_DIR}/custom_jupyter_server_config.json ${NB_PYTHON_PREFIX}/etc/jupyter/jupyter_notebook_config.d/
 
-# Set up the defaults for Desktop. Keep config in the base so doesn't trash user environment
+# Set up the defaults for Desktop. Keep config in the /etc so doesn't trash user environment (that they might want for other environments)
 ENV XDG_CONFIG_HOME=/etc/xdg/userconfig
 RUN mkdir -p ${XDG_CONFIG_HOME} && \
     chown -R ${NB_USER}:${NB_USER} ${XDG_CONFIG_HOME} && \

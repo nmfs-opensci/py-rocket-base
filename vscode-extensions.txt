@@ -1,0 +1,3 @@
+ms-python.python
+ms-toolsai.jupyter
+quarto.quarto
