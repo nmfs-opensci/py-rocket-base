@@ -49,6 +49,9 @@ RUN mkdir -p ${NB_PYTHON_PREFIX}/etc/jupyter/jupyter_server_config.d/ && \
 USER ${NB_USER}
 RUN chmod +x ${REPO_DIR}/start \
     && cp ${REPO_DIR}/start /srv/start
+
+# Set the defaults for Desktop. Keep in the base so doesn't trash user environment
+ENV XDG_CONFIG_HOME=/etc/xdg/.config
     
 # Revert to default user and home as pwd
 USER ${NB_USER}
