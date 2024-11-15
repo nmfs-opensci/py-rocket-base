@@ -1,5 +1,6 @@
 #!/bin/bash
 # Required User: root
+# Usage: RUN /pyrocket_scripts/setup-desktop.sh <directory path>"
 
 echo "Running setup-desktop.sh"
 
@@ -43,13 +44,13 @@ else
 fi
 
 # Check if desktop.sh exists before executing
-if [ -f "${REPO_DIR}/desktop.sh" ]; then
-    echo "  Running ${REPO_DIR}/desktop.sh to move Desktop files to appropriate directories and register as applications."
-    chmod +x "${REPO_DIR}/desktop.sh"
-    "${REPO_DIR}/desktop.sh"
+if [ -f "${REPO_DIR}/scripts/setup-desktop.sh" ]; then
+    echo "  Running ${REPO_DIR}/scripts/setup-desktop.sh to move Desktop files to appropriate directories and register as applications."
+    chmod +x "${REPO_DIR}/scripts/setup-desktop.sh"
+    "${REPO_DIR}/scripts/setup-desktop.sh"
 else
-    echo "  Warning: desktop.sh not found. Skipping execution."
+    echo "  Warning: ${REPO_DIR}/scripts/setup-desktop.sh not found. Skipping execution."
 fi
 
-echo "  Success! setup-desktop.sh"
+echo "  Success! install-desktop.sh"
 
