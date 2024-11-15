@@ -2,7 +2,7 @@
 # Required User: NB_USER
 
 # Install VSCode extensions. 
-# These get installed to $CONDA_PREFIX/envs/notebook/share/code-server/extensions/
+# These get installed to $CONDA_PREFIXshare/code-server/extensions/
 
 # Check if a filename argument is provided
 if [ -z "$1" ]; then
@@ -27,8 +27,14 @@ if [ ! -f "${ext_file}" ]; then
     exit 1
 fi
 
-# Install each extension listed in the file
+# Install each extension listed in the file; skip empty lines or comments
 while IFS= read -r EXT; do
+    # Remove comments and leading/trailing whitespace
+    EXT=$(echo "$EXT" | sed 's/#.*//; s/^[[:space:]]*//; s/[[:space:]]*$//')
+
+    # Skip if the line is now empty
+    [[ -z "$EXT" ]] && continue
+
     if ${NB_PYTHON_PREFIX}/bin/code-server --install-extension "$EXT"; then
         echo "  Successfully installed extension: $EXT"
     else
