@@ -6,7 +6,9 @@ set -euo pipefail
 # USE export <parname>=value
 # source this file to get the variables defined in the rocker Dockerfile
 # this is a series of export cmds
-source ${REPO_DIR}/env.txt
+if [ -f "${REPO_DIR}/env.txt" ]; then
+    source "${REPO_DIR}/env.txt"
+fi
 # End - Set any environment variables here
 
 # Run child start scripts in a subshell to contain its environment
