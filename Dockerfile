@@ -49,10 +49,11 @@ RUN mkdir -p ${NB_PYTHON_PREFIX}/etc/jupyter/jupyter_server_config.d/ && \
 ENV XDG_CONFIG_HOME=/etc/xdg/userconfig
 RUN mkdir -p /etc/xdg/userconfig && \
     chown -R ${NB_USER}:${NB_USER} ${XDG_CONFIG_HOME} && \
-    chmod -R u+rwx,g+rwX,o+rX ${XDG_CONFIG_HOME} && \
-    mv ${REPO_DIR}/user-dirs.dirs ${XDG_CONFIG_HOME} && \
-    chmod +x ${REPO_DIR}/desktop.sh && \
-    ${REPO_DIR}/desktop.sh
+    chmod -R u+rwx,g+rwX,o+rX ${XDG_CONFIG_HOME} 
+# && \
+#    mv ${REPO_DIR}/user-dirs.dirs ${XDG_CONFIG_HOME} && \
+#    chmod +x ${REPO_DIR}/desktop.sh && \
+#   ${REPO_DIR}/desktop.sh
 
 # Set up the start command 
 USER ${NB_USER}
