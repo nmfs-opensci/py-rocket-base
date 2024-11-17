@@ -80,11 +80,11 @@ if [ "$INSTALLATION_HAPPENED" = true ]; then
     fi
 fi
 
-# Check if the required pip package is installed
+# Check if jupyter-remote-desktop-proxy is installed. Sometimes a conda env update will delete it.
 PACKAGE_NAME="jupyter-remote-desktop-proxy"
 if ! ${CONDA_DIR}/envs/$ENV_NAME/bin/pip show "$PACKAGE_NAME" > /dev/null 2>&1; then
     echo "  Package '$PACKAGE_NAME' is missing. Reinstalling it."
-    ${CONDA_DIR}/envs/$ENV_NAME/bin/pip install --no-cache "$PACKAGE_NAME"
+    ${CONDA_DIR}/envs/$ENV_NAME/bin/pip install --no-deps "$PACKAGE_NAME"
 else
     echo "  Package '$PACKAGE_NAME' is already installed."
 fi
