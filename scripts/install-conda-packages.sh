@@ -89,4 +89,11 @@ else
     echo "  Package '$PACKAGE_NAME' is already installed."
 fi
 
+# If the above causes problems for adding jupyter-remote-desktop-proxy back in, here's is another approach.
+# Check if the pip section exists, if not add it to the ENV_FILE
+# if ! grep -q "jupyter-remote-desktop-proxy" "$ENV_FILE"; then
+#    echo "Adding jupyter-remote-desktop-proxy to the pip section in $ENV_FILE"
+#    sed -i '/dependencies:/a\  - pip\n  - pip:\n    - jupyter-remote-desktop-proxy' "$ENV_FILE"
+# fi
+
 echo "  Success! install-conda-packages.sh"
