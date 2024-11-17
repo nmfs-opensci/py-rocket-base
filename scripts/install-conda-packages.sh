@@ -1,6 +1,9 @@
 #!/bin/bash
 # Required User: NB_USER
 
+# Set INSTALLATION_HAPPENED to false by default
+INSTALLATION_HAPPENED=false
+
 # Check if a filename argument is provided
 if [ -z "$1" ]; then
     echo "Error: install-conda-packages.sh requires a file name (either conda-lock.yml or environment.yml)." >&2
@@ -37,6 +40,7 @@ if ! ${CONDA_DIR}/condabin/conda env list | grep -q "^$ENV_NAME "; then
     if grep -q "lock_set" "$ENV_FILE"; then
         echo "  Detected conda-lock.yml file."
         ${NB_PYTHON_PREFIX}/bin/conda-lock install --name $ENV_NAME -f "$ENV_FILE"
+        INSTALLATION_HAPPENED=true
     elif grep -q "name:" "$ENV_FILE"; then
         echo "  Detected environment.yml file."
         ${CONDA_DIR}/condabin/mamba env create -f "$ENV_FILE" --name $ENV_NAME
@@ -52,9 +56,11 @@ else
     if grep -q "lock_set" "$ENV_FILE"; then
         echo "  Detected conda-lock.yml file."
         ${NB_PYTHON_PREFIX}/bin/conda-lock install --name $ENV_NAME -f "$ENV_FILE"
+        INSTALLATION_HAPPENED=true
     elif grep -q "name:" "$ENV_FILE"; then
         echo "  Detected environment.yml file."
         ${CONDA_DIR}/condabin/mamba env update --name $ENV_NAME -f "$ENV_FILE"
+        INSTALLATION_HAPPENED=true
     else
         echo "  Error: Unrecognized file format in '${ENV_FILE}'."
         echo "    - For an environment.yml file, ensure it includes a 'name:' entry. Any name is acceptable."
