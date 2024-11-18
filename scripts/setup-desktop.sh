@@ -1,9 +1,17 @@
 #!/bin/bash
+# Required user: root
 # The default for XDG and xfce4 is for Desktop files to be in ~/Desktop but this leads to a variety of problems
 # First we are altering the user directiory which seems rude, second orphan desktop files might be in ~/Desktop so who knows
 # what the user Desktop experience with be, here the Desktop dir is set to /usr/share/Desktop so is part of the image.
 # users that want to customize Desktop can change /etc/xdg/user-dirs.dirs though py-rocket resets that each time the server is restarted.
 set -e
+
+# Check if the script is run as root
+if [[ $(id -u) -ne 0 ]]; then
+    echo "  Error: This setup-desktop.sh must be run as root. Please use 'USER root' in your Dockerfile before running this script."
+    echo "  Remember to switch back to the non-root user with 'USER ${NB_USER}' after running this script."
+    exit 1
+fi
 
 # Copy in the Desktop files
 APPLICATIONS_DIR=/usr/share/applications/packages
