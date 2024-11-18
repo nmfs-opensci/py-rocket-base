@@ -31,6 +31,8 @@ if [ ! -f "${ext_file}" ]; then
     exit 1
 fi
 
+${NB_PYTHON_PREFIX}/bin/code-server --extensions-dir $CONDA_PREFIX
+
 # Install each extension listed in the file; skip empty lines or comments
 while IFS= read -r EXT; do
     # Remove comments and leading/trailing whitespace
