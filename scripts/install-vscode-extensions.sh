@@ -14,6 +14,8 @@ fi
 # Check if running as root and switch to NB_USER if needed
 if [[ $(id -u) -eq 0 ]]; then
     echo "Switching to ${NB_USER} to run install-vscode-extensions.sh"
+    # the next command switches to bash and the PATH (and other variables) gets dropped
+    export PATH="$PATH"
     exec su "${NB_USER}" -c "/bin/bash $0 $1"  # Pass along the filename argument
 fi
 
