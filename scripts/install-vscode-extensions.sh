@@ -11,13 +11,16 @@ if [ -z "$1" ]; then
     exit 1
 fi
 
-# Check if running as root and switch to NB_USER if needed
-if [[ $(id -u) -eq 0 ]]; then
-    echo "Switching to ${NB_USER} to run install-vscode-extensions.sh"
-    exec su "${NB_USER}" -c "/bin/bash $0 $1"  # Pass along the filename argument
+# Check if the script is run as root; folders will be made in /home and there are issues with this if user is jovyan
+# Since some prior installs might have created .local as root. Easier just to install vscode extensions as root
+if [[ $(id -u) -ne 0 ]]; then
+    echo "Error: install-vscode-extensions.sh must be run as root. Please use 'USER root' in your Dockerfile before running this script."
+    echo "Remember to switch back to the non-root user with 'USER ${NB_USER}' after running this script."
+    exit 1
 fi
 
-echo "Running install-vscode-extensions.sh as ${NB_USER}"
+echo "Running install-vscode-extensions.sh as $(whoami)"
+echo "PATH = ${PATH}"
 
 ext_file="$1"
 
@@ -27,6 +30,11 @@ if [ ! -f "${ext_file}" ]; then
     exit 1
 fi
 
+# Set the extensions directory to be the conda dir so that it persists
+# Create if it doesn't exist; make owner jovyan
+EXT_DIR="${NB_PYTHON_PREFIX}/share/code-server/extensions"
+install -o ${NB_USER} -g ${NB_USER} -m 755 -d "${EXT_DIR}"
+
 # Install each extension listed in the file; skip empty lines or comments
 while IFS= read -r EXT; do
     # Remove comments and leading/trailing whitespace
@@ -35,7 +43,7 @@ while IFS= read -r EXT; do
     # Skip if the line is now empty
     [[ -z "$EXT" ]] && continue
 
-    if ${NB_PYTHON_PREFIX}/bin/code-server --install-extension "$EXT"; then
+    if ${NB_PYTHON_PREFIX}/bin/code-server --extensions-dir "${EXT_DIR}" --install-extension "$EXT"; then
         echo "  Successfully installed extension: $EXT"
     else
         echo "  Failed to install extension: $EXT" >&2

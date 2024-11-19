@@ -24,7 +24,7 @@ RUN mkdir -p /pyrocket_scripts && \
     chown -R root:staff /pyrocket_scripts && \
     chmod -R 775 /pyrocket_scripts
 
-# Install conda packages
+# Install conda packages (will switch to NB_USER in script)
 RUN /pyrocket_scripts/install-conda-packages.sh ${REPO_DIR}/environment.yml
 
 # Install R, RStudio via Rocker scripts. Requires the prefix for a rocker Dockerfile
@@ -57,6 +57,9 @@ RUN mkdir -p ${XDG_CONFIG_HOME} && \
     mv ${REPO_DIR}/user-dirs.dirs ${XDG_CONFIG_HOME} && \
     chmod +x ${REPO_DIR}/scripts/setup-desktop.sh && \
     ${REPO_DIR}/scripts/setup-desktop.sh
+
+# Fix home permissions. Not needed in JupyterHub with persistent memory but needed if not used in that context
+RUN /pyrocket_scripts/fix-home-permissions.sh
 
 # Set up the start command 
 USER ${NB_USER}
