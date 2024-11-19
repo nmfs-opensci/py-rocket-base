@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>2&nbsp; Customization scripts – py-rocket-base documentation</title>
+<title>7&nbsp; Example child images – py-rocket-base documentation</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -29,8 +29,8 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./r-packages.html" rel="next">
-<link href="./customizing.html" rel="prev">
+<link href="./developers.html" rel="next">
+<link href="./jupyter-config.html" rel="prev">
 <link href="./assets/favicon.ico" rel="icon">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -83,7 +83,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./configuration_files.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Customization scripts</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./example_children.html"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Example child images</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -130,7 +130,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./configuration_files.html" class="sidebar-item-text sidebar-link active">
+  <a href="./configuration_files.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Customization scripts</span></span></a>
   </div>
 </li>
@@ -160,7 +160,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./example_children.html" class="sidebar-item-text sidebar-link">
+  <a href="./example_children.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Example child images</span></span></a>
   </div>
 </li>
@@ -186,26 +186,16 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#install-conda-packages.sh" id="toc-install-conda-packages.sh" class="nav-link active" data-scroll-target="#install-conda-packages.sh"><span class="header-section-number">2.1</span> install-conda-packages.sh</a></li>
-  <li><a href="#install-pip-packages.sh" id="toc-install-pip-packages.sh" class="nav-link" data-scroll-target="#install-pip-packages.sh"><span class="header-section-number">2.2</span> install-pip-packages.sh</a></li>
-  <li><a href="#install-r-packages.sh" id="toc-install-r-packages.sh" class="nav-link" data-scroll-target="#install-r-packages.sh"><span class="header-section-number">2.3</span> install-r-packages.sh</a>
-  <ul class="collapse">
-  <li><a href="#add-r-geospatial-packages" id="toc-add-r-geospatial-packages" class="nav-link" data-scroll-target="#add-r-geospatial-packages"><span class="header-section-number">2.3.1</span> Add R geospatial packages</a></li>
-  </ul></li>
-  <li><a href="#install-apt-packages.sh" id="toc-install-apt-packages.sh" class="nav-link" data-scroll-target="#install-apt-packages.sh"><span class="header-section-number">2.4</span> install-apt-packages.sh</a></li>
-  <li><a href="#run-postbuild.sh" id="toc-run-postbuild.sh" class="nav-link" data-scroll-target="#run-postbuild.sh"><span class="header-section-number">2.5</span> run-postbuild.sh</a></li>
-  <li><a href="#setup-start.sh" id="toc-setup-start.sh" class="nav-link" data-scroll-target="#setup-start.sh"><span class="header-section-number">2.6</span> setup-start.sh</a></li>
-  <li><a href="#install-vscode-extensions.sh" id="toc-install-vscode-extensions.sh" class="nav-link" data-scroll-target="#install-vscode-extensions.sh"><span class="header-section-number">2.7</span> install-vscode-extensions.sh</a></li>
-  <li><a href="#desktop-applications" id="toc-desktop-applications" class="nav-link" data-scroll-target="#desktop-applications"><span class="header-section-number">2.8</span> Desktop applications</a></li>
+  <li><a href="#py-rocket-geospatial" id="toc-py-rocket-geospatial" class="nav-link active" data-scroll-target="#py-rocket-geospatial"><span class="header-section-number">7.1</span> py-rocket-geospatial</a></li>
   </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/nmfs-opensci/py-rocket-base/edit/main/configuration_files.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/nmfs-opensci/py-rocket-base/blob/main/configuration_files.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/nmfs-opensci/py-rocket-base/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+<div class="toc-actions"><ul><li><a href="https://github.com/nmfs-opensci/py-rocket-base/edit/main/example_children.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/nmfs-opensci/py-rocket-base/blob/main/example_children.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/nmfs-opensci/py-rocket-base/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Customization scripts</span></h1>
+<h1 class="title"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Example child images</span></h1>
 </div>
 
 
@@ -222,118 +212,202 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>The helper scripts at <code>/pyrocket_scripts</code> in the image scripts to help do common tasks for extending the py-rocket-base image. Users can write their own Docker file code to do these tasks but the helper scripts provide standardized code for these tasks. The scripts are</p>
-<ul>
-<li><code>install-conda-packages.sh</code></li>
-<li><code>install-pip-packages.sh</code></li>
-<li><code>install-r-packages.sh</code></li>
-<li><code>install-apt-packages.sh</code></li>
-<li><code>install-vscode-extensions.sh</code></li>
-<li><code>install-desktop.sh</code></li>
-<li><code>setup-start.sh</code></li>
-<li><code>run-postbuild.sh</code></li>
-</ul>
-<p>Note there are a few more scripts in <code>/py-rocket-scripts</code> but those are tailored more to the base-image creation rather than extending the base image.</p>
-<section id="install-conda-packages.sh" class="level2" data-number="2.1">
-<h2 data-number="2.1" class="anchored" data-anchor-id="install-conda-packages.sh"><span class="header-section-number">2.1</span> install-conda-packages.sh</h2>
-<p>The <code>install-conda-packages.sh</code> script will install conda packages to the conda notebook environment, the user environment in the py-rocket-base image (same as for pangeo and repo2docker images).</p>
-<p>Here is the code for your Docker file. You can name the conda package file to something other than <code>environment.yml</code>. Make sure your file has <code>name:</code>. The name is arbitrary. It is ignored but required for the script.</p>
-<pre><code>COPY environment.yml environment.yml
-RUN /pyrocket_scripts/install-conda-packages.sh environment.yml &amp;&amp; rm environment.yml</code></pre>
-<p>This is a standard format. You can add version pinning.</p>
-<p>environment.yml</p>
-<pre><code>name: required
-channels:
-  - conda-forge
-dependencies:
-  - cmocean
-  - numpy</code></pre>
-<p>Instead of a list of conda packages (typically called environment.yml), you can use a conda lock file instead.</p>
-<p>Here is the code for your Docker file. You can name your conda lock file something other than <code>conda-lock.yml</code>.</p>
-<pre><code>COPY conda-lock.yml conda-lock.yml
-RUN /pyrocket_scripts/install-conda-packages.sh conda-lock.yml &amp;&amp; rm conda-lock.yml</code></pre>
-</section>
-<section id="install-pip-packages.sh" class="level2" data-number="2.2">
-<h2 data-number="2.2" class="anchored" data-anchor-id="install-pip-packages.sh"><span class="header-section-number">2.2</span> install-pip-packages.sh</h2>
-<p>The <code>install-pip-packages.sh</code> script will install packages using <code>pip</code>. Here is the code for your Docker file. You can name your pip package file something other than <code>requirements.txt</code>.</p>
-<pre><code>COPY requirements.txt requirements.txt
-RUN /pyrocket_scripts/install-pip-packages.sh requirements.txt &amp;&amp; rm requirements.txt</code></pre>
-<p>requirements.txt</p>
-<pre><code>#a package
-harmony-py
-</code></pre>
-</section>
-<section id="install-r-packages.sh" class="level2" data-number="2.3">
-<h2 data-number="2.3" class="anchored" data-anchor-id="install-r-packages.sh"><span class="header-section-number">2.3</span> install-r-packages.sh</h2>
-<p>The <code>install-r-packages.sh</code> script will run the supplied R script which you can use to install R packages to the system library.</p>
-<p>Here is the code for your Docker file. You can name the R script file to something other than <code>install.R</code>. Make sure your file is an R script.</p>
-<pre><code>COPY install.R install.R
-RUN /pyrocket_scripts/install-r-packages.sh install.R &amp;&amp; rm install.R</code></pre>
-<p>install.R example</p>
-<pre><code># to match rocker/verse:4.4 used in py-rocker-base
-# look up the date that the Rocker image was created and put that
-repo &lt;- "https://p3m.dev/cran/__linux__/jammy/2024-05-13"
-list.of.packages &lt;- c("ncdf4", "httr", "plyr", "lubridate")
-install.packages(list.of.packages, repos=repo)</code></pre>
-<section id="add-r-geospatial-packages" class="level3" data-number="2.3.1">
-<h3 data-number="2.3.1" class="anchored" data-anchor-id="add-r-geospatial-packages"><span class="header-section-number">2.3.1</span> Add R geospatial packages</h3>
-<p>Geospatial packages require some linux packages. To get this working in your Docker image add this to your Docker file:</p>
+<section id="py-rocket-geospatial" class="level2" data-number="7.1">
+<h2 data-number="7.1" class="anchored" data-anchor-id="py-rocket-geospatial"><span class="header-section-number">7.1</span> py-rocket-geospatial</h2>
+<p>This has many geospatial R and Python packages along with QGIS, Panoply and CoastWatch utils.</p>
 <p>Dockerfile</p>
-<pre><code>FROM ghcr.io/nmfs-opensci/py-rocket-base:latest
+<pre><code>FROM ghcr.io/nmfs-opensci/py-rocket-base/test:latest
+
+LABEL org.opencontainers.image.maintainers="eli.holmes@noaa.gov"
+LABEL org.opencontainers.image.author="eli.holmes@noaa.gov"
+LABEL org.opencontainers.image.source=https://github.com/nmfs-opensci/container-images/py-rocket-2
+LABEL org.opencontainers.image.description="Geospatial Python (3.11) and R (4.4) image with Desktop (QGIS, Panoply, CWUtils)"
+LABEL org.opencontainers.image.licenses=Apache2.0
+LABEL org.opencontainers.image.version=2024.11.06
 
 USER root
+COPY . /tmp2/
+RUN /pyrocket_scripts/install-conda-packages.sh /tmp2/environment.yml || echo "install-conda-packages.sh failed" || true
+RUN /pyrocket_scripts/install-r-packages.sh /tmp2/install.R || echo "install-r-package.sh failed" || true
+RUN /pyrocket_scripts/install-apt-packages.sh /tmp2/apt.txt || echo "install-apt-packages.sh failed" || true
+RUN /pyrocket_scripts/install-desktop.sh /tmp2/Desktop|| echo "setup-desktop.sh failed" || true
+RUN rm -rf /tmp2
+USER ${NB_USER}
+
+USER root
+# install the geospatial libraries and R spatial; the rocket script are part of py-rocket-base
 RUN PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin &amp;&amp; \
     /rocker_scripts/install_geospatial.sh
-USER ${NB_USER}</code></pre>
-</section>
-</section>
-<section id="install-apt-packages.sh" class="level2" data-number="2.4">
-<h2 data-number="2.4" class="anchored" data-anchor-id="install-apt-packages.sh"><span class="header-section-number">2.4</span> install-apt-packages.sh</h2>
-<p>The <code>install-apt-packages.sh</code> script will install packages with <code>apt-get</code>. Here is the code for your Docker file. You can name the apt file of packages names to something other than <code>apt.txt</code>. Comments and newlines are allowed. Installation requires root.</p>
-<pre><code>USER root
-COPY apt.txt apt.txt
-RUN /pyrocket_scripts/install-apt-packages.sh apt.txt &amp;&amp; rm apt.txt
-USER ${NB_USER}</code></pre>
-<p>apt.txt example</p>
-<pre><code># Some useful stuff
-tk-dev
 
-# Add some more
-cmocean</code></pre>
-</section>
-<section id="run-postbuild.sh" class="level2" data-number="2.5">
-<h2 data-number="2.5" class="anchored" data-anchor-id="run-postbuild.sh"><span class="header-section-number">2.5</span> run-postbuild.sh</h2>
-<p>The <code>run-postbuild.sh</code> script can be run as root or jovyan (<code>${NB_USER}</code>). The script has some extra code to remove leftover files after installing Python extensions.</p>
-<pre><code>COPY postBuild postBuild
-RUN /pyrocket_scripts/run-postbuild.sh postBuild &amp;&amp; rm postBuild</code></pre>
-<p>postBuild</p>
-<pre><code>#!/bin/bash -l
-set -e
+# Install cwutils
+RUN cd /tmp &amp;&amp; \
+    wget https://www.star.nesdis.noaa.gov/socd/coastwatch/cwf/cwutils-4_0_0_198-linux-x86_64.tar.gz &amp;&amp; \
+    tar -zxf cwutils-4_0_0_198-linux-x86_64.tar.gz &amp;&amp; \
+    rm -rf cwutils-4_0_0_198-linux-x86_64.tar.gz
+ENV PATH=${PATH}:/tmp/cwutils_4.0.0.198/bin
+ENV MANPATH=${MANPATH}:/tmp/cwutils_4.0.0.198/doc/man
+ENV INSTALL4J ADD VM PARAMS=-Dsun.java2d.uiScale=2.0
 
-&lt;bash commands&gt;</code></pre>
-</section>
-<section id="setup-start.sh" class="level2" data-number="2.6">
-<h2 data-number="2.6" class="anchored" data-anchor-id="setup-start.sh"><span class="header-section-number">2.6</span> setup-start.sh</h2>
-<p>The <code>start</code> bash code is run when the image starts. py-rocker-base has a start script at <code>${REPO_DIR}/start</code> which loads the Desktop applications. If you change that start file (by copying your start file onto that location), then the Desktop apps will not be loaded properly. Instead, the <code>setup-start.sh</code> will add your start file to a directory <code>${REPO_DIR}/childstarts</code> and will run all those scripts after <code>${REPO_DIR}/start</code>.</p>
-<p>The <code>setup-start.sh</code> script will move the file you provide into <code>${REPO_DIR}/childstarts</code>. As usual you can name your script something other than <code>start</code>.</p>
-<pre><code>COPY start start
-RUN /pyrocket_scripts/setup-start.sh start &amp;&amp; rm start</code></pre>
-</section>
-<section id="install-vscode-extensions.sh" class="level2" data-number="2.7">
-<h2 data-number="2.7" class="anchored" data-anchor-id="install-vscode-extensions.sh"><span class="header-section-number">2.7</span> install-vscode-extensions.sh</h2>
-<p>The <code>install-vscode-extensions.sh</code> script will add VSCode extensions to the conda notebook environment (in <code>${CONDA_PREFIX}/share/code-server/extensions</code>).</p>
-<pre><code>COPY vscode-extensions.txt vscode-extensions.txt
-RUN /pyrocket_scripts/install-vscode-extensions.sh vscode-extensions.txt &amp;&amp; \
-  rm vscode-extensions.txt</code></pre>
-<p>vscode-extensions.txt</p>
-<pre><code>gitlens
-indent-rainbow
-code-spell-checker
-prettier</code></pre>
-</section>
-<section id="desktop-applications" class="level2" data-number="2.8">
-<h2 data-number="2.8" class="anchored" data-anchor-id="desktop-applications"><span class="header-section-number">2.8</span> Desktop applications</h2>
-<p>See the <a href="desktop.html">chapter on Desktop applications</a>.</p>
+# Install panoply
+RUN cd /tmp &amp;&amp; \
+  wget --user-agent="Mozilla/5.0" https://www.giss.nasa.gov/tools/panoply/download/PanoplyJ-5.5.5.tgz &amp;&amp; \
+  tar -zxf PanoplyJ-5.5.5.tgz &amp;&amp; \
+  rm -rf PanoplyJ-5.5.5.tgz
+ENV PATH=${PATH}:/tmp/PanoplyJ
+
+USER ${NB_USER}
+WORKDIR ${HOME}</code></pre>
+<p>environment.yml</p>
+<pre><code>name: py-rocket-geospatial 
+# 2024-11-01
+channels:
+  - conda-forge
+  - nodefaults
+
+dependencies:
+  # Core scientific python stack
+  - cython # optimization, C API access
+  - flox # optimization, xarray operations
+  - hypothesis # needed by numpy testing tools
+  - networkx
+  - numba # high-performance numerics
+  - numpy
+  - pandas
+  - scikit-image
+  - scikit-learn
+  - scipy
+  - statsmodels
+  - pymannkendall # non-parametric Mann-Kendall trend analysis
+  - sympy
+  - xarray&gt;=2024.05.0
+
+  # Visualization packages
+  - bokeh
+  - cartopy # geospatial plotting with matplotlib
+  - geemap
+  - geoviews
+  - hvplot
+  - ipyleaflet
+  - ipympl # This enables matplotlib interaction with jupyter widgets
+  - leafmap
+  - lonboard
+  - matplotlib
+  - plotly
+  - seaborn # statistical plotting with matplotlib
+  - cmocean # colormaps for ocean
+  - imageio # helps writing image files
+  - apng # create animation from multiple png
+  - holoviews
+  - graphviz
+  - bqplot # 2-D visualization system
+  - regionmask # create masks of (geo)spatial regions
+
+  # Machine Learning packages
+  - py-xgboost~=2.1.1=cpu*
+
+  # Geospatial data packages
+  - geopandas&gt;=0.14.4
+  - pygmt
+  - rasterio
+  - rioxarray
+  - rasterstats # summarize geospatial raster datasets based on vector geometries
+  - pyresample # resampling geospatial image data
+  - shapely # manipulation and analysis of planar geometric objects
+  - pyproj
+  - datashader
+
+  # File formats and file management, download, dataset caching
+  - h5py
+  - h5netcdf
+  - nco
+  - pooch
+  - zarr
+  - kerchunk
+  - rechunker
+  - cftime # for decoding time units and variable values in a netCDF file
+  - h5coro # reading HDF5 data stored in S3
+  - hdf5plugin # provides HDF5 compression filters
+  - lxml # processing XML and HTML
+  - pynco # python style access to the NetCDF Operators (NCO)
+
+  # Cloud access tools and libraries
+  - awscli
+  - awscliv2
+  - boto3
+  - s3fs&gt;=2023.6.0
+  # handle login and similar details for accessing earthdata protected data
+  # Access datasets exposed via STAC
+  - pystac-client
+  - stackstac
+  # Access datasets exposed via intake catalogs
+  - intake
+  - intake-esm&gt;=2023.7.7
+  - intake-stac==0.4.0
+  - intake-xarray==0.6.1
+  - gcsfs&gt;=2023.5.0
+  - certifi # Root Certificates for validating the trustworthiness of SSL certificates.
+
+  # Specific cloud access libraries
+  - copernicusmarine # get data from copernicus
+  - earthaccess&gt;=0.11.0 # get data from nasa earth access
+  - pydap # OPeNDAP implementation
+  - erddapy # connect to erddap servers
+  - ecmwflibs # wraps some of European Centre for Medium-Range Weather Forecasts libraries
+  - harmony-py
+
+  # Distributed computing
+  - dask&gt;=2023.12.1
+  - dask-labextension
+  - dask-geopandas
+  - coiled
+
+  # Other useful generic python packages
+  - pillow # Python imaging library, useful for many image-related tasks
+  - pytest
+  - pytest-cov
+  - pep8
+  - flake8
+  - tqdm # progress bars, with notebook support
+  - joblib # lightweight pipelining in Python
+
+  # Packages specific to climate and ocean data work
+  - esmpy
+  - xmip
+  - spectral # pure Python module for processing hyperspectral image data
+
+  # Desktop tools
+  - qgis 
+  - pyopencl  # Maybe needed for qgis? https://github.com/conda-forge/qgis-feedstock/issues/263
+  # Resolves warning "No ICDs were found": https://github.com/CryoInTheCloud/hub-image/issues/50
+  - ocl-icd-system
+  
+  # Quarto
+  - quarto
+  - pip:
+    - xq # Apply XPath expressions to XML
+    - jupyterlab-quarto</code></pre>
+<p>install.R</p>
+<pre><code>#! /usr/local/bin/Rscript
+# install R dependencies
+
+# to match rocker/verse:4.4 used in py-rocker-base
+# look up the date that the Rocker image was created and put that
+repo &lt;- "https://p3m.dev/cran/__linux__/jammy/2024-05-13"
+
+install.packages(c("rstac", "quarto", "aws.s3", "reticulate", "gdalcubes", "rnaturalearth"), repos=repo)
+install.packages("rnaturalearthdata", repos=repo)
+
+remotes::install_github('r-tmap/tmap', upgrade=FALSE)
+# CRAN version is out of date
+devtools::install_github("boettiger-lab/earthdatalogin")
+
+# CoastWatch required
+list.of.packages &lt;- c("parsedate", "reshape2", "gridGraphics", "PBSmapping",   
+                      "date", "openair", "cmocean", "plotdap", "rerddapXtracto")
+install.packages(list.of.packages, repos=repo)</code></pre>
+<p>apt.txt</p>
+<pre><code># for qgis
+libgl1-mesa-glx</code></pre>
 
 
 </section>
@@ -905,13 +979,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./customizing.html" class="pagination-link" aria-label="Using py-rocket-base">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Using py-rocket-base</span></span>
+      <a href="./jupyter-config.html" class="pagination-link" aria-label="Customizing Jupyter">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Customizing Jupyter</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./r-packages.html" class="pagination-link" aria-label="R packages">
-        <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">R packages</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./developers.html" class="pagination-link" aria-label="Developer notes">
+        <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Developer notes</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
@@ -920,4 +994,4 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 
 
 
-<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/nmfs-opensci/py-rocket-base/edit/main/configuration_files.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/nmfs-opensci/py-rocket-base/blob/main/configuration_files.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/nmfs-opensci/py-rocket-base/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/nmfs-opensci/py-rocket-base/edit/main/example_children.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/nmfs-opensci/py-rocket-base/blob/main/example_children.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/nmfs-opensci/py-rocket-base/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>
