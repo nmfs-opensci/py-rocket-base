@@ -247,7 +247,7 @@ ul.task-list li input[type="checkbox"] {
 <pre><code>COPY environment.yml environment.yml
 RUN /pyrocket_scripts/install-conda-packages.sh environment.yml &amp;&amp; \
   rm environment.yml</code></pre>
-<p>Rocker scripts do not take arguments. Note that PATH must be given since rocker installation scripts will fail with conda on the path. The path specification is only within the specific RUN context.</p>
+<p>Rocker scripts do not take arguments. Note that PATH must be given since rocker installation scripts will fail with conda on the path. The path specification will apply only within the specific RUN context and must be in the same RUN that the rocker script is run. The scripts should be run as root.</p>
 <pre><code>USER root
 RUN PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin &amp;&amp; \
     /rocker_scripts/install_geospatial.sh

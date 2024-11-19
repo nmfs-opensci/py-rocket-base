@@ -3,6 +3,13 @@ on:
   workflow_dispatch: null
   push:
     branches: test
+    paths:
+      - '.github/workflows/test-build.yaml'
+      - '!book/**'  # Ignore all changes in the /book directory
+      - '!docs/**'  # Ignore all changes in the /docs directory
+      - '!README.md'
+      - '!conda-lock.yml'
+      - '!LICENSE'
 
 jobs:
   build:

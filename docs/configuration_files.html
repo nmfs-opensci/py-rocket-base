@@ -227,6 +227,7 @@ ul.task-list li input[type="checkbox"] {
 <li><code>setup-start.sh</code></li>
 <li><code>run-postbuild.sh</code></li>
 </ul>
+<p>Note there are a few more scripts in <code>/py-rocket-scripts</code> but those are tailored more to the base-image creation rather than extending the base image.</p>
 <section id="install-conda-packages.sh" class="level2" data-number="2.1">
 <h2 data-number="2.1" class="anchored" data-anchor-id="install-conda-packages.sh"><span class="header-section-number">2.1</span> install-conda-packages.sh</h2>
 <p>The <code>install-conda-packages.sh</code> script will install conda packages to the conda notebook environment, the user environment in the py-rocket-base image (same as for pangeo and repo2docker images).</p>
@@ -314,7 +315,7 @@ RUN /pyrocket_scripts/setup-start.sh start &amp;&amp; rm start</code></pre>
 </section>
 <section id="install-vscode-extensions.sh" class="level2" data-number="2.7">
 <h2 data-number="2.7" class="anchored" data-anchor-id="install-vscode-extensions.sh"><span class="header-section-number">2.7</span> install-vscode-extensions.sh</h2>
-<p>The <code>install-vscode-extensions.sh</code> script will add VSCode extensions.</p>
+<p>The <code>install-vscode-extensions.sh</code> script will add VSCode extensions to the conda notebook environment (in <code>${CONDA_PREFIX}/share/code-server/extensions</code>).</p>
 <pre><code>COPY vscode-extensions.txt vscode-extensions.txt
 RUN /pyrocket_scripts/install-vscode-extensions.sh vscode-extensions.txt &amp;&amp; \
   rm vscode-extensions.txt</code></pre>
