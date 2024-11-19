@@ -11,6 +11,8 @@ The helper scripts at `/pyrocket_scripts` in the image scripts to help do common
 * `setup-start.sh`
 * `run-postbuild.sh`
 
+Note there are a few more scripts in `/py-rocket-scripts` but those are tailored more to the base-image creation rather than extending the base image.
+
 ## install-conda-packages.sh
 
 The `install-conda-packages.sh` script will install conda packages to the conda notebook environment, the user environment in the py-rocket-base image (same as for pangeo and repo2docker images). 
@@ -143,7 +145,7 @@ RUN /pyrocket_scripts/setup-start.sh start && rm start
 
 ## install-vscode-extensions.sh
 
-The `install-vscode-extensions.sh` script will add VSCode extensions.
+The `install-vscode-extensions.sh` script will add VSCode extensions to the conda notebook environment (in `${CONDA_PREFIX}/share/code-server/extensions`).
 
 ```
 COPY vscode-extensions.txt vscode-extensions.txt
