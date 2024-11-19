@@ -18,6 +18,8 @@ ENV_NAME="${2:-${CONDA_ENV}}"
 # Check if running as root and switch to NB_USER if needed
 if [[ $(id -u) -eq 0 ]]; then
     echo "Switching to ${NB_USER} to run install-conda-packages.sh"
+    # Be aware that the next line is resetting PATH to not include conda bins. If this becomes a problem, uncomment the following
+    # export PATH="$PATH"
     exec su "${NB_USER}" -c "/bin/bash $0 $ENV_FILE $ENV_NAME"
 fi
 
