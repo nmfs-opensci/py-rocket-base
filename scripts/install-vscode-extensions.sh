@@ -30,8 +30,8 @@ if [ ! -f "${ext_file}" ]; then
 fi
 
 # Set the extensions directory to be the conda dir so that it persists
-EXT_DIR=${NB_PYTHON_PREFIX}/share/code-server/extensions
-mkdir -p ${EXT_DIR}
+EXT_DIR="${NB_PYTHON_PREFIX}/share/code-server/extensions"
+mkdir -p "${EXT_DIR}"
 
 # Install each extension listed in the file; skip empty lines or comments
 while IFS= read -r EXT; do
@@ -41,7 +41,7 @@ while IFS= read -r EXT; do
     # Skip if the line is now empty
     [[ -z "$EXT" ]] && continue
 
-    if ${NB_PYTHON_PREFIX}/bin/code-server --extensions-dir ${EXT_DIR} --install-extension "$EXT"; then
+    if ${NB_PYTHON_PREFIX}/bin/code-server --extensions-dir "${EXT_DIR}" --install-extension "$EXT"; then
         echo "  Successfully installed extension: $EXT"
     else
         echo "  Failed to install extension: $EXT" >&2
