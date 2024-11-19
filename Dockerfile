@@ -24,7 +24,7 @@ RUN mkdir -p /pyrocket_scripts && \
     chown -R root:staff /pyrocket_scripts && \
     chmod -R 775 /pyrocket_scripts
 
-# Install conda packages
+# Install conda packages (will switch to NB_USER in script)
 RUN /pyrocket_scripts/install-conda-packages.sh ${REPO_DIR}/environment.yml
 
 # Install R, RStudio via Rocker scripts. Requires the prefix for a rocker Dockerfile
@@ -33,6 +33,9 @@ RUN /pyrocket_scripts/install-rocker.sh "verse_${R_VERSION}"
 # Install extra apt packages
 # Install linux packages after R installation since the R install scripts get rid of packages
 RUN /pyrocket_scripts/install-apt-packages.sh ${REPO_DIR}/apt.txt
+
+# Install some basic VS Code extensions
+RUN /pyrocket_scripts/install-vscode-extensions.sh ${REPO_DIR}/vscode-extensions.txt
 
 # Re-enable man pages disabled in Ubuntu 18 minimal image
 # https://wiki.ubuntu.com/Minimal
@@ -59,9 +62,6 @@ RUN mkdir -p ${XDG_CONFIG_HOME} && \
 USER ${NB_USER}
 RUN chmod +x ${REPO_DIR}/start \
     && cp ${REPO_DIR}/start /srv/start
-
-# Install some basic VS Code extensions
-RUN /pyrocket_scripts/install-vscode-extensions.sh ${REPO_DIR}/vscode-extensions.txt
     
 # Revert to default user and home as pwd
 USER ${NB_USER}
