@@ -33,7 +33,7 @@ fi
 # Set the extensions directory to be the conda dir so that it persists
 # Create if it doesn't exist; make owner jovyan
 EXT_DIR="${NB_PYTHON_PREFIX}/share/code-server/extensions"
-install -o jovyan -g jovyan -m 755 -d "${EXT_DIR}"
+install -o ${NB_USER} -g ${NB_USER} -m 755 -d "${EXT_DIR}"
 
 # Install each extension listed in the file; skip empty lines or comments
 while IFS= read -r EXT; do

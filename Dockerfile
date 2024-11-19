@@ -58,6 +58,9 @@ RUN mkdir -p ${XDG_CONFIG_HOME} && \
     chmod +x ${REPO_DIR}/scripts/setup-desktop.sh && \
     ${REPO_DIR}/scripts/setup-desktop.sh
 
+# Fix home permissions. Not needed in JupyterHub with persistent memory but needed if not used in that context
+RUN /pyrocket_scripts/fix-home-permissions.sh
+
 # Set up the start command 
 USER ${NB_USER}
 RUN chmod +x ${REPO_DIR}/start \
