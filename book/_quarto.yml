@@ -23,6 +23,7 @@ book:
     - desktop.qmd
     - publishing.qmd
     - jupyter-config.qmd
+    - example_children.qmd
     - developers.qmd
     - related.qmd
 
