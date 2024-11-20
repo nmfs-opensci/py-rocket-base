@@ -20,6 +20,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -215,20 +249,20 @@ ul.task-list li input[type="checkbox"] {
 
 <p>To install extra R packages, use <code>install.R</code>. This is treated as an R script which is run. For example, you can have a script like</p>
 <p>install.R</p>
-<pre><code>repo &lt;- "https://p3m.dev/cran/__linux__/jammy/2024-05-13"
-list.of.packages &lt;- c("ggplot2","remotes")
-install.packages(list.of.packages, repos=repo)
-remotes::install_github("hadley/httr@v0.4")</code></pre>
+<div class="sourceCode" id="cb1"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>repo &lt;- "https://p3m.dev/cran/__linux__/jammy/2024-05-13"</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>list.of.packages &lt;- c("ggplot2","remotes")</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>install.packages(list.of.packages, repos=repo)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>remotes::install_github("hadley/httr@v0.4")</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <section id="spatial-libraries" class="level3" data-number="3.0.1">
 <h3 data-number="3.0.1" class="anchored" data-anchor-id="spatial-libraries"><span class="header-section-number">3.0.1</span> Spatial libraries</h3>
 <p>Some packages depend on linux packages. One example are spatial packages like <code>sf</code> which depend on GDAL. In this case</p>
-<pre><code>install.packages("sf")</code></pre>
+<div class="sourceCode" id="cb2"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>install.packages("sf")</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>will not work because it will not install the linux package dependencies.</p>
 <p>There are a few ways to get around this.</p>
 <ul>
 <li><p>Install the necessary linux packages via apt-get. This can be hard.</p></li>
 <li><p>Install via via /rocker_scipts/install_geospatial.sh To do this include</p>
-<pre><code>RUN /rocker_scipts/install_geospatial.sh</code></pre>
+<div class="sourceCode" id="cb3"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>RUN /rocker_scipts/install_geospatial.sh</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>in your Dockerfile.</p></li>
 <li><p>Use r2u which has Ubuntu binaries with all the dependencies included.</p></li>
 </ul>
@@ -236,11 +270,11 @@ remotes::install_github("hadley/httr@v0.4")</code></pre>
 <section id="default-cran-repository" class="level3" data-number="3.0.2">
 <h3 data-number="3.0.2" class="anchored" data-anchor-id="default-cran-repository"><span class="header-section-number">3.0.2</span> Default CRAN repository</h3>
 <p>The default CRAN repository is set in ${R_HOME}/etc/Rprofile.site and the CRAN environmental variable to</p>
-<pre><code>https://p3m.dev/cran/__linux__/jammy/latest</code></pre>
+<div class="sourceCode" id="cb4"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>https://p3m.dev/cran/__linux__/jammy/latest</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>To set a different repo, edit ${R_HOME}/etc/Rprofile.site or specify the repo to use in <code>install.packages()</code> like so</p>
-<pre><code>repo &lt;- "https://p3m.dev/cran/__linux__/jammy/2024-05-13"
-list.of.packages &lt;- c("maps", "mapdata", "RColorBrewer")
-install.packages(list.of.packages, repos=repo)</code></pre>
+<div class="sourceCode" id="cb5"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>repo &lt;- "https://p3m.dev/cran/__linux__/jammy/2024-05-13"</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>list.of.packages &lt;- c("maps", "mapdata", "RColorBrewer")</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>install.packages(list.of.packages, repos=repo)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 
 </section>

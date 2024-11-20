@@ -21,7 +21,7 @@ You can add either *.json or *.py configurations files to the same directory.
 For example, if you want to allow hidden files to be shown in the file browser in Jupyter Lab. Add 
 
 custom_jupyter_server_config.json
-```
+```markdown
 {
     "ContentsManager": {
         "allow_hidden": true
@@ -32,7 +32,7 @@ custom_jupyter_server_config.json
 and then copy this into `jupyter_server_config.d` and `jupyter_notebook_config.d` via code in the Dockerfile or in postBuild. We copy both to notebook server config and jupyter server config, because either can be used in the JupyterHub.
 
 Dockerfile
-```
+```markdown
 COPY custom_jupyter_server_config.json custom_jupyter_server_config.json
 RUN cp custom_jupyter_server_config.json ${NB_PYTHON_PREFIX}/etc/jupyter/jupyter_server_config.d/ && \
     cp custom_jupyter_server_config.json ${NB_PYTHON_PREFIX}/etc/jupyter/jupyter_notebook_config.d/ && \
@@ -42,7 +42,7 @@ RUN cp custom_jupyter_server_config.json ${NB_PYTHON_PREFIX}/etc/jupyter/jupyter
 Alternatively, you can add a postBuild file to your repo and py-rocket-base will automatically run this when you image builds.
 
 postBuild
-```
+```markdown
 #!/bin/bash -l
 set -euo pipefail
 

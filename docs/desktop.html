@@ -20,6 +20,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -220,17 +254,17 @@ ul.task-list li input[type="checkbox"] {
 <p>py-rocket-base includes the <a href="https://www.xfce.org/">xfce4 Desktop UI</a> where you can run applications. It is built off <a href="https://www.freedesktop.org/wiki/Software/">freedesktop</a> (which is helpful to know if you are debugging and configuring). A common application is to run QGIS or java-based applications. py-rocket-base looks for files with the ending <code>.desktop</code>, <code>.xml</code> (optional), and <code>.png</code> or <code>.svg</code> (optional) associated with an application in a directory called Desktop in your repo.</p>
 <p>py-rocket-base puts these <code>.desktop</code> files in <code>/usr/share/Desktop</code>. Typically these desktop files are in <code>~/Desktop</code>. But in a JupyterHub, the home directory is often persistent and py-rocket-base tries not to alter the user home directory. Also there might be orphaned desktop files in <code>~/Desktop</code> and so the user desktop UI would be inconsistent between users. Using <code>/usr/share/Desktop</code> does mean that users cannot add their own persistent applications to xfce4 Desktop but this would be difficult anyhow without root access in many cases.</p>
 <p>py-rocket-base has Java (<code>openjdk-11-jdk</code> and <code>openjdk-11-jre</code>) pre-installed as part of the rocker R/RStudio installation. So Java applications do work as long as they work with this version of Java.</p>
-<pre><code>openjdk version "11.0.24" 2024-07-16
-OpenJDK Runtime Environment (build 11.0.24+8-post-Ubuntu-1ubuntu322.04)
-OpenJDK 64-Bit Server VM (build 11.0.24+8-post-Ubuntu-1ubuntu322.04, mixed mode, sharing)</code></pre>
+<div class="sourceCode" id="cb1"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>openjdk version "11.0.24" 2024-07-16</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>OpenJDK Runtime Environment (build 11.0.24+8-post-Ubuntu-1ubuntu322.04)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>OpenJDK 64-Bit Server VM (build 11.0.24+8-post-Ubuntu-1ubuntu322.04, mixed mode, sharing)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <section id="adding-an-application-in-your-child-docker-image" class="level2" data-number="4.1">
 <h2 data-number="4.1" class="anchored" data-anchor-id="adding-an-application-in-your-child-docker-image"><span class="header-section-number">4.1</span> Adding an application in your child docker image</h2>
 <p>Use the pyrocket script <code>install-desktop.sh</code> to set up the desktop and move your files to the proper location. Provide a path to a directory with your Desktop files as the argument to the script. Here is the code for your Docker file. This script must be run as root.</p>
-<pre><code>USER root
-COPY ./Desktop /tmp/Desktop
-RUN /pyrocket_scripts/install-desktop.sh  /tmp/Desktop
-RUN rm -rf /tmp/Desktop
-USER ${NB_USER}</code></pre>
+<div class="sourceCode" id="cb2"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>USER root</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>COPY ./Desktop /tmp/Desktop</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>RUN /pyrocket_scripts/install-desktop.sh  /tmp/Desktop &amp;&amp; \</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  rm -rf /tmp/Desktop</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>USER ${NB_USER}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <section id="create-the-desktop-directory" class="level3" data-number="4.1.1">
 <h3 data-number="4.1.1" class="anchored" data-anchor-id="create-the-desktop-directory"><span class="header-section-number">4.1.1</span> Create the Desktop directory</h3>
 <p>Create a directory for the Desktop file and add the .desktop and optional .png and .xml files. The pyrocket script <code>install_desktop.sh</code> will move them to the correct places (<code>/usr/share/applications</code> and <code>/usr/share/Desktop</code>, <code>/usr/share/mime/packages</code> and icon locations).</p>
@@ -245,17 +279,17 @@ USER ${NB_USER}</code></pre>
 <h4 data-number="4.1.1.1" class="anchored" data-anchor-id="desktop-file"><span class="header-section-number">4.1.1.1</span> .desktop file</h4>
 <p>The <code>.desktop</code> file is a configuration file that describes how an application is launched. The required parts are Name, Exec and Type. MimeType specifies what types of files the application can use (optional). If you included an icon in your Desktop directory, then that will be registered and you can use the filename without a path. However, sometimes the icon is installed with the application and in that case you need the full path. See the icon section below.</p>
 <p>cdat.desktop</p>
-<pre><code>[Desktop Entry]
-Type=Application
-Name=CWUtils
-GenericName=CoastWatch Data Analysis Tool
-Icon=cdat
-TryExec=cdat
-Exec=cdat %F
-Terminal=false
-StartupNotify=false
-Categories=Qt;Education;Science;Geography;
-Keywords=map;globe;</code></pre>
+<div class="sourceCode" id="cb4"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">Desktop Entry</span><span class="co">]</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>Type=Application</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>Name=CWUtils</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>GenericName=CoastWatch Data Analysis Tool</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>Icon=cdat</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>TryExec=cdat</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>Exec=cdat %F</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>Terminal=false</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>StartupNotify=false</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>Categories=Qt;Education;Science;Geography;</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>Keywords=map;globe;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="xml" class="level4" data-number="4.1.1.2">
 <h4 data-number="4.1.1.2" class="anchored" data-anchor-id="xml"><span class="header-section-number">4.1.1.2</span> .xml</h4>
@@ -264,10 +298,10 @@ Keywords=map;globe;</code></pre>
 <section id="icons" class="level4" data-number="4.1.1.3">
 <h4 data-number="4.1.1.3" class="anchored" data-anchor-id="icons"><span class="header-section-number">4.1.1.3</span> icons</h4>
 <p>You can include a png or svg for the icon. py-rocket-base will place this in <code>/usr/share/icons/hicolor</code>. If you put your icon file in the Desktop directory in your repo, then in your desktop file, use the file name without the extension. If for some reason, your icon is not showing up, use the direct url <code>/srv/repo/Desktop/your-icon-name.png</code>. If the icon cache does not update properly, you have the use the full url.</p>
-<pre><code>Icon=cdat</code></pre>
+<div class="sourceCode" id="cb5"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>Icon=cdat</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>You can also use an absolute file path.</p>
 <p>If an icon is installed with your application, it will be in the installation files.</p>
-<pre><code>Icon=/srv/conda/envs/notebook/share/qgis/images/icons/qgis-icon-512x512.png</code></pre>
+<div class="sourceCode" id="cb6"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>Icon=/srv/conda/envs/notebook/share/qgis/images/icons/qgis-icon-512x512.png</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>or if you include an icon in your <code>Desktop</code> directory, it will be in <code>/srv/repo/Desktop</code> (but in that case it is also registered as an icon so you can just use <code>cdat</code>).</p>
 <pre><code>Icon=/srv/repo/Desktop/cdat.png</code></pre>
 </section>
@@ -282,44 +316,44 @@ Keywords=map;globe;</code></pre>
 <li>add the <code>qgis.desktop</code> file to your Desktop directory</li>
 </ul>
 <p>qgis.desktop</p>
-<pre><code># From: https://github.com/qgis/QGIS/blob/ltr-3_28/linux/org.qgis.qgis.desktop.in
-[Desktop Entry]
-Type=Application
-Name=QGIS Desktop
-GenericName=Geographic Information System
-Icon=/srv/conda/envs/notebook/share/qgis/images/icons/qgis-icon-512x512.png
-TryExec=qgis
-Exec=qgis %F
-Terminal=false
-StartupNotify=false
-Categories=Qt;Education;Science;Geography;
-MimeType=application/x-qgis-project;application/x-qgis-project-container;application/x-qgis-layer-settings;application/x-qgis-layer-definition;application/x-qgis-composer-template;image/tiff;image/jpeg;image/jp2;application/x-raster-aig;application/x-raster-ecw;application/x-raster-mrsid;application/x-mapinfo-mif;application/x-esri-shape;application/vnd.google-earth.kml+xml;application/vnd.google-earth.kmz;application/geopackage+sqlite3;
-Keywords=map;globe;postgis;wms;wfs;ogc;osgeo;
-StartupWMClass=QGIS3</code></pre>
+<div class="sourceCode" id="cb8"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># From: https://github.com/qgis/QGIS/blob/ltr-3_28/linux/org.qgis.qgis.desktop.in</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">Desktop Entry</span><span class="co">]</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>Type=Application</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>Name=QGIS Desktop</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>GenericName=Geographic Information System</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>Icon=/srv/conda/envs/notebook/share/qgis/images/icons/qgis-icon-512x512.png</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>TryExec=qgis</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>Exec=qgis %F</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>Terminal=false</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>StartupNotify=false</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>Categories=Qt;Education;Science;Geography;</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>MimeType=application/x-qgis-project;application/x-qgis-project-container;application/x-qgis-layer-settings;application/x-qgis-layer-definition;application/x-qgis-composer-template;image/tiff;image/jpeg;image/jp2;application/x-raster-aig;application/x-raster-ecw;application/x-raster-mrsid;application/x-mapinfo-mif;application/x-esri-shape;application/vnd.google-earth.kml+xml;application/vnd.google-earth.kmz;application/geopackage+sqlite3;</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>Keywords=map;globe;postgis;wms;wfs;ogc;osgeo;</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>StartupWMClass=QGIS3</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p><strong>CoastWatch Utilities</strong></p>
 <p>Add this to the docker file to install</p>
-<pre><code>USER root
-# Install cwutils
-RUN cd /tmp &amp;&amp; \
-    wget https://www.star.nesdis.noaa.gov/socd/coastwatch/cwf/cwutils-4_0_0_198-linux-x86_64.tar.gz &amp;&amp; \
-    tar -zxf cwutils-4_0_0_198-linux-x86_64.tar.gz &amp;&amp; \
-    rm -rf cwutils-4_0_0_198-linux-x86_64.tar.gz
-ENV PATH=${PATH}:/tmp/cwutils_4.0.0.198/bin
-ENV MANPATH=${MANPATH}:/tmp/cwutils_4.0.0.198/doc/man
-ENV INSTALL4J ADD VM PARAMS=-Dsun.java2d.uiScale=2.0
-USER ${NB_USER}</code></pre>
+<div class="sourceCode" id="cb9"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>USER root</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu"># Install cwutils</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>RUN cd /tmp &amp;&amp; \</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    wget https://www.star.nesdis.noaa.gov/socd/coastwatch/cwf/cwutils-4_0_0_198-linux-x86_64.tar.gz &amp;&amp; \</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    tar -zxf cwutils-4_0_0_198-linux-x86_64.tar.gz &amp;&amp; \</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    rm -rf cwutils-4_0_0_198-linux-x86_64.tar.gz</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>ENV PATH=${PATH}:/tmp/cwutils_4.0.0.198/bin</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>ENV MANPATH=${MANPATH}:/tmp/cwutils_4.0.0.198/doc/man</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>ENV INSTALL4J ADD VM PARAMS=-Dsun.java2d.uiScale=2.0</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>USER ${NB_USER}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Add this <code>cdat.desktop</code> file to Desktop directory</p>
-<pre><code>[Desktop Entry]
-Type=Application
-Name=CWUtils
-GenericName=CoastWatch Data Analysis Tool
-Icon=/srv/repo/Desktop/cdat.png
-TryExec=cdat
-Exec=cdat %F
-Terminal=false
-StartupNotify=false
-Categories=Qt;Education;Science;Geography;
-Keywords=map;globe;</code></pre>
+<div class="sourceCode" id="cb10"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">Desktop Entry</span><span class="co">]</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>Type=Application</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>Name=CWUtils</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>GenericName=CoastWatch Data Analysis Tool</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>Icon=/srv/repo/Desktop/cdat.png</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>TryExec=cdat</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>Exec=cdat %F</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>Terminal=false</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>StartupNotify=false</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>Categories=Qt;Education;Science;Geography;</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>Keywords=map;globe;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Add <code>cdat.png</code> icon to Desktop directory. How do you know that the command to open the application is <code>cdat</code>? You read the application installation documentation and it will tell you how to open the application from a terminal (command line).</p>
 </section>
 </section>

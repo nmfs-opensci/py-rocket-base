@@ -20,6 +20,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -238,9 +272,10 @@ ul.task-list li input[type="checkbox"] {
 <h2 data-number="2.1" class="anchored" data-anchor-id="install-conda-packages.sh"><span class="header-section-number">2.1</span> install-conda-packages.sh</h2>
 <p>The <code>install-conda-packages.sh</code> script will install conda packages to the conda notebook environment, the user environment in the py-rocket-base image (same as for pangeo and repo2docker images).</p>
 <p>Here is the code for your Docker file. You can name the conda package file to something other than <code>environment.yml</code>. Make sure your file has <code>name:</code>. The name is arbitrary. It is ignored but required for the script.</p>
-<pre><code>COPY environment.yml environment.yml
-RUN /pyrocket_scripts/install-conda-packages.sh environment.yml &amp;&amp; rm environment.yml</code></pre>
-<p>This is a standard format. You can add version pinning.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>FROM ghcr.io/nmfs-opensci/py-rocket-base:latest</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>COPY environment.yml environment.yml</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>RUN /pyrocket_scripts/install-conda-packages.sh environment.yml &amp;&amp; rm environment.yml</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>environment.yml</p>
 <pre><code>name: required
 channels:
@@ -250,86 +285,99 @@ dependencies:
   - numpy</code></pre>
 <p>Instead of a list of conda packages (typically called environment.yml), you can use a conda lock file instead.</p>
 <p>Here is the code for your Docker file. You can name your conda lock file something other than <code>conda-lock.yml</code>.</p>
-<pre><code>COPY conda-lock.yml conda-lock.yml
-RUN /pyrocket_scripts/install-conda-packages.sh conda-lock.yml &amp;&amp; rm conda-lock.yml</code></pre>
+<div class="sourceCode" id="cb3"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>FROM ghcr.io/nmfs-opensci/py-rocket-base:latest</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>COPY conda-lock.yml conda-lock.yml</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>RUN /pyrocket_scripts/install-conda-packages.sh conda-lock.yml &amp;&amp; rm conda-lock.yml</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="install-pip-packages.sh" class="level2" data-number="2.2">
 <h2 data-number="2.2" class="anchored" data-anchor-id="install-pip-packages.sh"><span class="header-section-number">2.2</span> install-pip-packages.sh</h2>
 <p>The <code>install-pip-packages.sh</code> script will install packages using <code>pip</code>. Here is the code for your Docker file. You can name your pip package file something other than <code>requirements.txt</code>.</p>
-<pre><code>COPY requirements.txt requirements.txt
-RUN /pyrocket_scripts/install-pip-packages.sh requirements.txt &amp;&amp; rm requirements.txt</code></pre>
+<div class="sourceCode" id="cb4"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>FROM ghcr.io/nmfs-opensci/py-rocket-base:latest</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>COPY requirements.txt requirements.txt</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>RUN /pyrocket_scripts/install-pip-packages.sh requirements.txt &amp;&amp; rm requirements.txt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>requirements.txt</p>
-<pre><code>#a package
-harmony-py
-</code></pre>
+<div class="sourceCode" id="cb5"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>#a package</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>harmony-py</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="install-r-packages.sh" class="level2" data-number="2.3">
 <h2 data-number="2.3" class="anchored" data-anchor-id="install-r-packages.sh"><span class="header-section-number">2.3</span> install-r-packages.sh</h2>
 <p>The <code>install-r-packages.sh</code> script will run the supplied R script which you can use to install R packages to the system library.</p>
 <p>Here is the code for your Docker file. You can name the R script file to something other than <code>install.R</code>. Make sure your file is an R script.</p>
-<pre><code>COPY install.R install.R
-RUN /pyrocket_scripts/install-r-packages.sh install.R &amp;&amp; rm install.R</code></pre>
+<div class="sourceCode" id="cb6"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>FROM ghcr.io/nmfs-opensci/py-rocket-base:latest</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>COPY install.R install.R</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>RUN /pyrocket_scripts/install-r-packages.sh install.R &amp;&amp; rm install.R</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>install.R example</p>
-<pre><code># to match rocker/verse:4.4 used in py-rocker-base
-# look up the date that the Rocker image was created and put that
-repo &lt;- "https://p3m.dev/cran/__linux__/jammy/2024-05-13"
-list.of.packages &lt;- c("ncdf4", "httr", "plyr", "lubridate")
-install.packages(list.of.packages, repos=repo)</code></pre>
+<div class="sourceCode" id="cb7"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># to match rocker/verse:4.4 used in py-rocker-base</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu"># look up the date that the Rocker image was created and put that</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>repo &lt;- "https://p3m.dev/cran/__linux__/jammy/2024-05-13"</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>list.of.packages &lt;- c("ncdf4", "httr", "plyr", "lubridate")</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>install.packages(list.of.packages, repos=repo)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <section id="add-r-geospatial-packages" class="level3" data-number="2.3.1">
 <h3 data-number="2.3.1" class="anchored" data-anchor-id="add-r-geospatial-packages"><span class="header-section-number">2.3.1</span> Add R geospatial packages</h3>
 <p>Geospatial packages require some linux packages. To get this working in your Docker image add this to your Docker file:</p>
 <p>Dockerfile</p>
-<pre><code>FROM ghcr.io/nmfs-opensci/py-rocket-base:latest
-
-USER root
-RUN PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin &amp;&amp; \
-    /rocker_scripts/install_geospatial.sh
-USER ${NB_USER}</code></pre>
+<div class="sourceCode" id="cb8"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>FROM ghcr.io/nmfs-opensci/py-rocket-base:latest</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>USER root</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>RUN PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin &amp;&amp; \</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    /rocker_scripts/install_geospatial.sh</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>USER ${NB_USER}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 </section>
 <section id="install-apt-packages.sh" class="level2" data-number="2.4">
 <h2 data-number="2.4" class="anchored" data-anchor-id="install-apt-packages.sh"><span class="header-section-number">2.4</span> install-apt-packages.sh</h2>
 <p>The <code>install-apt-packages.sh</code> script will install packages with <code>apt-get</code>. Here is the code for your Docker file. You can name the apt file of packages names to something other than <code>apt.txt</code>. Comments and newlines are allowed. Installation requires root.</p>
-<pre><code>USER root
-COPY apt.txt apt.txt
-RUN /pyrocket_scripts/install-apt-packages.sh apt.txt &amp;&amp; rm apt.txt
-USER ${NB_USER}</code></pre>
+<div class="sourceCode" id="cb9"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>FROM ghcr.io/nmfs-opensci/py-rocket-base:latest</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>USER root</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>COPY apt.txt apt.txt</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>RUN /pyrocket_scripts/install-apt-packages.sh apt.txt &amp;&amp; rm apt.txt</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>USER ${NB_USER}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>apt.txt example</p>
-<pre><code># Some useful stuff
-tk-dev
-
-# Add some more
-cmocean</code></pre>
+<div class="sourceCode" id="cb10"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># Some useful stuff</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>tk-dev</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="fu"># Add some more</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>cmocean</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="run-postbuild.sh" class="level2" data-number="2.5">
 <h2 data-number="2.5" class="anchored" data-anchor-id="run-postbuild.sh"><span class="header-section-number">2.5</span> run-postbuild.sh</h2>
 <p>The <code>run-postbuild.sh</code> script can be run as root or jovyan (<code>${NB_USER}</code>). The script has some extra code to remove leftover files after installing Python extensions.</p>
-<pre><code>COPY postBuild postBuild
-RUN /pyrocket_scripts/run-postbuild.sh postBuild &amp;&amp; rm postBuild</code></pre>
+<div class="sourceCode" id="cb11"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>FROM ghcr.io/nmfs-opensci/py-rocket-base:latest</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>COPY postBuild postBuild</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>RUN /pyrocket_scripts/run-postbuild.sh postBuild &amp;&amp; rm postBuild</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>postBuild</p>
-<pre><code>#!/bin/bash -l
-set -e
-
-&lt;bash commands&gt;</code></pre>
+<div class="sourceCode" id="cb12"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>#!/bin/bash -l</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>set -e</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>&lt;bash commands&gt;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="setup-start.sh" class="level2" data-number="2.6">
 <h2 data-number="2.6" class="anchored" data-anchor-id="setup-start.sh"><span class="header-section-number">2.6</span> setup-start.sh</h2>
 <p>The <code>start</code> bash code is run when the image starts. py-rocker-base has a start script at <code>${REPO_DIR}/start</code> which loads the Desktop applications. If you change that start file (by copying your start file onto that location), then the Desktop apps will not be loaded properly. Instead, the <code>setup-start.sh</code> will add your start file to a directory <code>${REPO_DIR}/childstarts</code> and will run all those scripts after <code>${REPO_DIR}/start</code>.</p>
 <p>The <code>setup-start.sh</code> script will move the file you provide into <code>${REPO_DIR}/childstarts</code>. As usual you can name your script something other than <code>start</code>.</p>
-<pre><code>COPY start start
-RUN /pyrocket_scripts/setup-start.sh start &amp;&amp; rm start</code></pre>
+<div class="sourceCode" id="cb13"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>FROM ghcr.io/nmfs-opensci/py-rocket-base:latest</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>COPY start start</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>RUN /pyrocket_scripts/setup-start.sh start &amp;&amp; rm start</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="install-vscode-extensions.sh" class="level2" data-number="2.7">
 <h2 data-number="2.7" class="anchored" data-anchor-id="install-vscode-extensions.sh"><span class="header-section-number">2.7</span> install-vscode-extensions.sh</h2>
 <p>The <code>install-vscode-extensions.sh</code> script will add VSCode extensions to the conda notebook environment (in <code>${CONDA_PREFIX}/share/code-server/extensions</code>).</p>
-<pre><code>COPY vscode-extensions.txt vscode-extensions.txt
-RUN /pyrocket_scripts/install-vscode-extensions.sh vscode-extensions.txt &amp;&amp; \
-  rm vscode-extensions.txt</code></pre>
+<div class="sourceCode" id="cb14"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>FROM ghcr.io/nmfs-opensci/py-rocket-base:latest</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>COPY vscode-extensions.txt vscode-extensions.txt</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>RUN /pyrocket_scripts/install-vscode-extensions.sh vscode-extensions.txt &amp;&amp; \</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  rm vscode-extensions.txt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>vscode-extensions.txt</p>
-<pre><code>gitlens
-indent-rainbow
-code-spell-checker
-prettier</code></pre>
+<div class="sourceCode" id="cb15"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>gitlens</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>indent-rainbow</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>code-spell-checker</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>prettier</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="desktop-applications" class="level2" data-number="2.8">
 <h2 data-number="2.8" class="anchored" data-anchor-id="desktop-applications"><span class="header-section-number">2.8</span> Desktop applications</h2>

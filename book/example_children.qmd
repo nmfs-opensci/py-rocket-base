@@ -5,7 +5,7 @@
 This has many geospatial R and Python packages along with QGIS, Panoply and CoastWatch utils.
 
 Dockerfile
-```
+```markdown
 FROM ghcr.io/nmfs-opensci/py-rocket-base/test:latest
 
 LABEL org.opencontainers.image.maintainers="eli.holmes@noaa.gov"
@@ -15,17 +15,23 @@ LABEL org.opencontainers.image.description="Geospatial Python (3.11) and R (4.4)
 LABEL org.opencontainers.image.licenses=Apache2.0
 LABEL org.opencontainers.image.version=2024.11.06
 
-USER root
+# copy files into the build context
 COPY . /tmp2/
-RUN /pyrocket_scripts/install-conda-packages.sh /tmp2/environment.yml || echo "install-conda-packages.sh failed" || true
-RUN /pyrocket_scripts/install-r-packages.sh /tmp2/install.R || echo "install-r-package.sh failed" || true
-RUN /pyrocket_scripts/install-apt-packages.sh /tmp2/apt.txt || echo "install-apt-packages.sh failed" || true
-RUN /pyrocket_scripts/install-desktop.sh /tmp2/Desktop|| echo "setup-desktop.sh failed" || true
-RUN rm -rf /tmp2
-USER ${NB_USER}
 
+# The scripts will switch to NB_USER for installation if needed
 USER root
-# install the geospatial libraries and R spatial; the rocket script are part of py-rocket-base
+
+# Use install script to take care of installation tasks
+RUN /pyrocket_scripts/install-conda-packages.sh /tmp2/environment.yml
+RUN /pyrocket_scripts/install-r-packages.sh /tmp2/install.R
+RUN /pyrocket_scripts/install-apt-packages.sh /tmp2/apt.txt
+RUN /pyrocket_scripts/install-desktop.sh /tmp2/Desktop
+
+# Don't leave the files in the image
+RUN rm -rf /tmp2
+
+# install the geospatial libraries and R spatial
+# The PATH setting is required because rocker scripts need to NOT have conda on the PATH
 RUN PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin && \
     /rocker_scripts/install_geospatial.sh
 
@@ -50,7 +56,7 @@ WORKDIR ${HOME}
 ```
 
 environment.yml
-```
+```markdown
 name: py-rocket-geospatial 
 # 2024-11-01
 channels:
@@ -182,7 +188,7 @@ dependencies:
 ```
 
 install.R
-```
+```markdown
 #! /usr/local/bin/Rscript
 # install R dependencies
 
@@ -204,7 +210,7 @@ install.packages(list.of.packages, repos=repo)
 ```
 
 apt.txt
-```
+```markdown
 # for qgis
 libgl1-mesa-glx
 ```

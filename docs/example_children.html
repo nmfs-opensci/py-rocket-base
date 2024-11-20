@@ -20,6 +20,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -216,198 +250,204 @@ ul.task-list li input[type="checkbox"] {
 <h2 data-number="7.1" class="anchored" data-anchor-id="py-rocket-geospatial"><span class="header-section-number">7.1</span> py-rocket-geospatial</h2>
 <p>This has many geospatial R and Python packages along with QGIS, Panoply and CoastWatch utils.</p>
 <p>Dockerfile</p>
-<pre><code>FROM ghcr.io/nmfs-opensci/py-rocket-base/test:latest
-
-LABEL org.opencontainers.image.maintainers="eli.holmes@noaa.gov"
-LABEL org.opencontainers.image.author="eli.holmes@noaa.gov"
-LABEL org.opencontainers.image.source=https://github.com/nmfs-opensci/container-images/py-rocket-2
-LABEL org.opencontainers.image.description="Geospatial Python (3.11) and R (4.4) image with Desktop (QGIS, Panoply, CWUtils)"
-LABEL org.opencontainers.image.licenses=Apache2.0
-LABEL org.opencontainers.image.version=2024.11.06
-
-USER root
-COPY . /tmp2/
-RUN /pyrocket_scripts/install-conda-packages.sh /tmp2/environment.yml || echo "install-conda-packages.sh failed" || true
-RUN /pyrocket_scripts/install-r-packages.sh /tmp2/install.R || echo "install-r-package.sh failed" || true
-RUN /pyrocket_scripts/install-apt-packages.sh /tmp2/apt.txt || echo "install-apt-packages.sh failed" || true
-RUN /pyrocket_scripts/install-desktop.sh /tmp2/Desktop|| echo "setup-desktop.sh failed" || true
-RUN rm -rf /tmp2
-USER ${NB_USER}
-
-USER root
-# install the geospatial libraries and R spatial; the rocket script are part of py-rocket-base
-RUN PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin &amp;&amp; \
-    /rocker_scripts/install_geospatial.sh
-
-# Install cwutils
-RUN cd /tmp &amp;&amp; \
-    wget https://www.star.nesdis.noaa.gov/socd/coastwatch/cwf/cwutils-4_0_0_198-linux-x86_64.tar.gz &amp;&amp; \
-    tar -zxf cwutils-4_0_0_198-linux-x86_64.tar.gz &amp;&amp; \
-    rm -rf cwutils-4_0_0_198-linux-x86_64.tar.gz
-ENV PATH=${PATH}:/tmp/cwutils_4.0.0.198/bin
-ENV MANPATH=${MANPATH}:/tmp/cwutils_4.0.0.198/doc/man
-ENV INSTALL4J ADD VM PARAMS=-Dsun.java2d.uiScale=2.0
-
-# Install panoply
-RUN cd /tmp &amp;&amp; \
-  wget --user-agent="Mozilla/5.0" https://www.giss.nasa.gov/tools/panoply/download/PanoplyJ-5.5.5.tgz &amp;&amp; \
-  tar -zxf PanoplyJ-5.5.5.tgz &amp;&amp; \
-  rm -rf PanoplyJ-5.5.5.tgz
-ENV PATH=${PATH}:/tmp/PanoplyJ
-
-USER ${NB_USER}
-WORKDIR ${HOME}</code></pre>
+<div class="sourceCode" id="cb1"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>FROM ghcr.io/nmfs-opensci/py-rocket-base/test:latest</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>LABEL org.opencontainers.image.maintainers="eli.holmes@noaa.gov"</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>LABEL org.opencontainers.image.author="eli.holmes@noaa.gov"</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>LABEL org.opencontainers.image.source=https://github.com/nmfs-opensci/container-images/py-rocket-2</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>LABEL org.opencontainers.image.description="Geospatial Python (3.11) and R (4.4) image with Desktop (QGIS, Panoply, CWUtils)"</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>LABEL org.opencontainers.image.licenses=Apache2.0</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>LABEL org.opencontainers.image.version=2024.11.06</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="fu"># copy files into the build context</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>COPY . /tmp2/</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="fu"># The scripts will switch to NB_USER for installation if needed</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>USER root</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="fu"># Use install script to take care of installation tasks</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>RUN /pyrocket_scripts/install-conda-packages.sh /tmp2/environment.yml</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>RUN /pyrocket_scripts/install-r-packages.sh /tmp2/install.R</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>RUN /pyrocket_scripts/install-apt-packages.sh /tmp2/apt.txt</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>RUN /pyrocket_scripts/install-desktop.sh /tmp2/Desktop</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="fu"># Don't leave the files in the image</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>RUN rm -rf /tmp2</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="fu"># install the geospatial libraries and R spatial</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a><span class="fu"># The PATH setting is required because rocker scripts need to NOT have conda on the PATH</span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>RUN PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin &amp;&amp; \</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>    /rocker_scripts/install_geospatial.sh</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a><span class="fu"># Install cwutils</span></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>RUN cd /tmp &amp;&amp; \</span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>    wget https://www.star.nesdis.noaa.gov/socd/coastwatch/cwf/cwutils-4_0_0_198-linux-x86_64.tar.gz &amp;&amp; \</span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>    tar -zxf cwutils-4_0_0_198-linux-x86_64.tar.gz &amp;&amp; \</span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>    rm -rf cwutils-4_0_0_198-linux-x86_64.tar.gz</span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>ENV PATH=${PATH}:/tmp/cwutils_4.0.0.198/bin</span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>ENV MANPATH=${MANPATH}:/tmp/cwutils_4.0.0.198/doc/man</span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>ENV INSTALL4J ADD VM PARAMS=-Dsun.java2d.uiScale=2.0</span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a><span class="fu"># Install panoply</span></span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>RUN cd /tmp &amp;&amp; \</span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>  wget --user-agent="Mozilla/5.0" https://www.giss.nasa.gov/tools/panoply/download/PanoplyJ-5.5.5.tgz &amp;&amp; \</span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>  tar -zxf PanoplyJ-5.5.5.tgz &amp;&amp; \</span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>  rm -rf PanoplyJ-5.5.5.tgz</span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a>ENV PATH=${PATH}:/tmp/PanoplyJ</span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a>USER ${NB_USER}</span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a>WORKDIR ${HOME}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>environment.yml</p>
-<pre><code>name: py-rocket-geospatial 
-# 2024-11-01
-channels:
-  - conda-forge
-  - nodefaults
-
-dependencies:
-  # Core scientific python stack
-  - cython # optimization, C API access
-  - flox # optimization, xarray operations
-  - hypothesis # needed by numpy testing tools
-  - networkx
-  - numba # high-performance numerics
-  - numpy
-  - pandas
-  - scikit-image
-  - scikit-learn
-  - scipy
-  - statsmodels
-  - pymannkendall # non-parametric Mann-Kendall trend analysis
-  - sympy
-  - xarray&gt;=2024.05.0
-
-  # Visualization packages
-  - bokeh
-  - cartopy # geospatial plotting with matplotlib
-  - geemap
-  - geoviews
-  - hvplot
-  - ipyleaflet
-  - ipympl # This enables matplotlib interaction with jupyter widgets
-  - leafmap
-  - lonboard
-  - matplotlib
-  - plotly
-  - seaborn # statistical plotting with matplotlib
-  - cmocean # colormaps for ocean
-  - imageio # helps writing image files
-  - apng # create animation from multiple png
-  - holoviews
-  - graphviz
-  - bqplot # 2-D visualization system
-  - regionmask # create masks of (geo)spatial regions
-
-  # Machine Learning packages
-  - py-xgboost~=2.1.1=cpu*
-
-  # Geospatial data packages
-  - geopandas&gt;=0.14.4
-  - pygmt
-  - rasterio
-  - rioxarray
-  - rasterstats # summarize geospatial raster datasets based on vector geometries
-  - pyresample # resampling geospatial image data
-  - shapely # manipulation and analysis of planar geometric objects
-  - pyproj
-  - datashader
-
-  # File formats and file management, download, dataset caching
-  - h5py
-  - h5netcdf
-  - nco
-  - pooch
-  - zarr
-  - kerchunk
-  - rechunker
-  - cftime # for decoding time units and variable values in a netCDF file
-  - h5coro # reading HDF5 data stored in S3
-  - hdf5plugin # provides HDF5 compression filters
-  - lxml # processing XML and HTML
-  - pynco # python style access to the NetCDF Operators (NCO)
-
-  # Cloud access tools and libraries
-  - awscli
-  - awscliv2
-  - boto3
-  - s3fs&gt;=2023.6.0
-  # handle login and similar details for accessing earthdata protected data
-  # Access datasets exposed via STAC
-  - pystac-client
-  - stackstac
-  # Access datasets exposed via intake catalogs
-  - intake
-  - intake-esm&gt;=2023.7.7
-  - intake-stac==0.4.0
-  - intake-xarray==0.6.1
-  - gcsfs&gt;=2023.5.0
-  - certifi # Root Certificates for validating the trustworthiness of SSL certificates.
-
-  # Specific cloud access libraries
-  - copernicusmarine # get data from copernicus
-  - earthaccess&gt;=0.11.0 # get data from nasa earth access
-  - pydap # OPeNDAP implementation
-  - erddapy # connect to erddap servers
-  - ecmwflibs # wraps some of European Centre for Medium-Range Weather Forecasts libraries
-  - harmony-py
-
-  # Distributed computing
-  - dask&gt;=2023.12.1
-  - dask-labextension
-  - dask-geopandas
-  - coiled
-
-  # Other useful generic python packages
-  - pillow # Python imaging library, useful for many image-related tasks
-  - pytest
-  - pytest-cov
-  - pep8
-  - flake8
-  - tqdm # progress bars, with notebook support
-  - joblib # lightweight pipelining in Python
-
-  # Packages specific to climate and ocean data work
-  - esmpy
-  - xmip
-  - spectral # pure Python module for processing hyperspectral image data
-
-  # Desktop tools
-  - qgis 
-  - pyopencl  # Maybe needed for qgis? https://github.com/conda-forge/qgis-feedstock/issues/263
-  # Resolves warning "No ICDs were found": https://github.com/CryoInTheCloud/hub-image/issues/50
-  - ocl-icd-system
-  
-  # Quarto
-  - quarto
-  - pip:
-    - xq # Apply XPath expressions to XML
-    - jupyterlab-quarto</code></pre>
+<div class="sourceCode" id="cb2"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="an">name:</span><span class="co"> py-rocket-geospatial </span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu"># 2024-11-01</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>channels:</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>conda-forge</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>nodefaults</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>dependencies:</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  # Core scientific python stack</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>cython # optimization, C API access</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>flox # optimization, xarray operations</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>hypothesis # needed by numpy testing tools</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>networkx</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>numba # high-performance numerics</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>numpy</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>pandas</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>scikit-image</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>scikit-learn</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>scipy</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>statsmodels</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>pymannkendall # non-parametric Mann-Kendall trend analysis</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>sympy</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>xarray&gt;=2024.05.0</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>  # Visualization packages</span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>bokeh</span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>cartopy # geospatial plotting with matplotlib</span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>geemap</span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>geoviews</span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>hvplot</span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>ipyleaflet</span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>ipympl # This enables matplotlib interaction with jupyter widgets</span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>leafmap</span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>lonboard</span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>matplotlib</span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>plotly</span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>seaborn # statistical plotting with matplotlib</span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>cmocean # colormaps for ocean</span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>imageio # helps writing image files</span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>apng # create animation from multiple png</span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>holoviews</span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>graphviz</span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>bqplot # 2-D visualization system</span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>regionmask # create masks of (geo)spatial regions</span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a>  # Machine Learning packages</span>
+<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>py-xgboost~=2.1.1=cpu*</span>
+<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a>  # Geospatial data packages</span>
+<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>geopandas&gt;=0.14.4</span>
+<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>pygmt</span>
+<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>rasterio</span>
+<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>rioxarray</span>
+<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>rasterstats # summarize geospatial raster datasets based on vector geometries</span>
+<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>pyresample # resampling geospatial image data</span>
+<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>shapely # manipulation and analysis of planar geometric objects</span>
+<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>pyproj</span>
+<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>datashader</span>
+<span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a>  # File formats and file management, download, dataset caching</span>
+<span id="cb2-60"><a href="#cb2-60" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>h5py</span>
+<span id="cb2-61"><a href="#cb2-61" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>h5netcdf</span>
+<span id="cb2-62"><a href="#cb2-62" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>nco</span>
+<span id="cb2-63"><a href="#cb2-63" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>pooch</span>
+<span id="cb2-64"><a href="#cb2-64" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>zarr</span>
+<span id="cb2-65"><a href="#cb2-65" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>kerchunk</span>
+<span id="cb2-66"><a href="#cb2-66" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>rechunker</span>
+<span id="cb2-67"><a href="#cb2-67" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>cftime # for decoding time units and variable values in a netCDF file</span>
+<span id="cb2-68"><a href="#cb2-68" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>h5coro # reading HDF5 data stored in S3</span>
+<span id="cb2-69"><a href="#cb2-69" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>hdf5plugin # provides HDF5 compression filters</span>
+<span id="cb2-70"><a href="#cb2-70" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>lxml # processing XML and HTML</span>
+<span id="cb2-71"><a href="#cb2-71" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>pynco # python style access to the NetCDF Operators (NCO)</span>
+<span id="cb2-72"><a href="#cb2-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-73"><a href="#cb2-73" aria-hidden="true" tabindex="-1"></a>  # Cloud access tools and libraries</span>
+<span id="cb2-74"><a href="#cb2-74" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>awscli</span>
+<span id="cb2-75"><a href="#cb2-75" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>awscliv2</span>
+<span id="cb2-76"><a href="#cb2-76" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>boto3</span>
+<span id="cb2-77"><a href="#cb2-77" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>s3fs&gt;=2023.6.0</span>
+<span id="cb2-78"><a href="#cb2-78" aria-hidden="true" tabindex="-1"></a>  # handle login and similar details for accessing earthdata protected data</span>
+<span id="cb2-79"><a href="#cb2-79" aria-hidden="true" tabindex="-1"></a>  # Access datasets exposed via STAC</span>
+<span id="cb2-80"><a href="#cb2-80" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>pystac-client</span>
+<span id="cb2-81"><a href="#cb2-81" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>stackstac</span>
+<span id="cb2-82"><a href="#cb2-82" aria-hidden="true" tabindex="-1"></a>  # Access datasets exposed via intake catalogs</span>
+<span id="cb2-83"><a href="#cb2-83" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>intake</span>
+<span id="cb2-84"><a href="#cb2-84" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>intake-esm&gt;=2023.7.7</span>
+<span id="cb2-85"><a href="#cb2-85" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>intake-stac==0.4.0</span>
+<span id="cb2-86"><a href="#cb2-86" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>intake-xarray==0.6.1</span>
+<span id="cb2-87"><a href="#cb2-87" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>gcsfs&gt;=2023.5.0</span>
+<span id="cb2-88"><a href="#cb2-88" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>certifi # Root Certificates for validating the trustworthiness of SSL certificates.</span>
+<span id="cb2-89"><a href="#cb2-89" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-90"><a href="#cb2-90" aria-hidden="true" tabindex="-1"></a>  # Specific cloud access libraries</span>
+<span id="cb2-91"><a href="#cb2-91" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>copernicusmarine # get data from copernicus</span>
+<span id="cb2-92"><a href="#cb2-92" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>earthaccess&gt;=0.11.0 # get data from nasa earth access</span>
+<span id="cb2-93"><a href="#cb2-93" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>pydap # OPeNDAP implementation</span>
+<span id="cb2-94"><a href="#cb2-94" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>erddapy # connect to erddap servers</span>
+<span id="cb2-95"><a href="#cb2-95" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>ecmwflibs # wraps some of European Centre for Medium-Range Weather Forecasts libraries</span>
+<span id="cb2-96"><a href="#cb2-96" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>harmony-py</span>
+<span id="cb2-97"><a href="#cb2-97" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-98"><a href="#cb2-98" aria-hidden="true" tabindex="-1"></a>  # Distributed computing</span>
+<span id="cb2-99"><a href="#cb2-99" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>dask&gt;=2023.12.1</span>
+<span id="cb2-100"><a href="#cb2-100" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>dask-labextension</span>
+<span id="cb2-101"><a href="#cb2-101" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>dask-geopandas</span>
+<span id="cb2-102"><a href="#cb2-102" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>coiled</span>
+<span id="cb2-103"><a href="#cb2-103" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-104"><a href="#cb2-104" aria-hidden="true" tabindex="-1"></a>  # Other useful generic python packages</span>
+<span id="cb2-105"><a href="#cb2-105" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>pillow # Python imaging library, useful for many image-related tasks</span>
+<span id="cb2-106"><a href="#cb2-106" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>pytest</span>
+<span id="cb2-107"><a href="#cb2-107" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>pytest-cov</span>
+<span id="cb2-108"><a href="#cb2-108" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>pep8</span>
+<span id="cb2-109"><a href="#cb2-109" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>flake8</span>
+<span id="cb2-110"><a href="#cb2-110" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>tqdm # progress bars, with notebook support</span>
+<span id="cb2-111"><a href="#cb2-111" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>joblib # lightweight pipelining in Python</span>
+<span id="cb2-112"><a href="#cb2-112" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-113"><a href="#cb2-113" aria-hidden="true" tabindex="-1"></a>  # Packages specific to climate and ocean data work</span>
+<span id="cb2-114"><a href="#cb2-114" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>esmpy</span>
+<span id="cb2-115"><a href="#cb2-115" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>xmip</span>
+<span id="cb2-116"><a href="#cb2-116" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>spectral # pure Python module for processing hyperspectral image data</span>
+<span id="cb2-117"><a href="#cb2-117" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-118"><a href="#cb2-118" aria-hidden="true" tabindex="-1"></a>  # Desktop tools</span>
+<span id="cb2-119"><a href="#cb2-119" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>qgis </span>
+<span id="cb2-120"><a href="#cb2-120" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>pyopencl  # Maybe needed for qgis? https://github.com/conda-forge/qgis-feedstock/issues/263</span>
+<span id="cb2-121"><a href="#cb2-121" aria-hidden="true" tabindex="-1"></a>  # Resolves warning "No ICDs were found": https://github.com/CryoInTheCloud/hub-image/issues/50</span>
+<span id="cb2-122"><a href="#cb2-122" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>ocl-icd-system</span>
+<span id="cb2-123"><a href="#cb2-123" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-124"><a href="#cb2-124" aria-hidden="true" tabindex="-1"></a>  # Quarto</span>
+<span id="cb2-125"><a href="#cb2-125" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>quarto</span>
+<span id="cb2-126"><a href="#cb2-126" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>pip:</span>
+<span id="cb2-127"><a href="#cb2-127" aria-hidden="true" tabindex="-1"></a><span class="ss">    - </span>xq # Apply XPath expressions to XML</span>
+<span id="cb2-128"><a href="#cb2-128" aria-hidden="true" tabindex="-1"></a><span class="ss">    - </span>jupyterlab-quarto</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>install.R</p>
-<pre><code>#! /usr/local/bin/Rscript
-# install R dependencies
-
-# to match rocker/verse:4.4 used in py-rocker-base
-# look up the date that the Rocker image was created and put that
-repo &lt;- "https://p3m.dev/cran/__linux__/jammy/2024-05-13"
-
-install.packages(c("rstac", "quarto", "aws.s3", "reticulate", "gdalcubes", "rnaturalearth"), repos=repo)
-install.packages("rnaturalearthdata", repos=repo)
-
-remotes::install_github('r-tmap/tmap', upgrade=FALSE)
-# CRAN version is out of date
-devtools::install_github("boettiger-lab/earthdatalogin")
-
-# CoastWatch required
-list.of.packages &lt;- c("parsedate", "reshape2", "gridGraphics", "PBSmapping",   
-                      "date", "openair", "cmocean", "plotdap", "rerddapXtracto")
-install.packages(list.of.packages, repos=repo)</code></pre>
+<div class="sourceCode" id="cb3"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>#! /usr/local/bin/Rscript</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu"># install R dependencies</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="fu"># to match rocker/verse:4.4 used in py-rocker-base</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="fu"># look up the date that the Rocker image was created and put that</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>repo &lt;- "https://p3m.dev/cran/__linux__/jammy/2024-05-13"</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>install.packages(c("rstac", "quarto", "aws.s3", "reticulate", "gdalcubes", "rnaturalearth"), repos=repo)</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>install.packages("rnaturalearthdata", repos=repo)</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>remotes::install_github('r-tmap/tmap', upgrade=FALSE)</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="fu"># CRAN version is out of date</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>devtools::install_github("boettiger-lab/earthdatalogin")</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="fu"># CoastWatch required</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>list.of.packages &lt;- c("parsedate", "reshape2", "gridGraphics", "PBSmapping",   </span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>                      "date", "openair", "cmocean", "plotdap", "rerddapXtracto")</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>install.packages(list.of.packages, repos=repo)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>apt.txt</p>
-<pre><code># for qgis
-libgl1-mesa-glx</code></pre>
+<div class="sourceCode" id="cb4"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># for qgis</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>libgl1-mesa-glx</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 
 </section>

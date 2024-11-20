@@ -20,6 +20,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -241,8 +275,8 @@ ul.task-list li input[type="checkbox"] {
 <section id="jupyter-lab" class="level3" data-number="5.1.3">
 <h3 data-number="5.1.3" class="anchored" data-anchor-id="jupyter-lab"><span class="header-section-number">5.1.3</span> Jupyter Lab</h3>
 <p>The <code>jupyterlab-quarto</code> package is installed which allows Quarto markdown to be rendered in markdown cells in Jupyter notebooks (ipynb). But you will need to render from a terminal. Quarto render both <code>qmd</code> and <code>ipynb</code> files. Read about using Quarto with JupyterLab on this Quarto <a href="https://quarto.org/docs/tools/jupyter-lab.html">page</a>. For example,</p>
-<pre><code>quarto render --to pdf test.qmd
-quarto render --to html test.ipynb</code></pre>
+<div class="sourceCode" id="cb1"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>quarto render --to pdf test.qmd</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>quarto render --to html test.ipynb</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>For PDF output, TexLive packages will not install on the fly and you will need to do <code>tlmgr install packagename</code> for any missing package errors you get.</p>
 </section>
 </section>
@@ -280,15 +314,15 @@ quarto render --to html test.ipynb</code></pre>
 <ul>
 <li>Do not use <code>apt-get</code> to install texlive packages. This will turn off tlmgr (the TeX package manager). Instead use</li>
 </ul>
-<pre><code>tlmgr install &lt;package&gt;</code></pre>
+<div class="sourceCode" id="cb2"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>tlmgr install &lt;package&gt;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <ul>
 <li>Run <code>tlmgr option</code> to make sure tlmgr is working.</li>
 </ul>
 <p>Unfortunately any packages you install will be in the <code>/opt</code> directory and this gets recreated every time you restart your server. So if you need a particular package you will need to keep installing it. Or create your own image based on py-rocket-base:</p>
 <p>Dockerfile</p>
-<pre><code>FROM ghcr.io/nmfs-opensci/py-rocket-base:latest
-
-RUN tlmgr install collection-latexrecommended &amp;&amp; tlmgr clean --all</code></pre>
+<div class="sourceCode" id="cb3"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>FROM ghcr.io/nmfs-opensci/py-rocket-base:latest</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>RUN tlmgr install collection-latexrecommended &amp;&amp; tlmgr clean --all</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 
 </section>

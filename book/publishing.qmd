@@ -24,7 +24,7 @@ The VSCode Quarto extension is installed. This provides many nice features. Read
 
 The `jupyterlab-quarto` package is installed which allows Quarto markdown to be rendered in markdown cells in Jupyter notebooks (ipynb). But you will need to render from a terminal. Quarto render both `qmd` and `ipynb` files. Read about using Quarto with JupyterLab on this Quarto [page](https://quarto.org/docs/tools/jupyter-lab.html). For example,
 
-```
+```markdown
 quarto render --to pdf test.qmd
 quarto render --to html test.ipynb
 ```
@@ -73,7 +73,7 @@ py-rocket-base has Quarto and Myst installed along with pandoc and TeXLive for o
 tlmgr must be used.
 
 * Do not use `apt-get` to install texlive packages. This will turn off tlmgr (the TeX package manager). Instead use
-```
+```markdown
 tlmgr install <package>
 ```
 * Run `tlmgr option` to make sure tlmgr is working.
@@ -82,7 +82,7 @@ Unfortunately any packages you install will be in the `/opt` directory and this 
 particular package you will need to keep installing it. Or create your own image based on py-rocket-base:
 
 Dockerfile
-```
+```markdown
 FROM ghcr.io/nmfs-opensci/py-rocket-base:latest
 
 RUN tlmgr install collection-latexrecommended && tlmgr clean --all

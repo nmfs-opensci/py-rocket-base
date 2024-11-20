@@ -21,7 +21,7 @@ py-rocket-base does not include this `ONBUILD` behavior. Instead it follows the 
 
 To build the documentation book, clone repo and then
 
-```
+```markdown
 cd book
 quarto render .
 ```
@@ -30,8 +30,7 @@ Set GitHub Pages to docs folder.
 
 ## Building the images
 
-The `.github/workflows/build.yaml` is a GitHub Action to build the image with [repo2docker-action](https://github.com/jupyterhub/repo2docker-action). 
-The GitHub Action builds the image and the URL will look like one of these
+The `.github/workflows/build.yaml` is a GitHub Action to build the image. The GitHub Action builds the image and the URL will look like one of these
 ```
 ghcr.io/nmfs-opensci/repo-name/image-name:latest
 ghcr.io/nmfs-opensci/image-name:latest
@@ -39,149 +38,114 @@ ghcr.io/nmfs-opensci/image-name:latest
 For example, for this repo the image is `ghcr.io/nmfs-opensci/py-rocket-base:latest`.
 
 
-## repo2docker
+## base-image
 
-[repo2docker-action](https://github.com/jupyterhub/repo2docker-action) is creating the image and publishing to `ghcr.io/nmfs-opensci/py-rocket-base` (image hosting like dockerhub or quay.io).
+In the directory, `base-image` is the Pangeo base-image Dockerfile minus the ONBUILD statements. Thus the base-image for py-rocket-base is the same as Pangeo base-image but doesn't have the behavior of automatically processing files like `environment.yml` in child images (that use the base image in the `FROM` line).
 
-[repo2docker](https://github.com/jupyterhub/repo2docker) (a python package) sets up the structure of the base environment, e.g. installs mamba for package solving, sets up environment variables, installs linux packages, etc. It looks for specific files (like apt.txt, environment.yml, postBuild) in the build context (the repo that the Dockerfile is in) and takes the appropriate action. repo2docker-action also allows you to include `appendix` to add more commands to your Dockerfile. 
+py-rocket-base uses base-image and adds on the pangeo-notebook metapackage which add the basic JupyterHub and JupyterLab packages. py-rocket-base then adds on R/RStudio, more conda packages and Desktop via install scripts. 
 
-repo2docker does a lot behind the scene and has some different behavior.
+## py-rocket-base
 
-### COPY
+The [Dockerfile](https://github.com/nmfs-opensci/py-rocket-base/blob/main/Dockerfile) does the following in order:
 
-`COPY <src> <dest>` does not work in `appendix` because repo2docker changes the build context. The files are in `src` not `.`. In appendix, you do not do lines like this
-```
-COPY file1 newlocation/file1
-```
-to bring file1 into the build. Instead, the files are already in `${REPO_DIR}/`. If you want to copy a file to a new location, run the following as root if jovyan does not have permission to write to `newlocation`.
-```
-RUN cp ${REPO_DIR}/file1 newlocation/file1
-```
+* Move files into `/srv/repo`
+* Move scripts into `/pyrocket_scripts` and `/rocker_scripts`
+* Install conda packages with the pangeo-notebook metapackage as the main set of packages plus the extra server packages
+* Install R and RStudio plus the verse set of packages with the rocker scripts
+* Set up the Desktop environment and ensure that applications go into `/etc/xdg/userconfig` instead of `$HOME`.
+* Move the start script to `/srv/start`.
 
-### ENV and ARGS
-
-repo2docker uses a number of ARGs in the build which you might expect to be in the image environment, for example `${NB_USER}`. These need to be converted to ENV to be available to child builds.
-
-## RStudio
-
-[jupyter-rsession-proxy](https://github.com/jupyterhub/jupyter-rsession-proxy) allows us to launch RStudio from Jupyter Lab, but the environment is different than the environment in Jupyter Lab.
-
-### Environmental variables
-
-* PATH is different. conda is not on the path.
-* None of the environmental variables in the docker file will be in the `/rstudio` environment. The start command affects `\lab` and `\notebook` but not `\rstudio`.
-* The path in the terminal (in RStudio) can/is different than in the R console. Expect weird unexpected behavior because of this. If you type `bash`, then `.bashrc` is run and that will run `conda init` and that will add conda binaries to the path. Then really weird and unexpected things can happen.
-
-If you need some environmental variable set, you will need to set those in `$R_HOME/etc/Rprofile.site` which is run when R starts.
-
-## Basic structure of py-rocket-base
-
-The py-rocket-base docker build has the following structure:
-```
-# base image and environment
-repo2docker sets this up
-repo2docker-action sets the directory where the build files 
-  are put to /srv/repo (via $REPO_DIR in GitHub Action)
-  and ownership is set to jovyan (via $NB_USER)
-  
-# environment.yml
-repo2docker adds these packages to the conda notebook environment
-
-# start
-repo2docker points the Docker image entrypoint (command run on start) to this file
-${REPO_DIR}/start
-
-# appendix
-repo2docker-action adds the Docker commands here to the end of Dockerfile
-most of the work in py-rocket-base is done here. appendix calls rocker.sh and install packages in apt2.txt
-```
-
-Each file is described below.
-
-## apt2.txt
-
-This is not named `apt.txt` because these packages need to be installed after R is installed because the R scripts uninstall packages as part of cleanup. There are some packages that are required for Desktop (`/desktop`) to operate correctly. Packages needed for R and RStudio building (`/rstudio`) are installed via the rocker install scripts.
-
-## environment.yml
-
-These are added to the notebook conda environment and in py-rocket-base the basic packages needed for Jupyter Lab, RStudio and Desktop are added. Scientific packages are not added here. They will be added via child images that use py-rocket-base as the base image (in the FROM line).
-
-
-## appendix
-
-This a long file with many pieces. The pieces are explained below. Click on the number next to code to read about what that code block does.
+The pieces of the Dockerfile are explained below. Click on the number next to code to read about what that code block does.
 
 ```r
+FROM ghcr.io/nmfs-opensci/py-rocket-base/base-image:latest
+
 USER root # <1>
 
-# Set env variables # <2>
-# This is the default env in repo2docker type images # <2>
-ENV CONDA_ENV=notebook # <2>
-# Tell applications where to open desktop apps  # <2>
-DISPLAY=":1.0"  # <2>
+# Define environment variables
+# DISPLAY Tell applications where to open desktop apps - this allows notebooks to pop open GUIs
+ENV REPO_DIR="/srv/repo" \ # <2>
+    DISPLAY=":1.0" \ # <2>
+    R_VERSION="4.4.1" # <2>
 
-# Install R, RStudio via Rocker scripts
-ENV R_VERSION="4.4.1"      # <3>
-ENV R_DOCKERFILE="verse_${R_VERSION}"  # <3>
-# This is in the rocker script but will not run since ${NB_USER} already exists  # <3>
-# Needed because rocker scripts set permissions based on the staff group  # <3>
-RUN usermod -a -G staff "${NB_USER}"  # <3>
-RUN PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin && \  # <3>
-  chmod +x ${REPO_DIR}/rocker.sh && \  # <3>
-  ${REPO_DIR}/rocker.sh  # <3>
+# Add NB_USER to staff group (required for rocker script)
+# Ensure the staff group exists first
+RUN groupadd -f staff && usermod -a -G staff "${NB_USER}"
 
-# Install linux packages after R installation since the R install scripts get rid of packages  # <4>
-# The package_list part is reading the file and doing clean-up to just have the list of packages  # <4>
-RUN package_list=$(grep -v '^\s*#' ${REPO_DIR}/apt2.txt | grep -v '^\s*$' | sed 's/\r//g; s/#.*//; s/^[[:space:]]*//; s/[[:space:]]*$//' | awk '{$1=$1};1') && \  # <4>
-  apt-get update && \  # <4>
-  apt-get install --yes --no-install-recommends $package_list && \  # <4>
-  apt-get autoremove --purge && \  # <4>
-  apt-get clean && \  # <4>
-  rm -rf /var/lib/apt/lists/*  # <4>
-  
+# Copy files into REPO_DIR and make sure staff group can edit (use staff for rocker)
+COPY --chown=${NB_USER}:${NB_USER} . ${REPO_DIR} # <3>
+RUN chgrp -R staff ${REPO_DIR} && \ # <3>
+    chmod -R g+rwx ${REPO_DIR} && \ # <3>
+    rm -rf ${REPO_DIR}/book ${REPO_DIR}/docs # <3>
+
+# Copy scripts to /pyrocket_scripts and set permissions
+RUN mkdir -p /pyrocket_scripts && \  # <4>
+    cp -r ${REPO_DIR}/scripts/* /pyrocket_scripts/ && \ # <4>
+    chown -R root:staff /pyrocket_scripts && \ # <4>
+    chmod -R 775 /pyrocket_scripts # <4>
+
+# Install conda packages (will switch to NB_USER in script)
+RUN /pyrocket_scripts/install-conda-packages.sh ${REPO_DIR}/environment.yml # <5>
+
+# Install R, RStudio via Rocker scripts. Requires the prefix for a rocker Dockerfile
+RUN /pyrocket_scripts/install-rocker.sh "verse_${R_VERSION}" # <6>
+
+# Install extra apt packages
+# Install linux packages after R installation since the R install scripts get rid of packages
+RUN /pyrocket_scripts/install-apt-packages.sh ${REPO_DIR}/apt.txt # <7>
+
+# Install some basic VS Code extensions
+RUN /pyrocket_scripts/install-vscode-extensions.sh ${REPO_DIR}/vscode-extensions.txt # <8>
+
 # Re-enable man pages disabled in Ubuntu 18 minimal image
 # https://wiki.ubuntu.com/Minimal
-RUN yes | unminimize # <5>
-# NOTE: $NB_PYTHON_PREFIX is the same as $CONDA_PREFIX at run-time. # <5>
-# $CONDA_PREFIX isn't available in this context. # <5>
-# NOTE: Prepending ensures a working path; if $MANPATH was previously empty, # <5>
-# the trailing colon ensures that system paths are searched. # <5>
-ENV MANPATH="${NB_PYTHON_PREFIX}/share/man:${MANPATH}" # <5>
-RUN mandb # <5>
+RUN yes | unminimize # <9>
+ENV MANPATH="${NB_PYTHON_PREFIX}/share/man:${MANPATH}" # <9>
+RUN mandb # <9>
 
-# Add custom jupyter config. You can also put config.py files in the same place
-COPY custom_jupyter_server_config.json ${NB_PYTHON_PREFIX}/etc/jupyter/jupyter_server_config.d/ # <6>
-COPY custom_jupyter_server_config.json ${NB_PYTHON_PREFIX}/etc/jupyter/jupyter_notebook_config.d/ # <6>
+# Add custom Jupyter server configurations
+RUN mkdir -p ${NB_PYTHON_PREFIX}/etc/jupyter/jupyter_server_config.d/ && \ # <10>
+    mkdir -p ${NB_PYTHON_PREFIX}/etc/jupyter/jupyter_notebook_config.d/ && \ # <10>
+    cp ${REPO_DIR}/custom_jupyter_server_config.json  ${NB_PYTHON_PREFIX}/etc/jupyter/jupyter_server_config.d/ && \ # <10>
+    cp ${REPO_DIR}/custom_jupyter_server_config.json ${NB_PYTHON_PREFIX}/etc/jupyter/jupyter_notebook_config.d/ # <10>
 
-# Clean up extra files in ${REPO_DIR}
-RUN rm -rf ${REPO_DIR}/book ${REPO_DIR}/docs # <7>
+# Set up the defaults for Desktop. 
+ENV XDG_CONFIG_HOME=/etc/xdg/userconfig # <11>
+RUN mkdir -p ${XDG_CONFIG_HOME} && \ # <11>
+    chown -R ${NB_USER}:${NB_USER} ${XDG_CONFIG_HOME} && \ # <11>
+    chmod -R u+rwx,g+rwX,o+rX ${XDG_CONFIG_HOME} && \ # <11>
+    mv ${REPO_DIR}/user-dirs.dirs ${XDG_CONFIG_HOME} && \ # <11>
+    chmod +x ${REPO_DIR}/scripts/setup-desktop.sh && \ # <11>
+    ${REPO_DIR}/scripts/setup-desktop.sh # <11>
 
-# Copy scripts into /pyrocket_scripts directory in the image
-RUN mkdir -p /pyrocket_scripts && cp -r ${REPO_DIR}/scripts/* /pyrocket_scripts/ # <8>
+# Fix home permissions. Not needed in JupyterHub with persistent memory but needed if not used in that context
+RUN /pyrocket_scripts/fix-home-permissions.sh # <12>
 
-# Set ownership to root and permissions to 755 # <8>
-RUN chown -R root:staff /pyrocket_scripts && \ # <8>
-    chmod -R 775 /pyrocket_scripts # <8>
-
-# Convert NB_USER to ENV (from ARG) so that it passes to the child dockerfile
-ENV NB_USER=${NB_USER} # <9>
-
+# Set up the start command 
+USER ${NB_USER} # <13>
+RUN chmod +x ${REPO_DIR}/start \ # <13>
+    && cp ${REPO_DIR}/start /srv/start # <13>
+    
 # Revert to default user and home as pwd
-USER ${NB_USER} # <10>
-WORKDIR ${HOME} # <10>
+USER ${NB_USER} # <14>
+WORKDIR ${HOME} # <14>
 ```
 1. Some commands need to be run as root, such as installing linux packages with `apt-get`
 2. Set variables. CONDA_ENV is useful for child builds
-3. This section runs the script `rocker.sh` which installs R and RStudio using rocker scripts.
-4. The rocker scripts build R from source and as part of clean up in the script, linux packages are removed that are not needed. repo2docker installs the packages in `apt.txt` automatically before the code in `appendix` thus the needed linux packages (which include packages for the Xfce Desktop Environment in `\desktop`) are put in `apt2.txt`. repo2docker will not detect this file and we can install the packages here after R is built. The  `grep -v ` etc code is processing `apt2.txt` and removing comments and blank lines.
-5. Ubuntu does not have man pages installed by default. These lines activate `man` so users have the common help files.
-6. This is some custom jupyter config to allow hidden files to be listed in the folder browser.
-7. `book` and `docs` are the documentation files and are not needed in the image.
-8. Copy the pyrocket helper scripts to the `/pyrocket_scripts` directory and set to executable.
-9. The `NB_USER` environmental variable is not exported by repo2docker (it is an argument confined to the parent build) but is very useful for child builds. So it is converted to an environmental variable.
-11. The parent docker build completes by setting the user to jovyan and the working directory to `${HOME}`. Within a JupyterHub deployment, `${HOME}` will often be re-mapped to the user persistent memory so it is important not to write anything that needs to be persistent to `${HOME}`, for example configuration. You can do this in the `start` script since that runs after the user directory is mapped or you can put configuration files in some place other than `${HOME}`.
+3. Copy the py-rocket-base files into `/srv/repo` directory. `book` and `docs` are the documentation files and are not needed in the image.
+4. Copy the pyrocket scripts into the image and set the permissions so they can be executed by the staff group (which includes jovyan). The [pyrocket scripts](https://github.com/nmfs-opensci/py-rocket-base/tree/main/scripts) are used to do most of the installation tasks and these can also be used to extend py-rocket-base.
+5. Use the pyrocket script to install the conda packages in `environment.yml`. The script does clean-up. The core package is the pangeo-notebook metapackage to this are added some JupyterLab extensions and packages needed for RStudio and Desktop. Scientific packages are not added here. They will be added via child images that use py-rocket-base as the base image (in the FROM line).
+6. This section runs the script `install-rocker.sh` which installs R and RStudio using rocker scripts.
+7. The linux packages are installed with the `install-apt-packages` script which takes care of clean-up. These packages need to be installed after R is installed because the R scripts uninstall packages as part of cleanup. 
+8. The VSCode extensions are installed into the conda environment directory since instead of the home directory since the home directory is replaced by the user persistent home directory in a JupyterHub.
+9. Ubuntu does not have man pages installed by default. These lines activate `man` so users have the common help files.
+10. This is some custom jupyter config to allow hidden files to be listed in the folder browser.
+11. Setting up Desktop. Keep config in the `/etc` so doesn't trash user environment (that they might want for other environments). Setting up Desktop configuration very poorly documented. The key is setting the environmental variable `XDG_CONFIG_HOME` and then putting the file `user-dirs.dirs` within that directory. In that file, one can specify `XDG_DESKTOP_DIR="/usr/share/Desktop"` which says where application files are kept.
+12. Ensure that none of the directories in `/home` are owned by root. When the image is used in a JupyterHub, this won't matter if home is replaced by the user persistent directory but in other applications having any directories in home owned by root will cause problems.
+13. The start file mainly includes a subshell to run any start files used in extenstions from the py-rocket-base image.
+14. The parent docker build completes by setting the user to jovyan and the working directory to `${HOME}`. Within a JupyterHub deployment, `${HOME}` will often be re-mapped to the user persistent memory so it is important not to write anything that needs to be persistent to `${HOME}`, for example configuration. You can do this in the `start` script since that runs after the user directory is mapped or you can put configuration files in some place other than `${HOME}`.
 
-## rocker.sh
+## install-rocker.sh
 
 This script will copy in the rocker scripts from [rocker-versioned2](https://github.com/rocker-org/rocker-versioned2) into `${REPO_DIR}` to install things. It will read in one of the rocker docker files using `R_DOCKERFILE` defined in the `appendix` file (which is inserted into the main docker file). 
 Variables defined here will only be available in this script. Click on the numbers in the script to learn what each section is doing.
@@ -276,9 +240,9 @@ exec "$@"
 1. In a Docker file so no way to dynamically set environmental variables, so the `env.txt` file with the `export <var>=<value>` are source at start up.
 2. Run any child start script in a subshell. Run in a subshell to contain any `set` statements or similar. start scripts are moved into `childstarts` by the `setup-start.sh` pyrocket script.
 
-## desktop.sh
+## setup-desktop.sh
 
-The default for XDG and xfce4 is for Desktop files to be in ~/Desktop but this leads to a variety of problems. First we are altering the user directiory which seems rude, second orphan desktop files might be in ~/Desktop so who knows what the user Desktop experience with be, here the Desktop dir is set to /usr/share/Desktop so is part of the image. Users that really want to customize Desktop can change `~/.config/user-dirs.dirs`. Though py-rocket-base might not respect that. Not sure why you'd do that instead of just using a different image that doesn't have the py-rocket-base behavior.
+The default for XDG and xfce4 is for Desktop files to be in `~/Desktop` but this leads to a variety of problems. First we are altering the user directiory which seems rude, second orphan desktop files might be in `~/Desktop` so who knows what the user Desktop experience with be, here the Desktop dir is set to `/usr/share/Desktop` so is part of the image. Users that really want to customize Desktop can change `~/.config/user-dirs.dirs`. Though py-rocket-base might not respect that. Not sure why you'd do that instead of just using a different image that doesn't have the py-rocket-base behavior.
 
 ```r
 #!/bin/bash
@@ -329,7 +293,19 @@ gtk-update-icon-cache "${ICON_DIR}" # <6>
 ```
 1. This is the default local for system applications.
 2. Create the Desktop directory and make sure jovyan can put files there. This is mainly for debugging.
-3. Set up the default XDG_DESKTOP_DIR value. This will be copied to the `~.config` (by xinitrc).
+3. This is not needed. It is the `user-dirs.dirs` file that is used.
 4. Copy the .desktop file in the Desktop directory into the applications directory and make a symlink to the Desktop directory. The former means that the applications will appear in the menu in xfce4 desktop and the latter means there will be a desktop icon.
 5. Add any mime xml files to the mime folder and update the mime database.
 6. Add any png or svg icon files to the icon folder and update the icon database.
+
+## Notes on the RStudio environment
+
+[jupyter-rsession-proxy](https://github.com/jupyterhub/jupyter-rsession-proxy) allows us to launch RStudio from Jupyter Lab, but the environment is different than the environment in Jupyter Lab.
+
+### Environmental variables
+
+* PATH is different. conda is not on the path.
+* None of the environmental variables in the docker file will be in the `/rstudio` environment. The start command affects `\lab` and `\notebook` but not `\rstudio`.
+* The path in the terminal (in RStudio) can/is different than in the R console. Expect weird unexpected behavior because of this. If you type `bash`, then `.bashrc` is run and that will run `conda init` and that will add conda binaries to the path. Then really weird and unexpected things can happen.
+
+If you need some environmental variable set, you will need to set those in `$R_HOME/etc/Rprofile.site` which is run when R starts.

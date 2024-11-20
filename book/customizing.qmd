@@ -26,14 +26,16 @@ The rocker docker stack also includes a set of scripts for extending rocker pack
 The format for calling the pyrocket and rocker scripts is the following. 
 
 pyrocket scripts take files (or a path to a directory with Desktop files) as arguments. The `COPY` command is needed to copy the file into the Docker build context where it can be used in `RUN` commands. Without this you will get a "file not found" error. Removing the file after you are done with it will clean up your image files.
-```
+
+```markdown
 COPY environment.yml environment.yml
 RUN /pyrocket_scripts/install-conda-packages.sh environment.yml && \
   rm environment.yml
 ```
 
 Rocker scripts do not take arguments. Note that PATH must be given since rocker installation scripts will fail with conda on the path. The path specification will apply only within the specific RUN context and must be in the same RUN that the rocker script is run. The scripts should be run as root.
-```
+
+```markdown
 USER root
 RUN PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin && \
     /rocker_scripts/install_geospatial.sh
@@ -74,7 +76,7 @@ your-repo/
 ```
 
 Dockerfile
-```
+```markdown
 FROM ghcr.io/nmfs-opensci/py-rocket-base:latest
 
 COPY environment.yml environment.yml
@@ -83,7 +85,7 @@ RUN /pyrocket_scripts/install-conda-packages.sh environment.yml && \
 ```
 
 environment.yml
-```
+```markdown
 name: required
 channels:
   - conda-forge
@@ -103,7 +105,7 @@ your-repo/
 ```
 
 Dockerfile
-```
+```markdown
 FROM ghcr.io/nmfs-opensci/py-rocket-base:latest
 
 COPY install.R install.R
@@ -111,7 +113,7 @@ RUN /pyrocket_scripts/install-r-packages.sh install.R && rm install.R
 ```
 
 install.R
-```
+```markdown
 # to match rocker/verse:4.4 used in py-rocker-base
 # look up the date that the Rocker image was created and put that
 repo <- "https://p3m.dev/cran/__linux__/jammy/2024-05-13"
@@ -130,7 +132,7 @@ your-repo/
 ```
 
 Dockerfile
-```
+```markdown
 FROM ghcr.io/nmfs-opensci/py-rocket-base:latest
 
 USER root
@@ -140,7 +142,7 @@ USER ${NB_USER}
 ```
 
 apt.txt
-```
+```markdown
 # a package
 libgl1-mesa-glx
 
@@ -153,7 +155,7 @@ vim
 Geospatial packages require some linux packages. To get this working in your Docker image add this to your Docker file:
 
 Dockerfile
-```
+```markdown
 FROM ghcr.io/nmfs-opensci/py-rocket-base:latest
 
 USER root
