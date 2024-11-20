@@ -249,7 +249,7 @@ ul.task-list li input[type="checkbox"] {
 <h2 class="anchored" data-anchor-id="using-the-image">Using the image</h2>
 <p>Include a Dockerfile in your repository with the following from line:</p>
 <pre><code>FROM ghcr.io/nmfs-opensci/py-rocket-base:latest</code></pre>
-<p>To extend the base image, see the documentation on <a href="customizing.html">customizing</a> the base image. py-rocket-base includes directories called <code>\pyrocket_scripts</code> and <code>\rocker_scripts</code> that will help you do common tasks for extending scientific docker images. You do not have to use these scripts, but they can help you do standard installation tasks (and some tasks like properly setting up GDAL) require some experience. If you are familiar with writing Docker files, you can write your own code in your Docker file.</p>
+<p>To extend the base image, see the documentation on <a href="customizing.html">customizing</a> the base image. py-rocket-base includes directories called <code>\pyrocket_scripts</code> and <code>\rocker_scripts</code> that will help you do common tasks for extending scientific docker images. You do not have to use these scripts, but they can help you do standard installation tasks.</p>
 <p>There is one exception and that is the installation of Desktop files. Properly adding Desktop applications to py-rocket-base requires the use of the <code>\pyrocket_scripts/install-desktop.sh</code> script. Setting up the start file (a script that runs after the user server is started) is also unique. See the documentation.</p>
 <p>This work is part of a large effort: the <a href="https://nmfs-opensci.github.io/container-images/">NMFS Open Science docker stack</a>.</p>
 

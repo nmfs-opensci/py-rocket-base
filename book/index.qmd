@@ -26,7 +26,7 @@ Include a Dockerfile in your repository with the following from line:
 ```
 FROM ghcr.io/nmfs-opensci/py-rocket-base:latest
 ```
-To extend the base image, see the documentation on [customizing](customizing.html) the base image. py-rocket-base includes directories called `\pyrocket_scripts` and `\rocker_scripts` that will help you do common tasks for extending scientific docker images. You do not have to use these scripts, but they can help you do standard installation tasks (and some tasks like properly setting up GDAL) require some experience. If you are familiar with writing Docker files, you can write your own code in your Docker file. 
+To extend the base image, see the documentation on [customizing](customizing.html) the base image. py-rocket-base includes directories called `\pyrocket_scripts` and `\rocker_scripts` that will help you do common tasks for extending scientific docker images. You do not have to use these scripts, but they can help you do standard installation tasks.
 
 There is one exception and that is the installation of Desktop files. Properly adding Desktop applications to py-rocket-base requires the use of the `\pyrocket_scripts/install-desktop.sh` script. Setting up the start file (a script that runs after the user server is started) is also unique. See the documentation.
 
