@@ -1,8 +1,8 @@
 FROM ghcr.io/nmfs-opensci/py-rocket-base/base-image:latest
 LABEL org.opencontainers.image.maintainers="eli.holmes@noaa.gov"
 LABEL org.opencontainers.image.author="eli.holmes@noaa.gov"
-LABEL org.opencontainers.image.source=https://github.com/nmfs-opensci/container-images/images/py-rocket-geospatial-2
-LABEL org.opencontainers.image.description="Geospatial Python (3.12), R (4.4) and QGIS image"
+LABEL org.opencontainers.image.source=https://github.com/nmfs-opensci/py-rocket-base
+LABEL org.opencontainers.image.description="Geospatial Python (3.12), R (4.4) and Desktop"
 LABEL org.opencontainers.image.licenses=Apache2.0
 LABEL org.opencontainers.image.version=2024.11.19
 
