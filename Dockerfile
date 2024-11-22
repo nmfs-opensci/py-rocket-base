@@ -43,6 +43,9 @@ RUN /pyrocket_scripts/install-apt-packages.sh ${REPO_DIR}/apt.txt
 # Install some basic VS Code extensions
 RUN /pyrocket_scripts/install-vscode-extensions.sh ${REPO_DIR}/vscode-extensions.txt
 
+# Install Zotero
+RUN wget -qO- https://raw.githubusercontent.com/retorquere/zotero-deb/master/install.sh | bash 
+
 # Re-enable man pages disabled in Ubuntu 18 minimal image
 # https://wiki.ubuntu.com/Minimal
 RUN yes | unminimize
