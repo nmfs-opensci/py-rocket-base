@@ -2,7 +2,7 @@
 # Required User: root
 # Usage: RUN /pyrocket_scripts/install-desktop.sh <directory path>"
 
-echo "Running setup-desktop.sh"
+echo "Running install-desktop.sh"
 
 # Check if the script is run as root
 if [[ $(id -u) -ne 0 ]]; then
