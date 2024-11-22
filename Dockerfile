@@ -67,6 +67,10 @@ RUN mkdir -p ${XDG_CONFIG_HOME} && \
 # Fix home permissions. Not needed in JupyterHub with persistent memory but needed if not used in that context
 RUN /pyrocket_scripts/fix-home-permissions.sh
 
+# Install Zotero
+RUN wget -qO- https://raw.githubusercontent.com/retorquere/zotero-deb/master/install.sh | bash && \
+  /pyrocket_scripts/install-desktop.sh ${REPO_DIR}/Desktop
+
 # Set up the start command 
 USER ${NB_USER}
 RUN chmod +x ${REPO_DIR}/start \
