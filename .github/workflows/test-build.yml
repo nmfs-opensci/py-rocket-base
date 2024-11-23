@@ -5,12 +5,23 @@ on:
     branches: test
     paths:
       - '.github/workflows/test-build.yaml'
+      - 'Desktop/**'
+      - 'apt.txt'
+      - 'user-dirs.dirs'
+      - 'vscode-extensions.txt'
+      - 'environment.yml'
+      - 'start'
+      - 'postBuild'
+      - 'Dockerfile'
+      - 'custom_jupyter_server_config.json'
+      - 'scripts/**'
       - '!book/**'  # Ignore all changes in the /book directory
       - '!docs/**'  # Ignore all changes in the /docs directory
+      - '!base-image/**'
       - '!README.md'
       - '!conda-lock.yml'
       - '!LICENSE'
-
+      
 jobs:
   build:
     runs-on: ubuntu-latest
