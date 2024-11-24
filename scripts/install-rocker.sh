@@ -17,7 +17,7 @@ fi
 
 # Check if a filename argument is provided
 if [ -z "$1" ]; then
-    echo "Error: install-rocker.sh requires a rocker Dockerfile prefix. Will looke like verse.4.1.1. Exiting." >&2
+    echo "Error: install-rocker.sh requires a rocker Dockerfile prefix. Will look like verse.4.1.1. Exiting." >&2
     echo "Usage: RUN /pyrocket_scripts/install-conda-packages.sh <filename>" >&2
     exit 1
 fi
@@ -34,15 +34,17 @@ R_DOCKERFILE="$1"
 export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
 # Copy in the rocker files. Work in ${REPO_DIR} to make sure I don't clobber anything
+# R_VERSION_PULL may be different than R_VERSION. Specifically pulling latest but using R_VERSION prior to latest
+# So that CRAN repo is pinned to a date.
 cd ${REPO_DIR}
 ROCKER_DOCKERFILE_NAME="${R_DOCKERFILE}.Dockerfile"
 # For degugging use: wget https://github.com/eeholmes/rocker-versioned2/archive/refs/tags/R4.4.1.tar.gz
-wget https://github.com/rocker-org/rocker-versioned2/archive/refs/tags/R${R_VERSION}.tar.gz
-tar zxvf R${R_VERSION}.tar.gz && \
-mv rocker-versioned2-R${R_VERSION}/scripts /rocker_scripts && \
-mv rocker-versioned2-R${R_VERSION}/dockerfiles/${ROCKER_DOCKERFILE_NAME} /rocker_scripts/original.Dockerfile && \
-rm R${R_VERSION}.tar.gz && \
-rm -rf rocker-versioned2-R${R_VERSION}
+wget https://github.com/rocker-org/rocker-versioned2/archive/refs/tags/R${R_VERSION_PULL}.tar.gz
+tar zxvf R${R_VERSION_PULL}.tar.gz && \
+mv rocker-versioned2-R${R_VERSION_PULL}/scripts /rocker_scripts && \
+mv rocker-versioned2-R${R_VERSION_PULL}/dockerfiles/${ROCKER_DOCKERFILE_NAME} /rocker_scripts/original.Dockerfile && \
+rm R${R_VERSION_PULL}.tar.gz && \
+rm -rf rocker-versioned2-R${R_VERSION_PULL}
 
 cd /
 # Read the Dockerfile and process each line
