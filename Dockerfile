@@ -14,6 +14,9 @@ USER root
 ENV REPO_DIR="/srv/repo" \
     DISPLAY=":1.0" \
     R_VERSION="4.4.1"
+# The latest rocker will set CRAN to 'latest' but we need a date stamped version for reproducibility
+# So pull the latest and use one earlier
+ARG R_VERSION_PULL="4.4.2"
 
 # Add NB_USER to staff group (required for rocker script)
 # Ensure the staff group exists first
@@ -35,7 +38,7 @@ RUN mkdir -p /pyrocket_scripts && \
 RUN /pyrocket_scripts/install-conda-packages.sh ${REPO_DIR}/environment.yml
 
 # Install R, RStudio via Rocker scripts. Requires the prefix for a rocker Dockerfile
-RUN /pyrocket_scripts/install-rocker.sh "verse_${R_VERSION}"
+RUN R_VERSION_PULL=$R_VERSION_PULL /pyrocket_scripts/install-rocker.sh "verse_${R_VERSION}"
 
 # Install extra apt packages
 # Install linux packages after R installation since the R install scripts get rid of packages
