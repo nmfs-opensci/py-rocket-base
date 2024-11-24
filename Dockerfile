@@ -40,15 +40,15 @@ RUN /pyrocket_scripts/install-conda-packages.sh ${REPO_DIR}/environment.yml
 # Install R, RStudio via Rocker scripts. Requires the prefix for a rocker Dockerfile
 RUN R_VERSION_PULL=$R_VERSION_PULL /pyrocket_scripts/install-rocker.sh "verse_${R_VERSION}"
 
+# Install Zotero; must be run before apt since zotero apt install requires this is run first
+RUN wget -qO- https://raw.githubusercontent.com/retorquere/zotero-deb/master/install.sh | bash 
+
 # Install extra apt packages
 # Install linux packages after R installation since the R install scripts get rid of packages
 RUN /pyrocket_scripts/install-apt-packages.sh ${REPO_DIR}/apt.txt
 
 # Install some basic VS Code extensions
 RUN /pyrocket_scripts/install-vscode-extensions.sh ${REPO_DIR}/vscode-extensions.txt
-
-# Install Zotero
-RUN wget -qO- https://raw.githubusercontent.com/retorquere/zotero-deb/master/install.sh | bash 
 
 # Re-enable man pages disabled in Ubuntu 18 minimal image
 # https://wiki.ubuntu.com/Minimal
