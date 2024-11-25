@@ -1,10 +1,11 @@
 FROM ghcr.io/nmfs-opensci/py-rocket-base/base-image:latest
+
 LABEL org.opencontainers.image.maintainers="eli.holmes@noaa.gov"
 LABEL org.opencontainers.image.author="eli.holmes@noaa.gov"
 LABEL org.opencontainers.image.source=https://github.com/nmfs-opensci/py-rocket-base
-LABEL org.opencontainers.image.description="Geospatial Python (3.12), R (4.4) and Desktop"
+LABEL org.opencontainers.image.description="Python (3.12), R (4.4.1), Desktop and Publishing tools"
 LABEL org.opencontainers.image.licenses=Apache2.0
-LABEL org.opencontainers.image.version=2024.11.19
+LABEL org.opencontainers.image.version=2024.11.22
 
 USER root
 
@@ -13,6 +14,9 @@ USER root
 ENV REPO_DIR="/srv/repo" \
     DISPLAY=":1.0" \
     R_VERSION="4.4.1"
+# The latest rocker will set CRAN to 'latest' but we need a date stamped version for reproducibility
+# So pull the latest and use one earlier
+ARG R_VERSION_PULL="4.4.2"
 
 # Add NB_USER to staff group (required for rocker script)
 # Ensure the staff group exists first
@@ -34,7 +38,10 @@ RUN mkdir -p /pyrocket_scripts && \
 RUN /pyrocket_scripts/install-conda-packages.sh ${REPO_DIR}/environment.yml
 
 # Install R, RStudio via Rocker scripts. Requires the prefix for a rocker Dockerfile
-RUN /pyrocket_scripts/install-rocker.sh "verse_${R_VERSION}"
+RUN R_VERSION_PULL=$R_VERSION_PULL /pyrocket_scripts/install-rocker.sh "verse_${R_VERSION}"
+
+# Install Zotero; must be run before apt since zotero apt install requires this is run first
+RUN wget -qO- https://raw.githubusercontent.com/retorquere/zotero-deb/master/install.sh | bash 
 
 # Install extra apt packages
 # Install linux packages after R installation since the R install scripts get rid of packages
@@ -42,9 +49,6 @@ RUN /pyrocket_scripts/install-apt-packages.sh ${REPO_DIR}/apt.txt
 
 # Install some basic VS Code extensions
 RUN /pyrocket_scripts/install-vscode-extensions.sh ${REPO_DIR}/vscode-extensions.txt
-
-# Install Zotero
-RUN wget -qO- https://raw.githubusercontent.com/retorquere/zotero-deb/master/install.sh | bash 
 
 # Re-enable man pages disabled in Ubuntu 18 minimal image
 # https://wiki.ubuntu.com/Minimal
