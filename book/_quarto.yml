@@ -10,7 +10,7 @@ book:
   repo-actions: [edit, source, issue]
   favicon: assets/favicon.ico
   search: true
-  author: Eli Holmes, Carl Boettiger, Luis Lopez
+  author: Eli Holmes, Carl Boettiger, Luis Lopez, Yuvi Panda
   chapters:
     - index.qmd
     - customizing.qmd
