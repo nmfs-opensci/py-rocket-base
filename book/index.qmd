@@ -1,5 +1,5 @@
 # Introduction {.unnumbered}
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.13942617.svg)](https://doi.org/10.5281/zenodo.13942617)[![GitHub Release](https://img.shields.io/github/v/release/nmfs-opensci/py-rocket-base)](https://github.com/nmfs-opensci/py-rocket-base/releases) `ghcr.io/nmfs-opensci/py-rocket-base:latest`
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.13942617.svg)](https://doi.org/10.5281/zenodo.13942617) [![GitHub Release](https://img.shields.io/github/v/release/nmfs-opensci/py-rocket-base)](https://github.com/nmfs-opensci/py-rocket-base/releases) <br> image url:`ghcr.io/nmfs-opensci/py-rocket-base:latest`
 
 <div>
 <div style="float: right; position: relative; top: 0px; padding: 2px">
@@ -31,4 +31,8 @@ To extend the base image, see the documentation on [customizing](customizing.htm
 There is one exception and that is the installation of Desktop files. Properly adding Desktop applications to py-rocket-base requires the use of the `\pyrocket_scripts/install-desktop.sh` script. Setting up the start file (a script that runs after the user server is started) is also unique. See the documentation.
 
 This work is part of a large effort: the [NMFS Open Science docker stack](https://nmfs-opensci.github.io/container-images/).
+
+## Citation
+
+Holmes, E., Boettiger, C., López, L., & Panda, Y. (2024). py-rocket-base: Pangeo and Rocker docker image for earth science computing.  https://doi.org/10.5281/zenodo.13942617
 
