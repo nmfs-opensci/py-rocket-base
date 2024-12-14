@@ -32,3 +32,7 @@ There is one exception and that is the installation of Desktop files. Properly a
 
 This work is part of a large effort: the [NMFS Open Science docker stack](https://nmfs-opensci.github.io/container-images/).
 
+## Citation
+
+Holmes, E., Boettiger, C., López, L., & Panda, Y. (2024). py-rocket-base: Pangeo and Rocker docker image for earth science computing.  https://doi.org/10.5281/zenodo.13942617
+
