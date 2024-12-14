@@ -2,9 +2,9 @@
   {
     "objectID": "index.html",
     "href": "index.html",
-    "title": "py-rocket-base documentation",
+    "title": "py-rocket-base",
     "section": "",
-    "text": "Introduction\nghcr.io/nmfs-opensci/py-rocket-base:latest\nThe base image has the following support:",
+    "text": "Introduction\nimage url:ghcr.io/nmfs-opensci/py-rocket-base:latest\nThe base image has the following support:",
     "crumbs": [
       "Introduction"
     ]
@@ -12,7 +12,7 @@
   {
     "objectID": "index.html#using-the-image",
     "href": "index.html#using-the-image",
-    "title": "py-rocket-base documentation",
+    "title": "py-rocket-base",
     "section": "Using the image",
     "text": "Using the image\nInclude a Dockerfile in your repository with the following from line:\nFROM ghcr.io/nmfs-opensci/py-rocket-base:latest\nTo extend the base image, see the documentation on customizing the base image. py-rocket-base includes directories called \\pyrocket_scripts and \\rocker_scripts that will help you do common tasks for extending scientific docker images. You do not have to use these scripts, but they can help you do standard installation tasks.\nThere is one exception and that is the installation of Desktop files. Properly adding Desktop applications to py-rocket-base requires the use of the \\pyrocket_scripts/install-desktop.sh script. Setting up the start file (a script that runs after the user server is started) is also unique. See the documentation.\nThis work is part of a large effort: the NMFS Open Science docker stack.",
     "crumbs": [
@@ -20,9 +20,19 @@
     ]
   },
   {
+    "objectID": "index.html#citation",
+    "href": "index.html#citation",
+    "title": "py-rocket-base",
+    "section": "Citation",
+    "text": "Citation\nHolmes, E., Boettiger, C., López, L., & Panda, Y. (2024). py-rocket-base: Pangeo and Rocker docker image for earth science computing. https://doi.org/10.5281/zenodo.13942617",
+    "crumbs": [
+      "Introduction"
+    ]
+  },
+  {
     "objectID": "index.html#footnotes",
     "href": "index.html#footnotes",
-    "title": "py-rocket-base documentation",
+    "title": "py-rocket-base",
     "section": "",
     "text": "See the Developer section of the documentation for other approaches for installing R/RStudio and the design goals for py-rocket-base.↩︎",
     "crumbs": [
