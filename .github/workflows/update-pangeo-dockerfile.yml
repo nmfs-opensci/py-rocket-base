@@ -10,7 +10,7 @@ on:
       - '.github/workflows/update-pangeo-dockerfile.yml' 
   workflow_dispatch:  # Manual trigger
   schedule:
-    - cron: '0 3 * * *'  # Runs daily at 3:00 AM UTC
+    - cron: '0 3 * * 0'  # Runs on Sundays at 3:00 AM UTC
 
 jobs:
   update-dockerfile:
