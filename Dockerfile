@@ -17,9 +17,9 @@ ENV REPO_DIR="/srv/repo" \
 # The latest rocker will set CRAN to 'latest' but we need a date stamped version for reproducibility
 # So pull the latest and use one earlier
 ARG R_VERSION_PULL="4.4.2"
-ENV LANG=C.UTF-8
-ENV LC_ALL=C.UTF-8
-
+ENV LANG=en_US.UTF-8
+ENV LC_ALL=en_US.UTF-8
+    
 # Add NB_USER to staff group (required for rocker script)
 # Ensure the staff group exists first
 RUN groupadd -f staff && usermod -a -G staff "${NB_USER}"
