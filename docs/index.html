@@ -6,9 +6,9 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Eli Holmes">
+<meta name="author" content="Eli Holmes, Carl Boettiger, Luis Lopez, Yuvi Panda">
 
-<title>py-rocket-base documentation</title>
+<title>py-rocket-base</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -135,7 +135,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <img src="https://raw.githubusercontent.com/nmfs-opensci/assets/main/logo/nmfs-opensci-logo3.png" alt="" class="sidebar-logo py-0 d-lg-inline d-none">
       </a>
     <div class="sidebar-title mb-0 py-0">
-      <a href="./">py-rocket-base documentation</a> 
+      <a href="./">py-rocket-base</a> 
         <div class="sidebar-tools-main tools-wide">
     <a href="https://nmfs-opensci.github.io" title="NMFS Open Science" class="quarto-navigation-tool px-1" aria-label="NMFS Open Science"><i class="bi bi-globe"></i></a>
     <a href="https://github.com/nmfs-opensci/py-rocket-base" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
@@ -223,6 +223,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a>
   <ul class="collapse">
   <li><a href="#using-the-image" id="toc-using-the-image" class="nav-link" data-scroll-target="#using-the-image">Using the image</a></li>
+  <li><a href="#citation" id="toc-citation" class="nav-link" data-scroll-target="#citation">Citation</a></li>
   </ul></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/nmfs-opensci/py-rocket-base/edit/main/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/nmfs-opensci/py-rocket-base/blob/main/index.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/nmfs-opensci/py-rocket-base/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
@@ -232,27 +233,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">py-rocket-base documentation</h1>
+<h1 class="title">py-rocket-base</h1>
 </div>
 
 
-<div class="quarto-title-meta-author">
-  <div class="quarto-title-meta-heading">Author</div>
-  <div class="quarto-title-meta-heading">Affiliation</div>
-  
-    <div class="quarto-title-meta-contents">
-    <p class="author">Eli Holmes </p>
-  </div>
-  <div class="quarto-title-meta-contents">
-        <p class="affiliation">
-            NOAA Fisheres
-          </p>
-      </div>
-  </div>
 
 <div class="quarto-title-meta">
 
-      
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Eli Holmes, Carl Boettiger, Luis Lopez, Yuvi Panda </p>
+          </div>
+  </div>
+    
   
     
   </div>
@@ -264,7 +258,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="introduction" class="level1 unnumbered">
 <h1 class="unnumbered">Introduction</h1>
-<p><a href="https://doi.org/10.5281/zenodo.13942617"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.13942617.svg" class="img-fluid" alt="DOI"></a><a href="https://github.com/nmfs-opensci/py-rocket-base/releases"><img src="https://img.shields.io/github/v/release/nmfs-opensci/py-rocket-base.png" class="img-fluid" alt="GitHub Release"></a> <code>ghcr.io/nmfs-opensci/py-rocket-base:latest</code></p>
+<p><a href="https://doi.org/10.5281/zenodo.13942617"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.13942617.svg" class="img-fluid" alt="DOI"></a> <a href="https://github.com/nmfs-opensci/py-rocket-base/releases"><img src="https://img.shields.io/github/v/release/nmfs-opensci/py-rocket-base.png" class="img-fluid" alt="GitHub Release"></a> <br> image url:<code>ghcr.io/nmfs-opensci/py-rocket-base:latest</code></p>
 <div>
 <div style="float: right; position: relative; top: 0px; padding: 2px">
 <p><img src="assets/jhublogo.svg" class="img-fluid" width="300"></p>
@@ -286,6 +280,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>To extend the base image, see the documentation on <a href="customizing.html">customizing</a> the base image. py-rocket-base includes directories called <code>\pyrocket_scripts</code> and <code>\rocker_scripts</code> that will help you do common tasks for extending scientific docker images. You do not have to use these scripts, but they can help you do standard installation tasks.</p>
 <p>There is one exception and that is the installation of Desktop files. Properly adding Desktop applications to py-rocket-base requires the use of the <code>\pyrocket_scripts/install-desktop.sh</code> script. Setting up the start file (a script that runs after the user server is started) is also unique. See the documentation.</p>
 <p>This work is part of a large effort: the <a href="https://nmfs-opensci.github.io/container-images/">NMFS Open Science docker stack</a>.</p>
+</section>
+<section id="citation" class="level2">
+<h2 class="anchored" data-anchor-id="citation">Citation</h2>
+<p>Holmes, E., Boettiger, C., López, L., &amp; Panda, Y. (2024). py-rocket-base: Pangeo and Rocker docker image for earth science computing. https://doi.org/10.5281/zenodo.13942617</p>
 
 
 </section>

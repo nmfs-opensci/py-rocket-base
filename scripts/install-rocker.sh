@@ -38,34 +38,59 @@ export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 # So that CRAN repo is pinned to a date.
 cd ${REPO_DIR}
 ROCKER_DOCKERFILE_NAME="${R_DOCKERFILE}.Dockerfile"
+# Pull a tag (release) or pull the latest master (stable)
+# TAR_NAME="R${R_VERSION_PULL}"
+TAR_NAME="master"
 # For degugging use: wget https://github.com/eeholmes/rocker-versioned2/archive/refs/tags/R4.4.1.tar.gz
-wget https://github.com/rocker-org/rocker-versioned2/archive/refs/tags/R${R_VERSION_PULL}.tar.gz
-tar zxvf R${R_VERSION_PULL}.tar.gz && \
-mv rocker-versioned2-R${R_VERSION_PULL}/scripts /rocker_scripts && \
-mv rocker-versioned2-R${R_VERSION_PULL}/dockerfiles/${ROCKER_DOCKERFILE_NAME} /rocker_scripts/original.Dockerfile && \
-rm R${R_VERSION_PULL}.tar.gz && \
-rm -rf rocker-versioned2-R${R_VERSION_PULL}
+# wget https://github.com/rocker-org/rocker-versioned2/archive/refs/tags/R${R_VERSION_PULL}.tar.gz
+if [[ "$TAR_NAME" == "master" ]]; then
+    wget https://github.com/rocker-org/rocker-versioned2/archive/refs/heads/${TAR_NAME}.tar.gz
+else
+    wget https://github.com/rocker-org/rocker-versioned2/archive/refs/tags/${TAR_NAME}.tar.gz
+fi
+tar zxvf ${TAR_NAME}.tar.gz && \
+mv rocker-versioned2-${TAR_NAME}/scripts /rocker_scripts && \
+mv rocker-versioned2-${TAR_NAME}/dockerfiles/${ROCKER_DOCKERFILE_NAME} /rocker_scripts/original.Dockerfile && \
+rm ${TAR_NAME}.tar.gz && \
+rm -rf rocker-versioned2-${TAR_NAME}
 
 cd /
+
 # Read the Dockerfile and process each line
+in_run_block=false
+cmd=""
+
 while IFS= read -r line; do
-    # Check if the line starts with ENV or RUN
     if [[ "$line" == ENV* ]]; then
-        # Assign variable
         var_assignment=$(echo "$line" | sed 's/^ENV //g')
-        # Replace ENV DEFAULT_USER="jovyan"
         if [[ "$var_assignment" == DEFAULT_USER* ]]; then
             var_assignment="DEFAULT_USER=${NB_USER}"
         fi
-        # Run this way eval "export ..." otherwise the " will get turned to %22
         eval "export $var_assignment"
-        # Write the exported variable to env.txt
-        echo "export $var_assignment" >> ${REPO_DIR}/env.txt
+        echo "export $var_assignment" >> "${REPO_DIR}/env.txt"
+    
     elif [[ "$line" == RUN* ]]; then
-        # Run the command from the RUN line
+        # Detect start of a multi-line RUN block
+        if [[ "$line" =~ RUN\ \<\<([A-Za-z0-9_]+) ]]; then
+            in_run_block=true
+            cmd=""  # Reset command buffer
+            eof_marker="${BASH_REMATCH[1]}"  # Store EOF marker (e.g., EOF)
+            continue
+        fi
         cmd=$(echo "$line" | sed 's/^RUN //g')
         echo "Executing: $cmd"
-        eval "$cmd" # || echo ${cmd}" encountered an error, but continuing..."
+        eval "$cmd"
+
+    elif $in_run_block; then
+        # Detect end of the here-document
+        if [[ "$line" == "$eof_marker" ]]; then
+            in_run_block=false
+            echo "Executing multi-line RUN block:"
+            echo "$cmd"
+            eval "$cmd"
+        else
+            cmd+=$'\n'"$line"
+        fi
     fi
 done < /rocker_scripts/original.Dockerfile
 
