@@ -19,6 +19,7 @@ ENV REPO_DIR="/srv/repo" \
 ARG R_VERSION_PULL="4.4.2"
 ENV LANG=en_US.UTF-8
 ENV LC_ALL=en_US.UTF-8
+ENV PROJ_LIB=/srv/conda/envs/notebook/share/proj
     
 # Add NB_USER to staff group (required for rocker script)
 # Ensure the staff group exists first
