@@ -38,13 +38,21 @@ export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 # So that CRAN repo is pinned to a date.
 cd ${REPO_DIR}
 ROCKER_DOCKERFILE_NAME="${R_DOCKERFILE}.Dockerfile"
+# Pull a tag (release) or pull the latest master (stable)
+# TAR_NAME="R${R_VERSION_PULL}"
+TAR_NAME="master"
 # For degugging use: wget https://github.com/eeholmes/rocker-versioned2/archive/refs/tags/R4.4.1.tar.gz
-wget https://github.com/rocker-org/rocker-versioned2/archive/refs/tags/R${R_VERSION_PULL}.tar.gz
-tar zxvf R${R_VERSION_PULL}.tar.gz && \
-mv rocker-versioned2-R${R_VERSION_PULL}/scripts /rocker_scripts && \
-mv rocker-versioned2-R${R_VERSION_PULL}/dockerfiles/${ROCKER_DOCKERFILE_NAME} /rocker_scripts/original.Dockerfile && \
-rm R${R_VERSION_PULL}.tar.gz && \
-rm -rf rocker-versioned2-R${R_VERSION_PULL}
+# wget https://github.com/rocker-org/rocker-versioned2/archive/refs/tags/R${R_VERSION_PULL}.tar.gz
+if [[ "$TAR_NAME" == "master" ]]; then
+    wget https://github.com/rocker-org/rocker-versioned2/archive/refs/heads/${TAR_NAME}.tar.gz
+else
+    wget https://github.com/rocker-org/rocker-versioned2/archive/refs/tags/${TAR_NAME}.tar.gz
+fi
+tar zxvf ${TAR_NAME}.tar.gz && \
+mv rocker-versioned2-${TAR_NAME}/scripts /rocker_scripts && \
+mv rocker-versioned2-${TAR_NAME}/dockerfiles/${ROCKER_DOCKERFILE_NAME} /rocker_scripts/original.Dockerfile && \
+rm ${TAR_NAME}.tar.gz && \
+rm -rf rocker-versioned2-${TAR_NAME}
 
 cd /
 # Read the Dockerfile and process each line
