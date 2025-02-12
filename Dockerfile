@@ -13,7 +13,8 @@ USER root
 # DISPLAY Tell applications where to open desktop apps - this allows notebooks to pop open GUIs
 ENV REPO_DIR="/srv/repo" \
     DISPLAY=":1.0" \
-    R_VERSION="4.4.1"
+    R_VERSION="4.4.1" \
+    QUARTO_VERSION="1.5.57"
 # The latest rocker will set CRAN to 'latest' but we need a date stamped version for reproducibility
 # So pull the latest and use one earlier
 ARG R_VERSION_PULL="4.4.2"
