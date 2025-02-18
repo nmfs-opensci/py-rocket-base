@@ -100,3 +100,10 @@ if command -v tlmgr &> /dev/null; then
     tlmgr install collection-latexrecommended
     tlmgr install pdfcol tcolorbox eurosym upquote adjustbox titling enumitem ulem soul rsfs
 fi
+
+# Set the terminal in RStudio to have the clean PATH wo conda so don't use .bashrc which is for JLab
+echo 'export PATH="$PATH"' > /home/jovyan/.rstudio-bashrc && \
+    chown jovyan:jovyan /home/jovyan/.rstudio-bashrc
+if test -f /etc/rstudio/rserver.conf; then
+  echo "env.BASH_ENV=/home/jovyan/.rstudio-bashrc" >> /etc/rstudio/rserver.conf
+fi
