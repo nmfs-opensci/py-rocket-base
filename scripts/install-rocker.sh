@@ -102,8 +102,11 @@ if command -v tlmgr &> /dev/null; then
 fi
 
 # Set the terminal in RStudio to have the clean PATH wo conda so don't use .bashrc which is for JLab
-echo 'export PATH="$PATH"' > /home/jovyan/.rstudio-bashrc && \
-    chown jovyan:jovyan /home/jovyan/.rstudio-bashrc
-if test -f /etc/rstudio/rserver.conf; then
-  echo "env.BASH_ENV=/home/jovyan/.rstudio-bashrc" >> /etc/rstudio/rserver.conf
-fi
+#if test -f /etc/rstudio/rserver.profile; then
+#    echo 'export PATH="$PATH"' > /home/jovyan/.rstudio-bashrc
+#    chown jovyan:jovyan /home/jovyan/.rstudio-bashrc
+#    echo "BASH_ENV=/home/jovyan/.rstudio-bashrc" >> /etc/rstudio/rserver-profile
+#fi
+
+sudo chown -R jovyan:jovyan /etc/rstudio
+sudo chmod -R u+rwX /etc/rstudio
