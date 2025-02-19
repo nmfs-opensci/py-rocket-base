@@ -101,11 +101,5 @@ if command -v tlmgr &> /dev/null; then
     tlmgr install pdfcol tcolorbox eurosym upquote adjustbox titling enumitem ulem soul rsfs
 fi
 
-# Make sure that the default terminal opened in RStudio (which is a login bash) sets the PATH
-current_path="$PATH"
-echo 'if [[ -v RSTUDIO || -v R_HOME ]]; then \
-    export PATH="'$current_path'"; \
-fi' > /etc/profile.d/rstudio_set_path.sh
-
 sudo chown -R jovyan:jovyan /etc/rstudio
 sudo chmod -R u+rwX /etc/rstudio
