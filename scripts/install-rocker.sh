@@ -103,10 +103,8 @@ fi
 
 # Make sure that the default terminal opened in RStudio (which is a login bash) sets the PATH
 current_path="$PATH"
-echo 'if [[ ! -v RSTUDIO || ! -v R_HOME ]]; then \
-    # Set PATH to the captured current_path value \
+echo 'if [[ -v RSTUDIO || -v R_HOME ]]; then \
     export PATH="'$current_path'"; \
-    echo "Setting PATH to captured value: '$current_path'"; \
 fi' > /etc/profile.d/rstudio_set_path.sh
 
 sudo chown -R jovyan:jovyan /etc/rstudio
