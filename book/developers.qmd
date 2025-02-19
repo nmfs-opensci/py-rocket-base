@@ -306,7 +306,7 @@ When a terminal is launched from the Launcher, it starts a login bash shell (`ba
 `/etc/profile` script is run. For this image, this script will execute all the scripts in the directory `/etc/profile.d`. There is the script `init_conda.sh` which ensures that the conda notebook environment is activated. The user might override this if they create `~/.bashrc_profile` in which case that is used instead of `/etc/profile`.
 
 For non-login bash shells (interactive), `/etc/bash.bashrc` determines the shell environment unless the user has created `~/.bashrc`,
-in which case that file determines the shell environment. In Jupyter Lab, you can start and interactive shell by running `bash` (from a terminal). 
+in which case that file determines the shell environment. In Jupyter Lab, you can start and interactive shell by running `bash` (from a terminal). Be aware that if you run `bash` it might look like the conda environment is deactivated but it is really not since the `PATH` still includes `conda` in it. If you are trying to get remove `conda` from the path (and get rid of all the conda environment variables) you need to run `conda deactivate` (2x).
 
 ## Notes on the RStudio environment
 
