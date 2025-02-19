@@ -5,7 +5,7 @@ LABEL org.opencontainers.image.author="eli.holmes@noaa.gov"
 LABEL org.opencontainers.image.source=https://github.com/nmfs-opensci/py-rocket-base
 LABEL org.opencontainers.image.description="Python (3.12), R (4.4.1), Desktop and Publishing tools"
 LABEL org.opencontainers.image.licenses=Apache2.0
-LABEL org.opencontainers.image.version=2025.02.12
+LABEL org.opencontainers.image.version=2025.02.19
 
 USER root
 
