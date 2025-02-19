@@ -77,14 +77,14 @@ RUN mkdir -p ${XDG_CONFIG_HOME} && \
 # Fix home permissions. Not needed in JupyterHub with persistent memory but needed if not used in that context
 RUN /pyrocket_scripts/fix-home-permissions.sh
 
+# Create a symlink for python to python3 for all users
+RUN ln -s /usr/bin/python3 /usr/local/bin/python
+    
 # Set up the start command 
 USER ${NB_USER}
 RUN chmod +x ${REPO_DIR}/start \
     && cp ${REPO_DIR}/start /srv/start
 
-# Create a symlink for python to python3 for all users
-RUN ln -s /usr/bin/python3 /usr/local/bin/python
-    
 # Revert to default user and home as pwd
 USER ${NB_USER}
 WORKDIR ${HOME}
