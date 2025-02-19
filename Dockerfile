@@ -81,6 +81,9 @@ RUN /pyrocket_scripts/fix-home-permissions.sh
 USER ${NB_USER}
 RUN chmod +x ${REPO_DIR}/start \
     && cp ${REPO_DIR}/start /srv/start
+
+# Create a symlink for python to python3 for all users
+RUN ln -s /usr/bin/python3 /usr/local/bin/python
     
 # Revert to default user and home as pwd
 USER ${NB_USER}
