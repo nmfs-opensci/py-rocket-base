@@ -100,6 +100,3 @@ if command -v tlmgr &> /dev/null; then
     tlmgr install collection-latexrecommended
     tlmgr install pdfcol tcolorbox eurosym upquote adjustbox titling enumitem ulem soul rsfs
 fi
-
-sudo chown -R jovyan:jovyan /etc/rstudio
-sudo chmod -R u+rwX /etc/rstudio
