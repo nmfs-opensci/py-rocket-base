@@ -20,6 +20,12 @@ ENV REPO_DIR="/srv/repo" \
 ARG R_VERSION_PULL="4.4.2"
 ENV LANG=en_US.UTF-8
 ENV LC_ALL=en_US.UTF-8
+
+# Fix init_conda.sh so that it only runs if we are in Jupyter Lab and not RStudio
+RUN echo 'if [[ ! -v RSTUDIO || ! -v R_HOME ]]; then \
+    . ${CONDA_DIR}/etc/profile.d/conda.sh; \
+    conda activate ${CONDA_ENV}; \
+fi' > /etc/profile.d/init_conda.sh
     
 # Add NB_USER to staff group (required for rocker script)
 # Ensure the staff group exists first
