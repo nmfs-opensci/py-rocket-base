@@ -47,6 +47,7 @@ RUN /pyrocket_scripts/install-conda-packages.sh ${REPO_DIR}/environment.yml
 # Install R, RStudio via Rocker scripts. Requires the prefix for a rocker Dockerfile
 # Set the R_VERSION_PULL variable to specify what branch or release. If need to use a release use
 # R_VERSION_PULL="R4.3.3" for example; R_VERSION_PULL="master" is getting the current master branch
+# Be aware that if R_VERSION_PULL is set to the latest release, CRAN repo will use "latest" and date will not be pinned.
 RUN R_VERSION_PULL="master" /pyrocket_scripts/install-rocker.sh "verse_${R_VERSION}"
 
 # Install Zotero; must be run before apt since zotero apt install requires this is run first
