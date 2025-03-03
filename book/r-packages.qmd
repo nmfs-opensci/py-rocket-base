@@ -31,14 +31,15 @@ There are a few ways to get around this.
 
 ### Default CRAN repository
 
-The default CRAN repository is set in ${R_HOME}/etc/Rprofile.site and the CRAN environmental variable to
-```markdown
-https://p3m.dev/cran/__linux__/jammy/latest
-```
+The default CRAN repository is set in `${R_HOME}/etc/Rprofile.site` and the CRAN environmental variable is set to the date pinned version associated with the R version in the image. For example, `https://p3m.dev/cran/__linux__/jammy/2024-10-30`.
 
-To set a different repo, edit ${R_HOME}/etc/Rprofile.site or specify the repo to use in `install.packages()` like so
+To set a different repo, edit `${R_HOME}/etc/Rprofile.site` if you are changing an image or `~/.Rprofile` if setting user defaults:
 ```markdown
-repo <- "https://p3m.dev/cran/__linux__/jammy/2024-05-13"
+options(repos = c(CRAN = 'https://p3m.dev/cran/__linux__/jammy/latest'), download.file.method = 'libcurl')
+```
+You can also specify the repo to use in `install.packages()` like so
+```markdown
+repo <- "https://p3m.dev/cran/__linux__/jammy/latest"
 list.of.packages <- c("maps", "mapdata", "RColorBrewer")
 install.packages(list.of.packages, repos=repo)
 ```
