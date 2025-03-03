@@ -123,3 +123,10 @@ if [[ -f "$ENV_FILE" ]]; then
 else
     echo "Warning: $ENV_FILE not found. No changes made."
 fi
+
+# Ensure jovyan can modify Rprofile.site because start will need to this
+# to set the gh-scoped-cred variables if they are present
+chown ${NB_USER}:staff ${R_HOME}/etc/Rprofile.site
+chmod g+w ${R_HOME}/etc/Rprofile.site
+
+echo "Updated permissions for Rprofile.site"
