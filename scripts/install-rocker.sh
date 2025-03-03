@@ -62,7 +62,7 @@ while IFS= read -r line; do
         var_assignment=$(echo "$line" | sed 's/^ENV //g')
         # Special handling for CRAN
         if [[ "$var_assignment" =~ ^CRAN=.*__linux__/([^/]+)/(.+)$ ]]; then
-            var_assignment="CRAN=https://p3m.dev/cran/__linux__/${UBUNTU_VERSION}/${BASH_REMATCH[2]}"
+            var_assignment="CRAN=https://p3m.dev/cran/__linux__/${UBUNTU_VERSION}/${BASH_REMATCH[2]//\"/}"
         fi
         # Special handling for DEFAULT_USER
         if [[ "$var_assignment" == DEFAULT_USER* ]]; then
