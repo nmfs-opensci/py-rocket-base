@@ -11,13 +11,11 @@ USER root
 
 # Define environment variables
 # DISPLAY Tell applications where to open desktop apps - this allows notebooks to pop open GUIs
+# Set QUARTO_VERSION due to Jupyter Lab bug with version 1.6 that won't all qmd to open
 ENV REPO_DIR="/srv/repo" \
     DISPLAY=":1.0" \
     R_VERSION="4.4.2" \
     QUARTO_VERSION="1.5.57"
-# The latest rocker will set CRAN to 'latest' but we need a date stamped version for reproducibility
-# So pull the latest and use one earlier
-ARG R_VERSION_PULL="4.4.3"
 ENV LANG=en_US.UTF-8
 ENV LC_ALL=en_US.UTF-8
 
@@ -47,7 +45,10 @@ RUN mkdir -p /pyrocket_scripts && \
 RUN /pyrocket_scripts/install-conda-packages.sh ${REPO_DIR}/environment.yml
 
 # Install R, RStudio via Rocker scripts. Requires the prefix for a rocker Dockerfile
-RUN R_VERSION_PULL=$R_VERSION_PULL /pyrocket_scripts/install-rocker.sh "verse_${R_VERSION}"
+# Set the R_VERSION_PULL variable to specify what branch or release. If need to use a release use
+# R_VERSION_PULL="R4.3.3" for example; R_VERSION_PULL="master" is getting the current master branch
+# Be aware that if R_VERSION_PULL is set to the latest release, CRAN repo will use "latest" and date will not be pinned.
+RUN R_VERSION_PULL="master" /pyrocket_scripts/install-rocker.sh "verse_${R_VERSION}"
 
 # Install Zotero; must be run before apt since zotero apt install requires this is run first
 RUN wget -qO- https://raw.githubusercontent.com/retorquere/zotero-deb/master/install.sh | bash 

@@ -34,13 +34,10 @@ R_DOCKERFILE="$1"
 export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
 # Copy in the rocker files. Work in ${REPO_DIR} to make sure I don't clobber anything
-# R_VERSION_PULL may be different than R_VERSION. Specifically pulling latest but using R_VERSION prior to latest
-# So that CRAN repo is pinned to a date.
 cd ${REPO_DIR}
 ROCKER_DOCKERFILE_NAME="${R_DOCKERFILE}.Dockerfile"
-# Pull a tag (release) or pull the latest master (stable)
-# TAR_NAME="R${R_VERSION_PULL}"
-TAR_NAME="master"
+# Pull a tag (release) or pull the latest master (stable); R_VERSION_PULL is defined in Dockerfile when this script is called.
+TAR_NAME=${R_VERSION_PULL}
 # For degugging use: wget https://github.com/eeholmes/rocker-versioned2/archive/refs/tags/R4.4.1.tar.gz
 # wget https://github.com/rocker-org/rocker-versioned2/archive/refs/tags/R${R_VERSION_PULL}.tar.gz
 if [[ "$TAR_NAME" == "master" ]]; then
