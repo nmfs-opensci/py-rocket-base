@@ -15,7 +15,8 @@ USER root
 ENV REPO_DIR="/srv/repo" \
     DISPLAY=":1.0" \
     R_VERSION="4.4.2" \
-    QUARTO_VERSION="1.5.57"
+    QUARTO_VERSION="1.5.57" \
+    UBUNTU_VERSION="jammy"
 ENV LANG=en_US.UTF-8
 ENV LC_ALL=en_US.UTF-8
 
