@@ -3,7 +3,7 @@ FROM ghcr.io/nmfs-opensci/py-rocket-base/base-image:latest
 LABEL org.opencontainers.image.maintainers="eli.holmes@noaa.gov"
 LABEL org.opencontainers.image.author="eli.holmes@noaa.gov"
 LABEL org.opencontainers.image.source=https://github.com/nmfs-opensci/py-rocket-base
-LABEL org.opencontainers.image.description="Python (3.12), R (4.4.1), Desktop and Publishing tools"
+LABEL org.opencontainers.image.description="Python (3.12), R (4.4.2), Desktop and Publishing tools"
 LABEL org.opencontainers.image.licenses=Apache2.0
 LABEL org.opencontainers.image.version=2025.03.03
 
@@ -13,11 +13,11 @@ USER root
 # DISPLAY Tell applications where to open desktop apps - this allows notebooks to pop open GUIs
 ENV REPO_DIR="/srv/repo" \
     DISPLAY=":1.0" \
-    R_VERSION="4.4.1" \
+    R_VERSION="4.4.2" \
     QUARTO_VERSION="1.5.57"
 # The latest rocker will set CRAN to 'latest' but we need a date stamped version for reproducibility
 # So pull the latest and use one earlier
-ARG R_VERSION_PULL="4.4.2"
+ARG R_VERSION_PULL="4.4.3"
 ENV LANG=en_US.UTF-8
 ENV LC_ALL=en_US.UTF-8
 
