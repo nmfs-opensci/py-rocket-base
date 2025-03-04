@@ -104,32 +104,34 @@ if command -v tlmgr &> /dev/null; then
     tlmgr install pdfcol tcolorbox eurosym upquote adjustbox titling enumitem ulem soul rsfs
 fi
 
-# Make sure the env vars set in the rocker dockerfile are in Rprofile.site
+# Make sure the env vars set in the rocker Dockerfile are in Renviron.site
 ENV_FILE="${REPO_DIR}/env.txt"
-RPROFILE_SITE="${R_HOME}/etc/Rprofile.site"
+RENVIRO_SITE="${R_HOME}/etc/Renviron.site"
 
 # Ensure the file exists before processing
 if [[ -f "$ENV_FILE" ]]; then
-    echo "Appending environment variables from $ENV_FILE to $RPROFILE_SITE..."
+    echo "Appending environment variables from $ENV_FILE to $RENVIRO_SITE..."
     
     awk -F '=' '
     /^export / {
         gsub(/"/, "", $2);  # Remove double quotes around values
         if ($1 ~ /PATH/) {
-            print "Sys.setenv(" substr($1, 8) " = Sys.getenv(\"PATH\") \":\" \"" $2 "\")"
+            print substr($1, 8) "=\"" "$2 ":${PATH}\""
         } else {
-            print "Sys.setenv(" substr($1, 8) " = \"" $2 "\")"
+            print substr($1, 8) "=\"" $2 "\""
         }
-    }' "$ENV_FILE" >> "$RPROFILE_SITE"
+    }' "$ENV_FILE" >> "$RENVIRO_SITE"
 
     echo "Done."
 else
     echo "Warning: $ENV_FILE not found. No changes made."
 fi
 
-# Ensure jovyan can modify Rprofile.site because start will need to this
+# Ensure jovyan can modify Rprofile.site and Renviron.site because start will need to this
 # to set the gh-scoped-cred variables if they are present
 chown ${NB_USER}:staff ${R_HOME}/etc/Rprofile.site
 chmod g+w ${R_HOME}/etc/Rprofile.site
+chown ${NB_USER}:staff ${R_HOME}/etc/Renviron.site
+chmod g+w ${R_HOME}/etc/Renviron.site
 
-echo "Updated permissions for Rprofile.site"
+echo "Updated permissions for Rprofile.site and Renviron.site"
