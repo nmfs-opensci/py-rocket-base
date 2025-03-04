@@ -26,7 +26,7 @@ dependencies:
 
   # Extra Jupyter tools
   - jupyterlab-git
-  - jupyter-ai
+  #- jupyter-ai
   - jupyter-book
   - jupyter-offlinenotebook
   - jupyter-sshd-proxy

@@ -11,6 +11,15 @@ if [ -f "${REPO_DIR}/env.txt" ]; then
 fi
 # End - Set any environment variables here
 
+# check for gh-scoped-creds needed variables so that can use this in RStudio
+# These are based on Jupyter Hub config so will not know before server starts what these are.
+for var in GH_SCOPED_CREDS_CLIENT_ID GH_SCOPED_CREDS_APP_URL; do
+    if [[ -n "${!var:-}" ]]; then
+        echo "${var}=\"${!var}\"" >> "${R_HOME}/etc/Renviron.site"
+        echo "Added ${var} to Renviron.site"
+    fi
+done
+
 # Run child start scripts in a subshell to contain its environment
 # ${REPO_DIR}/childstart/ is created by setup-start.sh
 if [ -d "${REPO_DIR}/childstart/" ]; then

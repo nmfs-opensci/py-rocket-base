@@ -34,13 +34,10 @@ R_DOCKERFILE="$1"
 export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
 # Copy in the rocker files. Work in ${REPO_DIR} to make sure I don't clobber anything
-# R_VERSION_PULL may be different than R_VERSION. Specifically pulling latest but using R_VERSION prior to latest
-# So that CRAN repo is pinned to a date.
 cd ${REPO_DIR}
 ROCKER_DOCKERFILE_NAME="${R_DOCKERFILE}.Dockerfile"
-# Pull a tag (release) or pull the latest master (stable)
-# TAR_NAME="R${R_VERSION_PULL}"
-TAR_NAME="master"
+# Pull a tag (release) or pull the latest master (stable); R_VERSION_PULL is defined in Dockerfile when this script is called.
+TAR_NAME=${R_VERSION_PULL}
 # For degugging use: wget https://github.com/eeholmes/rocker-versioned2/archive/refs/tags/R4.4.1.tar.gz
 # wget https://github.com/rocker-org/rocker-versioned2/archive/refs/tags/R${R_VERSION_PULL}.tar.gz
 if [[ "$TAR_NAME" == "master" ]]; then
@@ -63,9 +60,15 @@ cmd=""
 while IFS= read -r line; do
     if [[ "$line" == ENV* ]]; then
         var_assignment=$(echo "$line" | sed 's/^ENV //g')
+        # Special handling for CRAN
+        if [[ "$var_assignment" =~ ^CRAN=.*__linux__/([^/]+)/(.+)$ ]]; then
+            var_assignment="CRAN=https://p3m.dev/cran/__linux__/${UBUNTU_VERSION}/${BASH_REMATCH[2]//\"/}"
+        fi
+        # Special handling for DEFAULT_USER
         if [[ "$var_assignment" == DEFAULT_USER* ]]; then
             var_assignment="DEFAULT_USER=${NB_USER}"
         fi
+        echo "Processed ENV variable: $var_assignment"
         eval "export $var_assignment"
         echo "export $var_assignment" >> "${REPO_DIR}/env.txt"
     
@@ -100,3 +103,35 @@ if command -v tlmgr &> /dev/null; then
     tlmgr install collection-latexrecommended
     tlmgr install pdfcol tcolorbox eurosym upquote adjustbox titling enumitem ulem soul rsfs
 fi
+
+# Make sure the env vars set in the rocker Dockerfile are in Renviron.site
+ENV_FILE="${REPO_DIR}/env.txt"
+RENVIRO_SITE="${R_HOME}/etc/Renviron.site"
+
+# Ensure the file exists before processing
+if [[ -f "$ENV_FILE" ]]; then
+    echo "Appending environment variables from $ENV_FILE to $RENVIRO_SITE..."
+
+    awk -F '=' '
+    /^export / {
+        gsub(/"/, "", $2);  # Remove double quotes around values
+        if ($1 ~ /PATH/) {
+            print substr($1, 8) "=\"" ENVIRON["PATH"] ":" $2 "\""
+        } else {
+            print substr($1, 8) "=\"" $2 "\""
+        }
+    }' "$ENV_FILE" > "$RENVIRO_SITE"
+
+    echo "Done."
+else
+    echo "Warning: $ENV_FILE not found. No changes made."
+fi
+
+# Ensure jovyan can modify Rprofile.site and Renviron.site because start will need to this
+# to set the gh-scoped-cred variables if they are present
+chown ${NB_USER}:staff ${R_HOME}/etc/Rprofile.site
+chmod g+w ${R_HOME}/etc/Rprofile.site
+chown ${NB_USER}:staff ${R_HOME}/etc/Renviron.site
+chmod g+w ${R_HOME}/etc/Renviron.site
+
+echo "Updated permissions for Rprofile.site and Renviron.site"
