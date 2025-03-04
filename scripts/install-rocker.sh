@@ -111,16 +111,16 @@ RENVIRO_SITE="${R_HOME}/etc/Renviron.site"
 # Ensure the file exists before processing
 if [[ -f "$ENV_FILE" ]]; then
     echo "Appending environment variables from $ENV_FILE to $RENVIRO_SITE..."
-    
+
     awk -F '=' '
     /^export / {
         gsub(/"/, "", $2);  # Remove double quotes around values
         if ($1 ~ /PATH/) {
-            print substr($1, 8) "=\"" "$2 ":${PATH}\""
+            print substr($1, 8) "=\"" ENVIRON["PATH"] ":" $2 "\""
         } else {
             print substr($1, 8) "=\"" $2 "\""
         }
-    }' "$ENV_FILE" >> "$RENVIRO_SITE"
+    }' "$ENV_FILE" > "$RENVIRO_SITE"
 
     echo "Done."
 else
