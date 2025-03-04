@@ -85,8 +85,9 @@ RUN mkdir -p ${XDG_CONFIG_HOME} && \
 # Fix home permissions. Not needed in JupyterHub with persistent memory but needed if not used in that context
 RUN /pyrocket_scripts/fix-home-permissions.sh
 
-# Create a symlink for python to python3 for all users
+# Create a symlink for python to python3 and gh-scoped-creds for all users; need for RStudio sinc conda not on path
 RUN ln -s /usr/bin/python3 /usr/local/bin/python
+RUN ln -s /srv/conda/envs/notebook/bin/gh-scoped-creds /usr/local/bin/gh-scoped-creds
     
 # Set up the start command 
 USER ${NB_USER}
