@@ -36,6 +36,7 @@ dependencies:
   - jupyterlab-myst
   - jupytext
   - nbdime
+  - quarto
   
   # JupyterBook Addons
   - sphinx
@@ -52,9 +53,11 @@ dependencies:
   # over the version available via ubuntu sources
   - git>=2.39
 
-  # Desktop server
+  # Desktop server and quarto
   # Not all packages will be available from conda-forge, we install from pip when we need to.
   - pip
   - pip:
+    - xq
+    - jupyterlab-quarto
     # Access linux desktop from inside JupyterHub
     - jupyter-remote-desktop-proxy
