@@ -57,7 +57,5 @@ dependencies:
   # Not all packages will be available from conda-forge, we install from pip when we need to.
   - pip
   - pip:
-    - xq
-    - jupyterlab-quarto
     # Access linux desktop from inside JupyterHub
     - jupyter-remote-desktop-proxy
