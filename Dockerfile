@@ -71,7 +71,11 @@ RUN mandb
 RUN mkdir -p ${NB_PYTHON_PREFIX}/etc/jupyter/jupyter_server_config.d/ && \
     mkdir -p ${NB_PYTHON_PREFIX}/etc/jupyter/jupyter_notebook_config.d/ && \
     cp ${REPO_DIR}/custom_jupyter_server_config.json ${NB_PYTHON_PREFIX}/etc/jupyter/jupyter_server_config.d/ && \
-    cp ${REPO_DIR}/custom_jupyter_server_config.json ${NB_PYTHON_PREFIX}/etc/jupyter/jupyter_notebook_config.d/
+    cp ${REPO_DIR}/custom_jupyter_server_config.json ${NB_PYTHON_PREFIX}/etc/jupyter/jupyter_notebook_config.d/ && \
+    chown jovyan:staff ${NB_PYTHON_PREFIX}/etc/jupyter/jupyter_server_config.d/custom_jupyter_server_config.json && \
+    chown jovyan:staff ${NB_PYTHON_PREFIX}/etc/jupyter/jupyter_notebook_config.d/custom_jupyter_server_config.json && \
+    chmod 664 ${NB_PYTHON_PREFIX}/etc/jupyter/jupyter_server_config.d/custom_jupyter_server_config.json && \
+    chmod 664 ${NB_PYTHON_PREFIX}/etc/jupyter/jupyter_notebook_config.d/custom_jupyter_server_config.json
 
 # Set up the defaults for Desktop. Keep config in the /etc so doesn't trash user environment (that they might want for other environments)
 ENV XDG_CONFIG_HOME=/etc/xdg/userconfig
