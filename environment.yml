@@ -52,9 +52,10 @@ dependencies:
   # over the version available via ubuntu sources
   - git>=2.39
 
-  # Desktop server
   # Not all packages will be available from conda-forge, we install from pip when we need to.
   - pip
   - pip:
     # Access linux desktop from inside JupyterHub
     - jupyter-remote-desktop-proxy
+    # Create urls to open files directly in hub
+    - jupyterlab-open-url-parameter
