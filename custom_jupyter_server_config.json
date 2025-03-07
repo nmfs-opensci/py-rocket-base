@@ -1,5 +1,10 @@
 {
     "ContentsManager": {
         "allow_hidden": true
+    },
+    "@jupyterlab/docmanager-extension:plugin": {
+        "defaultViewers": {
+            "qmd": "editor"
+        }
     }
 }
