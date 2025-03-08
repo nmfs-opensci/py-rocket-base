@@ -6,5 +6,16 @@
         "defaultViewers": {
             "qmd": "editor"
         }
+    },
+    "@jupyterlab/docregistry-extension:plugin": {
+        "fileTypes": [
+            {
+                "name": "qmd",
+                "displayName": "Quarto Markdown",
+                "extensions": [".qmd"],
+                "mimeTypes": ["text/markdown"],
+                "fileFormat": "text"
+            }
+        ]
     }
 }
