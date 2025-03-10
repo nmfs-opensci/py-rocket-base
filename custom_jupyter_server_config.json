@@ -4,7 +4,8 @@
     },
     "@jupyterlab/docmanager-extension:plugin": {
         "defaultViewers": {
-            "qmd": "editor"
+            "qmd": "editor",
+            "quarto": "editor"
         }
     },
     "@jupyterlab/docregistry-extension:plugin": {
