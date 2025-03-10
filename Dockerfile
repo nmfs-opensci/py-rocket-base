@@ -81,7 +81,8 @@ RUN mkdir -p ${NB_PYTHON_PREFIX}/etc/jupyter/jupyter_server_config.d/ && \
 RUN mkdir -p ${NB_PYTHON_PREFIX}/share/jupyter/lab/settings/@jupyterlab/docmanager-extension/ && \
     echo '{ \
         "defaultViewers": { \
-            "qmd": "Editor" \
+            "qmd": "Editor", \
+            "quarto": "Editor", \
         } \
     }' > ${NB_PYTHON_PREFIX}/share/jupyter/lab/settings/@jupyterlab/docmanager-extension/plugin.jupyterlab-settings
 
