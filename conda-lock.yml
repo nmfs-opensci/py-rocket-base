@@ -13,7 +13,7 @@
 version: 1
 metadata:
   content_hash:
-    linux-64: 1b5556ed082c6be7feb081838c50cf9d748feb58242f5f060284388ebc25bb8f
+    linux-64: c1e3208ca276320812f20fa65ed9737aa96ad56bbcf89d0b3e4496e9ac0bf7f2
   channels:
   - url: conda-forge
     used_env_vars: []
@@ -1267,15 +1267,15 @@ package:
   category: main
   optional: false
 - name: fsspec
-  version: 2025.2.0
+  version: 2025.3.0
   manager: conda
   platform: linux-64
   dependencies:
     python: '>=3.9'
-  url: https://conda.anaconda.org/conda-forge/noarch/fsspec-2025.2.0-pyhd8ed1ab_0.conda
+  url: https://conda.anaconda.org/conda-forge/noarch/fsspec-2025.3.0-pyhd8ed1ab_0.conda
   hash:
-    md5: d9ea16b71920b03beafc17fcca16df90
-    sha256: 7433b8469074985b651693778ec6f03d2a23fad9919a515e3b8545996b5e721a
+    md5: 5ecafd654e33d1f2ecac5ec97057593b
+    sha256: 9cbba3b36d1e91e4806ba15141936872d44d20a4d1e3bb74f4aea0ebeb01b205
   category: main
   optional: false
 - name: gflags
@@ -1693,7 +1693,7 @@ package:
   category: main
   optional: false
 - name: ipython
-  version: 9.0.0
+  version: 9.0.2
   manager: conda
   platform: linux-64
   dependencies:
@@ -1711,10 +1711,10 @@ package:
     stack_data: ''
     traitlets: '>=5.13.0'
     typing_extensions: '>=4.6'
-  url: https://conda.anaconda.org/conda-forge/noarch/ipython-9.0.0-pyhfb0248b_1.conda
+  url: https://conda.anaconda.org/conda-forge/noarch/ipython-9.0.2-pyhfb0248b_0.conda
   hash:
-    md5: f3fdf97b6316a4b26141717fb3c4ba4d
-    sha256: a93f4c3b4468529464f7406499a2b7e9bccb61d2aba5c65b15589b78f67a9e4a
+    md5: b031bcd65b260a0a3353531eab50d465
+    sha256: 98f14471e0f492d290c4882f1e2c313fffc67a0f9a3a36e699d7b0c5d42a5196
   category: main
   optional: false
 - name: ipython_genutils
@@ -2322,24 +2322,6 @@ package:
   hash:
     md5: b26e487434032d7f486277beb0cead3a
     sha256: 206489e417408d2ffc2a7b245008b4735a8beb59df6c9109d4f77e7bc5969d5d
-  category: main
-  optional: false
-- name: jupytext
-  version: 1.16.7
-  manager: conda
-  platform: linux-64
-  dependencies:
-    markdown-it-py: '>=1.0'
-    mdit-py-plugins: ''
-    nbformat: ''
-    packaging: ''
-    python: '>=3.9'
-    pyyaml: ''
-    tomli: ''
-  url: https://conda.anaconda.org/conda-forge/noarch/jupytext-1.16.7-pyhbbac1ac_0.conda
-  hash:
-    md5: f5abe5ee23914325837250927f20e623
-    sha256: cfbd169b6d64c983e74c5fdfbaac1128209017ebd0992f163c13dadea71f606e
   category: main
   optional: false
 - name: jwcrypto
