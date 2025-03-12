@@ -88,6 +88,9 @@ RUN /pyrocket_scripts/fix-home-permissions.sh
 # Create a symlink for python to python3 and gh-scoped-creds for all users; need for RStudio sinc conda not on path
 RUN ln -s /usr/bin/python3 /usr/local/bin/python
 RUN ln -s /srv/conda/envs/notebook/bin/gh-scoped-creds /usr/local/bin/gh-scoped-creds
+RUN ln -s /srv/conda/condabin/conda /usr/local/bin/conda
+RUN ln -s /srv/conda/envs/notebook/bin/pip /usr/local/bin/pip
+
     
 # Set up the start command 
 USER ${NB_USER}
