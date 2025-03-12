@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Jupyter Link Generator</title>
+    <script>
+        function convertToRawUrl(githubUrl) {
+            let match = githubUrl.match(/https:\/\/github\.com\/(.+?)\/(.+?)\/blob\/(.+)/);
+            if (match) {
+                return `https://raw.githubusercontent.com/${match[1]}/${match[2]}/${match[3]}`;
+            }
+            return githubUrl; // If it's already a raw URL, return as is
+        }
+
+        function generateLink() {
+            let hubUrl = document.getElementById("hub").value.trim();
+            let notebookUrl = document.getElementById("notebook").value.trim();
+            
+            if (!hubUrl || !notebookUrl) {
+                alert("Please enter both the hub URL and the notebook URL.");
+                return;
+            }
+            
+            let rawNotebookUrl = convertToRawUrl(notebookUrl);
+            let encodedNotebookUrl = encodeURIComponent(rawNotebookUrl);
+            let finalUrl = `${hubUrl}/hub/user-redirect/lab?fromURL=${encodedNotebookUrl}`;
+            
+            document.getElementById("generatedLink").href = finalUrl;
+            document.getElementById("generatedLink").innerText = finalUrl;
+            document.getElementById("generatedLink").style.display = "inline";
+            document.getElementById("openLinkButton").onclick = function() {
+                window.open(finalUrl, '_blank');
+            };
+            document.getElementById("openLinkButton").style.display = "inline";
+        }
+    </script>
+</head>
+<body>
+    <h2>Jupyter Notebook Link Generator</h2>
+    <label for="hub">Hub URL:</label>
+    <input type="text" id="hub" placeholder="https://nmfs-openscapes.2i2c.cloud" size="50"><br><br>
+    
+    <label for="notebook">Notebook URL:</label>
+    <input type="text" id="notebook" placeholder="https://github.com/your/repo/blob/main/notebook.ipynb" size="80"><br><br>
+    
+    <button onclick="generateLink()">Generate Link</button>
+    <br><br>
+    
+    <a id="generatedLink" href="#" target="_blank" style="display:none;"></a>
+    <br><br>
+    <button id="openLinkButton" style="display:none;">Open Notebook</button>
+</body>
+</html>
