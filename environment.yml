@@ -17,7 +17,8 @@ dependencies:
   
   # VS Code support
   - jupyter-vscode-proxy
-  - code-server
+  - code-server=4.97.2  # Pin to prevent downgrades when conda env is updated
+  - nodejs=18.20.5      # Correct version for code-server=4.98.0
 
   # https://syncthing.net/ provides a dropbox-like interface for syncing directories across users,
   # hubs and machines. Used along with `jupyter-syncthing-proxy`.
