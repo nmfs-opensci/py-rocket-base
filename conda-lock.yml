@@ -13,7 +13,7 @@
 version: 1
 metadata:
   content_hash:
-    linux-64: c1e3208ca276320812f20fa65ed9737aa96ad56bbcf89d0b3e4496e9ac0bf7f2
+    linux-64: eb1f12a72fb74f675129d709ca11b4d2e6a7e6748acaf628091999491923c448
   channels:
   - url: conda-forge
     used_env_vars: []
@@ -60,15 +60,15 @@ package:
   category: main
   optional: false
 - name: aiohappyeyeballs
-  version: 2.5.0
+  version: 2.6.1
   manager: conda
   platform: linux-64
   dependencies:
     python: '>=3.9'
-  url: https://conda.anaconda.org/conda-forge/noarch/aiohappyeyeballs-2.5.0-pyhd8ed1ab_0.conda
+  url: https://conda.anaconda.org/conda-forge/noarch/aiohappyeyeballs-2.6.1-pyhd8ed1ab_0.conda
   hash:
-    md5: b7dbe12461afb9eff415ed46cfa81021
-    sha256: cb0175ba6301c389aa114ab36fd25808a97abf5fa9355b2656dfb7043cc378e4
+    md5: 18fd895e0e775622906cdabfc3cf0fb4
+    sha256: 7842ddc678e77868ba7b92a726b437575b23aaec293bca0d40826f1026d90e27
   category: main
   optional: false
 - name: aiohttp
@@ -269,15 +269,15 @@ package:
   category: main
   optional: false
 - name: attrs
-  version: 25.1.0
+  version: 25.2.0
   manager: conda
   platform: linux-64
   dependencies:
     python: '>=3.9'
-  url: https://conda.anaconda.org/conda-forge/noarch/attrs-25.1.0-pyh71513ae_0.conda
+  url: https://conda.anaconda.org/conda-forge/noarch/attrs-25.2.0-pyh71513ae_0.conda
   hash:
-    md5: 2cc3f588512f04f3a0c64b4e9bedc02d
-    sha256: 1f267886522dfb9ae4e5ebbc3135b5eb13cff27bdbfe8d881a4d893459166ab4
+    md5: 0d011de95db107ac3383b2041990007b
+    sha256: 0c8a5a842cd448a9a29ec394931a5bc55d9e6f62b04ff01939cc54ed52342e91
   category: main
   optional: false
 - name: aws-c-auth
@@ -2556,11 +2556,11 @@ package:
     dav1d: '>=1.2.1,<1.2.2.0a0'
     libgcc: '>=13'
     rav1e: '>=0.6.6,<1.0a0'
-    svt-av1: '>=3.0.0,<3.0.1.0a0'
-  url: https://conda.anaconda.org/conda-forge/linux-64/libavif16-1.2.0-hf3231e4_0.conda
+    svt-av1: '>=3.0.1,<3.0.2.0a0'
+  url: https://conda.anaconda.org/conda-forge/linux-64/libavif16-1.2.0-h63b8bd6_1.conda
   hash:
-    md5: a9329ba10be85b54f0c6bf76788ed4b1
-    sha256: e5b9ab354be66b725a4acdd7a023598558fdace2fbc415ec41b528d02a1fa74b
+    md5: 03cd532b4867d402f80fb2e814e4d275
+    sha256: fc14629b40488d9756d6a005790ea31a013b0471ad9ca45e28c573d023e5321d
   category: main
   optional: false
 - name: libblas
@@ -4508,7 +4508,7 @@ package:
   category: main
   optional: false
 - name: pyzmq
-  version: 26.2.1
+  version: 26.3.0
   manager: conda
   platform: linux-64
   dependencies:
@@ -4519,10 +4519,10 @@ package:
     python: '>=3.12,<3.13.0a0'
     python_abi: 3.12.*
     zeromq: '>=4.3.5,<4.4.0a0'
-  url: https://conda.anaconda.org/conda-forge/linux-64/pyzmq-26.2.1-py312hbf22597_0.conda
+  url: https://conda.anaconda.org/conda-forge/linux-64/pyzmq-26.3.0-py312hbf22597_0.conda
   hash:
-    md5: 7cec8d0dac15a2d9fea8e49879aa779d
-    sha256: 90ec0da0317d3d76990a40c61e1709ef859dd3d8c63838bad2814f46a63c8a2e
+    md5: ec243006dd2b7dc72f1fba385e59f693
+    sha256: aa96b9d13bc74f514ccbc3ad275d23bb837ec63894e6e7fb43786c7c41959bfd
   category: main
   optional: false
 - name: rav1e
@@ -5032,7 +5032,7 @@ package:
   category: main
   optional: false
 - name: sqlalchemy
-  version: 2.0.38
+  version: 2.0.39
   manager: conda
   platform: linux-64
   dependencies:
@@ -5042,10 +5042,10 @@ package:
     python: '>=3.12,<3.13.0a0'
     python_abi: 3.12.*
     typing-extensions: '>=4.6.0'
-  url: https://conda.anaconda.org/conda-forge/linux-64/sqlalchemy-2.0.38-py312h66e93f0_0.conda
+  url: https://conda.anaconda.org/conda-forge/linux-64/sqlalchemy-2.0.39-py312h66e93f0_0.conda
   hash:
-    md5: 91e345de80d0dc238b598683b69da123
-    sha256: e70d630452e3b44f0c4c127a73df3c90bfae125fc53f9c698954058153b18aa1
+    md5: fe24befa9726e9d8411d5aa42099be3d
+    sha256: 7db26262fb2bd8ceede4937ec8f950252f3a4c6f00804ea3ea6e1eb52c0a3949
   category: main
   optional: false
 - name: stack_data
@@ -5064,17 +5064,17 @@ package:
   category: main
   optional: false
 - name: svt-av1
-  version: 3.0.0
+  version: 3.0.1
   manager: conda
   platform: linux-64
   dependencies:
     __glibc: '>=2.17,<3.0.a0'
     libgcc: '>=13'
     libstdcxx: '>=13'
-  url: https://conda.anaconda.org/conda-forge/linux-64/svt-av1-3.0.0-h5888daf_0.conda
+  url: https://conda.anaconda.org/conda-forge/linux-64/svt-av1-3.0.1-h5888daf_0.conda
   hash:
-    md5: d86fc7eb811593abc06b328d3d72c001
-    sha256: 01ae1e86f79e05b9e687ef3b963e7f4f8a7554ac9f5af4dc1e3dc11ed79548b2
+    md5: 83ae590ee23da54c162d1f0fbf05bef0
+    sha256: 43a914e4b8f413d0327dd0eb98425b7c84d9dff6642a90bdae00e60dcc11a26d
   category: main
   optional: false
 - name: tabulate
