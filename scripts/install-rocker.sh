@@ -135,7 +135,7 @@ echo "${R_LIBS_USER}"
 mkdir -p "${R_LIBS_USER}" && chown ${NB_USER}:staff "${R_LIBS_USER}"
 # Ensure R_LIBS_USER exists at runtime inside R
 echo 'if (!dir.exists(Sys.getenv("R_LIBS_USER"))) dir.create(Sys.getenv("R_LIBS_USER"), recursive = TRUE)' >> "$RPROFILE_SITE"
-echo '.libPaths(c(Sys.getenv("R_LIBS_USER"), .libPaths()))' >> "$RPROFILE_SITE"
+echo '.libPaths(c(.libPaths(), Sys.getenv("R_LIBS_USER")))' >> "$RPROFILE_SITE"
 
 # Ensure jovyan can modify Rprofile.site and Renviron.site because start will need to this
 # to set the gh-scoped-cred variables if they are present
