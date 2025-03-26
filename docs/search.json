@@ -44,7 +44,7 @@
     "href": "customizing.html",
     "title": "1  Using py-rocket-base",
     "section": "",
-    "text": "1.1 helper scripts",
+    "text": "1.1 helper scripts\npy-rocket-base is designed to be used in the FROM line of a Dockerfile similar to rocker images. It includes directories called \\pyrocket_scripts and \\rocker_scripts that will help you do common tasks for scientific docker images. You do not have to use these scripts. If you are familiar with writing Docker files, you can write your own code. The exception is installation of Desktop files. Properly adding Desktop applications to py-rocket-base requires the use of the \\pyrocket_scripts/install-desktop.sh script. The start file is also an exception. See the discussion in the configuration files.",
     "crumbs": [
       "<span class='chapter-number'>1</span>  <span class='chapter-title'>Using py-rocket-base</span>"
     ]
@@ -84,7 +84,7 @@
     "href": "configuration_files.html",
     "title": "2  Customization scripts",
     "section": "",
-    "text": "2.1 install-conda-packages.sh\nThe install-conda-packages.sh script will install conda packages to the conda notebook environment, the user environment in the py-rocket-base image (same as for pangeo and repo2docker images).\nHere is the code for your Docker file. You can name the conda package file to something other than environment.yml. Make sure your file has name:. The name is arbitrary. It is ignored but required for the script.\nenvironment.yml\nInstead of a list of conda packages (typically called environment.yml), you can use a conda lock file instead.\nHere is the code for your Docker file. You can name your conda lock file something other than conda-lock.yml.",
+    "text": "2.1 install-conda-packages.sh\nThe helper scripts at /pyrocket_scripts in the image scripts to help do common tasks for extending the py-rocket-base image. Users can write their own Docker file code to do these tasks but the helper scripts provide standardized code for these tasks. The scripts are\nNote there are a few more scripts in /py-rocket-scripts but those are tailored more to the base-image creation rather than extending the base image.\nThe install-conda-packages.sh script will install conda packages to the conda notebook environment, the user environment in the py-rocket-base image (same as for pangeo and repo2docker images).\nHere is the code for your Docker file. You can name the conda package file to something other than environment.yml. Make sure your file has name:. The name is arbitrary. It is ignored but required for the script.\nenvironment.yml\nInstead of a list of conda packages (typically called environment.yml), you can use a conda lock file instead.\nHere is the code for your Docker file. You can name your conda lock file something other than conda-lock.yml.",
     "crumbs": [
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Customization scripts</span>"
     ]
@@ -174,7 +174,7 @@
     "href": "r-packages.html",
     "title": "3  R packages",
     "section": "",
-    "text": "To install extra R packages, use install.R. This is treated as an R script which is run. For example, you can have a script like\ninstall.R\nrepo &lt;- \"https://p3m.dev/cran/__linux__/jammy/2024-05-13\"\nlist.of.packages &lt;- c(\"ggplot2\",\"remotes\")\ninstall.packages(list.of.packages, repos=repo)\nremotes::install_github(\"hadley/httr@v0.4\")\n\n3.0.1 Spatial libraries\nSome packages depend on linux packages. One example are spatial packages like sf which depend on GDAL. In this case\ninstall.packages(\"sf\")\nwill not work because it will not install the linux package dependencies.\nThere are a few ways to get around this.\n\nInstall the necessary linux packages via apt-get. This can be hard.\nInstall via via /rocker_scipts/install_geospatial.sh To do this include\nRUN /rocker_scipts/install_geospatial.sh\nin your Dockerfile.\nUse r2u which has Ubuntu binaries with all the dependencies included.\n\n\n\n3.0.2 Default CRAN repository\nThe default CRAN repository is set in ${R_HOME}/etc/Rprofile.site and the CRAN environmental variable to\nhttps://p3m.dev/cran/__linux__/jammy/latest\nTo set a different repo, edit ${R_HOME}/etc/Rprofile.site or specify the repo to use in install.packages() like so\nrepo &lt;- \"https://p3m.dev/cran/__linux__/jammy/2024-05-13\"\nlist.of.packages &lt;- c(\"maps\", \"mapdata\", \"RColorBrewer\")\ninstall.packages(list.of.packages, repos=repo)",
+    "text": "To install extra R packages, use install.R. This is treated as an R script which is run. For example, you can have a script like\ninstall.R\nrepo &lt;- \"https://p3m.dev/cran/__linux__/jammy/2024-05-13\"\nlist.of.packages &lt;- c(\"ggplot2\",\"remotes\")\ninstall.packages(list.of.packages, repos=repo)\nremotes::install_github(\"hadley/httr@v0.4\")\n\n3.0.1 Spatial libraries\nSome packages depend on linux packages. One example are spatial packages like sf which depend on GDAL. In this case\ninstall.packages(\"sf\")\nwill not work because it will not install the linux package dependencies.\nThere are a few ways to get around this.\n\nInstall the necessary linux packages via apt-get. This can be hard.\nInstall via via /rocker_scipts/install_geospatial.sh To do this include\nRUN /rocker_scipts/install_geospatial.sh\nin your Dockerfile.\nUse r2u which has Ubuntu binaries with all the dependencies included.\n\n\n\n3.0.2 Default CRAN repository\nThe default CRAN repository is set in ${R_HOME}/etc/Rprofile.site and the CRAN environmental variable is set to the date pinned version associated with the R version in the image. For example, https://p3m.dev/cran/__linux__/jammy/2024-10-30.\nTo set a different repo, edit ${R_HOME}/etc/Rprofile.site if you are changing an image or ~/.Rprofile if setting user defaults:\noptions(repos = c(CRAN = 'https://p3m.dev/cran/__linux__/jammy/latest'), download.file.method = 'libcurl')\nYou can also specify the repo to use in install.packages() like so\nrepo &lt;- \"https://p3m.dev/cran/__linux__/jammy/latest\"\nlist.of.packages &lt;- c(\"maps\", \"mapdata\", \"RColorBrewer\")\ninstall.packages(list.of.packages, repos=repo)",
     "crumbs": [
       "<span class='chapter-number'>3</span>  <span class='chapter-title'>R packages</span>"
     ]
@@ -184,7 +184,7 @@
     "href": "desktop.html",
     "title": "4  Desktop",
     "section": "",
-    "text": "4.1 Adding an application in your child docker image\nUse the pyrocket script install-desktop.sh to set up the desktop and move your files to the proper location. Provide a path to a directory with your Desktop files as the argument to the script. Here is the code for your Docker file. This script must be run as root.",
+    "text": "4.1 Adding an application in your child docker image\npy-rocket-base includes the xfce4 Desktop UI where you can run applications. It is built off freedesktop (which is helpful to know if you are debugging and configuring). A common application is to run QGIS or java-based applications. py-rocket-base looks for files with the ending .desktop, .xml (optional), and .png or .svg (optional) associated with an application in a directory called Desktop in your repo.\npy-rocket-base puts these .desktop files in /usr/share/Desktop. Typically these desktop files are in ~/Desktop. But in a JupyterHub, the home directory is often persistent and py-rocket-base tries not to alter the user home directory. Also there might be orphaned desktop files in ~/Desktop and so the user desktop UI would be inconsistent between users. Using /usr/share/Desktop does mean that users cannot add their own persistent applications to xfce4 Desktop but this would be difficult anyhow without root access in many cases.\npy-rocket-base has Java (openjdk-11-jdk and openjdk-11-jre) pre-installed as part of the rocker R/RStudio installation. So Java applications do work as long as they work with this version of Java.\nUse the pyrocket script install-desktop.sh to set up the desktop and move your files to the proper location. Provide a path to a directory with your Desktop files as the argument to the script. Here is the code for your Docker file. This script must be run as root.",
     "crumbs": [
       "<span class='chapter-number'>4</span>  <span class='chapter-title'>Desktop</span>"
     ]
@@ -214,7 +214,7 @@
     "href": "publishing.html",
     "title": "5  Publishing",
     "section": "",
-    "text": "5.1 Quarto\nQuarto is a full-feature platform for creation of documents, books and webpages in a variety of formats. Explore the documentation at https://quarto.org/. You can use Quarto in JupyterLab, RStudio or VSCode. RStudio has the most featured integration followed by VSCode. JupyterLab integration is somewhat minimal.",
+    "text": "5.1 Quarto\npy-rocket-base has a number of packages to help with creation of documentation, books and webpages from content: Sphinx, Quarto, and Myst. Pandoc is installed which allows output to many different formats including html, Word, markdown and PDF. TexLive (for PDF output) is installed with tlmgr to handle package installation.\nQuarto is a full-feature platform for creation of documents, books and webpages in a variety of formats. Explore the documentation at https://quarto.org/. You can use Quarto in JupyterLab, RStudio or VSCode. RStudio has the most featured integration followed by VSCode. JupyterLab integration is somewhat minimal.",
     "crumbs": [
       "<span class='chapter-number'>5</span>  <span class='chapter-title'>Publishing</span>"
     ]
@@ -380,11 +380,21 @@
     ]
   },
   {
+    "objectID": "developers.html#notes-on-the-jupyter-lab-environment",
+    "href": "developers.html#notes-on-the-jupyter-lab-environment",
+    "title": "8  Developer notes",
+    "section": "8.9 Notes on the Jupyter Lab environment",
+    "text": "8.9 Notes on the Jupyter Lab environment\n\n8.9.1 Terminal in Jupyter Lab\nWhen a terminal is launched from the Launcher, it starts a login bash shell (bash -l). When login bash shells are started, /etc/profile script is run. For this image, this script will execute all the scripts in the directory /etc/profile.d. There is the script init_conda.sh which ensures that the conda notebook environment is activated. The user might override this if they create ~/.bashrc_profile in which case that is used instead of /etc/profile.\nFor non-login bash shells (interactive), /etc/bash.bashrc determines the shell environment unless the user has created ~/.bashrc, in which case that file determines the shell environment. In Jupyter Lab, you can start and interactive shell by running bash (from a terminal). Be aware that if you run bash it might look like the conda environment is deactivated but it is really not since the PATH still includes conda in it. If you are trying to get remove conda from the path (and get rid of all the conda environment variables) you need to run conda deactivate (2x).",
+    "crumbs": [
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Developer notes</span>"
+    ]
+  },
+  {
     "objectID": "developers.html#notes-on-the-rstudio-environment",
     "href": "developers.html#notes-on-the-rstudio-environment",
     "title": "8  Developer notes",
-    "section": "8.9 Notes on the RStudio environment",
-    "text": "8.9 Notes on the RStudio environment\njupyter-rsession-proxy allows us to launch RStudio from Jupyter Lab, but the environment is different than the environment in Jupyter Lab.\n\n8.9.1 Environmental variables\n\nPATH is different. conda is not on the path.\nNone of the environmental variables in the docker file will be in the /rstudio environment. The start command affects \\lab and \\notebook but not \\rstudio.\nThe path in the terminal (in RStudio) can/is different than in the R console. Expect weird unexpected behavior because of this. If you type bash, then .bashrc is run and that will run conda init and that will add conda binaries to the path. Then really weird and unexpected things can happen.\n\nIf you need some environmental variable set, you will need to set those in $R_HOME/etc/Rprofile.site which is run when R starts.",
+    "section": "8.10 Notes on the RStudio environment",
+    "text": "8.10 Notes on the RStudio environment\njupyter-rsession-proxy allows us to launch RStudio from Jupyter Lab, but the environment is different than the environment in Jupyter Lab.\n\n8.10.1 Environmental variables\n\nPATH is different. conda is not on the path.\nNone of the environmental variables in the docker file will be in the /rstudio environment. The start command affects \\lab and \\notebook but not \\rstudio.\n\nIf you need some environmental variable set, you will need to set those in $R_HOME/etc/Rprofile.site which is run when R starts.\n\n\n8.10.2 Terminal in RStudio\nThe default way that a terminal is started is bash -l which means it is a login terminal. When a login terminal launches, /etc/profile script is run. For this image, this script will execute all the scripts in the directory /etc/profile.d. You can add scripts there that you want to run when a login terminal is started. In particular, there is the script init_conda.sh. This ensures that when a terminal is opened from the Launcher in JupyterLab, the conda notebook environment is activated. However, we do not want this to happen in RStudio so the script checks if RSTUDIO==1 and R_HOME is set, if that is true then we are in the RStudio UI and conda should not be initialized.",
     "crumbs": [
       "<span class='chapter-number'>8</span>  <span class='chapter-title'>Developer notes</span>"
     ]

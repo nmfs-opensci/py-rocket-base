@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.5.55">
+<meta name="generator" content="quarto-1.6.39">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -71,12 +71,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-e26003cea8cd680ca0c55a263523d882.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-d166b450ba5a8e9f7a0ab969bf6592c1.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-1c72828a604d1ca8431045bd307be2a9.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-ec14e8678c2c066486278521a71c3cb8.min.css" rel="prefetch" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -228,9 +228,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#install-rocker.sh" id="toc-install-rocker.sh" class="nav-link" data-scroll-target="#install-rocker.sh"><span class="header-section-number">8.6</span> install-rocker.sh</a></li>
   <li><a href="#start" id="toc-start" class="nav-link" data-scroll-target="#start"><span class="header-section-number">8.7</span> start</a></li>
   <li><a href="#setup-desktop.sh" id="toc-setup-desktop.sh" class="nav-link" data-scroll-target="#setup-desktop.sh"><span class="header-section-number">8.8</span> setup-desktop.sh</a></li>
-  <li><a href="#notes-on-the-rstudio-environment" id="toc-notes-on-the-rstudio-environment" class="nav-link" data-scroll-target="#notes-on-the-rstudio-environment"><span class="header-section-number">8.9</span> Notes on the RStudio environment</a>
+  <li><a href="#notes-on-the-jupyter-lab-environment" id="toc-notes-on-the-jupyter-lab-environment" class="nav-link" data-scroll-target="#notes-on-the-jupyter-lab-environment"><span class="header-section-number">8.9</span> Notes on the Jupyter Lab environment</a>
   <ul class="collapse">
-  <li><a href="#environmental-variables" id="toc-environmental-variables" class="nav-link" data-scroll-target="#environmental-variables"><span class="header-section-number">8.9.1</span> Environmental variables</a></li>
+  <li><a href="#terminal-in-jupyter-lab" id="toc-terminal-in-jupyter-lab" class="nav-link" data-scroll-target="#terminal-in-jupyter-lab"><span class="header-section-number">8.9.1</span> Terminal in Jupyter Lab</a></li>
+  </ul></li>
+  <li><a href="#notes-on-the-rstudio-environment" id="toc-notes-on-the-rstudio-environment" class="nav-link" data-scroll-target="#notes-on-the-rstudio-environment"><span class="header-section-number">8.10</span> Notes on the RStudio environment</a>
+  <ul class="collapse">
+  <li><a href="#environmental-variables" id="toc-environmental-variables" class="nav-link" data-scroll-target="#environmental-variables"><span class="header-section-number">8.10.1</span> Environmental variables</a></li>
+  <li><a href="#terminal-in-rstudio" id="toc-terminal-in-rstudio" class="nav-link" data-scroll-target="#terminal-in-rstudio"><span class="header-section-number">8.10.2</span> Terminal in RStudio</a></li>
   </ul></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/nmfs-opensci/py-rocket-base/edit/main/developers.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/nmfs-opensci/py-rocket-base/blob/main/developers.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/nmfs-opensci/py-rocket-base/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
@@ -642,17 +647,28 @@ ghcr.io/nmfs-opensci/image-name:latest</code></pre>
 </dd>
 </dl>
 </section>
-<section id="notes-on-the-rstudio-environment" class="level2" data-number="8.9">
-<h2 data-number="8.9" class="anchored" data-anchor-id="notes-on-the-rstudio-environment"><span class="header-section-number">8.9</span> Notes on the RStudio environment</h2>
+<section id="notes-on-the-jupyter-lab-environment" class="level2" data-number="8.9">
+<h2 data-number="8.9" class="anchored" data-anchor-id="notes-on-the-jupyter-lab-environment"><span class="header-section-number">8.9</span> Notes on the Jupyter Lab environment</h2>
+<section id="terminal-in-jupyter-lab" class="level3" data-number="8.9.1">
+<h3 data-number="8.9.1" class="anchored" data-anchor-id="terminal-in-jupyter-lab"><span class="header-section-number">8.9.1</span> Terminal in Jupyter Lab</h3>
+<p>When a terminal is launched from the Launcher, it starts a login bash shell (<code>bash -l</code>). When login bash shells are started, <code>/etc/profile</code> script is run. For this image, this script will execute all the scripts in the directory <code>/etc/profile.d</code>. There is the script <code>init_conda.sh</code> which ensures that the conda notebook environment is activated. The user might override this if they create <code>~/.bashrc_profile</code> in which case that is used instead of <code>/etc/profile</code>.</p>
+<p>For non-login bash shells (interactive), <code>/etc/bash.bashrc</code> determines the shell environment unless the user has created <code>~/.bashrc</code>, in which case that file determines the shell environment. In Jupyter Lab, you can start and interactive shell by running <code>bash</code> (from a terminal). Be aware that if you run <code>bash</code> it might look like the conda environment is deactivated but it is really not since the <code>PATH</code> still includes <code>conda</code> in it. If you are trying to get remove <code>conda</code> from the path (and get rid of all the conda environment variables) you need to run <code>conda deactivate</code> (2x).</p>
+</section>
+</section>
+<section id="notes-on-the-rstudio-environment" class="level2" data-number="8.10">
+<h2 data-number="8.10" class="anchored" data-anchor-id="notes-on-the-rstudio-environment"><span class="header-section-number">8.10</span> Notes on the RStudio environment</h2>
 <p><a href="https://github.com/jupyterhub/jupyter-rsession-proxy">jupyter-rsession-proxy</a> allows us to launch RStudio from Jupyter Lab, but the environment is different than the environment in Jupyter Lab.</p>
-<section id="environmental-variables" class="level3" data-number="8.9.1">
-<h3 data-number="8.9.1" class="anchored" data-anchor-id="environmental-variables"><span class="header-section-number">8.9.1</span> Environmental variables</h3>
+<section id="environmental-variables" class="level3" data-number="8.10.1">
+<h3 data-number="8.10.1" class="anchored" data-anchor-id="environmental-variables"><span class="header-section-number">8.10.1</span> Environmental variables</h3>
 <ul>
 <li>PATH is different. conda is not on the path.</li>
 <li>None of the environmental variables in the docker file will be in the <code>/rstudio</code> environment. The start command affects <code>\lab</code> and <code>\notebook</code> but not <code>\rstudio</code>.</li>
-<li>The path in the terminal (in RStudio) can/is different than in the R console. Expect weird unexpected behavior because of this. If you type <code>bash</code>, then <code>.bashrc</code> is run and that will run <code>conda init</code> and that will add conda binaries to the path. Then really weird and unexpected things can happen.</li>
 </ul>
 <p>If you need some environmental variable set, you will need to set those in <code>$R_HOME/etc/Rprofile.site</code> which is run when R starts.</p>
+</section>
+<section id="terminal-in-rstudio" class="level3" data-number="8.10.2">
+<h3 data-number="8.10.2" class="anchored" data-anchor-id="terminal-in-rstudio"><span class="header-section-number">8.10.2</span> Terminal in RStudio</h3>
+<p>The default way that a terminal is started is <code>bash -l</code> which means it is a login terminal. When a login terminal launches, <code>/etc/profile</code> script is run. For this image, this script will execute all the scripts in the directory <code>/etc/profile.d</code>. You can add scripts there that you want to run when a login terminal is started. In particular, there is the script <code>init_conda.sh</code>. This ensures that when a terminal is opened from the Launcher in JupyterLab, the conda notebook environment is activated. However, we do not want this to happen in RStudio so the script checks if RSTUDIO==1 and R_HOME is set, if that is true then we are in the RStudio UI and conda should not be initialized.</p>
 
 
 </section>
@@ -885,8 +901,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   });
   clipboard.on('success', onCopySuccess);
   if (window.document.getElementById('quarto-embedded-source-code-modal')) {
-    // For code content inside modals, clipBoardJS needs to be initialized with a container option
-    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
     const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
       text: getTextToCopy,
       container: window.document.getElementById('quarto-embedded-source-code-modal')
@@ -997,7 +1011,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       if (window.Quarto?.typesetMath) {
         window.Quarto.typesetMath(note);
       }
-      // TODO in 1.5, we should make sure this works without a callout special case
       if (note.classList.contains("callout")) {
         return note.outerHTML;
       } else {
