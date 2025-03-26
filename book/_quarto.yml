@@ -41,7 +41,7 @@ format:
   html:
     theme:
       light: [cosmo, assets/theme.scss] 
-      dark: [cosmo, assests/theme-dark.scss]
+      dark: [cosmo, assets/theme-dark.scss]
     code-copy: true
     code-overflow: wrap
     toc: true
