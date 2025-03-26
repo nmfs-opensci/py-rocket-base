@@ -40,8 +40,8 @@ book:
 format:
   html:
     theme:
-      light: [cosmo, theme.scss] 
-      dark: [cosmo, theme-dark.scss]
+      light: [cosmo, assets/theme.scss] 
+      dark: [cosmo, assests/theme-dark.scss]
     code-copy: true
     code-overflow: wrap
     toc: true
