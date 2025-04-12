@@ -100,6 +100,9 @@ RUN ln -s /srv/conda/envs/notebook/bin/gh-scoped-creds /usr/local/bin/gh-scoped-
 RUN ln -s /srv/conda/condabin/conda /usr/local/bin/conda
 RUN ln -s /srv/conda/envs/notebook/bin/pip /usr/local/bin/pip
 
+# Allow user to change the rstudio server conf if needed.
+RUN chown jovyan:users /etc/rstudio/rserver.conf
+
 # Set up the start command 
 USER ${NB_USER}
 RUN chmod +x ${REPO_DIR}/start \

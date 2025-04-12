@@ -14,7 +14,7 @@ dependencies:
 
   # R/RStudio Support
   - jupyter-rsession-proxy
- 
+
   # VS Code support
   - jupyter-vscode-proxy
   - code-server=4.98.0  # Pin to prevent downgrades when conda env is updated
