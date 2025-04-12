@@ -14,8 +14,6 @@ dependencies:
 
   # R/RStudio Support
   - jupyter-rsession-proxy
-  # Run R in Jupyter Lab
-  - r-irkernel
  
   # VS Code support
   - jupyter-vscode-proxy
