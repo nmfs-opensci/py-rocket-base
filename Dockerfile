@@ -51,6 +51,7 @@ RUN /pyrocket_scripts/install-conda-packages.sh ${REPO_DIR}/environment.yml
 # Be aware that if R_VERSION_PULL is set to the latest release, CRAN repo will use "latest" and date will not be pinned.
 RUN R_VERSION_PULL="master" /pyrocket_scripts/install-rocker.sh "verse_${R_VERSION}"
 
+# Set up so that users can use R in Jupyter Lab and links to ${R_HOME} and use Python in RStudio/reticulate and links to conda/envs/notebook
 # Install IRkernel and register it with Jupyter so we can select an R kernel with Jupyter Lab
 # When R is invoked, the PATH is cleaned to remove conda, but need to add conda on temporarily so that
 # installspec can find jupyter (which is in conda dir)
