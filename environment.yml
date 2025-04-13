@@ -11,9 +11,6 @@ dependencies:
   - pip
   - jupyter-resource-usage
   - gh-scoped-creds==4.1
-  # Match the system version
-  - openssl=3.0.*
-  - libopenssl=3.0.*
 
   # R/RStudio Support
   - jupyter-rsession-proxy
