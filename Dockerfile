@@ -49,21 +49,8 @@ RUN /pyrocket_scripts/install-conda-packages.sh ${REPO_DIR}/environment.yml
 # Set the R_VERSION_PULL variable to specify what branch or release. If need to use a release use
 # R_VERSION_PULL="R4.3.3" for example; R_VERSION_PULL="master" is getting the current master branch
 # Be aware that if R_VERSION_PULL is set to the latest release, CRAN repo will use "latest" and date will not be pinned.
+# The script also configs reticulate and sets up a user library
 RUN R_VERSION_PULL="master" /pyrocket_scripts/install-rocker.sh "verse_${R_VERSION}"
-
-# Set up so that users can use R in Jupyter Lab and links to ${R_HOME} and use Python in RStudio/reticulate and links to conda/envs/notebook
-# Install IRkernel and register it with Jupyter so we can select an R kernel with Jupyter Lab
-# When R is invoked, the PATH is cleaned to remove conda, but need to add conda on temporarily so that
-# installspec can find jupyter (which is in conda dir)
-RUN Rscript - <<EOF
-install.packages('IRkernel')
-Sys.setenv(PATH = paste("/srv/conda/envs/notebook/bin", Sys.getenv("PATH"), sep = ":"))
-IRkernel::installspec(name = "ir", displayname = "R ${R_VERSION}")
-EOF
-# Fix LD library path for RStudio https://github.com/rstudio/rstudio/issues/14060#issuecomment-1911329450
-RUN echo "rsession-ld-library-path=/srv/conda/envs/notebook/lib" >> /etc/rstudio/rserver.conf
-# Set default Python for reticulate
-RUN echo 'RETICULATE_PYTHON=/srv/conda/envs/notebook/bin/python' >> "${R_HOME}/etc/Renviron.site"
 
 # Install Zotero; must be run before apt since zotero apt install requires this is run first
 RUN wget -qO- https://raw.githubusercontent.com/retorquere/zotero-deb/master/install.sh | bash 
@@ -104,9 +91,6 @@ RUN ln -s /usr/bin/python3 /usr/local/bin/python
 RUN ln -s /srv/conda/envs/notebook/bin/gh-scoped-creds /usr/local/bin/gh-scoped-creds
 RUN ln -s /srv/conda/condabin/conda /usr/local/bin/conda
 RUN ln -s /srv/conda/envs/notebook/bin/pip /usr/local/bin/pip
-
-# Allow user to change the rstudio server conf if needed.
-RUN chown jovyan:users /etc/rstudio/rserver.conf
 
 # Set up the start command 
 USER ${NB_USER}
