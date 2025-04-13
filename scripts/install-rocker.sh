@@ -148,8 +148,10 @@ echo "rsession-ld-library-path=/srv/conda/envs/notebook/lib" >> /etc/rstudio/rse
 echo "Setting RETICULATE_PYTHON globally in Renviron.site..."
 echo "RETICULATE_PYTHON=/srv/conda/envs/notebook/bin/python" >> "${R_HOME}/etc/Renviron.site"
 
-# Ensure jovyan can modify Rprofile.site and Renviron.site because start will need to this
+# Ensure jovyan can modify Rprofile.site and Renviron.site because start will need this, and allow user to alter rserver.conf
 # to set the gh-scoped-cred variables if they are present
+chown ${NB_USER}:staff /etc/rstudio/rserver.conf
+chmod g+w /etc/rstudio/rserver.conf
 chown ${NB_USER}:staff ${R_HOME}/etc/Rprofile.site
 chmod g+w ${R_HOME}/etc/Rprofile.site
 chown ${NB_USER}:staff ${R_HOME}/etc/Renviron.site
