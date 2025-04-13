@@ -61,6 +61,8 @@ IRkernel::installspec(name = "ir", displayname = "R ${R_VERSION}")
 EOF
 # Fix LD library path for RStudio https://github.com/rstudio/rstudio/issues/14060#issuecomment-1911329450
 RUN echo "rsession-ld-library-path=/srv/conda/envs/notebook/lib" >> /etc/rstudio/rserver.conf
+# Set default Python for reticulate
+RUN echo 'RETICULATE_PYTHON=/srv/conda/envs/notebook/bin/python' >> /etc/R/Renviron.site
 
 # Install Zotero; must be run before apt since zotero apt install requires this is run first
 RUN wget -qO- https://raw.githubusercontent.com/retorquere/zotero-deb/master/install.sh | bash 
