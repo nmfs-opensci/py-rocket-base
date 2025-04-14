@@ -162,8 +162,8 @@ cat << 'EOF' >> "${R_HOME}/etc/Rprofile.site"
 setHook(packageEvent("reticulate", "onAttach"), function(...) {
   packageStartupMessage(
     "Use py_require() for Python interoperability without altering PATH.\n",
-    "Use use_condaenv("notebook") to use conda environment but this will alter PATH and may break R functions.\n",
-    "Restart R to reset PATH or store PATH before calling use_condaenv("notebook") and restore when done.\n"
+    "Use use_condaenv('notebook') to use conda environment but this will alter PATH and may break R functions.\n",
+    "Restart R to reset PATH or store PATH before calling use_condaenv('notebook') and restore when done.\n"
   )
 })
 EOF
