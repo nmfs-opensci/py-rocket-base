@@ -146,7 +146,8 @@ EOF
 echo "Configuring RStudio LD_LIBRARY_PATH in rserver.conf for proper SSL behavior when using conda env..."
 echo "rsession-ld-library-path=/srv/conda/envs/notebook/lib" >> /etc/rstudio/rserver.conf
 # Add this so that we make it easier to restore the PATH after reticulate::use_conda() adds conda to it. reticulate does not have deactivate function.
-echo 'RSTUDIO_CLEAN_PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/texlive/bin/linux' >> "${R_HOME}/etc/Renviron.site"
+# PATH is defined in this script. First at top and then the Rocker Docker file might add on something (texlive). Needs to match env.txt
+echo 'RSTUDIO_CLEAN_PATH=${PATH} >> "${R_HOME}/etc/Renviron.site"
 # Do not do this. This will put conda on the system PATH and break R spatial packages due to GDAL mismatches
 #echo "Setting RETICULATE_PYTHON globally in Renviron.site..."
 #echo "RETICULATE_PYTHON=/srv/conda/envs/notebook/bin/python" >> "${R_HOME}/etc/Renviron.site"
