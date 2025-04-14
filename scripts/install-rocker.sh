@@ -51,6 +51,11 @@ mv rocker-versioned2-${TAR_NAME}/dockerfiles/${ROCKER_DOCKERFILE_NAME} /rocker_s
 rm ${TAR_NAME}.tar.gz && \
 rm -rf rocker-versioned2-${TAR_NAME}
 
+# Patch the install_texlive script before use so that tlmgr --usermode works and creates a userdir in /home
+sed -i '/^TEXMFHOME/d' /rocker_scripts/install_texlive.sh
+sed -i '/^TEXMFVAR/d' /rocker_scripts/install_texlive.sh
+sed -i '/^TEXMFCONFIG/d' /rocker_scripts/install_texlive.sh
+
 cd /
 
 # Read the Dockerfile and process each line
