@@ -137,8 +137,21 @@ mkdir -p "${R_LIBS_USER}" && chown ${NB_USER}:staff "${R_LIBS_USER}"
 echo 'if (!dir.exists(Sys.getenv("R_LIBS_USER"))) dir.create(Sys.getenv("R_LIBS_USER"), recursive = TRUE)' >> "$RPROFILE_SITE"
 echo '.libPaths(c(.libPaths(), Sys.getenv("R_LIBS_USER")))' >> "$RPROFILE_SITE"
 
-# Ensure jovyan can modify Rprofile.site and Renviron.site because start will need to this
+# Set up RStudio so that reticulate uses the conda environment
+Rscript - <<-"EOF"
+install.packages('IRkernel', lib = .Library) # install in system library
+Sys.setenv(PATH = paste("/srv/conda/envs/notebook/bin", Sys.getenv("PATH"), sep = ":"))
+IRkernel::installspec(name = "ir", displayname = "R ${R_VERSION}")
+EOF
+echo "Configuring RStudio LD_LIBRARY_PATH in rserver.conf for proper SSL behavior when using conda env..."
+echo "rsession-ld-library-path=/srv/conda/envs/notebook/lib" >> /etc/rstudio/rserver.conf
+echo "Setting RETICULATE_PYTHON globally in Renviron.site..."
+echo "RETICULATE_PYTHON=/srv/conda/envs/notebook/bin/python" >> "${R_HOME}/etc/Renviron.site"
+
+# Ensure jovyan can modify Rprofile.site and Renviron.site because start will need this, and allow user to alter rserver.conf
 # to set the gh-scoped-cred variables if they are present
+chown ${NB_USER}:staff /etc/rstudio/rserver.conf
+chmod g+w /etc/rstudio/rserver.conf
 chown ${NB_USER}:staff ${R_HOME}/etc/Rprofile.site
 chmod g+w ${R_HOME}/etc/Rprofile.site
 chown ${NB_USER}:staff ${R_HOME}/etc/Renviron.site
