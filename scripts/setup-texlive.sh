@@ -11,8 +11,6 @@ alias tlmgr='tlmgr --usermode'
 
 # Set user-specific TEXMF paths
 export TEXMFHOME="$HOME/texmf"
-export TEXMFVAR="$HOME/.texlive2025/texmf-var"
-export TEXMFCONFIG="$HOME/.texlive2025/texmf-config"
 
 # Auto-init user tree if not already done
 if [ ! -f "$HOME/.texlive2025/tlpkg/texlive.tlpdb" ]; then
