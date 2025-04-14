@@ -13,7 +13,7 @@ alias tlmgr='tlmgr --usermode'
 export TEXMFHOME="$HOME/texmf"
 
 # Auto-init user tree if not already done
-if [ ! -f "$HOME/.texlive2025/tlpkg/texlive.tlpdb" ]; then
+if [ ! -f "$HOME/texmf/tlpkg/texlive.tlpdb" ]; then
     echo "[texlive-user] Initializing user TeX Live tree..."
     tlmgr --usermode init-usertree
 fi
