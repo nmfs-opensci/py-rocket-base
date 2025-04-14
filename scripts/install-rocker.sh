@@ -140,7 +140,7 @@ echo '.libPaths(c(.libPaths(), Sys.getenv("R_LIBS_USER")))' >> "$RPROFILE_SITE"
 # Set up RStudio so that reticulate uses the conda environment
 Rscript - <<-"EOF"
 install.packages('IRkernel', lib = .Library) # install in system library
-Sys.setenv(PATH = paste("/srv/conda/envs/notebook/bin", Sys.g etenv("PATH"), sep = ":"))
+Sys.setenv(PATH = paste("/srv/conda/envs/notebook/bin", Sys.getenv("PATH"), sep = ":"))
 IRkernel::installspec(name = "ir", displayname = "R ${R_VERSION}")
 EOF
 echo "Configuring RStudio LD_LIBRARY_PATH in rserver.conf for proper SSL behavior when using conda env..."
