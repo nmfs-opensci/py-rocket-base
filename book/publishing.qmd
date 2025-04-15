@@ -14,7 +14,11 @@ Quarto is fully integrated with RStudio. Use the Render and Build buttons.
 
 **Special note regarding creating pdfs**
 
-Rendering to PDF or `format: pdf` should work fine and packages will be installed on the fly. But the package installations will not persist and you will need to install them again after you restart the server.
+Rendering to PDF or `format: pdf` should work fine and packages will be installed on the fly. But the package installations will not persist and you will need to install them again after you restart the server.  To get the packages into the user library at `~/texmf`, you need to do this in a terminal:
+```
+tlmgr install soulpos pdfcomment luatex85
+```
+Replace the package names with the packages you need to install.
 
 ### VSCode
 
@@ -29,7 +33,7 @@ quarto render --to pdf test.qmd
 quarto render --to html test.ipynb
 ```
 
-For PDF output, TexLive packages will not install on the fly and you will need to do `tlmgr install packagename` for any missing package errors you get.
+For PDF output when running `quarto render` in a terminal, TexLive packages will not install on the fly and you will need to do `tlmgr install packagename` for any missing package errors you get. The packages will install in `~/texmf` and will persist in the home directory.
 
 ## MyST
 

@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>8&nbsp; Developer notes – py-rocket-base</title>
+<title>9&nbsp; Developer notes – py-rocket-base</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -64,7 +64,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
 <link href="./related.html" rel="next">
-<link href="./example_children.html" rel="prev">
+<link href="./r-config.html" rel="prev">
 <link href="./assets/favicon.ico" rel="icon">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -117,7 +117,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./developers.html"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Developer notes</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./developers.html"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Developer notes</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -200,14 +200,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./r-config.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">R in Jupyter Lab and Python in RStudio</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./developers.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Developer notes</span></span></a>
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Developer notes</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./related.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Related Docker Stacks</span></span></a>
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Related Docker Stacks</span></span></a>
   </div>
 </li>
     </ul>
@@ -220,22 +226,22 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#design" id="toc-design" class="nav-link active" data-scroll-target="#design"><span class="header-section-number">8.1</span> Design</a></li>
-  <li><a href="#documentation" id="toc-documentation" class="nav-link" data-scroll-target="#documentation"><span class="header-section-number">8.2</span> Documentation</a></li>
-  <li><a href="#building-the-images" id="toc-building-the-images" class="nav-link" data-scroll-target="#building-the-images"><span class="header-section-number">8.3</span> Building the images</a></li>
-  <li><a href="#base-image" id="toc-base-image" class="nav-link" data-scroll-target="#base-image"><span class="header-section-number">8.4</span> base-image</a></li>
-  <li><a href="#py-rocket-base" id="toc-py-rocket-base" class="nav-link" data-scroll-target="#py-rocket-base"><span class="header-section-number">8.5</span> py-rocket-base</a></li>
-  <li><a href="#install-rocker.sh" id="toc-install-rocker.sh" class="nav-link" data-scroll-target="#install-rocker.sh"><span class="header-section-number">8.6</span> install-rocker.sh</a></li>
-  <li><a href="#start" id="toc-start" class="nav-link" data-scroll-target="#start"><span class="header-section-number">8.7</span> start</a></li>
-  <li><a href="#setup-desktop.sh" id="toc-setup-desktop.sh" class="nav-link" data-scroll-target="#setup-desktop.sh"><span class="header-section-number">8.8</span> setup-desktop.sh</a></li>
-  <li><a href="#notes-on-the-jupyter-lab-environment" id="toc-notes-on-the-jupyter-lab-environment" class="nav-link" data-scroll-target="#notes-on-the-jupyter-lab-environment"><span class="header-section-number">8.9</span> Notes on the Jupyter Lab environment</a>
+  <li><a href="#design" id="toc-design" class="nav-link active" data-scroll-target="#design"><span class="header-section-number">9.1</span> Design</a></li>
+  <li><a href="#documentation" id="toc-documentation" class="nav-link" data-scroll-target="#documentation"><span class="header-section-number">9.2</span> Documentation</a></li>
+  <li><a href="#building-the-images" id="toc-building-the-images" class="nav-link" data-scroll-target="#building-the-images"><span class="header-section-number">9.3</span> Building the images</a></li>
+  <li><a href="#base-image" id="toc-base-image" class="nav-link" data-scroll-target="#base-image"><span class="header-section-number">9.4</span> base-image</a></li>
+  <li><a href="#py-rocket-base" id="toc-py-rocket-base" class="nav-link" data-scroll-target="#py-rocket-base"><span class="header-section-number">9.5</span> py-rocket-base</a></li>
+  <li><a href="#install-rocker.sh" id="toc-install-rocker.sh" class="nav-link" data-scroll-target="#install-rocker.sh"><span class="header-section-number">9.6</span> install-rocker.sh</a></li>
+  <li><a href="#start" id="toc-start" class="nav-link" data-scroll-target="#start"><span class="header-section-number">9.7</span> start</a></li>
+  <li><a href="#setup-desktop.sh" id="toc-setup-desktop.sh" class="nav-link" data-scroll-target="#setup-desktop.sh"><span class="header-section-number">9.8</span> setup-desktop.sh</a></li>
+  <li><a href="#notes-on-the-jupyter-lab-environment" id="toc-notes-on-the-jupyter-lab-environment" class="nav-link" data-scroll-target="#notes-on-the-jupyter-lab-environment"><span class="header-section-number">9.9</span> Notes on the Jupyter Lab environment</a>
   <ul class="collapse">
-  <li><a href="#terminal-in-jupyter-lab" id="toc-terminal-in-jupyter-lab" class="nav-link" data-scroll-target="#terminal-in-jupyter-lab"><span class="header-section-number">8.9.1</span> Terminal in Jupyter Lab</a></li>
+  <li><a href="#terminal-in-jupyter-lab" id="toc-terminal-in-jupyter-lab" class="nav-link" data-scroll-target="#terminal-in-jupyter-lab"><span class="header-section-number">9.9.1</span> Terminal in Jupyter Lab</a></li>
   </ul></li>
-  <li><a href="#notes-on-r-in-the-rstudio-or-jupyter-lab-environment" id="toc-notes-on-r-in-the-rstudio-or-jupyter-lab-environment" class="nav-link" data-scroll-target="#notes-on-r-in-the-rstudio-or-jupyter-lab-environment"><span class="header-section-number">8.10</span> Notes on R in the RStudio or Jupyter Lab environment</a>
+  <li><a href="#notes-on-r-in-the-rstudio-or-jupyter-lab-environment" id="toc-notes-on-r-in-the-rstudio-or-jupyter-lab-environment" class="nav-link" data-scroll-target="#notes-on-r-in-the-rstudio-or-jupyter-lab-environment"><span class="header-section-number">9.10</span> Notes on R in the RStudio or Jupyter Lab environment</a>
   <ul class="collapse">
-  <li><a href="#environmental-variables" id="toc-environmental-variables" class="nav-link" data-scroll-target="#environmental-variables"><span class="header-section-number">8.10.1</span> Environmental variables</a></li>
-  <li><a href="#terminal-in-rstudio" id="toc-terminal-in-rstudio" class="nav-link" data-scroll-target="#terminal-in-rstudio"><span class="header-section-number">8.10.2</span> Terminal in RStudio</a></li>
+  <li><a href="#environmental-variables" id="toc-environmental-variables" class="nav-link" data-scroll-target="#environmental-variables"><span class="header-section-number">9.10.1</span> Environmental variables</a></li>
+  <li><a href="#terminal-in-rstudio" id="toc-terminal-in-rstudio" class="nav-link" data-scroll-target="#terminal-in-rstudio"><span class="header-section-number">9.10.2</span> Terminal in RStudio</a></li>
   </ul></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/nmfs-opensci/py-rocket-base/edit/main/developers.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/nmfs-opensci/py-rocket-base/blob/main/developers.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/nmfs-opensci/py-rocket-base/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
@@ -245,7 +251,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Developer notes</span></h1>
+<h1 class="title"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Developer notes</span></h1>
 </div>
 
 
@@ -262,8 +268,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="design" class="level2" data-number="8.1">
-<h2 data-number="8.1" class="anchored" data-anchor-id="design"><span class="header-section-number">8.1</span> Design</h2>
+<section id="design" class="level2" data-number="9.1">
+<h2 data-number="9.1" class="anchored" data-anchor-id="design"><span class="header-section-number">9.1</span> Design</h2>
 <p>py-rocket-base is inspired by <a href="https://github.com/jupyterhub/repo2docker">repo2docker</a> and the <a href="https://pangeo-docker-images.readthedocs.io/en/latest/">Pangeo Docker stack</a> design. py-rocker-base is built using repo2docker (via <a href="https://github.com/jupyterhub/repo2docker-action">repo2docker-action</a>) and thus lets repo2docker make the choices regarding the environment design—things like how the conda environment is set-up and the base directory structure and permissions.</p>
 <p>The Pangeo Docker stack does not use repo2docker, but mimics repo2docker’s environment design. The Pangeo base-image behaves similar to repo2docker in that using the base-image in the <code>FROM</code> line of a Dockerfile causes the build to look for files with the same names as repo2docker’s <a href="https://repo2docker.readthedocs.io/en/latest/config_files.html">configuration files</a> and then do the proper action with those files. This means that routine users do not need to know how to write Dockerfile code in order to extend the image with new packages or applications. py-rocker-base Docker image uses this Pangeo base-image design. It is based on <code>ONBUILD</code> commands in the Dockerfile that trigger actions only when the image is used in the <code>FROM</code> line of another Dockerfile.</p>
 <p>py-rocket-base does not include this <code>ONBUILD</code> behavior. Instead it follows the <a href="https://github.com/rocker-org/rocker-versioned2">rocker docker stack</a> design and provides helper scripts for building on the base image. py-rocket-base a directory called <code>\pyrocket_scripts</code>that will help you do common tasks for scientific docker images.These scripts are not required. If users are familiar with writing Docker files, they can write their own code. The use of helper scripts was used after feedback that the Pangeo ONBUILD behavior makes it harder to customize images that need very specific structure or order of operations.</p>
@@ -274,27 +280,27 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ol>
 </aside>
 </section>
-<section id="documentation" class="level2" data-number="8.2">
-<h2 data-number="8.2" class="anchored" data-anchor-id="documentation"><span class="header-section-number">8.2</span> Documentation</h2>
+<section id="documentation" class="level2" data-number="9.2">
+<h2 data-number="9.2" class="anchored" data-anchor-id="documentation"><span class="header-section-number">9.2</span> Documentation</h2>
 <p>To build the documentation book, clone repo and then</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>cd book</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>quarto render .</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Set GitHub Pages to docs folder.</p>
 </section>
-<section id="building-the-images" class="level2" data-number="8.3">
-<h2 data-number="8.3" class="anchored" data-anchor-id="building-the-images"><span class="header-section-number">8.3</span> Building the images</h2>
+<section id="building-the-images" class="level2" data-number="9.3">
+<h2 data-number="9.3" class="anchored" data-anchor-id="building-the-images"><span class="header-section-number">9.3</span> Building the images</h2>
 <p>The <code>.github/workflows/build.yaml</code> is a GitHub Action to build the image. The GitHub Action builds the image and the URL will look like one of these</p>
 <pre><code>ghcr.io/nmfs-opensci/repo-name/image-name:latest
 ghcr.io/nmfs-opensci/image-name:latest</code></pre>
 <p>For example, for this repo the image is <code>ghcr.io/nmfs-opensci/py-rocket-base:latest</code>.</p>
 </section>
-<section id="base-image" class="level2" data-number="8.4">
-<h2 data-number="8.4" class="anchored" data-anchor-id="base-image"><span class="header-section-number">8.4</span> base-image</h2>
+<section id="base-image" class="level2" data-number="9.4">
+<h2 data-number="9.4" class="anchored" data-anchor-id="base-image"><span class="header-section-number">9.4</span> base-image</h2>
 <p>In the directory, <code>base-image</code> is the Pangeo base-image Dockerfile minus the ONBUILD statements. Thus the base-image for py-rocket-base is the same as Pangeo base-image but doesn’t have the behavior of automatically processing files like <code>environment.yml</code> in child images (that use the base image in the <code>FROM</code> line).</p>
 <p>py-rocket-base uses base-image and adds on the pangeo-notebook metapackage which add the basic JupyterHub and JupyterLab packages. py-rocket-base then adds on R/RStudio, more conda packages and Desktop via install scripts.</p>
 </section>
-<section id="py-rocket-base" class="level2" data-number="8.5">
-<h2 data-number="8.5" class="anchored" data-anchor-id="py-rocket-base"><span class="header-section-number">8.5</span> py-rocket-base</h2>
+<section id="py-rocket-base" class="level2" data-number="9.5">
+<h2 data-number="9.5" class="anchored" data-anchor-id="py-rocket-base"><span class="header-section-number">9.5</span> py-rocket-base</h2>
 <p>The <a href="https://github.com/nmfs-opensci/py-rocket-base/blob/main/Dockerfile">Dockerfile</a> does the following in order:</p>
 <ul>
 <li>Move files into <code>/srv/repo</code></li>
@@ -435,8 +441,8 @@ ghcr.io/nmfs-opensci/image-name:latest</code></pre>
 </dd>
 </dl>
 </section>
-<section id="install-rocker.sh" class="level2" data-number="8.6">
-<h2 data-number="8.6" class="anchored" data-anchor-id="install-rocker.sh"><span class="header-section-number">8.6</span> install-rocker.sh</h2>
+<section id="install-rocker.sh" class="level2" data-number="9.6">
+<h2 data-number="9.6" class="anchored" data-anchor-id="install-rocker.sh"><span class="header-section-number">9.6</span> install-rocker.sh</h2>
 <p>This script will copy in the rocker scripts from <a href="https://github.com/rocker-org/rocker-versioned2">rocker-versioned2</a> into <code>${REPO_DIR}</code> to install things. It will read in one of the rocker docker files using <code>R_DOCKERFILE</code> defined in the <code>appendix</code> file (which is inserted into the main docker file). Variables defined here will only be available in this script. Click on the numbers in the script to learn what each section is doing.</p>
 <div class="sourceCode" id="annotated-cell-4"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-4-1"><a href="#annotated-cell-4-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
 <span id="annotated-cell-4-2"><a href="#annotated-cell-4-2" aria-hidden="true" tabindex="-1"></a>set <span class="sc">-</span>e</span>
@@ -535,8 +541,8 @@ ghcr.io/nmfs-opensci/image-name:latest</code></pre>
 </dd>
 </dl>
 </section>
-<section id="start" class="level2" data-number="8.7">
-<h2 data-number="8.7" class="anchored" data-anchor-id="start"><span class="header-section-number">8.7</span> start</h2>
+<section id="start" class="level2" data-number="9.7">
+<h2 data-number="9.7" class="anchored" data-anchor-id="start"><span class="header-section-number">9.7</span> start</h2>
 <p>Within a JupyterHub, the user home directory <code>$HOME</code> is typically re-mapped to the user persistent home directory. That means that the image build process cannot put things into <code>$HOME</code>, they would just be lost when <code>$HOME</code> is re-mapped. If a process needs to have something in the home directory, e.g.&nbsp;in some local user configuration, this must be done in the <code>start</code> script. The repo2docker docker image specifies that the start script is <code>${REPO_DIR}/start</code>. In py-rocket-base, the start scripts in a child docker file is souces in a subshell from the py-rocket-base start script.</p>
 <div class="sourceCode" id="annotated-cell-5"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-5-1"><a href="#annotated-cell-5-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
 <span id="annotated-cell-5-2"><a href="#annotated-cell-5-2" aria-hidden="true" tabindex="-1"></a>set <span class="sc">-</span>euo pipefail</span>
@@ -572,8 +578,8 @@ ghcr.io/nmfs-opensci/image-name:latest</code></pre>
 </dd>
 </dl>
 </section>
-<section id="setup-desktop.sh" class="level2" data-number="8.8">
-<h2 data-number="8.8" class="anchored" data-anchor-id="setup-desktop.sh"><span class="header-section-number">8.8</span> setup-desktop.sh</h2>
+<section id="setup-desktop.sh" class="level2" data-number="9.8">
+<h2 data-number="9.8" class="anchored" data-anchor-id="setup-desktop.sh"><span class="header-section-number">9.8</span> setup-desktop.sh</h2>
 <p>The default for XDG and xfce4 is for Desktop files to be in <code>~/Desktop</code> but this leads to a variety of problems. First we are altering the user directiory which seems rude, second orphan desktop files might be in <code>~/Desktop</code> so who knows what the user Desktop experience with be, here the Desktop dir is set to <code>/usr/share/Desktop</code> so is part of the image. Users that really want to customize Desktop can change <code>~/.config/user-dirs.dirs</code>. Though py-rocket-base might not respect that. Not sure why you’d do that instead of just using a different image that doesn’t have the py-rocket-base behavior.</p>
 <div class="sourceCode" id="annotated-cell-6"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-6-1"><a href="#annotated-cell-6-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
 <span id="annotated-cell-6-2"><a href="#annotated-cell-6-2" aria-hidden="true" tabindex="-1"></a>set <span class="sc">-</span>e</span>
@@ -647,23 +653,23 @@ ghcr.io/nmfs-opensci/image-name:latest</code></pre>
 </dd>
 </dl>
 </section>
-<section id="notes-on-the-jupyter-lab-environment" class="level2" data-number="8.9">
-<h2 data-number="8.9" class="anchored" data-anchor-id="notes-on-the-jupyter-lab-environment"><span class="header-section-number">8.9</span> Notes on the Jupyter Lab environment</h2>
-<section id="terminal-in-jupyter-lab" class="level3" data-number="8.9.1">
-<h3 data-number="8.9.1" class="anchored" data-anchor-id="terminal-in-jupyter-lab"><span class="header-section-number">8.9.1</span> Terminal in Jupyter Lab</h3>
+<section id="notes-on-the-jupyter-lab-environment" class="level2" data-number="9.9">
+<h2 data-number="9.9" class="anchored" data-anchor-id="notes-on-the-jupyter-lab-environment"><span class="header-section-number">9.9</span> Notes on the Jupyter Lab environment</h2>
+<section id="terminal-in-jupyter-lab" class="level3" data-number="9.9.1">
+<h3 data-number="9.9.1" class="anchored" data-anchor-id="terminal-in-jupyter-lab"><span class="header-section-number">9.9.1</span> Terminal in Jupyter Lab</h3>
 <p>When a terminal is launched from the Launcher, it starts a login bash shell (<code>bash -l</code>). When login bash shells are started, <code>/etc/profile</code> script is run. For this image, this script will execute all the scripts in the directory <code>/etc/profile.d</code>. There is the script <code>init_conda.sh</code> which ensures that the conda notebook environment is activated. The user might override this if they create <code>~/.bashrc_profile</code> in which case that is used instead of <code>/etc/profile</code>.</p>
 <p>For non-login bash shells (interactive), <code>/etc/bash.bashrc</code> determines the shell environment unless the user has created <code>~/.bashrc</code>, in which case that file determines the shell environment. In Jupyter Lab, you can start and interactive shell by running <code>bash</code> (from a terminal). Be aware that if you run <code>bash</code> it might look like the conda environment is deactivated but it is really not since the <code>PATH</code> still includes <code>conda</code> in it. If you are trying to get remove <code>conda</code> from the path (and get rid of all the conda environment variables) you need to run <code>conda deactivate</code> (2x).</p>
 </section>
 </section>
-<section id="notes-on-r-in-the-rstudio-or-jupyter-lab-environment" class="level2" data-number="8.10">
-<h2 data-number="8.10" class="anchored" data-anchor-id="notes-on-r-in-the-rstudio-or-jupyter-lab-environment"><span class="header-section-number">8.10</span> Notes on R in the RStudio or Jupyter Lab environment</h2>
+<section id="notes-on-r-in-the-rstudio-or-jupyter-lab-environment" class="level2" data-number="9.10">
+<h2 data-number="9.10" class="anchored" data-anchor-id="notes-on-r-in-the-rstudio-or-jupyter-lab-environment"><span class="header-section-number">9.10</span> Notes on R in the RStudio or Jupyter Lab environment</h2>
 <p><a href="https://github.com/jupyterhub/jupyter-rsession-proxy">jupyter-rsession-proxy</a> in <code>environment.yml</code> allows us to launch RStudio from Jupyter Lab and <code>IRkernel</code> run in our R installation via this in the Docker file</p>
 <pre><code>RUN Rscript -e "install.packages('IRkernel')" &amp;&amp; \
     PATH=/srv/conda/envs/notebook/bin:$PATH Rscript -e "IRkernel::installspec(name = 'ir', displayname = 'R ${R_VERSION}')"</code></pre>
 <p>creates a Jupyter Lab kernel called <code>R X.X.X</code> using our R installation (in <code>/usr/local/bin/R</code>) with all our libraries.</p>
 <p>However we enter the R environment (either in Jupyter Lab or RStudio), the environment is different than the default environment if you use the default Python environment (the conda ‘notebook’ environment).</p>
-<section id="environmental-variables" class="level3" data-number="8.10.1">
-<h3 data-number="8.10.1" class="anchored" data-anchor-id="environmental-variables"><span class="header-section-number">8.10.1</span> Environmental variables</h3>
+<section id="environmental-variables" class="level3" data-number="9.10.1">
+<h3 data-number="9.10.1" class="anchored" data-anchor-id="environmental-variables"><span class="header-section-number">9.10.1</span> Environmental variables</h3>
 <ul>
 <li>PATH is different. conda is not on the path. Try <code>Sys.getenv("PATH")</code>. This is on purpose because the R geospatial packages get confused if one uses the GDAL associated with the conda environment. This is critical to know if you are using <code>reticulate</code> and <code>Python</code> inside of R. conda will not be on the path and all the Python libraries will not be accessible. If you want to use the conda environment, you have to run this. The first line tells R where the conda binary is because it has no way to find it since conda is not on its system PATH.</li>
 </ul>
@@ -674,8 +680,8 @@ reticulate::use_condaenv("/srv/conda/envs/notebook", required = TRUE)</code></pr
 </ul>
 <p>If your users need some environmental variable set, they will need to set those in <code>$R_HOME/etc/Rprofile.site</code> which is run when R starts.</p>
 </section>
-<section id="terminal-in-rstudio" class="level3" data-number="8.10.2">
-<h3 data-number="8.10.2" class="anchored" data-anchor-id="terminal-in-rstudio"><span class="header-section-number">8.10.2</span> Terminal in RStudio</h3>
+<section id="terminal-in-rstudio" class="level3" data-number="9.10.2">
+<h3 data-number="9.10.2" class="anchored" data-anchor-id="terminal-in-rstudio"><span class="header-section-number">9.10.2</span> Terminal in RStudio</h3>
 <p>The default way that a terminal is started is <code>bash -l</code> which means it is a login terminal. When a login terminal launches, <code>/etc/profile</code> script is run. For this image, this script will execute all the scripts in the directory <code>/etc/profile.d</code>. You can add scripts there that you want to run when a login terminal is started. In particular, there is the script <code>init_conda.sh</code>. This ensures that when a terminal is opened from the Launcher in JupyterLab, the conda notebook environment is activated. However, we do not want this to happen in RStudio so the script checks if RSTUDIO==1 and R_HOME is set, if that is true then we are in the RStudio UI and conda should not be initialized (and is not).</p>
 
 
@@ -1287,13 +1293,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./example_children.html" class="pagination-link" aria-label="Example child images">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Example child images</span></span>
+      <a href="./r-config.html" class="pagination-link" aria-label="R in Jupyter Lab and Python in RStudio">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">R in Jupyter Lab and Python in RStudio</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
       <a href="./related.html" class="pagination-link" aria-label="Related Docker Stacks">
-        <span class="nav-page-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Related Docker Stacks</span></span> <i class="bi bi-arrow-right-short"></i>
+        <span class="nav-page-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Related Docker Stacks</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

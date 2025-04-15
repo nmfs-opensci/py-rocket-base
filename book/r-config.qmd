@@ -1,0 +1,82 @@
+# R in Jupyter Lab and Python in RStudio
+
+py-rocket has separate R and Python installations because there are a variety of system packages linkages (GDAL and others depending whyat you are doing) that will break if you do not use the right system linkages. The way this is handled is via the the system PATH. This tells functions where to look for files it needs.
+
+As long as you only use R or Python (don't mix the two) in a notebook, you will be fine in py-rocket. When you activate R, the path will not have conda. When you activate Python, it will have use the conda "notebook" environment and have that on the path. 
+
+Try this in R (RStudio or the R kernel in Jupyter Lab):
+```
+Sys.getenv("PATH")
+```
+Try this in a Jupyter Notebook in Jupyter Lab:
+```
+import os
+print(os.environ["PATH"])
+```
+
+## Using R in Jupyter Lab
+
+In Jupyter Lab, you select a R kernel from the upper right. You can then use R code in the notebook. It will use the R installation in py-rocket with all the preloaded libraries.
+
+## Using Python in R (RStudio or Jupyter Lab with R kernel)
+
+The following behavior is specific to R, not the GUI (RStudio or Jupyter Lab with R kernel) that you are using to interact with it.
+
+### `py_require()`
+
+To use Python, you use the `reticulate` library. If you only need a handful of Python packages, it will simplify things if you use `py_require()`.  Like this
+```
+library(reticulate)
+py_require("xarray")
+```
+This will create an ephemeral environment with the packages you require and does not change the system PATH or put `conda/envs/notebook` on the path. Everything should work fine though I have not tested dask.
+
+One gotcha is that reticulate create a cache in `~/.cache/R/reticulate` and it might not be easy to change later to using a conda environment for your Python binary. I often had to do
+```
+rm ~/.cache/R/reticulate
+```
+in a terminal to get reticulate to allow me to use `use_conda("notebook")` in another R session.
+
+### Using a conda environment
+
+You can also use the conda environment with reticulate with all the pre-installed packages.
+```
+library(reticulate)
+use_condaenv("notebook")
+```
+However this will prepend conda to the system path and that will persist until you RESTART R. In RStudio, it is not enough to close the script or notebook you are working in; you actually have to restart R. reticulate does not have a `deactivate_conda()` function. In Jupyter Lab, your notebooks are isolated from each other and each has its own kernel, so whatever path changes you do in one notebook do not affect other notebooks. This is not the case for RStudio.
+```
+"/srv/conda/condabin:/srv/conda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/usr/sbin:/usr/bin:/usr/local/texlive/bin/x86_64-linux:$PATH:/usr/local/texlive/bin/x86_64-linux:/usr/lib/rstudio-server/bin/quarto/bin:/usr/lib/rstudio-server/bin/postback"
+```
+
+If you use `use_condaenv()` in an R session and need to restore the normal path (to get R libraries that bind to system packages to work), you can do the following:
+```
+orig <- Sys.getenv("RSTUDIO_CLEAN_PATH", unset = NA)
+orig # make sure it looks right
+Sys.setenv(PATH = orig)
+```
+
+Note, the terminal in RStudio is not the same environment as R. So doing `echo $PATH` in the terminal in RStudio will still show the original path without conda.
+
+**Why activating conda causes problems for R**
+
+When we use a conda environment, the PATH is altered so that the conda environment directory appears first on the PATH. Any R packages that need a particular system package that is also in conda (like GDAL) are likely to throw mis-match errors.
+
+## Dealing with SSL mismatch errors
+
+When you use reticulate in R, use `use_condaenv()` and call a function that needs to download data, you are liable to get a OpenSSL mismatch error. py-rocket solves this by adding this to 
+```
+rsession-ld-library-path=/srv/conda/envs/notebook/lib
+```
+to `/etc/rstudio/rserver.conf`. This let's R know where to look for SSL links and hopefully doesn't break R packages. Make sure that `.Renviron` does not set `LD_LIBRARY_PATH` or this solution will not work. I don't know why but it breaks.
+
+## Developers
+
+How is the R kernel created so that it shows up in Jupyter Lab? You don't need to install R into the conda environment since it already is in the image. We just need to use `IRkernel` R package to register the kernel with jupyter.
+```
+Rscript - <<-"EOF"
+install.packages('IRkernel', lib = .Library) # install in system library
+Sys.setenv(PATH = paste("/srv/conda/envs/notebook/bin", Sys.getenv("PATH"), sep = ":"))
+IRkernel::installspec(name = "ir", displayname = "R ${R_VERSION}")
+EOF
+```

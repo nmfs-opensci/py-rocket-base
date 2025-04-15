@@ -200,14 +200,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./r-config.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">R in Jupyter Lab and Python in RStudio</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./developers.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Developer notes</span></span></a>
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Developer notes</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./related.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Related Docker Stacks</span></span></a>
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Related Docker Stacks</span></span></a>
   </div>
 </li>
     </ul>
@@ -266,7 +272,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h3 data-number="5.1.1" class="anchored" data-anchor-id="rstudio"><span class="header-section-number">5.1.1</span> RStudio</h3>
 <p>Quarto is fully integrated with RStudio. Use the Render and Build buttons.</p>
 <p><strong>Special note regarding creating pdfs</strong></p>
-<p>Rendering to PDF or <code>format: pdf</code> should work fine and packages will be installed on the fly. But the package installations will not persist and you will need to install them again after you restart the server.</p>
+<p>Rendering to PDF or <code>format: pdf</code> should work fine and packages will be installed on the fly. But the package installations will not persist and you will need to install them again after you restart the server. To get the packages into the user library at <code>~/texmf</code>, you need to do this in a terminal:</p>
+<pre><code>tlmgr install soulpos pdfcomment luatex85</code></pre>
+<p>Replace the package names with the packages you need to install.</p>
 </section>
 <section id="vscode" class="level3" data-number="5.1.2">
 <h3 data-number="5.1.2" class="anchored" data-anchor-id="vscode"><span class="header-section-number">5.1.2</span> VSCode</h3>
@@ -275,9 +283,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="jupyter-lab" class="level3" data-number="5.1.3">
 <h3 data-number="5.1.3" class="anchored" data-anchor-id="jupyter-lab"><span class="header-section-number">5.1.3</span> Jupyter Lab</h3>
 <p>The <code>jupyterlab-quarto</code> package is installed which allows Quarto markdown to be rendered in markdown cells in Jupyter notebooks (ipynb). But you will need to render from a terminal. Quarto render both <code>qmd</code> and <code>ipynb</code> files. Read about using Quarto with JupyterLab on this Quarto <a href="https://quarto.org/docs/tools/jupyter-lab.html">page</a>. For example,</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>quarto render --to pdf test.qmd</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>quarto render --to html test.ipynb</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>For PDF output, TexLive packages will not install on the fly and you will need to do <code>tlmgr install packagename</code> for any missing package errors you get.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>quarto render --to pdf test.qmd</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>quarto render --to html test.ipynb</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>For PDF output when running <code>quarto render</code> in a terminal, TexLive packages will not install on the fly and you will need to do <code>tlmgr install packagename</code> for any missing package errors you get. The packages will install in <code>~/texmf</code> and will persist in the home directory.</p>
 </section>
 </section>
 <section id="myst" class="level2" data-number="5.2">
@@ -314,15 +322,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <ul>
 <li>Do not use <code>apt-get</code> to install texlive packages. This will turn off tlmgr (the TeX package manager). Instead use</li>
 </ul>
-<div class="sourceCode" id="cb2"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>tlmgr install &lt;package&gt;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>tlmgr install &lt;package&gt;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <ul>
 <li>Run <code>tlmgr option</code> to make sure tlmgr is working.</li>
 </ul>
 <p>Unfortunately any packages you install will be in the <code>/opt</code> directory and this gets recreated every time you restart your server. So if you need a particular package you will need to keep installing it. Or create your own image based on py-rocket-base:</p>
 <p>Dockerfile</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>FROM ghcr.io/nmfs-opensci/py-rocket-base:latest</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>RUN tlmgr install collection-latexrecommended &amp;&amp; tlmgr clean --all</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>FROM ghcr.io/nmfs-opensci/py-rocket-base:latest</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>RUN tlmgr install collection-latexrecommended &amp;&amp; tlmgr clean --all</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 
 </section>

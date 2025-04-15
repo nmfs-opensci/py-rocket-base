@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>6&nbsp; Customizing Jupyter – py-rocket-base</title>
+<title>8&nbsp; R in Jupyter Lab and Python in RStudio – py-rocket-base</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,40 +20,6 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for syntax highlighting */
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
 </style>
 
 
@@ -63,8 +29,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./example_children.html" rel="next">
-<link href="./publishing.html" rel="prev">
+<link href="./developers.html" rel="next">
+<link href="./example_children.html" rel="prev">
 <link href="./assets/favicon.ico" rel="icon">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -117,7 +83,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./jupyter-config.html"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Customizing Jupyter</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./r-config.html"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">R in Jupyter Lab and Python in RStudio</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -188,7 +154,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./jupyter-config.html" class="sidebar-item-text sidebar-link active">
+  <a href="./jupyter-config.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Customizing Jupyter</span></span></a>
   </div>
 </li>
@@ -200,7 +166,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./r-config.html" class="sidebar-item-text sidebar-link">
+  <a href="./r-config.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">R in Jupyter Lab and Python in RStudio</span></span></a>
   </div>
 </li>
@@ -221,15 +187,28 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#using-r-in-jupyter-lab" id="toc-using-r-in-jupyter-lab" class="nav-link active" data-scroll-target="#using-r-in-jupyter-lab"><span class="header-section-number">8.1</span> Using R in Jupyter Lab</a></li>
+  <li><a href="#using-python-in-r-rstudio-or-jupyter-lab-with-r-kernel" id="toc-using-python-in-r-rstudio-or-jupyter-lab-with-r-kernel" class="nav-link" data-scroll-target="#using-python-in-r-rstudio-or-jupyter-lab-with-r-kernel"><span class="header-section-number">8.2</span> Using Python in R (RStudio or Jupyter Lab with R kernel)</a>
+  <ul class="collapse">
+  <li><a href="#py_require" id="toc-py_require" class="nav-link" data-scroll-target="#py_require"><span class="header-section-number">8.2.1</span> <code>py_require()</code></a></li>
+  <li><a href="#using-a-conda-environment" id="toc-using-a-conda-environment" class="nav-link" data-scroll-target="#using-a-conda-environment"><span class="header-section-number">8.2.2</span> Using a conda environment</a></li>
+  </ul></li>
+  <li><a href="#dealing-with-ssl-mismatch-errors" id="toc-dealing-with-ssl-mismatch-errors" class="nav-link" data-scroll-target="#dealing-with-ssl-mismatch-errors"><span class="header-section-number">8.3</span> Dealing with SSL mismatch errors</a></li>
+  <li><a href="#developers" id="toc-developers" class="nav-link" data-scroll-target="#developers"><span class="header-section-number">8.4</span> Developers</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/nmfs-opensci/py-rocket-base/edit/main/r-config.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/nmfs-opensci/py-rocket-base/blob/main/r-config.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/nmfs-opensci/py-rocket-base/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Customizing Jupyter</span></h1>
+<h1 class="title"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">R in Jupyter Lab and Python in RStudio</span></h1>
 </div>
 
 
@@ -246,39 +225,63 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>If you want to customize some feature of the JupyterHub or JupyterLab, you can do this by passing in <code>*.json</code> or <code>*.py</code> configuration files. In py-rocket-base, these are in the <code>jupyter_server_config.d</code> and <code>jupyter_notebook_config.d</code> directories in the conda notebook environment. These directories contain the json that specifies the configurations:</p>
-<pre><code>/srv/conda/envs/notebook/
-└── etc/
-    └── jupyter/
-        └── jupyter_server_config.d/
-            ├── security.json
-            ├── extensions.json
-            └── custom.json
-        └── jupyter_notebook_config.d/
-            └── custom.json</code></pre>
-<p>If you want to change these configurations, you need to either update the file with the configuration or add a new configuration file. You can add either <em>.json or </em>.py configurations files to the same directory.</p>
-<p>For example, if you want to allow hidden files to be shown in the file browser in Jupyter Lab. Add</p>
-<p>custom_jupyter_server_config.json</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>{</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    "ContentsManager": {</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>        "allow_hidden": true</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>and then copy this into <code>jupyter_server_config.d</code> and <code>jupyter_notebook_config.d</code> via code in the Dockerfile or in postBuild. We copy both to notebook server config and jupyter server config, because either can be used in the JupyterHub.</p>
-<p>Dockerfile</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>COPY custom_jupyter_server_config.json custom_jupyter_server_config.json</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>RUN cp custom_jupyter_server_config.json ${NB_PYTHON_PREFIX}/etc/jupyter/jupyter_server_config.d/ &amp;&amp; \</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    cp custom_jupyter_server_config.json ${NB_PYTHON_PREFIX}/etc/jupyter/jupyter_notebook_config.d/ &amp;&amp; \</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    rm custom_jupyter_server_config.json</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Alternatively, you can add a postBuild file to your repo and py-rocket-base will automatically run this when you image builds.</p>
-<p>postBuild</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>#!/bin/bash -l</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>set -euo pipefail</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>cp custom_jupyter_server_config.json ${NB_PYTHON_PREFIX}/etc/jupyter/jupyter_server_config.d/</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>cp custom_jupyter_server_config.json ${NB_PYTHON_PREFIX}/etc/jupyter/jupyter_notebook_config.d/</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>py-rocket has separate R and Python installations because there are a variety of system packages linkages (GDAL and others depending whyat you are doing) that will break if you do not use the right system linkages. The way this is handled is via the the system PATH. This tells functions where to look for files it needs.</p>
+<p>As long as you only use R or Python (don’t mix the two) in a notebook, you will be fine in py-rocket. When you activate R, the path will not have conda. When you activate Python, it will have use the conda “notebook” environment and have that on the path.</p>
+<p>Try this in R (RStudio or the R kernel in Jupyter Lab):</p>
+<pre><code>Sys.getenv("PATH")</code></pre>
+<p>Try this in a Jupyter Notebook in Jupyter Lab:</p>
+<pre><code>import os
+print(os.environ["PATH"])</code></pre>
+<section id="using-r-in-jupyter-lab" class="level2" data-number="8.1">
+<h2 data-number="8.1" class="anchored" data-anchor-id="using-r-in-jupyter-lab"><span class="header-section-number">8.1</span> Using R in Jupyter Lab</h2>
+<p>In Jupyter Lab, you select a R kernel from the upper right. You can then use R code in the notebook. It will use the R installation in py-rocket with all the preloaded libraries.</p>
+</section>
+<section id="using-python-in-r-rstudio-or-jupyter-lab-with-r-kernel" class="level2" data-number="8.2">
+<h2 data-number="8.2" class="anchored" data-anchor-id="using-python-in-r-rstudio-or-jupyter-lab-with-r-kernel"><span class="header-section-number">8.2</span> Using Python in R (RStudio or Jupyter Lab with R kernel)</h2>
+<p>The following behavior is specific to R, not the GUI (RStudio or Jupyter Lab with R kernel) that you are using to interact with it.</p>
+<section id="py_require" class="level3" data-number="8.2.1">
+<h3 data-number="8.2.1" class="anchored" data-anchor-id="py_require"><span class="header-section-number">8.2.1</span> <code>py_require()</code></h3>
+<p>To use Python, you use the <code>reticulate</code> library. If you only need a handful of Python packages, it will simplify things if you use <code>py_require()</code>. Like this</p>
+<pre><code>library(reticulate)
+py_require("xarray")</code></pre>
+<p>This will create an ephemeral environment with the packages you require and does not change the system PATH or put <code>conda/envs/notebook</code> on the path. Everything should work fine though I have not tested dask.</p>
+<p>One gotcha is that reticulate create a cache in <code>~/.cache/R/reticulate</code> and it might not be easy to change later to using a conda environment for your Python binary. I often had to do</p>
+<pre><code>rm ~/.cache/R/reticulate</code></pre>
+<p>in a terminal to get reticulate to allow me to use <code>use_conda("notebook")</code> in another R session.</p>
+</section>
+<section id="using-a-conda-environment" class="level3" data-number="8.2.2">
+<h3 data-number="8.2.2" class="anchored" data-anchor-id="using-a-conda-environment"><span class="header-section-number">8.2.2</span> Using a conda environment</h3>
+<p>You can also use the conda environment with reticulate with all the pre-installed packages.</p>
+<pre><code>library(reticulate)
+use_condaenv("notebook")</code></pre>
+<p>However this will prepend conda to the system path and that will persist until you RESTART R. In RStudio, it is not enough to close the script or notebook you are working in; you actually have to restart R. reticulate does not have a <code>deactivate_conda()</code> function. In Jupyter Lab, your notebooks are isolated from each other and each has its own kernel, so whatever path changes you do in one notebook do not affect other notebooks. This is not the case for RStudio.</p>
+<pre><code>"/srv/conda/condabin:/srv/conda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/usr/sbin:/usr/bin:/usr/local/texlive/bin/x86_64-linux:$PATH:/usr/local/texlive/bin/x86_64-linux:/usr/lib/rstudio-server/bin/quarto/bin:/usr/lib/rstudio-server/bin/postback"</code></pre>
+<p>If you use <code>use_condaenv()</code> in an R session and need to restore the normal path (to get R libraries that bind to system packages to work), you can do the following:</p>
+<pre><code>orig &lt;- Sys.getenv("RSTUDIO_CLEAN_PATH", unset = NA)
+orig # make sure it looks right
+Sys.setenv(PATH = orig)</code></pre>
+<p>Note, the terminal in RStudio is not the same environment as R. So doing <code>echo $PATH</code> in the terminal in RStudio will still show the original path without conda.</p>
+<p><strong>Why activating conda causes problems for R</strong></p>
+<p>When we use a conda environment, the PATH is altered so that the conda environment directory appears first on the PATH. Any R packages that need a particular system package that is also in conda (like GDAL) are likely to throw mis-match errors.</p>
+</section>
+</section>
+<section id="dealing-with-ssl-mismatch-errors" class="level2" data-number="8.3">
+<h2 data-number="8.3" class="anchored" data-anchor-id="dealing-with-ssl-mismatch-errors"><span class="header-section-number">8.3</span> Dealing with SSL mismatch errors</h2>
+<p>When you use reticulate in R, use <code>use_condaenv()</code> and call a function that needs to download data, you are liable to get a OpenSSL mismatch error. py-rocket solves this by adding this to</p>
+<pre><code>rsession-ld-library-path=/srv/conda/envs/notebook/lib</code></pre>
+<p>to <code>/etc/rstudio/rserver.conf</code>. This let’s R know where to look for SSL links and hopefully doesn’t break R packages. Make sure that <code>.Renviron</code> does not set <code>LD_LIBRARY_PATH</code> or this solution will not work. I don’t know why but it breaks.</p>
+</section>
+<section id="developers" class="level2" data-number="8.4">
+<h2 data-number="8.4" class="anchored" data-anchor-id="developers"><span class="header-section-number">8.4</span> Developers</h2>
+<p>How is the R kernel created so that it shows up in Jupyter Lab? You don’t need to install R into the conda environment since it already is in the image. We just need to use <code>IRkernel</code> R package to register the kernel with jupyter.</p>
+<pre><code>Rscript - &lt;&lt;-"EOF"
+install.packages('IRkernel', lib = .Library) # install in system library
+Sys.setenv(PATH = paste("/srv/conda/envs/notebook/bin", Sys.getenv("PATH"), sep = ":"))
+IRkernel::installspec(name = "ir", displayname = "R ${R_VERSION}")
+EOF</code></pre>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -844,13 +847,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./publishing.html" class="pagination-link" aria-label="Publishing">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Publishing</span></span>
+      <a href="./example_children.html" class="pagination-link" aria-label="Example child images">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Example child images</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./example_children.html" class="pagination-link" aria-label="Example child images">
-        <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Example child images</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./developers.html" class="pagination-link" aria-label="Developer notes">
+        <span class="nav-page-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Developer notes</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
@@ -859,4 +862,4 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 
 
 
-<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions"><ul><li><a href="https://github.com/nmfs-opensci/py-rocket-base/edit/main/jupyter-config.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/nmfs-opensci/py-rocket-base/blob/main/jupyter-config.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/nmfs-opensci/py-rocket-base/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/nmfs-opensci/py-rocket-base/edit/main/r-config.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/nmfs-opensci/py-rocket-base/blob/main/r-config.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/nmfs-opensci/py-rocket-base/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>
