@@ -5,7 +5,7 @@ LABEL org.opencontainers.image.author="eli.holmes@noaa.gov"
 LABEL org.opencontainers.image.source=https://github.com/nmfs-opensci/py-rocket-base
 LABEL org.opencontainers.image.description="Python (3.12), R (4.4.3), Desktop and Publishing tools"
 LABEL org.opencontainers.image.licenses=Apache2.0
-LABEL org.opencontainers.image.version=2025.04.11
+LABEL org.opencontainers.image.version=2025.04.14
 
 USER root
 
@@ -85,6 +85,9 @@ RUN mkdir -p ${XDG_CONFIG_HOME} && \
 
 # Fix home permissions. Not needed in JupyterHub with persistent memory but needed if not used in that context
 RUN /pyrocket_scripts/fix-home-permissions.sh
+
+# Setup user library for packages
+RUN /pyrocket_scripts/setup-texlive.sh
 
 # Create a symlink for python to python3 and gh-scoped-creds for all users; need for RStudio since conda not on path
 RUN ln -s /usr/bin/python3 /usr/local/bin/python

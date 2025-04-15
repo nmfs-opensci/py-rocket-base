@@ -51,6 +51,11 @@ mv rocker-versioned2-${TAR_NAME}/dockerfiles/${ROCKER_DOCKERFILE_NAME} /rocker_s
 rm ${TAR_NAME}.tar.gz && \
 rm -rf rocker-versioned2-${TAR_NAME}
 
+# Patch the install_texlive script before use so that tlmgr --usermode works and creates a userdir in /home
+sed -i '/^TEXMFHOME/d' /rocker_scripts/install_texlive.sh
+sed -i '/^TEXMFVAR/d' /rocker_scripts/install_texlive.sh
+sed -i '/^TEXMFCONFIG/d' /rocker_scripts/install_texlive.sh
+
 cd /
 
 # Read the Dockerfile and process each line
@@ -137,16 +142,31 @@ mkdir -p "${R_LIBS_USER}" && chown ${NB_USER}:staff "${R_LIBS_USER}"
 echo 'if (!dir.exists(Sys.getenv("R_LIBS_USER"))) dir.create(Sys.getenv("R_LIBS_USER"), recursive = TRUE)' >> "$RPROFILE_SITE"
 echo '.libPaths(c(.libPaths(), Sys.getenv("R_LIBS_USER")))' >> "$RPROFILE_SITE"
 
-# Set up RStudio so that reticulate uses the conda environment
+# Set up R kernel for Jupyter Lab
 Rscript - <<-"EOF"
 install.packages('IRkernel', lib = .Library) # install in system library
 Sys.setenv(PATH = paste("/srv/conda/envs/notebook/bin", Sys.getenv("PATH"), sep = ":"))
 IRkernel::installspec(name = "ir", displayname = "R ${R_VERSION}")
 EOF
+# fill SSL mismatch when using reticulate in R
 echo "Configuring RStudio LD_LIBRARY_PATH in rserver.conf for proper SSL behavior when using conda env..."
 echo "rsession-ld-library-path=/srv/conda/envs/notebook/lib" >> /etc/rstudio/rserver.conf
-echo "Setting RETICULATE_PYTHON globally in Renviron.site..."
-echo "RETICULATE_PYTHON=/srv/conda/envs/notebook/bin/python" >> "${R_HOME}/etc/Renviron.site"
+# Add this so that we make it easier to restore the PATH after reticulate::use_conda() adds conda to it. reticulate does not have deactivate function.
+echo "RSTUDIO_CLEAN_PATH=${PATH}" >> "${R_HOME}/etc/Renviron.site"
+# Do not do this. This will put conda on the system PATH and break R spatial packages due to GDAL mismatches
+#echo "Setting RETICULATE_PYTHON globally in Renviron.site..."
+#echo "RETICULATE_PYTHON=/srv/conda/envs/notebook/bin/python" >> "${R_HOME}/etc/Renviron.site"
+# Create a custom message for reticulate
+cat << 'EOF' >> "${R_HOME}/etc/Rprofile.site"
+
+setHook(packageEvent("reticulate", "attach"), function(...) {
+  message(
+    "Use py_require() for Python interoperability without altering PATH.\n",
+    "Use use_condaenv('notebook') to use conda environment but this will alter PATH and may break R functions.\n",
+    "Restart R to reset PATH or store PATH before calling use_condaenv('notebook') and restore when done."
+  )
+})
+EOF
 
 # Ensure jovyan can modify Rprofile.site and Renviron.site because start will need this, and allow user to alter rserver.conf
 # to set the gh-scoped-cred variables if they are present
