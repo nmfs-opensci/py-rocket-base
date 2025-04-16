@@ -17,6 +17,10 @@ fi
 # Main script execution as NB_USER
 echo "Running install-r-packages.sh as ${NB_USER}"
 
+# Make sure we install to the System library
+echo '.libPaths(.Library)' > /tmp/rprofile.site
+export R_PROFILE=/tmp/rprofile.site
+
 # Set the file variable to the provided argument
 INSTALL_FILE="$1"
 
@@ -34,5 +38,8 @@ if ! Rscript "$INSTALL_FILE"; then
     echo "  Error: Installation of packages from '$INSTALL_FILE' failed. Please check the script for errors." >&2
     exit 1
 fi
+
+# Clean up
+rm /tmp/rprofile.site
 
 echo "  Success! install-r-packages.sh"
