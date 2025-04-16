@@ -17,6 +17,10 @@ fi
 # Main script execution as NB_USER
 echo "Running install-r-packages.sh as ${NB_USER}"
 
+# Make sure we install to the System library
+syslib <- .Library
+.libPaths(c(syslib, .libPaths()))
+
 # Set the file variable to the provided argument
 INSTALL_FILE="$1"
 
