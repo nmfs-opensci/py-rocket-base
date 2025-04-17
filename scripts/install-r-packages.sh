@@ -17,8 +17,8 @@ fi
 # Main script execution as NB_USER
 echo "Running install-r-packages.sh as ${NB_USER}"
 
-# Make sure we install to the System library
-echo '.libPaths(.Library)' > /tmp/rprofile.site
+# Make sure we install to the site-library
+echo ".libPaths('${R_HOME}/site-library')" > /tmp/rprofile.site
 export R_PROFILE=/tmp/rprofile.site
 
 # Set the file variable to the provided argument
