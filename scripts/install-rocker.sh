@@ -142,13 +142,12 @@ mkdir -p "${R_LIBS_USER}" && chown ${NB_USER}:staff "${R_LIBS_USER}"
 echo 'if (!dir.exists(Sys.getenv("R_LIBS_USER"))) dir.create(Sys.getenv("R_LIBS_USER"), recursive = TRUE)' >> "$RPROFILE_SITE"
 echo '.libPaths(c(Sys.getenv("R_LIBS_USER"), .libPaths()))' >> "$RPROFILE_SITE"
 
-# Set up R kernel for Jupyter Lab
-Rscript - <<-"EOF"
+Rscript - <<EOF
 install.packages('IRkernel', lib = .Library) # install in system library
 Sys.setenv(PATH = paste("/srv/conda/envs/notebook/bin", Sys.getenv("PATH"), sep = ":"))
 IRkernel::installspec(name = "ir4", displayname = "R ${R_VERSION}", user = FALSE)
 EOF
-# fill SSL mismatch when using reticulate in R
+# fix SSL mismatch when using reticulate in R
 echo "Configuring RStudio LD_LIBRARY_PATH in rserver.conf for proper SSL behavior when using conda env..."
 echo "rsession-ld-library-path=/srv/conda/envs/notebook/lib" >> /etc/rstudio/rserver.conf
 # Add this so that we make it easier to restore the PATH after reticulate::use_conda() adds conda to it. reticulate does not have deactivate function.
