@@ -1,13 +1,26 @@
 # R packages
 
-To install extra R packages, use `install.R`. This is treated as an R script which is run.  For example, you can have a script like
+To install extra R packages in your Docker image, use `install.R` and `Rscript` in your Docker file. 
+
+```
+COPY install.R /tmp/install.R
+RUN Rscript /tmp/install.R
+```
+Make sure to install to `"${R_HOME}/site-library"` since by default `install.packages()` will install to the user library in `/home` and that will be replaced with the user home directory in Jupyter Hub with a persistent home directory.
 
 install.R
 ```markdown
 repo <- "https://p3m.dev/cran/__linux__/jammy/2024-05-13"
-list.of.packages <- c("ggplot2","remotes")
-install.packages(list.of.packages, repos=repo)
-remotes::install_github("hadley/httr@v0.4")
+lib <- "${R_HOME}/site-library"
+list.of.packages <- c("ggplot2","remotes", lib=lib)
+install.packages(list.of.packages, repos=repo, lib=lib)
+remotes::install_github("hadley/httr@v0.4", lib=lib)
+```
+
+You can also use the helper script which make sure packages go to the site-library:
+```
+COPY . /tmp2/
+RUN /pyrocket_scripts/install-r-packages.sh /tmp2/install.R
 ```
 
 ### Spatial libraries
@@ -23,11 +36,15 @@ There are a few ways to get around this.
 * Install the necessary linux packages via apt-get. This can be hard.
 * Install via via /rocker_scipts/install_geospatial.sh
   To do this include
-  ```markdown
-  RUN /rocker_scipts/install_geospatial.sh
   ```
-  in your Dockerfile.
-* Use r2u which has Ubuntu binaries with all the dependencies included.
+  RUN echo '.libPaths(file.path(Sys.getenv("R_HOME"), "site-library"))' > /tmp/rprofile.site
+  RUN env R_PROFILE=/tmp/rprofile.site \
+        PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \
+        /rocker_scripts/install_geospatial.sh
+  RUN rm /tmp/rprofile.site
+  ```
+  in your Dockerfile.  The extra code with a temporary `R_PROFILE` makes sure everything is installed to `"${R_HOME}/site-library"` and that the PATH does not have conda on it, which would break the needed linux installs.
+* Use [r2u](https://github.com/eddelbuettel/r2u) which has Ubuntu binaries with all the dependencies included.
 
 ### Default CRAN repository
 

@@ -253,35 +253,46 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>To install extra R packages, use <code>install.R</code>. This is treated as an R script which is run. For example, you can have a script like</p>
+<p>To install extra R packages in your Docker image, use <code>install.R</code> and <code>Rscript</code> in your Docker file.</p>
+<pre><code>COPY install.R /tmp/install.R
+RUN Rscript /tmp/install.R</code></pre>
+<p>Make sure to install to <code>"${R_HOME}/site-library"</code> since by default <code>install.packages()</code> will install to the user library in <code>/home</code> and that will be replaced with the user home directory in Jupyter Hub with a persistent home directory.</p>
 <p>install.R</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>repo &lt;- "https://p3m.dev/cran/__linux__/jammy/2024-05-13"</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>list.of.packages &lt;- c("ggplot2","remotes")</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>install.packages(list.of.packages, repos=repo)</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>remotes::install_github("hadley/httr@v0.4")</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>repo &lt;- "https://p3m.dev/cran/__linux__/jammy/2024-05-13"</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>lib &lt;- "${R_HOME}/site-library"</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>list.of.packages &lt;- c("ggplot2","remotes", lib=lib)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>install.packages(list.of.packages, repos=repo, lib=lib)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>remotes::install_github("hadley/httr@v0.4", lib=lib)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>You can also use the helper script which make sure packages go to the site-library:</p>
+<pre><code>COPY . /tmp2/
+RUN /pyrocket_scripts/install-r-packages.sh /tmp2/install.R</code></pre>
 <section id="spatial-libraries" class="level3" data-number="3.0.1">
 <h3 data-number="3.0.1" class="anchored" data-anchor-id="spatial-libraries"><span class="header-section-number">3.0.1</span> Spatial libraries</h3>
 <p>Some packages depend on linux packages. One example are spatial packages like <code>sf</code> which depend on GDAL. In this case</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>install.packages("sf")</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>install.packages("sf")</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>will not work because it will not install the linux package dependencies.</p>
 <p>There are a few ways to get around this.</p>
 <ul>
 <li><p>Install the necessary linux packages via apt-get. This can be hard.</p></li>
 <li><p>Install via via /rocker_scipts/install_geospatial.sh To do this include</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>RUN /rocker_scipts/install_geospatial.sh</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>in your Dockerfile.</p></li>
-<li><p>Use r2u which has Ubuntu binaries with all the dependencies included.</p></li>
+<pre><code>RUN echo '.libPaths(file.path(Sys.getenv("R_HOME"), "site-library"))' &gt; /tmp/rprofile.site
+RUN env R_PROFILE=/tmp/rprofile.site \
+      PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \
+      /rocker_scripts/install_geospatial.sh
+RUN rm /tmp/rprofile.site</code></pre>
+<p>in your Dockerfile. The extra code with a temporary <code>R_PROFILE</code> makes sure everything is installed to <code>"${R_HOME}/site-library"</code> and that the PATH does not have conda on it, which would break the needed linux installs.</p></li>
+<li><p>Use <a href="https://github.com/eddelbuettel/r2u">r2u</a> which has Ubuntu binaries with all the dependencies included.</p></li>
 </ul>
 </section>
 <section id="default-cran-repository" class="level3" data-number="3.0.2">
 <h3 data-number="3.0.2" class="anchored" data-anchor-id="default-cran-repository"><span class="header-section-number">3.0.2</span> Default CRAN repository</h3>
 <p>The default CRAN repository is set in <code>${R_HOME}/etc/Rprofile.site</code> and the CRAN environmental variable is set to the date pinned version associated with the R version in the image. For example, <code>https://p3m.dev/cran/__linux__/jammy/2024-10-30</code>.</p>
 <p>To set a different repo, edit <code>${R_HOME}/etc/Rprofile.site</code> if you are changing an image or <code>~/.Rprofile</code> if setting user defaults:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>options(repos = c(CRAN = 'https://p3m.dev/cran/__linux__/jammy/latest'), download.file.method = 'libcurl')</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>options(repos = c(CRAN = 'https://p3m.dev/cran/__linux__/jammy/latest'), download.file.method = 'libcurl')</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>You can also specify the repo to use in <code>install.packages()</code> like so</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>repo &lt;- "https://p3m.dev/cran/__linux__/jammy/latest"</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>list.of.packages &lt;- c("maps", "mapdata", "RColorBrewer")</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>install.packages(list.of.packages, repos=repo)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>repo &lt;- "https://p3m.dev/cran/__linux__/jammy/latest"</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>list.of.packages &lt;- c("maps", "mapdata", "RColorBrewer")</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>install.packages(list.of.packages, repos=repo)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 
 </section>

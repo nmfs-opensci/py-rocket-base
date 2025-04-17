@@ -192,14 +192,15 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#using-r-in-jupyter-lab" id="toc-using-r-in-jupyter-lab" class="nav-link active" data-scroll-target="#using-r-in-jupyter-lab"><span class="header-section-number">8.1</span> Using R in Jupyter Lab</a></li>
-  <li><a href="#using-python-in-r-rstudio-or-jupyter-lab-with-r-kernel" id="toc-using-python-in-r-rstudio-or-jupyter-lab-with-r-kernel" class="nav-link" data-scroll-target="#using-python-in-r-rstudio-or-jupyter-lab-with-r-kernel"><span class="header-section-number">8.2</span> Using Python in R (RStudio or Jupyter Lab with R kernel)</a>
+  <li><a href="#installing-r-packages" id="toc-installing-r-packages" class="nav-link active" data-scroll-target="#installing-r-packages"><span class="header-section-number">8.1</span> Installing R packages</a></li>
+  <li><a href="#using-r-in-jupyter-lab" id="toc-using-r-in-jupyter-lab" class="nav-link" data-scroll-target="#using-r-in-jupyter-lab"><span class="header-section-number">8.2</span> Using R in Jupyter Lab</a></li>
+  <li><a href="#using-python-in-r-rstudio-or-jupyter-lab-with-r-kernel" id="toc-using-python-in-r-rstudio-or-jupyter-lab-with-r-kernel" class="nav-link" data-scroll-target="#using-python-in-r-rstudio-or-jupyter-lab-with-r-kernel"><span class="header-section-number">8.3</span> Using Python in R (RStudio or Jupyter Lab with R kernel)</a>
   <ul class="collapse">
-  <li><a href="#py_require" id="toc-py_require" class="nav-link" data-scroll-target="#py_require"><span class="header-section-number">8.2.1</span> <code>py_require()</code></a></li>
-  <li><a href="#using-a-conda-environment" id="toc-using-a-conda-environment" class="nav-link" data-scroll-target="#using-a-conda-environment"><span class="header-section-number">8.2.2</span> Using a conda environment</a></li>
+  <li><a href="#py_require" id="toc-py_require" class="nav-link" data-scroll-target="#py_require"><span class="header-section-number">8.3.1</span> <code>py_require()</code></a></li>
+  <li><a href="#using-a-conda-environment" id="toc-using-a-conda-environment" class="nav-link" data-scroll-target="#using-a-conda-environment"><span class="header-section-number">8.3.2</span> Using a conda environment</a></li>
   </ul></li>
-  <li><a href="#dealing-with-ssl-mismatch-errors" id="toc-dealing-with-ssl-mismatch-errors" class="nav-link" data-scroll-target="#dealing-with-ssl-mismatch-errors"><span class="header-section-number">8.3</span> Dealing with SSL mismatch errors</a></li>
-  <li><a href="#developers" id="toc-developers" class="nav-link" data-scroll-target="#developers"><span class="header-section-number">8.4</span> Developers</a></li>
+  <li><a href="#dealing-with-ssl-mismatch-errors" id="toc-dealing-with-ssl-mismatch-errors" class="nav-link" data-scroll-target="#dealing-with-ssl-mismatch-errors"><span class="header-section-number">8.4</span> Dealing with SSL mismatch errors</a></li>
+  <li><a href="#developers" id="toc-developers" class="nav-link" data-scroll-target="#developers"><span class="header-section-number">8.5</span> Developers</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/nmfs-opensci/py-rocket-base/edit/main/r-config.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/nmfs-opensci/py-rocket-base/blob/main/r-config.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/nmfs-opensci/py-rocket-base/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
@@ -232,15 +233,27 @@ ul.task-list li input[type="checkbox"] {
 <p>Try this in a Jupyter Notebook in Jupyter Lab:</p>
 <pre><code>import os
 print(os.environ["PATH"])</code></pre>
-<section id="using-r-in-jupyter-lab" class="level2" data-number="8.1">
-<h2 data-number="8.1" class="anchored" data-anchor-id="using-r-in-jupyter-lab"><span class="header-section-number">8.1</span> Using R in Jupyter Lab</h2>
+<section id="installing-r-packages" class="level2" data-number="8.1">
+<h2 data-number="8.1" class="anchored" data-anchor-id="installing-r-packages"><span class="header-section-number">8.1</span> Installing R packages</h2>
+<p>There is a user directory specified by default in the user’s home directory. If this is persistent, then packages installed using</p>
+<pre><code>install.packages()</code></pre>
+<p>will by default be installed there and will be persistent.</p>
+<p>The 2nd and 3rd paths on <code>.libPaths()</code> are in the <code>/usr</code> directory and will be recreated each time the Jupyter Hub is restarted and thus any package installed there by the user will disappear.</p>
+<p>However, this means that if you are installing R package in a Docker image, they will by default go to the <code>/home/jovyan</code> user library and that will get wiped out in a Jupyter Hub where the user home is persistent since whatever is in <code>/home</code> during the Docker build will be replaced by the user home directory. In a Docker build, make sure to use</p>
+<pre><code>install.packages(...., lib="${R_HOME}/site-library")</code></pre>
+<p>or use the helper script plus a <code>install.R</code> file in your Docker file:</p>
+<pre><code>COPY . /tmp2/
+RUN /pyrocket_scripts/install-r-packages.sh /tmp2/install.R</code></pre>
+</section>
+<section id="using-r-in-jupyter-lab" class="level2" data-number="8.2">
+<h2 data-number="8.2" class="anchored" data-anchor-id="using-r-in-jupyter-lab"><span class="header-section-number">8.2</span> Using R in Jupyter Lab</h2>
 <p>In Jupyter Lab, you select a R kernel from the upper right. You can then use R code in the notebook. It will use the R installation in py-rocket with all the preloaded libraries.</p>
 </section>
-<section id="using-python-in-r-rstudio-or-jupyter-lab-with-r-kernel" class="level2" data-number="8.2">
-<h2 data-number="8.2" class="anchored" data-anchor-id="using-python-in-r-rstudio-or-jupyter-lab-with-r-kernel"><span class="header-section-number">8.2</span> Using Python in R (RStudio or Jupyter Lab with R kernel)</h2>
+<section id="using-python-in-r-rstudio-or-jupyter-lab-with-r-kernel" class="level2" data-number="8.3">
+<h2 data-number="8.3" class="anchored" data-anchor-id="using-python-in-r-rstudio-or-jupyter-lab-with-r-kernel"><span class="header-section-number">8.3</span> Using Python in R (RStudio or Jupyter Lab with R kernel)</h2>
 <p>The following behavior is specific to R, not the GUI (RStudio or Jupyter Lab with R kernel) that you are using to interact with it.</p>
-<section id="py_require" class="level3" data-number="8.2.1">
-<h3 data-number="8.2.1" class="anchored" data-anchor-id="py_require"><span class="header-section-number">8.2.1</span> <code>py_require()</code></h3>
+<section id="py_require" class="level3" data-number="8.3.1">
+<h3 data-number="8.3.1" class="anchored" data-anchor-id="py_require"><span class="header-section-number">8.3.1</span> <code>py_require()</code></h3>
 <p>To use Python, you use the <code>reticulate</code> library. If you only need a handful of Python packages, it will simplify things if you use <code>py_require()</code>. Like this</p>
 <pre><code>library(reticulate)
 py_require("xarray")</code></pre>
@@ -249,8 +262,8 @@ py_require("xarray")</code></pre>
 <pre><code>rm ~/.cache/R/reticulate</code></pre>
 <p>in a terminal to get reticulate to allow me to use <code>use_conda("notebook")</code> in another R session.</p>
 </section>
-<section id="using-a-conda-environment" class="level3" data-number="8.2.2">
-<h3 data-number="8.2.2" class="anchored" data-anchor-id="using-a-conda-environment"><span class="header-section-number">8.2.2</span> Using a conda environment</h3>
+<section id="using-a-conda-environment" class="level3" data-number="8.3.2">
+<h3 data-number="8.3.2" class="anchored" data-anchor-id="using-a-conda-environment"><span class="header-section-number">8.3.2</span> Using a conda environment</h3>
 <p>You can also use the conda environment with reticulate with all the pre-installed packages.</p>
 <pre><code>library(reticulate)
 use_condaenv("notebook")</code></pre>
@@ -265,14 +278,14 @@ Sys.setenv(PATH = orig)</code></pre>
 <p>When we use a conda environment, the PATH is altered so that the conda environment directory appears first on the PATH. Any R packages that need a particular system package that is also in conda (like GDAL) are likely to throw mis-match errors.</p>
 </section>
 </section>
-<section id="dealing-with-ssl-mismatch-errors" class="level2" data-number="8.3">
-<h2 data-number="8.3" class="anchored" data-anchor-id="dealing-with-ssl-mismatch-errors"><span class="header-section-number">8.3</span> Dealing with SSL mismatch errors</h2>
+<section id="dealing-with-ssl-mismatch-errors" class="level2" data-number="8.4">
+<h2 data-number="8.4" class="anchored" data-anchor-id="dealing-with-ssl-mismatch-errors"><span class="header-section-number">8.4</span> Dealing with SSL mismatch errors</h2>
 <p>When you use reticulate in R, use <code>use_condaenv()</code> and call a function that needs to download data, you are liable to get a OpenSSL mismatch error. py-rocket solves this by adding this to</p>
 <pre><code>rsession-ld-library-path=/srv/conda/envs/notebook/lib</code></pre>
 <p>to <code>/etc/rstudio/rserver.conf</code>. This let’s R know where to look for SSL links and hopefully doesn’t break R packages. Make sure that <code>.Renviron</code> does not set <code>LD_LIBRARY_PATH</code> or this solution will not work. I don’t know why but it breaks.</p>
 </section>
-<section id="developers" class="level2" data-number="8.4">
-<h2 data-number="8.4" class="anchored" data-anchor-id="developers"><span class="header-section-number">8.4</span> Developers</h2>
+<section id="developers" class="level2" data-number="8.5">
+<h2 data-number="8.5" class="anchored" data-anchor-id="developers"><span class="header-section-number">8.5</span> Developers</h2>
 <p>How is the R kernel created so that it shows up in Jupyter Lab? You don’t need to install R into the conda environment since it already is in the image. We just need to use <code>IRkernel</code> R package to register the kernel with jupyter.</p>
 <pre><code>Rscript - &lt;&lt;-"EOF"
 install.packages('IRkernel', lib = .Library) # install in system library

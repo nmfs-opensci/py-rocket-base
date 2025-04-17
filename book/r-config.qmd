@@ -14,6 +14,26 @@ import os
 print(os.environ["PATH"])
 ```
 
+## Installing R packages
+
+There is a user directory specified by default in the user's home directory. If this is persistent, then packages installed using
+```
+install.packages()
+```
+will by default be installed there and will be persistent.
+
+The 2nd and 3rd paths on `.libPaths()` are in the `/usr` directory and will be recreated each time the Jupyter Hub is restarted and thus any package installed there by the user will disappear.
+
+However, this means that if you are installing R package in a Docker image, they will by default go to the `/home/jovyan` user library and that will get wiped out in a Jupyter Hub where the user home is persistent since whatever is in `/home` during the Docker build will be replaced by the user home directory. In a Docker build, make sure to use 
+```
+install.packages(...., lib="${R_HOME}/site-library")
+```
+or use the helper script plus a `install.R` file in your Docker file:
+```
+COPY . /tmp2/
+RUN /pyrocket_scripts/install-r-packages.sh /tmp2/install.R
+```
+
 ## Using R in Jupyter Lab
 
 In Jupyter Lab, you select a R kernel from the upper right. You can then use R code in the notebook. It will use the R installation in py-rocket with all the preloaded libraries.
