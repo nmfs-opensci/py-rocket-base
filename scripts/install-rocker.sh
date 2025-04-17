@@ -140,13 +140,13 @@ echo "${R_LIBS_USER}"
 mkdir -p "${R_LIBS_USER}" && chown ${NB_USER}:staff "${R_LIBS_USER}"
 # Ensure R_LIBS_USER exists at runtime inside R
 echo 'if (!dir.exists(Sys.getenv("R_LIBS_USER"))) dir.create(Sys.getenv("R_LIBS_USER"), recursive = TRUE)' >> "$RPROFILE_SITE"
-echo '.libPaths(c(.libPaths(), Sys.getenv("R_LIBS_USER")))' >> "$RPROFILE_SITE"
+echo '.libPaths(c(Sys.getenv("R_LIBS_USER"), .libPaths()))' >> "$RPROFILE_SITE"
 
 # Set up R kernel for Jupyter Lab
 Rscript - <<-"EOF"
 install.packages('IRkernel', lib = .Library) # install in system library
 Sys.setenv(PATH = paste("/srv/conda/envs/notebook/bin", Sys.getenv("PATH"), sep = ":"))
-IRkernel::installspec(name = "ir", displayname = "R ${R_VERSION}")
+IRkernel::installspec(name = "ir4", displayname = "R ${R_VERSION}", user = FALSE)
 EOF
 # fill SSL mismatch when using reticulate in R
 echo "Configuring RStudio LD_LIBRARY_PATH in rserver.conf for proper SSL behavior when using conda env..."
