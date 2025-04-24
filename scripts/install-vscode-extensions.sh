@@ -36,6 +36,7 @@ EXT_DIR="${NB_PYTHON_PREFIX}/share/code-server/extensions"
 install -o ${NB_USER} -g ${NB_USER} -m 755 -d "${EXT_DIR}"
 
 # Install each extension listed in the file; skip empty lines or comments
+FAILED=0
 while IFS= read -r EXT; do
     # Remove comments and leading/trailing whitespace
     EXT=$(echo "$EXT" | sed 's/#.*//; s/^[[:space:]]*//; s/[[:space:]]*$//')
@@ -47,5 +48,11 @@ while IFS= read -r EXT; do
         echo "  Successfully installed extension: $EXT"
     else
         echo "  Failed to install extension: $EXT" >&2
+        FAILED=1
     fi
 done < "$ext_file"
+
+if [ "$FAILED" -ne 0 ]; then
+  echo "One or more VSCode extensions failed to install. Exiting." >&2
+  exit 1
+fi
