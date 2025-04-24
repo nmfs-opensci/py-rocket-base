@@ -1,8 +1,10 @@
 #!/bin/bash
-# Required User: NB_USER
+set -euo pipefail
+IFS=$'\n\t'
+# Required User: root
 
 # Install VSCode extensions. 
-# These get installed to $CONDA_PREFIXshare/code-server/extensions/
+# These get installed to ${NB_PYTHON_PREFIX}/share/code-server/extensions/
 
 # Check if a filename argument is provided
 if [ -z "$1" ]; then
@@ -11,7 +13,7 @@ if [ -z "$1" ]; then
     exit 1
 fi
 
-# Check if the script is run as root; folders will be made in /home and there are issues with this if user is jovyan
+# Check if the script is run as root; 
 # Since some prior installs might have created .local as root. Easier just to install vscode extensions as root
 if [[ $(id -u) -ne 0 ]]; then
     echo "Error: install-vscode-extensions.sh must be run as root. Please use 'USER root' in your Dockerfile before running this script."
