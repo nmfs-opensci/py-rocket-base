@@ -11,6 +11,7 @@ How to use the helper scripts is shown in [configuration files](configuration_fi
 * `install-conda-packages.sh`
 * `install-pip-packages.sh`
 * `install-r-packages.sh`
+* `install-geospatial-r.sh`
 * `install-apt-packages.sh`
 * `install-vscode-extensions.sh`
 * `install-desktop.sh`
@@ -33,12 +34,23 @@ RUN /pyrocket_scripts/install-conda-packages.sh environment.yml && \
   rm environment.yml
 ```
 
-Rocker scripts do not take arguments. Note that PATH must be given since rocker installation scripts will fail with conda on the path. The path specification will apply only within the specific RUN context and must be in the same RUN that the rocker script is run. The scripts should be run as root.
+If you have multiple files in the repo:
+```markdown
+COPY . /tmp2/
+RUN /pyrocket_scripts/install-conda-packages.sh /tmp2/environment.yml || echo "install-conda-packages.sh failed" || true
+RUN /pyrocket_scripts/install-r-packages.sh /tmp2/install.R || echo "install-r-package.sh failed" || true
+RUN /pyrocket_scripts/install-apt-packages.sh /tmp2/apt.txt || echo "install-apt-packages.sh failed" || true
+RUN /pyrocket_scripts/install-desktop.sh /tmp2/Desktop|| echo "setup-desktop.sh failed" || true
+RUN /pyrocket_scripts/install-geospatial-r.sh || echo "setup-desktop.sh failed" || true
+RUN rm -rf /tmp2
+```
+
+Rocker scripts do not take arguments. Note that PATH must be given since rocker installation scripts will fail with conda on the path. The path specification will apply only within the specific RUN context and must be in the same RUN that the rocker script is run. The scripts should be run as root. Getting R packages to install to the system library, as opposed to /home which will be removed in a Jupyter Hub, can be tricky. See the `/pyrocket_scripts/install-geospatial-r.sh` script for an example.
 
 ```markdown
 USER root
 RUN PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin && \
-    /rocker_scripts/install_geospatial.sh
+    /rocker_scripts/install_texlive.sh
 USER ${NB_USER}
 ```
 
