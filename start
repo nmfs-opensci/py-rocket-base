@@ -32,4 +32,25 @@ if [ -d "${REPO_DIR}/childstart/" ]; then
         fi
     done
 fi
+
+# --- Set default VSCode code-server settings if missing ---
+DEFAULT_SETTINGS_DIR="/usr/local/share/code-server/User"
+USER_SETTINGS_DIR="/home/jovyan/.local/share/code-server/User"
+
+# Ensure User settings directory exists
+mkdir -p "${USER_SETTINGS_DIR}"
+
+if [ ! -f "${USER_SETTINGS_DIR}/settings.json" ]; then
+    echo "Creating default VSCode settings.json..."
+    cat > "${USER_SETTINGS_DIR}/settings.json" <<'EOF'
+{
+  "remote.autoForwardPorts": true,
+  "remote.autoForwardPortsSource": "process",
+  "remote.restoreForwardedPorts": false
+}
+EOF
+    chown -R jovyan:jovyan "${USER_SETTINGS_DIR}"
+else
+    echo "User already has VSCode settings.json, not overwriting."
+fi
 exec "$@"
