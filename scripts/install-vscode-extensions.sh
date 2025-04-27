@@ -54,6 +54,11 @@ while IFS= read -r EXT; do
     fi
 done < "$ext_file"
 
+# Fix ownership so user can install/uninstall extensions later
+echo "Fixing ownership of installed extensions..."
+chown -R ${NB_USER}:${NB_USER} "${EXT_DIR}"
+chmod -R u+rwX,go+rX "${EXT_DIR}"
+
 if [ "$FAILED" -ne 0 ]; then
   echo "One or more VSCode extensions failed to install. Exiting." >&2
   exit 1
