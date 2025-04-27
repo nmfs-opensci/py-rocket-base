@@ -169,7 +169,7 @@ setHook(packageEvent("reticulate", "attach"), function(...) {
 EOF
 
 # Install for VSCode. languageserver is required for VSCode. others make R nicer in VSCode and JLab.
-RUN Rscript -e "install.packages(c('languageserver', 'httpgd', 'quarto'), lib = .Library)"
+Rscript -e "install.packages(c('languageserver', 'httpgd', 'quarto'), lib = .Library)"
 
 # Ensure jovyan can modify Rprofile.site and Renviron.site because start will need this, and allow user to alter rserver.conf
 # to set the gh-scoped-cred variables if they are present
