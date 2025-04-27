@@ -227,7 +227,7 @@ ul.task-list li input[type="checkbox"] {
 
 
 <p>py-rocket has separate R and Python installations because there are a variety of system packages linkages (GDAL and others depending whyat you are doing) that will break if you do not use the right system linkages. The way this is handled is via the the system PATH. This tells functions where to look for files it needs.</p>
-<p>As long as you only use R or Python (don’t mix the two) in a notebook, you will be fine in py-rocket. When you activate R, the path will not have conda. When you activate Python, it will have use the conda “notebook” environment and have that on the path.</p>
+<p>As long as you only use R or Python (don’t mix the two) in a notebook, you will be fine in py-rocket. When you activate R (in JupyterLab, RStudio, R, or VSCode), the path will not have conda. When you activate Python (via reticulate), it will use the conda “notebook” environment and have that on the path.</p>
 <p>Try this in R (RStudio or the R kernel in Jupyter Lab):</p>
 <pre><code>Sys.getenv("PATH")</code></pre>
 <p>Try this in a Jupyter Notebook in Jupyter Lab:</p>
@@ -258,7 +258,7 @@ RUN /pyrocket_scripts/install-r-packages.sh /tmp2/install.R</code></pre>
 <pre><code>library(reticulate)
 py_require("xarray")</code></pre>
 <p>This will create an ephemeral environment with the packages you require and does not change the system PATH or put <code>conda/envs/notebook</code> on the path. Everything should work fine though I have not tested dask.</p>
-<p>One gotcha is that reticulate create a cache in <code>~/.cache/R/reticulate</code> and it might not be easy to change later to using a conda environment for your Python binary. I often had to do</p>
+<p>One gotcha is that reticulate creates a cache in <code>~/.cache/R/reticulate</code> and it might not be easy to change later to using a conda environment for your Python binary. I often had to do</p>
 <pre><code>rm ~/.cache/R/reticulate</code></pre>
 <p>in a terminal to get reticulate to allow me to use <code>use_conda("notebook")</code> in another R session.</p>
 </section>
@@ -286,11 +286,11 @@ Sys.setenv(PATH = orig)</code></pre>
 </section>
 <section id="developers" class="level2" data-number="8.5">
 <h2 data-number="8.5" class="anchored" data-anchor-id="developers"><span class="header-section-number">8.5</span> Developers</h2>
-<p>How is the R kernel created so that it shows up in Jupyter Lab? You don’t need to install R into the conda environment since it already is in the image. We just need to use <code>IRkernel</code> R package to register the kernel with jupyter.</p>
+<p>How is the R kernel created so that it shows up in Jupyter Lab? You don’t need to install R into the conda environment since it already is in the image. We just need to use <code>IRkernel</code> R package to register the kernel with jupyter. This is in <code>scripts/install_rocker.sh</code>.</p>
 <pre><code>Rscript - &lt;&lt;-"EOF"
 install.packages('IRkernel', lib = .Library) # install in system library
 Sys.setenv(PATH = paste("/srv/conda/envs/notebook/bin", Sys.getenv("PATH"), sep = ":"))
-IRkernel::installspec(name = "ir", displayname = "R ${R_VERSION}")
+IRkernel::installspec(name = "ir4", displayname = "R ${R_VERSION}")
 EOF</code></pre>
 
 

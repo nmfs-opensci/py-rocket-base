@@ -7,13 +7,13 @@ code-annotations: select
 
 ## Design
 
-py-rocket-base is inspired by [repo2docker](https://github.com/jupyterhub/repo2docker) and the [Pangeo Docker stack](https://pangeo-docker-images.readthedocs.io/en/latest/) design. py-rocker-base is built using repo2docker (via [repo2docker-action](https://github.com/jupyterhub/repo2docker-action)) and thus lets repo2docker make the choices regarding the environment design---things like how the conda environment is set-up and the base directory structure and permissions.
+py-rocket-base is inspired by [repo2docker](https://github.com/jupyterhub/repo2docker) and the [Pangeo Docker stack](https://pangeo-docker-images.readthedocs.io/en/latest/) design. py-rocker-base is built the Pangeo base Docker file (with `ONBUILD` commands stripped out) and that Docker file make the choices regarding the environment design---things like how the conda environment is set-up and the base directory structure and permissions.
 
 The Pangeo Docker stack does not use repo2docker, but mimics repo2docker's environment design. The Pangeo base-image behaves similar to repo2docker in that using the base-image in the `FROM` line of a Dockerfile causes the build to look for files with the same names as repo2docker's [configuration files](https://repo2docker.readthedocs.io/en/latest/config_files.html) and then do the proper action with those files. This means that routine users do not need to know how to write Dockerfile code in order to extend the image with new packages or applications. py-rocker-base Docker image uses this Pangeo base-image design. It is based on `ONBUILD` commands in the Dockerfile that trigger actions only when the image is used in the `FROM` line of another Dockerfile.
 
 py-rocket-base does not include this `ONBUILD` behavior. Instead it follows the [rocker docker stack](https://github.com/rocker-org/rocker-versioned2) design and provides helper scripts for building on the base image. py-rocket-base a directory called `\pyrocket_scripts`that will help you do common tasks for scientific docker images.These scripts are not required. If users are familiar with writing Docker files, they can write their own code. The use of helper scripts was used after feedback that the Pangeo ONBUILD behavior makes it harder to customize images that need very specific structure or order of operations.
 
-*There are many ways to install R and RStudio into an image designed for JupyterHubs* The objective of py-rocker-base is not to install R and RStudio, per se, and there are other leaner and faster ways to install R/RStudio if that is your goal[^1]. The objective of py-rocket-base is to create an JupyterHub image such when you click the RStudio button in the JupyterLab UI to enter the RStudio UI, you enter an environment that is the same as if you had used a Rocker image. If you are in the JupyterLab UI, the environment is the same as it you had used repo2docker (or Pangeo base-image) to create the environment.
+*There are many ways to install R and RStudio into an image designed for JupyterHubs* The objective of py-rocker-base is not to install R and RStudio, per se, and there are other leaner and faster ways to install R/RStudio if that is your goal[^1]. The objective of py-rocket-base is to create an JupyterHub image such when you use R in the Jupyter Hub (whether in RStudio, Jupyter Lab, or VSCode), you enter an environment that is the same as if you had used a Rocker image. If you are in the JupyterLab UI, the environment is the same as it you had used repo2docker (or Pangeo base-image) to create the environment.
 
 [^1]: See for example [repo2docker-r](https://github.com/boettiger-lab/repo2docker-r) and [conda-r](https://github.com/binder-examples/r-conda) in [binder-examples](https://github.com/binder-examples).
 
@@ -49,9 +49,10 @@ py-rocket-base uses base-image and adds on the pangeo-notebook metapackage which
 The [Dockerfile](https://github.com/nmfs-opensci/py-rocket-base/blob/main/Dockerfile) does the following in order:
 
 * Move files into `/srv/repo`
-* Move scripts into `/pyrocket_scripts` and `/rocker_scripts`
+* Move py-rocket scripts into `/pyrocket_scripts` and rocker scripts into `/rocker_scripts`
 * Install conda packages with the pangeo-notebook metapackage as the main set of packages plus the extra server packages
-* Install R and RStudio plus the verse set of packages with the rocker scripts
+* Install R and RStudio plus the verse set of packages with the rocker scripts via `pyrocket_scripts/install_rocker.sh`
+* Set up the R kernel to point to the rocker installed R and fix a few things re reticulate and R in VSCode (happens in `pyrocket_scripts/install_rocker.sh`).
 * Set up the Desktop environment and ensure that applications go into `/etc/xdg/userconfig` instead of `$HOME`.
 * Move the start script to `/srv/start`.
 
@@ -148,7 +149,7 @@ WORKDIR ${HOME} # <14>
 ## install-rocker.sh
 
 This script will copy in the rocker scripts from [rocker-versioned2](https://github.com/rocker-org/rocker-versioned2) into `${REPO_DIR}` to install things. It will read in one of the rocker docker files using `R_DOCKERFILE` defined in the `appendix` file (which is inserted into the main docker file). 
-Variables defined here will only be available in this script. Click on the numbers in the script to learn what each section is doing.
+Variables defined here will only be available in this script. Click on the numbers in the script to learn what each section is doing. This shows the core of the script, but the script also has code that is setting up the R kernel for Jupyter Lab and VSCode and does some more setup to make sure R works well in the Hub.
 
 ```r
 #!/bin/bash
@@ -207,6 +208,8 @@ fi  # <13>
 11. If the docker file line starts with `RUN` then run the command. This command should be a rocker script because that is how rocker docker files are organized. See an example [rocker docker file](https://github.com/rocker-org/rocker-versioned2/blob/master/dockerfiles/verse_4.4.1.Dockerfile).
 12. Here the input file for the while loop is specified.
 13. The rocker `install_texlive.sh` script (which is part of verse) will provide a basic texlive installation. Here a few more packages are added so that the user is able to run vanilla Quarto to PDF and Myst to PDF. See the [chapter on texlive](tex.html).
+
+
 
 ## start
 
@@ -333,7 +336,7 @@ If your users need some environmental variable set, they will need to set those 
 
 ### Terminal in RStudio
 
-The default way that a terminal is started is `bash -l` which means it is a login terminal. When a login terminal launches, 
+The default way that a terminal is started in RStudio is `bash -l` which means it is a login terminal. When a login terminal launches, 
 `/etc/profile` script is run. For this image, this script will execute all the scripts in the directory `/etc/profile.d`. You
 can add scripts there that you want to run when a login terminal is started. In particular, there is the script `init_conda.sh`.
 This ensures that when a terminal is opened from the Launcher in JupyterLab, the conda notebook environment is activated.
