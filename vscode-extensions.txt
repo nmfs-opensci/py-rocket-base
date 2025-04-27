@@ -2,3 +2,4 @@ ms-python.python
 ms-toolsai.jupyter
 quarto.quarto
 anwar.papyrus-pdf
+REditorSupport.r
