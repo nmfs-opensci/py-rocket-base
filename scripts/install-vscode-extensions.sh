@@ -1,8 +1,10 @@
 #!/bin/bash
-# Required User: NB_USER
+set -euo pipefail
+IFS=$'\n\t'
+# Required User: root
 
 # Install VSCode extensions. 
-# These get installed to $CONDA_PREFIXshare/code-server/extensions/
+# These get installed to ${NB_PYTHON_PREFIX}/share/code-server/extensions/
 
 # Check if a filename argument is provided
 if [ -z "$1" ]; then
@@ -11,7 +13,7 @@ if [ -z "$1" ]; then
     exit 1
 fi
 
-# Check if the script is run as root; folders will be made in /home and there are issues with this if user is jovyan
+# Check if the script is run as root; 
 # Since some prior installs might have created .local as root. Easier just to install vscode extensions as root
 if [[ $(id -u) -ne 0 ]]; then
     echo "Error: install-vscode-extensions.sh must be run as root. Please use 'USER root' in your Dockerfile before running this script."
@@ -36,6 +38,7 @@ EXT_DIR="${NB_PYTHON_PREFIX}/share/code-server/extensions"
 install -o ${NB_USER} -g ${NB_USER} -m 755 -d "${EXT_DIR}"
 
 # Install each extension listed in the file; skip empty lines or comments
+FAILED=0
 while IFS= read -r EXT; do
     # Remove comments and leading/trailing whitespace
     EXT=$(echo "$EXT" | sed 's/#.*//; s/^[[:space:]]*//; s/[[:space:]]*$//')
@@ -47,5 +50,16 @@ while IFS= read -r EXT; do
         echo "  Successfully installed extension: $EXT"
     else
         echo "  Failed to install extension: $EXT" >&2
+        FAILED=1
     fi
 done < "$ext_file"
+
+# Fix ownership so user can install/uninstall extensions later
+echo "Fixing ownership of installed extensions..."
+chown -R ${NB_USER}:${NB_USER} "${EXT_DIR}"
+chmod -R u+rwX,go+rX "${EXT_DIR}"
+
+if [ "$FAILED" -ne 0 ]; then
+  echo "One or more VSCode extensions failed to install. Exiting." >&2
+  exit 1
+fi

@@ -5,7 +5,7 @@ LABEL org.opencontainers.image.author="eli.holmes@noaa.gov"
 LABEL org.opencontainers.image.source=https://github.com/nmfs-opensci/py-rocket-base
 LABEL org.opencontainers.image.description="Python (3.12), R (4.4.3), Desktop and Publishing tools"
 LABEL org.opencontainers.image.licenses=Apache2.0
-LABEL org.opencontainers.image.version=2025.04.17
+LABEL org.opencontainers.image.version=2025.04.26
 
 USER root
 
@@ -60,7 +60,7 @@ RUN wget -qO- https://raw.githubusercontent.com/retorquere/zotero-deb/master/ins
 RUN /pyrocket_scripts/install-apt-packages.sh ${REPO_DIR}/apt.txt
 
 # Install some basic VS Code extensions
-RUN /pyrocket_scripts/install-vscode-extensions.sh ${REPO_DIR}/vscode-extensions.txt
+RUN /pyrocket_scripts/install-vscode-extensions.sh ${REPO_DIR}/vscode-extensions.txt || (echo "install-vscode-extensions.sh failed for some extensions" >&2 && exit 1)
 
 # Re-enable man pages disabled in Ubuntu 18 minimal image
 # https://wiki.ubuntu.com/Minimal

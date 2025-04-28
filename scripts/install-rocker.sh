@@ -142,6 +142,7 @@ mkdir -p "${R_LIBS_USER}" && chown ${NB_USER}:staff "${R_LIBS_USER}"
 echo 'if (!dir.exists(Sys.getenv("R_LIBS_USER"))) dir.create(Sys.getenv("R_LIBS_USER"), recursive = TRUE)' >> "$RPROFILE_SITE"
 echo '.libPaths(c(Sys.getenv("R_LIBS_USER"), .libPaths()))' >> "$RPROFILE_SITE"
 
+# Install the R kernel for JupyterLab and VSCode so they point to the rocker installed R
 Rscript - <<EOF
 install.packages('IRkernel', lib = .Library) # install in system library
 Sys.setenv(PATH = paste("/srv/conda/envs/notebook/bin", Sys.getenv("PATH"), sep = ":"))
@@ -166,6 +167,9 @@ setHook(packageEvent("reticulate", "attach"), function(...) {
   )
 })
 EOF
+
+# Install for VSCode. languageserver is required for VSCode. others make R nicer in VSCode and JLab.
+Rscript -e "install.packages(c('languageserver', 'httpgd', 'quarto'), lib = .Library)"
 
 # Ensure jovyan can modify Rprofile.site and Renviron.site because start will need this, and allow user to alter rserver.conf
 # to set the gh-scoped-cred variables if they are present
