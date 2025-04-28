@@ -54,8 +54,8 @@ while IFS= read -r EXT; do
         echo "  Failed to install $EXT from open-vsx. Trying local vsix..."
 
         # Try to install local VSIX
-        if [ -f "/extensions/${EXT}.vsix" ]; then
-            if ${NB_PYTHON_PREFIX}/bin/code-server --extensions-dir "${EXT_DIR}" --install-extension "/extensions/${EXT}.vsix"; then
+        if [ -f "${REPO_DIR}/extensions/${EXT}.vsix" ]; then
+            if ${NB_PYTHON_PREFIX}/bin/code-server --extensions-dir "${EXT_DIR}" --install-extension "${REPO_DIR}/extensions/${EXT}.vsix"; then
                 echo "  Successfully installed extension from local vsix: $EXT"
             else
                 echo "  Failed to install local vsix for extension: $EXT" >&2
