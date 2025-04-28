@@ -61,6 +61,8 @@ RUN /pyrocket_scripts/install-apt-packages.sh ${REPO_DIR}/apt.txt
 
 # Install some basic VS Code extensions
 RUN /pyrocket_scripts/install-vscode-extensions.sh ${REPO_DIR}/vscode-extensions.txt || (echo "install-vscode-extensions.sh failed for some extensions" >&2 && exit 1)
+# Don't need in image
+RUN rm -rf ${REPO_DIR}/extensions
 
 # Re-enable man pages disabled in Ubuntu 18 minimal image
 # https://wiki.ubuntu.com/Minimal
