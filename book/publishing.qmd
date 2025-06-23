@@ -82,13 +82,21 @@ tlmgr install <package>
 ```
 * Run `tlmgr option` to make sure tlmgr is working.
 
-Unfortunately any packages you install will be in the `/opt` directory and this gets recreated every time you restart your server. So if you need a
-particular package you will need to keep installing it. Or create your own image based on py-rocket-base:
+By default in py-rocket-base when `tlmgr install` is run `TEXMFHOME` is used and that is set to `\home\jovyan\texmf`. This ensures that when users install texlive packages those are persistent in the user home directory.
 
-Dockerfile
+If you want to add texlive packages in a Dockerfile that uses py-rocket-base, then you need to unset `TEXMFHOME` otherwise the package is installed in `\home` and that is unattached in a JupyterHub (typically). Here is an example of Dockerfile code.
 ```markdown
 FROM ghcr.io/nmfs-opensci/py-rocket-base:latest
 
-RUN tlmgr install collection-latexrecommended && tlmgr clean --all
+USER root
+RUN unset TEXMFHOME && \
+    PATH=/usr/local/texlive/bin/linux:$PATH && \
+    echo "Installing texlive collections and extra packages..." && \
+    tlmgr install collection-latexrecommended collection-latexextra && \
+    tlmgr install \
+        pdfcol \
+        tcolorbox && \
+    tlmgr clean --all
+USER ${NB_USER}
 ```
 
