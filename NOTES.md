@@ -7,6 +7,12 @@ quarto render .
 ```
 Then push to GitHub
 
+## 2025-12-22
+
+* Update R to 4.5.1
+* Unbuntu updated to 24.04 in base image
+* Fix JupyterLab Quarto extension not working
+  
 ## 2025-04-26
 
 * I had removed ms-toolsai.jupyter from the VSCode extensions but turns out that is required for VSCode to work in a Jupyter Hub. Without it, first Jupyter notebooks don't open but more importantly, there is a memory leak that will crash the kernel in about 5-10 minutes.
