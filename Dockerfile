@@ -3,9 +3,9 @@ FROM ghcr.io/nmfs-opensci/py-rocket-base/base-image:latest
 LABEL org.opencontainers.image.maintainers="eli.holmes@noaa.gov"
 LABEL org.opencontainers.image.author="eli.holmes@noaa.gov"
 LABEL org.opencontainers.image.source=https://github.com/nmfs-opensci/py-rocket-base
-LABEL org.opencontainers.image.description="Python (3.12), R (4.4.3), Desktop and Publishing tools"
+LABEL org.opencontainers.image.description="Python (3.12), R (4.5.1), Desktop and Publishing tools"
 LABEL org.opencontainers.image.licenses=Apache2.0
-LABEL org.opencontainers.image.version=2025.04.26
+LABEL org.opencontainers.image.version=2025.12.22
 
 USER root
 
@@ -14,9 +14,9 @@ USER root
 # Set QUARTO_VERSION due to Jupyter Lab bug with version 1.6 that won't all qmd to open
 ENV REPO_DIR="/srv/repo" \
     DISPLAY=":1.0" \
-    R_VERSION="4.4.3" \
-    QUARTO_VERSION="1.5.57" \
-    UBUNTU_VERSION="jammy"
+    R_VERSION="4.5.1" \
+    QUARTO_VERSION="1.7.34" \
+    UBUNTU_VERSION="noble"
 ENV LANG=en_US.UTF-8
 ENV LC_ALL=en_US.UTF-8
 
