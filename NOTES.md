@@ -11,7 +11,8 @@ Then push to GitHub
 
 * Update R to 4.5.1
 * Unbuntu updated to 24.04 in base image
-* Fix JupyterLab Quarto extension not working
+* Fix JupyterLab Quarto extension not working by adding back in jupytext after Quarto team fixed bug
+* Add in a few Python packages: conda-lock, pigz, jupyterlab-quarto (was in geospatial-2)
   
 ## 2025-04-26
 
