@@ -41,7 +41,7 @@ dependencies:
   - jupyterlab-geojson
   - jupyterlab-h5web
   - jupyterlab-myst
-  #- jupytext # no jupytext until quarto bug that deletes content is fixed
+  - jupytext # no jupytext until quarto bug that deletes content is fixed
   - nbdime
   - escapism
   
