@@ -13,7 +13,7 @@
 version: 1
 metadata:
   content_hash:
-    linux-64: 97e025555fff860d54106936cdf9bff1ef34ac5e4e1375565d67bd3c88fc9e4e
+    linux-64: 08f3510ae2c631cf7e49a1ce8015a1d4a8b61abc68fccfd70431aa7d36e1449d
   channels:
   - url: conda-forge
     used_env_vars: []
@@ -2507,6 +2507,24 @@ package:
     sha256: 5c03de243d7ae6247f39a402f4785d95e61c3be79ef18738e8f17155585d31a8
   category: main
   optional: false
+- name: jupytext
+  version: 1.18.1
+  manager: conda
+  platform: linux-64
+  dependencies:
+    markdown-it-py: '>=1.0'
+    mdit-py-plugins: ''
+    nbformat: ''
+    packaging: ''
+    python: '>=3.10'
+    pyyaml: ''
+    tomli: ''
+  url: https://conda.anaconda.org/conda-forge/noarch/jupytext-1.18.1-pyh80e38bb_0.conda
+  hash:
+    md5: 3c85f79f1debe2d2c82ac08f1c1126e1
+    sha256: 07063dad3019455d786dc3b5174731eb0ef53eb699df25e21571c2b7cdcf0fd0
+  category: main
+  optional: false
 - name: jwcrypto
   version: 1.5.6
   manager: conda
@@ -2629,10 +2647,10 @@ package:
   dependencies:
     __glibc: '>=2.17,<3.0.a0'
     zstd: '>=1.5.7,<1.6.0a0'
-  url: https://conda.anaconda.org/conda-forge/linux-64/ld_impl_linux-64-2.45-default_hbd61a6d_104.conda
+  url: https://conda.anaconda.org/conda-forge/linux-64/ld_impl_linux-64-2.45-default_hbd61a6d_105.conda
   hash:
-    md5: a6abd2796fc332536735f68ba23f7901
-    sha256: 9e191baf2426a19507f1d0a17be0fdb7aa155cdf0f61d5a09c808e0a69464312
+    md5: 3ec0aa5037d39b06554109a01e6fb0c6
+    sha256: 1027bd8aa0d5144e954e426ab6218fd5c14e54a98f571985675468b339c808ca
   category: main
   optional: false
 - name: lerc
@@ -3661,6 +3679,19 @@ package:
     sha256: 6099a13faaaf22afa8daa273929f393d41140fc03509b4ef1e2f6858b511699d
   category: main
   optional: false
+- name: markdown-it-py
+  version: 4.0.0
+  manager: conda
+  platform: linux-64
+  dependencies:
+    mdurl: '>=0.1,<1'
+    python: '>=3.10'
+  url: https://conda.anaconda.org/conda-forge/noarch/markdown-it-py-4.0.0-pyhd8ed1ab_0.conda
+  hash:
+    md5: 5b5203189eb668f042ac2b0826244964
+    sha256: 7b1da4b5c40385791dbc3cc85ceea9fad5da680a27d5d3cb8bfaa185e304a89e
+  category: main
+  optional: false
 - name: markupsafe
   version: 3.0.3
   manager: conda
@@ -3687,6 +3718,31 @@ package:
   hash:
     md5: 00e120ce3e40bad7bfc78861ce3c4a25
     sha256: 9d690334de0cd1d22c51bc28420663f4277cfa60d34fa5cad1ce284a13f1d603
+  category: main
+  optional: false
+- name: mdit-py-plugins
+  version: 0.5.0
+  manager: conda
+  platform: linux-64
+  dependencies:
+    markdown-it-py: '>=2.0.0,<5.0.0'
+    python: '>=3.10'
+  url: https://conda.anaconda.org/conda-forge/noarch/mdit-py-plugins-0.5.0-pyhd8ed1ab_0.conda
+  hash:
+    md5: 1997a083ef0b4c9331f9191564be275e
+    sha256: 123cc004e2946879708cdb6a9eff24acbbb054990d6131bb94bca7a374ebebfc
+  category: main
+  optional: false
+- name: mdurl
+  version: 0.1.2
+  manager: conda
+  platform: linux-64
+  dependencies:
+    python: '>=3.9'
+  url: https://conda.anaconda.org/conda-forge/noarch/mdurl-0.1.2-pyhd8ed1ab_1.conda
+  hash:
+    md5: 592132998493b3ff25fd7479396e8351
+    sha256: 78c1bbe1723449c52b7a9df1af2ee5f005209f67e40b6e1d3c7619127c43b1c7
   category: main
   optional: false
 - name: mistune
@@ -5339,14 +5395,14 @@ package:
   manager: conda
   platform: linux-64
   dependencies:
-    __linux: ''
+    __unix: ''
     ptyprocess: ''
-    python: '>=3.8'
+    python: ''
     tornado: '>=6.1.0'
-  url: https://conda.anaconda.org/conda-forge/noarch/terminado-0.18.1-pyh0d859eb_0.conda
+  url: https://conda.anaconda.org/conda-forge/noarch/terminado-0.18.1-pyhc90fa1f_1.conda
   hash:
-    md5: efba281bbdae5f6b0a1d53c6d4a97c93
-    sha256: b300557c0382478cf661ddb520263508e4b3b5871b471410450ef2846e8c352c
+    md5: 17b43cee5cc84969529d5d0b0309b2cb
+    sha256: 6b6727a13d1ca6a23de5e6686500d0669081a117736a87c8abf444d60c1e40eb
   category: main
   optional: false
 - name: tifffile
