@@ -61,3 +61,5 @@ dependencies:
     - jupyter-remote-desktop-proxy
     # Create urls to open files directly in hub
     - jupyterlab-open-url-parameter
+    # Open quarto files in JupyterLab
+    - jupyterlab-quarto
