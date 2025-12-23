@@ -7,12 +7,17 @@ channels:
 dependencies:
   # Core JupyterHub packages
   - python=3.12
-  # most of the core libraries are here
+  # most of the core libraries are in the pangeo-notebook meta package
   # https://anaconda.org/channels/conda-forge/packages/pangeo-notebook/overview
   - pangeo-notebook=2025.12.08
   - pip
   - jupyter-resource-usage
   - gh-scoped-creds==4.1
+
+  # Some more basic UI/UX
+  - conda-lock
+  - pigz
+  - python-dotenv
 
   # R/RStudio Support
   - jupyter-rsession-proxy
@@ -28,7 +33,7 @@ dependencies:
 
   # Extra Jupyter tools
   - jupyterlab-git
-  #- jupyter-ai
+  #- jupyter-ai # was causing a memory leak so out for now
   - jupyter-book
   - jupyter-offlinenotebook
   - jupyter-sshd-proxy
@@ -38,6 +43,7 @@ dependencies:
   - jupyterlab-myst
   #- jupytext # no jupytext until quarto bug that deletes content is fixed
   - nbdime
+  - escapism
   
   # JupyterBook Addons
   - sphinx
@@ -61,3 +67,5 @@ dependencies:
     - jupyter-remote-desktop-proxy
     # Create urls to open files directly in hub
     - jupyterlab-open-url-parameter
+    # Open quarto files in JupyterLab
+    - jupyterlab-quarto
