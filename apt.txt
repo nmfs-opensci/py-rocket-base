@@ -67,6 +67,10 @@ xubuntu-icon-theme
 tigervnc-standalone-server
 tigervnc-xorg-extension
 
+# Java runtime (for desktop apps)
+openjdk-11-jre
+ca-certificates-java
+
 # Git clients and tools
 git-gui
 gitg
