@@ -1,12 +1,28 @@
 name: update conda lockfile
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - .github/workflows/conda-lock.yaml
-      - environment.yml
   workflow_dispatch:
+  push:
+    branches: [test]
+    paths:
+      - 'apt.txt'
+      - 'user-dirs.dirs'
+      - 'vscode-extensions.txt'
+      - 'environment.yml'
+      - 'start'
+      - 'postBuild'
+      - 'Dockerfile'
+      - 'custom_jupyter_server_config.json'
+      - 'scripts/**'
+      - '.github/workflows/build.yaml'
+      - '.github/workflows/conda-lock.yaml'
+      - '!book/**'
+      - '!docs/**'
+      - '!base-image/**'
+      - '!README.md'
+      - '!LICENSE'
+
+  workflow_dispatch:
+  
 permissions:
   contents: write
 jobs:
@@ -14,7 +30,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: checkout repo
-      uses: actions/checkout@main
+      uses: actions/checkout@test
     - name: install conda-lock with micromamba
       uses: mamba-org/setup-micromamba@main
       with:

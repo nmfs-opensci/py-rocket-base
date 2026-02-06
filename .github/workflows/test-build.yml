@@ -1,27 +1,10 @@
 name: Docker Image test
 on:
   workflow_dispatch: null
-  push:
-    branches: test
-    paths:
-      - '.github/workflows/test-build.yaml'
-      - 'Desktop/**'
-      - 'apt.txt'
-      - 'user-dirs.dirs'
-      - 'vscode-extensions.txt'
-      - 'environment.yml'
-      - 'start'
-      - 'postBuild'
-      - 'Dockerfile'
-      - 'custom_jupyter_server_config.json'
-      - 'scripts/**'
-      - '!book/**'  # Ignore all changes in the /book directory
-      - '!docs/**'  # Ignore all changes in the /docs directory
-      - '!base-image/**'
-      - '!README.md'
-      - '!conda-lock.yml'
-      - '!LICENSE'
-      
+  workflow_run:
+    workflows: ["update conda lockfile"]
+    types: [completed]
+    
 jobs:
   build:
     runs-on: ubuntu-latest
