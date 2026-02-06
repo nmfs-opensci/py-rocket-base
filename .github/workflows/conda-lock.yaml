@@ -19,9 +19,10 @@ on:
       - '!docs/**'
       - '!base-image/**'
       - '!README.md'
+      - '!NOTES.md'
+      - '!.gitignore'
+      - '!conda-lock.yml'
       - '!LICENSE'
-
-  workflow_dispatch:
   
 permissions:
   contents: write
