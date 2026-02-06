@@ -135,6 +135,8 @@ fi
 # Create user library
 echo "Configuring R to use user library"
 RPROFILE_SITE="${R_HOME}/etc/Rprofile.site"
+R_LIBS_USER="$(Rscript --vanilla -e 'cat(Sys.getenv("R_LIBS_USER"))')"
+export R_LIBS_USER
 echo "${R_LIBS_USER}"
 # Ensure R_LIBS_USER exists at the shell level (build-time guarantee)
 mkdir -p "${R_LIBS_USER}" && chown ${NB_USER}:staff "${R_LIBS_USER}"
