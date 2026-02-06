@@ -84,3 +84,6 @@ meld
 # Zotero
 zotero
 libpci-dev
+
+# for remote SSH
+openssh-server
