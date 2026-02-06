@@ -1,5 +1,6 @@
 #!/bin/bash
 # Required User: NB_USER
+set -euo pipefail
 
 # Check if a filename argument is provided
 if [ -z "$1" ]; then
