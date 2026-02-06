@@ -31,7 +31,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: checkout repo
-      uses: actions/checkout@test
+      uses: actions/checkout@v4
+      with:
+        ref: test
     - name: install conda-lock with micromamba
       uses: mamba-org/setup-micromamba@main
       with:
