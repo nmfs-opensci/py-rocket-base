@@ -20,11 +20,18 @@ ENV REPO_DIR="/srv/repo" \
 ENV LANG=en_US.UTF-8
 ENV LC_ALL=en_US.UTF-8
 
-# Fix init_conda.sh so that it only runs if we are in Jupyter Lab and not RStudio
+# This is for terminals. Fix init_conda.sh so that it only runs if we are in Jupyter Lab and not RStudio
+# CONDA_DIR=/srv/conda and CONDA_ENV=notebook; hardcoded to stop hiccups with ssh which doesn't know env vars
 RUN echo 'if [[ ! -v RSTUDIO || ! -v R_HOME ]]; then \
-    . ${CONDA_DIR}/etc/profile.d/conda.sh; \
-    conda activate ${CONDA_ENV}; \
+    . /srv/conda/etc/profile.d/conda.sh; \
+    conda activate notebook; \
 fi' > /etc/profile.d/init_conda.sh
+
+# Ensure that all interactive bash terminals (login or non-login) activate the conda env
+# This ensures that vscode terminals also activate notebook
+RUN echo '' >> /etc/bash.bashrc && \
+    echo '# --- Py-Rocket: always activate notebook conda env for interactive shells ---' >> /etc/bash.bashrc && \
+    echo '. /etc/profile.d/init_conda.sh' >> /etc/bash.bashrc
     
 # Add NB_USER to staff group (required for rocker script)
 # Ensure the staff group exists first
