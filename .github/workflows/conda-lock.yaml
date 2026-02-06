@@ -2,7 +2,7 @@ name: update conda lockfile
 on:
   workflow_dispatch:
   push:
-    branches: [test]
+    branches: [main]
     paths:
       - 'apt.txt'
       - 'user-dirs.dirs'
@@ -33,7 +33,7 @@ jobs:
     - name: checkout repo
       uses: actions/checkout@v4
       with:
-        ref: test
+        ref: main
     - name: install conda-lock with micromamba
       uses: mamba-org/setup-micromamba@main
       with:
