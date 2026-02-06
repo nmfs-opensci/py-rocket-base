@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+set -euo pipefail
 
 # Ensure script is being run as root
 if [ "$(id -u)" -ne 0 ]; then

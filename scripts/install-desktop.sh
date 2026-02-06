@@ -1,6 +1,7 @@
 #!/bin/bash
 # Required User: root
 # Usage: RUN /pyrocket_scripts/install-desktop.sh <directory path>"
+set -euo pipefail
 
 echo "Running install-desktop.sh"
 

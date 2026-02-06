@@ -1,5 +1,6 @@
 #!/bin/bash
 # Required User: NB_USER
+set -euo pipefail
 
 # Set INSTALLATION_HAPPENED to false by default
 INSTALLATION_HAPPENED=false

@@ -1,5 +1,6 @@
 #!/bin/bash
 # Required User: root
+set -euo pipefail
 
 echo "Running install-apt-packages.sh"
 
