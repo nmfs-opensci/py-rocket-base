@@ -2,10 +2,29 @@ name: Build py-rocket-base image
 
 on:
   workflow_dispatch: null
-  workflow_run:
-    workflows: ["update conda lockfile"]
-    types: [completed]
-
+  push:
+    branches: [main]
+    paths:
+      - 'apt.txt'
+      - 'user-dirs.dirs'
+      - 'vscode-extensions.txt'
+      - 'environment.yml'
+      - 'start'
+      - 'postBuild'
+      - 'Dockerfile'
+      - 'custom_jupyter_server_config.json'
+      - 'scripts/**'
+      - '.github/workflows/build.yaml'
+      - '.github/workflows/conda-lock.yaml'
+      - '!book/**'
+      - '!docs/**'
+      - '!base-image/**'
+      - '!README.md'
+      - '!NOTES.md'
+      - '!.gitignore'
+      - '!conda-lock.yml'
+      - '!LICENSE'
+  
 jobs:
   build:
     runs-on: ubuntu-latest
