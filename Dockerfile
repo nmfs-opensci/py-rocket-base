@@ -20,11 +20,18 @@ ENV REPO_DIR="/srv/repo" \
 ENV LANG=en_US.UTF-8
 ENV LC_ALL=en_US.UTF-8
 
-# Fix init_conda.sh so that it only runs if we are in Jupyter Lab and not RStudio
+# This is for terminals. Fix init_conda.sh so that it only runs if we are in Jupyter Lab and not RStudio
+# CONDA_DIR=/srv/conda and CONDA_ENV=notebook; hardcoded to stop hiccups with ssh which doesn't know env vars
 RUN echo 'if [[ ! -v RSTUDIO || ! -v R_HOME ]]; then \
-    . ${CONDA_DIR}/etc/profile.d/conda.sh; \
-    conda activate ${CONDA_ENV}; \
+    . /srv/conda/etc/profile.d/conda.sh; \
+    conda activate notebook; \
 fi' > /etc/profile.d/init_conda.sh
+
+# Ensure that all interactive bash terminals (login or non-login) activate the conda env
+# This ensures that vscode terminals also activate notebook
+RUN echo '' >> /etc/bash.bashrc && \
+    echo '# --- Py-Rocket: always activate notebook conda env for interactive shells ---' >> /etc/bash.bashrc && \
+    echo '. /etc/profile.d/init_conda.sh' >> /etc/bash.bashrc
     
 # Add NB_USER to staff group (required for rocker script)
 # Ensure the staff group exists first
@@ -43,7 +50,7 @@ RUN mkdir -p /pyrocket_scripts && \
     chmod -R 775 /pyrocket_scripts
 
 # Install conda packages (will switch to NB_USER in script)
-RUN /pyrocket_scripts/install-conda-packages.sh ${REPO_DIR}/environment.yml
+RUN /pyrocket_scripts/install-conda-packages.sh ${REPO_DIR}/conda-lock.yml
 
 # Install R, RStudio via Rocker scripts. Requires the prefix for a rocker Dockerfile
 # Set the R_VERSION_PULL variable to specify what branch or release. If need to use a release use
@@ -75,6 +82,12 @@ RUN mkdir -p ${NB_PYTHON_PREFIX}/etc/jupyter/jupyter_server_config.d/ && \
     mkdir -p ${NB_PYTHON_PREFIX}/etc/jupyter/jupyter_notebook_config.d/ && \
     cp ${REPO_DIR}/custom_jupyter_server_config.json ${NB_PYTHON_PREFIX}/etc/jupyter/jupyter_server_config.d/ && \
     cp ${REPO_DIR}/custom_jupyter_server_config.json ${NB_PYTHON_PREFIX}/etc/jupyter/jupyter_notebook_config.d/
+
+# Add a Jupyter server-proxy entry so the Launcher opens code-server in /home/jovyan/vscode not /home/jovyan the first time
+RUN mkdir -p /srv/conda/envs/notebook/etc/jupyter/jupyter_server_config.d && \
+    printf '%s\n' \
+'{"ServerProxy":{"servers":{"vscode":{"command":["code-server","--auth","none","--disable-telemetry","--disable-update-check","/home/jovyan/vscode"],"timeout":20,"launcher_entry":{"title":"code-server"}}}}}' \
+> /srv/conda/envs/notebook/etc/jupyter/jupyter_server_config.d/vscode.json
 
 # Set up the defaults for Desktop. Keep config in the /etc so doesn't trash user environment (that they might want for other environments)
 ENV XDG_CONFIG_HOME=/etc/xdg/userconfig

@@ -39,6 +39,9 @@ USER_SETTINGS_DIR="/home/jovyan/.local/share/code-server/User"
 
 # Ensure User settings directory exists
 mkdir -p "${USER_SETTINGS_DIR}"
+# Ensure directory to start vscode in exists; starting in $HOME is bad since vscode tries to index all the files
+mkdir -p "${HOME}/vscode"
+chown -R jovyan:jovyan "${HOME}/vscode"
 
 if [ ! -f "${USER_SETTINGS_DIR}/settings.json" ]; then
     echo "Creating default VSCode settings.json..."
