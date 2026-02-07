@@ -50,7 +50,7 @@ RUN mkdir -p /pyrocket_scripts && \
     chmod -R 775 /pyrocket_scripts
 
 # Install conda packages (will switch to NB_USER in script)
-RUN /pyrocket_scripts/install-conda-packages.sh ${REPO_DIR}/conda-lock.yml
+RUN /pyrocket_scripts/install-conda-packages.sh ${REPO_DIR}/environment.yml
 
 # Install R, RStudio via Rocker scripts. Requires the prefix for a rocker Dockerfile
 # Set the R_VERSION_PULL variable to specify what branch or release. If need to use a release use
