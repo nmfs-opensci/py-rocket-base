@@ -7,6 +7,10 @@ quarto render .
 ```
 Then push to GitHub
 
+## 2026-02-07
+
+* Update pangeo feedstock to latest version 2026-01-21
+
 ## 2026-02-06
 
 A series of fixes related to VSCode OSS and ssh into JuptyerHub from VSCode
