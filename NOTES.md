@@ -7,6 +7,14 @@ quarto render .
 ```
 Then push to GitHub
 
+## 2026-02-06
+
+A series of fixes related to VSCode OSS and ssh into JuptyerHub from VSCode
+* code-server was by default opening in ~ and trying to index all the file = RAM blowup
+* bash terminals in code-server and vscode are not login and so notebook conda env was not being activated
+* ssh does not get the Docker ENV so failing when bash startup tried to use CONDA_DIR
+* the various scripts were not using `set -euo` so failing but not erroring out
+
 ## 2025-12-22
 
 * Update R to 4.5.1
