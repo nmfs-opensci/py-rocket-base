@@ -3,9 +3,9 @@ FROM ghcr.io/nmfs-opensci/py-rocket-base/base-image:latest
 LABEL org.opencontainers.image.maintainers="eli.holmes@noaa.gov"
 LABEL org.opencontainers.image.author="eli.holmes@noaa.gov"
 LABEL org.opencontainers.image.source=https://github.com/nmfs-opensci/py-rocket-base
-LABEL org.opencontainers.image.description="Python (3.12), R (4.5.1), Desktop and Publishing tools"
+LABEL org.opencontainers.image.description="Python (3.11), R (4.5.1), Desktop and Publishing tools"
 LABEL org.opencontainers.image.licenses=Apache2.0
-LABEL org.opencontainers.image.version=2026.02.05
+LABEL org.opencontainers.image.version=2026.02.06
 
 USER root
 
