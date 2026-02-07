@@ -8,8 +8,9 @@ dependencies:
   # Core JupyterHub packages
   - python~=3.11.0
   # most of the core libraries are in the pangeo-notebook meta package
+  # https://github.com/conda-forge/pangeo-notebook-feedstock?tab=readme-ov-file
   # https://anaconda.org/channels/conda-forge/packages/pangeo-notebook/overview
-  - pangeo-notebook=2025.12.08
+  - pangeo-notebook=2026.01.21
   - pip
   - jupyter-resource-usage
   - gh-scoped-creds==4.1
