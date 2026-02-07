@@ -83,6 +83,12 @@ RUN mkdir -p ${NB_PYTHON_PREFIX}/etc/jupyter/jupyter_server_config.d/ && \
     cp ${REPO_DIR}/custom_jupyter_server_config.json ${NB_PYTHON_PREFIX}/etc/jupyter/jupyter_server_config.d/ && \
     cp ${REPO_DIR}/custom_jupyter_server_config.json ${NB_PYTHON_PREFIX}/etc/jupyter/jupyter_notebook_config.d/
 
+# Add a Jupyter server-proxy entry so the Launcher opens code-server in /home/jovyan/vscode not /home/jovyan the first time
+RUN mkdir -p /srv/conda/envs/notebook/etc/jupyter/jupyter_server_config.d && \
+    printf '%s\n' \
+'{"ServerProxy":{"servers":{"vscode":{"command":["code-server","--auth","none","--disable-telemetry","--disable-update-check","/home/jovyan/vscode"],"timeout":20,"launcher_entry":{"title":"code-server"}}}}}' \
+> /srv/conda/envs/notebook/etc/jupyter/jupyter_server_config.d/vscode.json
+
 # Set up the defaults for Desktop. Keep config in the /etc so doesn't trash user environment (that they might want for other environments)
 ENV XDG_CONFIG_HOME=/etc/xdg/userconfig
 RUN mkdir -p ${XDG_CONFIG_HOME} && \
