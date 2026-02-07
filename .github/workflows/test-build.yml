@@ -1,16 +1,13 @@
 name: Docker Image test
 on:
   workflow_dispatch: null
-  workflow_run:
-    workflows: ["update conda lockfile"]
-    types: [completed]
     
 jobs:
   build:
     runs-on: ubuntu-latest
     permissions: write-all
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           ref: test
       - name: Login to GitHub Container Registry
