@@ -28,7 +28,14 @@ fi
 #echo ".libPaths('${R_HOME}/site-library')" > /tmp/rprofile.site
 #export R_PROFILE=/tmp/rprofile.site
 # the ${R_HOME}/etc/R.profile has .libPaths(c(Sys.getenv("R_LIBS_USER"), .libPaths())), so we set R_LIBS_USER temporarily
-export R_LIBS_USER="${R_HOME}/site-library"
+#export R_LIBS_USER="${R_HOME}/site-library"
+SITE_LIB="${R_HOME}/site-library"
+# Add a per-run user profile (does NOT replace system Rprofile.site)
+TMP_PROFILE_USER="$(mktemp /tmp/Rprofile-user-XXXXXX.R)"
+cat > "$TMP_PROFILE_USER" <<EOF
+.libPaths(unique(c("${SITE_LIB}", .libPaths())))
+EOF
+export R_PROFILE_USER="$TMP_PROFILE_USER"
 
 # Set the file variable to the provided argument
 INSTALL_FILE="$1"
