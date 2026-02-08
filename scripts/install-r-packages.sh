@@ -25,8 +25,10 @@ if [[ -z "${R_HOME:-}" ]]; then
 fi
 
 # Make sure we install to the site-library
-echo ".libPaths('${R_HOME}/site-library')" > /tmp/rprofile.site
-export R_PROFILE=/tmp/rprofile.site
+#echo ".libPaths('${R_HOME}/site-library')" > /tmp/rprofile.site
+#export R_PROFILE=/tmp/rprofile.site
+export R_LIBS_SITE="${R_HOME}/site-library"
+export R_LIBS_USER=""
 
 # Set the file variable to the provided argument
 INSTALL_FILE="$1"
@@ -47,6 +49,6 @@ if ! Rscript "$INSTALL_FILE"; then
 fi
 
 # Clean up
-rm /tmp/rprofile.site
+# rm /tmp/rprofile.site
 
 echo "  Success! install-r-packages.sh"
