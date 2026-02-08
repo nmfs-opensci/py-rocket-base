@@ -4,7 +4,7 @@
 # First we are altering the user directiory which seems rude, second orphan desktop files might be in ~/Desktop so who knows
 # what the user Desktop experience with be, here the Desktop dir is set to /usr/share/Desktop so is part of the image.
 # users that want to customize Desktop can change /etc/xdg/user-dirs.dirs though py-rocket resets that each time the server is restarted.
-set -e
+set -euo pipefail
 
 # Check if the script is run as root
 if [[ $(id -u) -ne 0 ]]; then
