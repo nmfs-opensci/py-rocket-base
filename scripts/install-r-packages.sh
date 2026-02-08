@@ -20,7 +20,7 @@ echo "Running install-r-packages.sh as ${NB_USER}"
 
 # Get R_HOME from R itself if not already set
 if [[ -z "${R_HOME:-}" ]]; then
-    export R_HOME=$(R RHOME)
+    export R_HOME="$(R RHOME)"
     echo "  R_HOME set to: ${R_HOME}"
 fi
 
