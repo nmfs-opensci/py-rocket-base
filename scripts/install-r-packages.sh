@@ -27,8 +27,8 @@ fi
 # Make sure we install to the site-library
 #echo ".libPaths('${R_HOME}/site-library')" > /tmp/rprofile.site
 #export R_PROFILE=/tmp/rprofile.site
-export R_LIBS_SITE="${R_HOME}/site-library"
-export R_LIBS_USER=""
+# the ${R_HOME}/etc/R.profile has .libPaths(c(Sys.getenv("R_LIBS_USER"), .libPaths())), so we set R_LIBS_USER temporarily
+export R_LIBS_USER="${R_HOME}/site-library"
 
 # Set the file variable to the provided argument
 INSTALL_FILE="$1"
