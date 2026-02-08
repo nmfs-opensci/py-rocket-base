@@ -10,6 +10,9 @@ Then push to GitHub
 ## 2026-02-07
 
 * Update pangeo feedstock to latest version 2026-01-21
+* Set Python back to 3.11, same as CryoCloud
+* R packages installed with install-r-packages.sh are not using binaries. I was circumventing the behavior in $R_HOME/etc/Rprofile.site that ensures that using repo p3m.dev gets binaries instead of source.
+* The `set -euo` meant that unbound variables in scripts throw and error. This is probably correct although now threw some errors when calling install-r-packages.sh
 
 ## 2026-02-06
 
