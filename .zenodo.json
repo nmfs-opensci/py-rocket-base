@@ -1,0 +1,42 @@
+{
+  "title": "nmfs-opensci/py-rocket-base: py-rocket-base",
+  "upload_type": "software",
+  "access_right": "open",
+  "license": "apache-2.0",
+  "language": "eng",
+
+  "creators": [
+    {
+      "name": "Holmes, Elizabeth Eli",
+      "orcid": "0000-0001-9128-8393",
+      "affiliation": "NOAA Fisheries / University of Washington SAFS",
+      "type": "ProjectMember"
+    },
+    {
+      "name": "Boettiger, Carl",
+      "orcid": "0000-0002-1642-628X",
+      "affiliation": "University of California Berkeley",
+      "type": "ProjectMember"
+    },
+    {
+      "name": "Panda, Yuvi",
+      "affiliation": "2i2c",
+      "type": "ProjectMember"
+    },
+    {
+      "name": "López, Luis",
+      "type": "ProjectMember"
+    }
+  ],
+
+  "keywords": [
+    "Docker",
+    "JupyterHub",
+    "Python",
+    "R",
+    "RStudio",
+    "Geospatial",
+    "NOAA",
+    "Open Science"
+  ]
+}
