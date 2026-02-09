@@ -4,7 +4,20 @@
   "access_right": "open",
   "license": "apache-2.0",
   "language": "eng",
-
+"description": "<p>The py-rocket-base image is a base image for JupyterHubs with Python and RStudio. It installs a Jupyter and JupyterHub environment that builds on the Pangeo base-image and creates the R and RStudio environment using <a href=\"https://rocker-project.org/\">Rocker</a> installation scripts.</p>
+<p>Image: ghcr.io/nmfs-opensci/py-rocket-base</p>
+<p>The base image provides the following support:</p>
+<ul>
+  <li>Python + JupyterLab with mamba handling package installation</li>
+  <li>R + JupyterLab using an R installation provided via Rocker</li>
+  <li>R + RStudio with the Rocker verse environment pre-installed</li>
+  <li>Desktop VNC for installing applications, including Java-based tools</li>
+  <li>VS Code OSS with extensions for Jupyter notebooks and Quarto</li>
+  <li>Publishing suite: Quarto, JupyterBook, MyST, Pandoc, TeX Live, Zotero</li>
+  <li>pyrocket_scripts to assist with common customization tasks</li>
+  <li>rocker_scripts for extending the R/RStudio environment</li>
+</ul>
+<p>Rocker installation scripts are licensed under GPL-2.0-or-later and retain their original license.</p>",
   "creators": [
     {
       "name": "Holmes, Elizabeth Eli",
