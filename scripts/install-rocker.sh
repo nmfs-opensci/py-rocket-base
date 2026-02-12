@@ -151,8 +151,9 @@ Sys.setenv(PATH = paste("/srv/conda/envs/notebook/bin", Sys.getenv("PATH"), sep 
 IRkernel::installspec(name = "ir4", displayname = "R ${R_VERSION}", user = FALSE)
 EOF
 # fix SSL mismatch when using reticulate in R
-echo "Configuring RStudio LD_LIBRARY_PATH in rserver.conf for proper SSL behavior when using conda env..."
-echo "rsession-ld-library-path=/srv/conda/envs/notebook/lib" >> /etc/rstudio/rserver.conf
+# Do not do this as it breaks R functions that use GDAL
+# echo "Configuring RStudio LD_LIBRARY_PATH in rserver.conf for proper SSL behavior when using conda env..."
+# echo "rsession-ld-library-path=/srv/conda/envs/notebook/lib" >> /etc/rstudio/rserver.conf
 # Add this so that we make it easier to restore the PATH after reticulate::use_conda() adds conda to it. reticulate does not have deactivate function.
 echo "RSTUDIO_CLEAN_PATH=${PATH}" >> "${R_HOME}/etc/Renviron.site"
 # Do not do this. This will put conda on the system PATH and break R spatial packages due to GDAL mismatches
@@ -163,9 +164,9 @@ cat << 'EOF' >> "${R_HOME}/etc/Rprofile.site"
 
 setHook(packageEvent("reticulate", "attach"), function(...) {
   message(
-    "Use py_require() for Python interoperability without altering PATH.\n",
-    "Use use_condaenv('notebook') to use conda environment but this will alter PATH and may break R functions.\n",
-    "Restart R to reset PATH or store PATH before calling use_condaenv('notebook') and restore when done."
+    "Use py_require() for Python interoperability without altering PATH and GDAL dynamic linking.\n",
+    "use_condaenv('notebook') will alter PATH and GDAL linking and can break R functions that use GDAL.\n",
+    "See https://nmfs-opensci.github.io/py-rocket-base documentation for instructions."
   )
 })
 EOF
