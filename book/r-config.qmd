@@ -2,13 +2,16 @@
 
 py-rocket has separate R and Python installations because there are a variety of system packages linkages (GDAL and others depending whyat you are doing) that will break if you do not use the right system linkages. The way this is handled is via the the system PATH. This tells functions where to look for files it needs.
 
-As long as you only use R or Python (don't mix the two) in a notebook, you will be fine in py-rocket. When you activate R (in JupyterLab, RStudio, R, or VSCode), the path will not have conda. When you activate Python (via reticulate), it will use the conda "notebook" environment and have that on the path. 
+When you activate R (in JupyterLab, RStudio, R, or VSCode), the path will not have conda. If you use the reticulate package to run Python in R,
+it is recommended to use `py_require()` and install the needed packages into the ephemeral environment that reticulate creates. If you try to
+use `reticulate::use_conda()` in RStudio, functions that try to get files from the cloud will not work since RStudio sets up `LD_LIBRARY_PATH` and there is no real way to reset that. You can use `reticulate::use_conda()` in R started from the termial or JupyterLab, but be aware that
+it will put conda on the `PATH` and subsequent R functions that use GDAL will break or issue warnings.
 
 Try this in R (RStudio or the R kernel in Jupyter Lab):
 ```
 Sys.getenv("PATH")
 ```
-Try this in a Jupyter Notebook in Jupyter Lab:
+Try this in a Jupyter Notebook in Jupyter Lab with the Python kernel:
 ```
 import os
 print(os.environ["PATH"])
@@ -30,7 +33,7 @@ install.packages(...., lib="${R_HOME}/site-library")
 ```
 or use the helper script plus a `install.R` file in your Docker file:
 ```
-COPY . /tmp2/
+COPY install.R /tmp/
 RUN /pyrocket_scripts/install-r-packages.sh /tmp2/install.R
 ```
 
@@ -44,7 +47,7 @@ The following behavior is specific to R, not the GUI (RStudio or Jupyter Lab wit
 
 ### `py_require()`
 
-To use Python, you use the `reticulate` library. If you only need a handful of Python packages, it will simplify things if you use `py_require()`.  Like this
+To use Python, you use the `reticulate` library. If you only need a handful of Python packages, it will simplify things if you use `py_require()`. This will link to the GDAL system libraries that R uses. Like this
 ```
 library(reticulate)
 py_require("xarray")
@@ -53,13 +56,13 @@ This will create an ephemeral environment with the packages you require and does
 
 One gotcha is that reticulate creates a cache in `~/.cache/R/reticulate` and it might not be easy to change later to using a conda environment for your Python binary. I often had to do
 ```
-rm ~/.cache/R/reticulate
+rm -rf ~/.cache/R/reticulate
 ```
 in a terminal to get reticulate to allow me to use `use_conda("notebook")` in another R session.
 
 ### Using a conda environment
 
-You can also use the conda environment with reticulate with all the pre-installed packages.
+You can also use the conda environment with reticulate with all the pre-installed packages **outside of RStudio**.
 ```
 library(reticulate)
 use_condaenv("notebook")
@@ -80,19 +83,105 @@ Note, the terminal in RStudio is not the same environment as R. So doing `echo $
 
 **Why activating conda causes problems for R**
 
-When we use a conda environment, the PATH is altered so that the conda environment directory appears first on the PATH. Any R packages that need a particular system package that is also in conda (like GDAL) are likely to throw mis-match errors.
+When we use a conda environment, the PATH is altered so that the conda environment directory appears first on the PATH. Any R packages that need a particular system package that is also in conda (like GDAL) are likely to throw mis-match errors. Also GDAL needs linking for various dynamic libraries.
 
 ## Dealing with SSL mismatch errors
 
-When you use reticulate in R, use `use_condaenv()` and call a function that needs to download data, you are liable to get a OpenSSL mismatch error. py-rocket solves this by adding this to 
+When you use reticulate in R, use `use_condaenv()` and call a function that needs to download data, you are liable to get a OpenSSL mismatch error. You can add the below to `/etc/rstudio/rserver.conf`: 
 ```
 rsession-ld-library-path=/srv/conda/envs/notebook/lib
 ```
-to `/etc/rstudio/rserver.conf`. This let's R know where to look for SSL links and hopefully doesn't break R packages. Make sure that `.Renviron` does not set `LD_LIBRARY_PATH` or this solution will not work. I don't know why but it breaks.
+This let's R know where to look for SSL links but it will break any R packages that need GDAL. Make sure that `.Renviron` does not set `LD_LIBRARY_PATH` or this solution will not work. I don't know why but it breaks.
 
-## Developers
+## Examples of workflows that combine use Python in an R environment
 
-How is the R kernel created so that it shows up in Jupyter Lab? You don't need to install R into the conda environment since it already is in the image. We just need to use `IRkernel` R package to register the kernel with jupyter. This is in `scripts/install_rocker.sh`.
+### Staying in the R GDAL system libraries will work.
+
+```
+library(terra) 
+url = "https://storage.googleapis.com/nmfs_odp_nwfsc/CB/fish-pace-datasets/chla-z/netcdf/chla_z_20240305_v2.nc" 
+r <- rast(url, vsi = TRUE)
+```
+
+Use reticulate with `py_require()` to run Python commands. This works because it uses the same GDAL libraries as R does. 
+
+```
+library(reticulate)
+py_require(c("xarray", "h5netcdf", "h5py", "fsspec", "requests", "aiohttp"))
+xr <- import("xarray")
+url <- "https://storage.googleapis.com/nmfs_odp_nwfsc/CB/fish-pace-datasets/chla-z/netcdf/chla_z_20240305_v2.nc"
+ds <- xr$open_dataset(url, engine = "h5netcdf")
+```
+
+### Mixing conda GDAL and R GDAL system libraries does not work
+
+The problems happen when you try to use a conda env. Now it uses/wants the GDAL libraries in the conda env.   *RStudio sets up the LD_LIBRARY_PATH as soon as it starts up*. This does not happen if you start R via JupyterLab kernel or via `R` in the terminal. 
+
+This will work in plain R session (start R from terminal or JupyterLab) but not one started in RStudio.
+```
+library(reticulate)
+use_condaenv("notebook", required = TRUE)
+xr <- import("xarray")
+url <- "https://storage.googleapis.com/nmfs_odp_nwfsc/CB/fish-pace-datasets/chla-z/netcdf/chla_z_20240305_v2.nc"
+ds <- xr$open_dataset(url, engine = "h5netcdf")
+```
+
+Even in R started in a terminal, problems happen if we try to mix functions that link to GDAL w R versus Python in our conda env.
+
+In R in a terminal: Run terra first, and the python does not work since R GDAL system libraries are linked. 
+```
+url = "https://storage.googleapis.com/nmfs_odp_nwfsc/CB/fish-pace-datasets/chla-z/netcdf/chla_z_20240305_v2.nc" 
+
+library(terra) 
+r <- rast(url, vsi = TRUE)
+
+# now you get an SSL error; it is not finding the dyn libs that it needs
+library(reticulate)
+use_condaenv("notebook", required = TRUE)
+xr <- import("xarray")
+ds <- xr$open_dataset(url, engine = "h5netcdf")
+```
+
+Run terra after loading conda, and terra may or may not work, depending how it is feeling.
+```
+url = "https://storage.googleapis.com/nmfs_odp_nwfsc/CB/fish-pace-datasets/chla-z/netcdf/chla_z_20240305_v2.nc" 
+
+library(reticulate)
+use_condaenv("notebook", required = TRUE)
+xr <- import("xarray")
+ds <- xr$open_dataset(url, engine = "h5netcdf")
+
+# may or may not work; but def the dyn libs are wrong
+library(terra) 
+r <- rast(url, vsi = TRUE)
+```
+
+How to keep conda GDAL and R GDAL completely separate in a script, assuming you do not want to use `py_require()` which is the better way to go. You can use `callr::r()` to start a clean R session within a running R session. But `callr` only returns R objects so you will need to do something with `ds`, like save to netcdf
+```
+url <- "https://storage.googleapis.com/nmfs_odp_nwfsc/CB/fish-pace-datasets/chla-z/netcdf/chla_z_20240305_v2.nc"
+out <- file.path(Sys.getenv("HOME"), "chla_subset.nc")
+
+callr::r(function(url, out) {
+  library(reticulate)
+  use_condaenv("notebook", required = TRUE)
+
+  xr <- import("xarray", convert = FALSE)
+  py <- import("builtins", convert = FALSE)
+
+  ds <- xr$open_dataset(url, engine = "h5netcdf")
+  da <- ds[["CHLA"]]$
+    isel(time = 0L, z = 0L)$
+    sel(lat = py$slice(10, 5),
+        lon = py$slice(-140, -135))
+
+  da$to_netcdf(out)
+  out
+}, args = list(url = url, out = out))
+```
+
+## Developers: R kernel in JupyterLab
+
+How is the R kernel created so that it shows up in Jupyter Lab? You don't need to install R into the conda environment since it already is in the image. We just need to use `IRkernel` R package to register the kernel with jupyter. This is in `scripts/install_rocker.sh` and is built into py-rocket-base.
 ```
 Rscript - <<-"EOF"
 install.packages('IRkernel', lib = .Library) # install in system library
