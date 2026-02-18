@@ -66,6 +66,9 @@ RUN wget -qO- https://raw.githubusercontent.com/retorquere/zotero-deb/master/ins
 # Install linux packages after R installation since the R install scripts get rid of packages
 RUN /pyrocket_scripts/install-apt-packages.sh ${REPO_DIR}/apt.txt
 
+# Install AWS CLI v2
+RUN awsv2 --install
+
 # Install some basic VS Code extensions
 RUN /pyrocket_scripts/install-vscode-extensions.sh ${REPO_DIR}/vscode-extensions.txt || (echo "install-vscode-extensions.sh failed for some extensions" >&2 && exit 1)
 # Don't need in image
