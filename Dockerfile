@@ -5,7 +5,7 @@ LABEL org.opencontainers.image.author="eli.holmes@noaa.gov"
 LABEL org.opencontainers.image.source=https://github.com/nmfs-opensci/py-rocket-base
 LABEL org.opencontainers.image.description="Python (3.11), R (4.5.1), Desktop and Publishing tools"
 LABEL org.opencontainers.image.licenses=Apache2.0
-LABEL org.opencontainers.image.version=2026.02.18
+LABEL org.opencontainers.image.version=2026.02.12
 
 USER root
 
@@ -65,9 +65,6 @@ RUN wget -qO- https://raw.githubusercontent.com/retorquere/zotero-deb/master/ins
 # Install extra apt packages
 # Install linux packages after R installation since the R install scripts get rid of packages
 RUN /pyrocket_scripts/install-apt-packages.sh ${REPO_DIR}/apt.txt
-
-# Install AWS CLI v2
-RUN awsv2 --install
 
 # Install some basic VS Code extensions
 RUN /pyrocket_scripts/install-vscode-extensions.sh ${REPO_DIR}/vscode-extensions.txt || (echo "install-vscode-extensions.sh failed for some extensions" >&2 && exit 1)
