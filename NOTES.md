@@ -7,10 +7,6 @@ quarto render .
 ```
 Then push to GitHub
 
-## 2026-02-18
-
-* Add `awscli2 --install` to dockerfile
-  
 ## 2026-02-07
 
 * Update pangeo feedstock to latest version 2026-01-21
