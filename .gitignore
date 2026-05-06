@@ -108,3 +108,6 @@ dmypy.json
 .Rproj.user/
 *.Rproj
 .Rhistory
+
+# License files (do not commit activation licenses to git)
+*.lic

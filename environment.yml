@@ -70,3 +70,5 @@ dependencies:
     - jupyterlab-open-url-parameter
     # Open quarto files in JupyterLab
     - jupyterlab-quarto
+    # Positron IDE server proxy (the binary is installed separately via install-positron.sh)
+    - jupyter-positron-server

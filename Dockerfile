@@ -52,6 +52,14 @@ RUN mkdir -p /pyrocket_scripts && \
 # Install conda packages (will switch to NB_USER in script)
 RUN /pyrocket_scripts/install-conda-packages.sh ${REPO_DIR}/environment.yml
 
+# Install Positron server binary. The pip package jupyter-positron-server (installed above)
+# provides the Jupyter server proxy, while this binary provides the IDE itself. The activation
+# license is not bundled here; it should be mounted or copied in at deploy time.
+# To test locally, copy a license file into the image by uncommenting the line below
+# (do not commit the license file to git):
+# COPY positron-license.lic /opt/positron-server/resources/activation/linux/x86_64/license.lic
+RUN /pyrocket_scripts/install-positron.sh
+
 # Install R, RStudio via Rocker scripts. Requires the prefix for a rocker Dockerfile
 # Set the R_VERSION_PULL variable to specify what branch or release. If need to use a release use
 # R_VERSION_PULL="R4.3.3" for example; R_VERSION_PULL="master" is getting the current master branch
