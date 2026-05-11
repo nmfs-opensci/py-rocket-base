@@ -1,5 +1,12 @@
 {
     "ContentsManager": {
         "allow_hidden": true
+    },
+    "ServerProxy": {
+        "servers": {
+            "positron": {
+                "new_browser_tab": false
+            }
+        }
     }
 }
