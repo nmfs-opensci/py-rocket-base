@@ -70,3 +70,8 @@ dependencies:
     - jupyterlab-open-url-parameter
     # Open quarto files in JupyterLab
     - jupyterlab-quarto
+    # Positron IDE server proxy (the binary is installed separately via install-positron.sh)
+    - jupyter-positron-server
+    # jupyter-positron-server relies on the redirect Location-header rewriting added
+    # in jupyter-server-proxy 4.5.0, so override that pin here via pip.
+    - jupyter-server-proxy>=4.5.0

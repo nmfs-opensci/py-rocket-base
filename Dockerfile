@@ -3,7 +3,7 @@ FROM ghcr.io/nmfs-opensci/py-rocket-base/base-image:latest
 LABEL org.opencontainers.image.maintainers="eli.holmes@noaa.gov"
 LABEL org.opencontainers.image.author="eli.holmes@noaa.gov"
 LABEL org.opencontainers.image.source=https://github.com/nmfs-opensci/py-rocket-base
-LABEL org.opencontainers.image.description="Python (3.11), R (4.5.1), Desktop and Publishing tools"
+LABEL org.opencontainers.image.description="Python (3.11), R (4.5.3), Desktop and Publishing tools"
 LABEL org.opencontainers.image.licenses=Apache2.0
 LABEL org.opencontainers.image.version=2026.02.12
 
@@ -14,7 +14,7 @@ USER root
 # Set QUARTO_VERSION due to Jupyter Lab bug with version 1.6 that won't all qmd to open
 ENV REPO_DIR="/srv/repo" \
     DISPLAY=":1.0" \
-    R_VERSION="4.5.1" \
+    R_VERSION="4.5.3" \
     QUARTO_VERSION="1.7.34" \
     UBUNTU_VERSION="noble"
 ENV LANG=en_US.UTF-8
@@ -51,6 +51,14 @@ RUN mkdir -p /pyrocket_scripts && \
 
 # Install conda packages (will switch to NB_USER in script)
 RUN /pyrocket_scripts/install-conda-packages.sh ${REPO_DIR}/environment.yml
+
+# Install Positron server binary. The pip package jupyter-positron-server (installed above)
+# provides the Jupyter server proxy, while this binary provides the IDE itself. The activation
+# license is not bundled here; it should be mounted or copied in at deploy time.
+# To test locally, copy a license file into the image by uncommenting the line below
+# (do not commit the license file to git):
+# COPY positron-license.lic /opt/positron-server/resources/activation/linux/x86_64/license.lic
+RUN /pyrocket_scripts/install-positron.sh
 
 # Install R, RStudio via Rocker scripts. Requires the prefix for a rocker Dockerfile
 # Set the R_VERSION_PULL variable to specify what branch or release. If need to use a release use
