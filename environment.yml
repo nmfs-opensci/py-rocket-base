@@ -6,7 +6,7 @@ channels:
 
 dependencies:
   # Core JupyterHub packages
-  - python~=3.11.0
+  - python~=3.13.0
   # most of the core libraries are in the pangeo-notebook meta package
   # https://github.com/conda-forge/pangeo-notebook-feedstock?tab=readme-ov-file
   # https://anaconda.org/channels/conda-forge/packages/pangeo-notebook/overview
