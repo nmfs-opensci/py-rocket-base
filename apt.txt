@@ -67,13 +67,11 @@ xubuntu-icon-theme
 tigervnc-standalone-server
 tigervnc-xorg-extension
 
-# Java runtime (for desktop Java apps, e.g. Panoply)
-# We intentionally install the JRE only to keep image size down.
-# If you need Java development tools (javac, keytool, jar, etc.),
-# uncomment the JDK line below.
-openjdk-21-jre
+# Java: full JDK 21 (runtime with GUI support for desktop Java apps, plus javac/jar for compiling and rJava).
+# Rocker's install_verse.sh already installs default-jdk; listed here so Java stays even if rocker changes.
+# Before rocker-versioned2#1048 (2026-11-08), install_verse.sh ran `apt-get remove systemd`, which also removed the JDK.
+default-jdk
 ca-certificates-java
-# openjdk-21-jdk-headless   # add only if Java compilation/tools are required
 
 # Git clients and tools
 git-gui

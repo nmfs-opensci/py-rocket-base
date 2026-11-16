@@ -56,6 +56,15 @@ sed -i '/^TEXMFHOME/d' /rocker_scripts/install_texlive.sh
 sed -i '/^TEXMFVAR/d' /rocker_scripts/install_texlive.sh
 sed -i '/^TEXMFCONFIG/d' /rocker_scripts/install_texlive.sh
 
+# Patch install_pandoc.sh so it finds the pandoc bundled with RStudio 2026.x, which is in quarto/bin/tools/<arch>/.
+# Without this the script falls back to looking up the latest pandoc via the unauthenticated GitHub API, and under
+# set -e an empty or rate-limited reply makes it exit 1 with no output (seen in the R 4.6.1 / RStudio 2026.10.1 build).
+if ! grep -q 'quarto/bin/tools/$(uname -m)/pandoc' /rocker_scripts/install_pandoc.sh; then
+    sed -i '\|BUNDLED_PANDOC="/usr/lib/rstudio-server/bin/quarto/bin/tools/pandoc"|a\
+elif [ -f "/usr/lib/rstudio-server/bin/quarto/bin/tools/$(uname -m)/pandoc" ]; then\
+    BUNDLED_PANDOC="/usr/lib/rstudio-server/bin/quarto/bin/tools/$(uname -m)/pandoc"' /rocker_scripts/install_pandoc.sh
+fi
+
 cd /
 
 # Read the Dockerfile and process each line
