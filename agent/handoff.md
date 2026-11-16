@@ -53,14 +53,17 @@ Plan and checklist are in
 Decisions so far (2026-11-16):
 
 - Agents (Claude Code, Antigravity) get an opt-in helper script, not an image install.
-- gcloud (~1 GB) moves out of the image.
+- gcloud stays (Eli uses Google object storage regularly), installed with
+  `--no-install-recommends` (drops anthoscli; ~880 MB instead of 1004 MB).
 - awscli v1 replaces awscliv2.
 - The source-coop CLI goes in, pinned.
 - Panoply moves to its own derivative image, and cwutils moves with it.
 - QGIS stays, bumped to `qgis~=3.44`.
-- The icechunk packages are folded into `env-core2.yml`, provided the solve passes with no bad
-  downgrades. The solve check results are in #69.
-- rclone and s5cmd go in the image if they are small.
+- The icechunk packages are folded into `env-core2.yml`, listed explicitly. The combined solve
+  showed no downgrades; it only adds icechunk 2.3.1. `obspec-utils` is pip-only.
+- rclone and s5cmd go in the image (~60 MB together).
+- All decisions are recorded in #69's comments. Next step there: the branch-safe test
+  workflow, then the changes.
 
 Its Dockerfile installs the conda env files **one at a time**; solve them the same way, never
 all together. Do not dispatch its `build-and-push.yml` as a test, because it pushes `:latest`.
