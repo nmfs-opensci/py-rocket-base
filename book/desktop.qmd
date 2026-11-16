@@ -5,12 +5,7 @@ looks for files with the ending `.desktop`, `.xml` (optional), and `.png` or `.s
 
 py-rocket-base puts these `.desktop` files in `/usr/share/Desktop`. Typically these desktop files are in `~/Desktop`. But in a JupyterHub, the home directory is often persistent and py-rocket-base tries not to alter the user home directory. Also there might be orphaned desktop files in `~/Desktop` and so the user desktop UI would be inconsistent between users. Using `/usr/share/Desktop` does mean that users cannot add their own persistent applications to xfce4 Desktop but this would be difficult anyhow without root access in many cases.
 
-py-rocket-base has Java (`openjdk-11-jdk` and `openjdk-11-jre`) pre-installed as part of the rocker R/RStudio installation. So Java applications do work as long as they work with this version of Java.
-```markdown
-openjdk version "11.0.24" 2024-07-16
-OpenJDK Runtime Environment (build 11.0.24+8-post-Ubuntu-1ubuntu322.04)
-OpenJDK 64-Bit Server VM (build 11.0.24+8-post-Ubuntu-1ubuntu322.04, mixed mode, sharing)
-```
+py-rocket-base has Java 21 (`default-jdk`, the full JDK with `javac`), installed by the rocker R/RStudio installation and also listed in `apt.txt`. Java desktop applications work as long as they support Java 21 (Panoply, for example, needs Java 11 or later). Check the version with `java -version`.
 
 ## Adding an application in your child docker image
 

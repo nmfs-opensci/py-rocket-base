@@ -3,19 +3,20 @@ FROM ghcr.io/nmfs-opensci/py-rocket-base/base-image:latest
 LABEL org.opencontainers.image.maintainers="eli.holmes@noaa.gov"
 LABEL org.opencontainers.image.author="eli.holmes@noaa.gov"
 LABEL org.opencontainers.image.source=https://github.com/nmfs-opensci/py-rocket-base
-LABEL org.opencontainers.image.description="Python (3.11), R (4.5.1), Desktop and Publishing tools"
+LABEL org.opencontainers.image.description="Python (3.13), R (4.6.1), Desktop and Publishing tools"
 LABEL org.opencontainers.image.licenses=Apache2.0
-LABEL org.opencontainers.image.version=2026.02.12
+LABEL org.opencontainers.image.version=2026.11.16
 
 USER root
 
 # Define environment variables
 # DISPLAY Tell applications where to open desktop apps - this allows notebooks to pop open GUIs
-# Set QUARTO_VERSION due to Jupyter Lab bug with version 1.6 that won't all qmd to open
+# R_VERSION is one minor release behind the latest rocker release so that CRAN is a dated p3m snapshot (see NOTES.md)
+# QUARTO_VERSION is not set: rocker's install_quarto.sh then uses the Quarto bundled with the rocker RStudio version.
+# Set QUARTO_VERSION="latest" or a version number here to override.
 ENV REPO_DIR="/srv/repo" \
     DISPLAY=":1.0" \
-    R_VERSION="4.5.1" \
-    QUARTO_VERSION="1.7.34" \
+    R_VERSION="4.6.1" \
     UBUNTU_VERSION="noble"
 ENV LANG=en_US.UTF-8
 ENV LC_ALL=en_US.UTF-8
@@ -83,10 +84,20 @@ RUN mkdir -p ${NB_PYTHON_PREFIX}/etc/jupyter/jupyter_server_config.d/ && \
     cp ${REPO_DIR}/custom_jupyter_server_config.json ${NB_PYTHON_PREFIX}/etc/jupyter/jupyter_server_config.d/ && \
     cp ${REPO_DIR}/custom_jupyter_server_config.json ${NB_PYTHON_PREFIX}/etc/jupyter/jupyter_notebook_config.d/
 
-# Add a Jupyter server-proxy entry so the Launcher opens code-server in /home/jovyan/vscode not /home/jovyan the first time
+# Open .qmd files in the text editor by default. Opening them as jupytext notebooks makes autosave write a jupyter:
+# kernelspec header into the file, which switches R/knitr documents to the Jupyter engine when Quarto renders them.
+# Right-click > Open With > Jupytext Notebook still opens a .qmd as a notebook. "quarto" is jupytext's file type name.
+RUN mkdir -p ${NB_PYTHON_PREFIX}/share/jupyter/lab/settings && \
+    printf '%s\n' \
+'{"@jupyterlab/docmanager-extension:plugin":{"defaultViewers":{"quarto":"Editor"}}}' \
+> ${NB_PYTHON_PREFIX}/share/jupyter/lab/settings/overrides.json
+
+# Add a Jupyter server-proxy entry so the Launcher opens code-server in /home/jovyan/vscode not /home/jovyan
+# --ignore-last-opened: otherwise code-server reopens the last folder a user opened (stored in ~/.local/share/code-server/coder.json),
+# and a large folder such as /home (which includes the shared data mounts) makes the file watcher and Python extension exhaust memory.
 RUN mkdir -p /srv/conda/envs/notebook/etc/jupyter/jupyter_server_config.d && \
     printf '%s\n' \
-'{"ServerProxy":{"servers":{"vscode":{"command":["code-server","--auth","none","--disable-telemetry","--disable-update-check","/home/jovyan/vscode"],"timeout":20,"launcher_entry":{"title":"code-server"}}}}}' \
+'{"ServerProxy":{"servers":{"vscode":{"command":["code-server","--auth","none","--disable-telemetry","--disable-update-check","--ignore-last-opened","/home/jovyan/vscode"],"timeout":20,"launcher_entry":{"title":"code-server"}}}}}' \
 > /srv/conda/envs/notebook/etc/jupyter/jupyter_server_config.d/vscode.json
 
 # Set up the defaults for Desktop. Keep config in the /etc so doesn't trash user environment (that they might want for other environments)
