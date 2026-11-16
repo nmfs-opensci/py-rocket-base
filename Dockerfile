@@ -92,10 +92,12 @@ RUN mkdir -p ${NB_PYTHON_PREFIX}/share/jupyter/lab/settings && \
 '{"@jupyterlab/docmanager-extension:plugin":{"defaultViewers":{"quarto":"Editor"}}}' \
 > ${NB_PYTHON_PREFIX}/share/jupyter/lab/settings/overrides.json
 
-# Add a Jupyter server-proxy entry so the Launcher opens code-server in /home/jovyan/vscode not /home/jovyan the first time
+# Add a Jupyter server-proxy entry so the Launcher opens code-server in /home/jovyan/vscode not /home/jovyan
+# --ignore-last-opened: otherwise code-server reopens the last folder a user opened (stored in ~/.local/share/code-server/coder.json),
+# and a large folder such as /home (which includes the shared data mounts) makes the file watcher and Python extension exhaust memory.
 RUN mkdir -p /srv/conda/envs/notebook/etc/jupyter/jupyter_server_config.d && \
     printf '%s\n' \
-'{"ServerProxy":{"servers":{"vscode":{"command":["code-server","--auth","none","--disable-telemetry","--disable-update-check","/home/jovyan/vscode"],"timeout":20,"launcher_entry":{"title":"code-server"}}}}}' \
+'{"ServerProxy":{"servers":{"vscode":{"command":["code-server","--auth","none","--disable-telemetry","--disable-update-check","--ignore-last-opened","/home/jovyan/vscode"],"timeout":20,"launcher_entry":{"title":"code-server"}}}}}' \
 > /srv/conda/envs/notebook/etc/jupyter/jupyter_server_config.d/vscode.json
 
 # Set up the defaults for Desktop. Keep config in the /etc so doesn't trash user environment (that they might want for other environments)
