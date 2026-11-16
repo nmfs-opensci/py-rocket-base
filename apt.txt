@@ -71,9 +71,9 @@ tigervnc-xorg-extension
 # We intentionally install the JRE only to keep image size down.
 # If you need Java development tools (javac, keytool, jar, etc.),
 # uncomment the JDK line below.
-openjdk-11-jre
+openjdk-21-jre
 ca-certificates-java
-# openjdk-11-jdk-headless   # add only if Java compilation/tools are required
+# openjdk-21-jdk-headless   # add only if Java compilation/tools are required
 
 # Git clients and tools
 git-gui

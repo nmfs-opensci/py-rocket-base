@@ -7,6 +7,21 @@ quarto render .
 ```
 Then push to GitHub
 
+## 2026-11-16
+
+Issue #312. Minimal update so py-rocket-geospatial-2 can move to Python ≥3.12 (needed by icechunk, virtualizarr, zarr 3).
+
+* Python 3.11 → 3.13 (#310, #311). The 3.11 reason ("same as CryoCloud") no longer holds; CryoCloud is on 3.14 and the Pangeo base-notebook image on 3.13.
+* pangeo-notebook 2026.01.21 → 2026.10.29.
+* R 4.5.1 → 4.6.1. Rule: one minor release behind the latest rocker release, so CRAN is a dated p3m snapshot rather than `latest`. 4.6.1 is also the last rocker release on Ubuntu noble; verse_4.6.2 moved to Ubuntu resolute (26.04). Rocker master only keeps the newest few Dockerfiles, and verse_4.5.1 had already been removed, so main could not be rebuilt without this bump. 4.6.1 brings CRAN `noble/2026-10-28` and RStudio 2026.10.1+239.
+* Quarto: removed `QUARTO_VERSION=1.7.34`. Rocker 4.6.1 does not set it, so rocker installs the Quarto bundled with RStudio. The old JupyterLab problem (quarto-dev/jupyterlab-quarto#13) is about Quarto being installed twice (deb and conda), not about the version. If .qmd files stop opening in JupyterLab, set `QUARTO_VERSION="latest"`.
+* code-server: the exact pin 4.98.0 is now the floor `>=4.145`. The pin was added (#252) to stop child images downgrading code-server (which caused a node "I2 Connector" error), not to hold an old version; a floor prevents that too.
+* Java: `openjdk-11-jre` → `openjdk-21-jre`. The image already has Java 21 headless; the full JRE is needed for GUI apps like Panoply.
+* code-server `settings.json` gets `python.defaultInterpreterPath` so Quarto in code-server uses the notebook python (#309). `start` adds the key to existing settings files if it is missing; it skips files that are not plain JSON and never fails start.
+* GitHub Actions: `docker/login-action` v1 → v3; `actions/checkout` v3 → v4 (base-build, in #313).
+* Watch item: rocker's setup_R heredoc runs `userdel --remove "$(id -un 1000)"` and uid 1000 is jovyan. It was present in earlier builds too. Check the build log and `id jovyan` in the image after any R update.
+* geospatial-2 notes from local conda dry-run solves on Python 3.13 (each env file solved separately on top of base, as in its Dockerfile): core1, core2, geo, ioos and viz solve; `qgis~=3.40` has no solvable build for 3.13, but `qgis~=3.44` (3.44.14) solves. The icechunk stack solves (icechunk 2.3.1, virtualizarr 2.8.0, zarr 3.4.2, obstore 0.12.1).
+
 ## 2026-02-07
 
 * Update pangeo feedstock to latest version 2026-01-21

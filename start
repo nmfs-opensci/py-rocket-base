@@ -49,11 +49,32 @@ if [ ! -f "${USER_SETTINGS_DIR}/settings.json" ]; then
 {
   "remote.autoForwardPorts": true,
   "remote.autoForwardPortsSource": "process",
-  "remote.restoreForwardedPorts": false
+  "remote.restoreForwardedPorts": false,
+  "python.defaultInterpreterPath": "/srv/conda/envs/notebook/bin/python"
 }
 EOF
     chown -R jovyan:jovyan "${USER_SETTINGS_DIR}"
 else
     echo "User already has VSCode settings.json, not overwriting."
+    # Add python.defaultInterpreterPath if missing so Quarto in code-server finds the notebook python (issue #309).
+    # Never fail start: skip files that are not plain JSON (code-server allows comments) and keep any user value.
+    /srv/conda/envs/notebook/bin/python - "${USER_SETTINGS_DIR}/settings.json" <<'PYEOF' || echo "Could not update VSCode settings.json; leaving it unchanged."
+import json, sys
+path = sys.argv[1]
+key = "python.defaultInterpreterPath"
+try:
+    with open(path) as f:
+        settings = json.load(f)
+except (OSError, ValueError):
+    print(f"{path} is not plain JSON; not adding {key}.")
+    sys.exit(0)
+if not isinstance(settings, dict) or key in settings:
+    sys.exit(0)
+settings[key] = "/srv/conda/envs/notebook/bin/python"
+with open(path, "w") as f:
+    json.dump(settings, f, indent=2)
+    f.write("\n")
+print(f"Added {key} to {path}.")
+PYEOF
 fi
 exec "$@"

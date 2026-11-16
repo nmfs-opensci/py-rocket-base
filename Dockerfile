@@ -3,19 +3,20 @@ FROM ghcr.io/nmfs-opensci/py-rocket-base/base-image:latest
 LABEL org.opencontainers.image.maintainers="eli.holmes@noaa.gov"
 LABEL org.opencontainers.image.author="eli.holmes@noaa.gov"
 LABEL org.opencontainers.image.source=https://github.com/nmfs-opensci/py-rocket-base
-LABEL org.opencontainers.image.description="Python (3.11), R (4.5.1), Desktop and Publishing tools"
+LABEL org.opencontainers.image.description="Python (3.13), R (4.6.1), Desktop and Publishing tools"
 LABEL org.opencontainers.image.licenses=Apache2.0
-LABEL org.opencontainers.image.version=2026.02.12
+LABEL org.opencontainers.image.version=2026.11.16
 
 USER root
 
 # Define environment variables
 # DISPLAY Tell applications where to open desktop apps - this allows notebooks to pop open GUIs
-# Set QUARTO_VERSION due to Jupyter Lab bug with version 1.6 that won't all qmd to open
+# R_VERSION is one minor release behind the latest rocker release so that CRAN is a dated p3m snapshot (see NOTES.md)
+# QUARTO_VERSION is not set: rocker's install_quarto.sh then uses the Quarto bundled with the rocker RStudio version.
+# Set QUARTO_VERSION="latest" or a version number here to override.
 ENV REPO_DIR="/srv/repo" \
     DISPLAY=":1.0" \
-    R_VERSION="4.5.1" \
-    QUARTO_VERSION="1.7.34" \
+    R_VERSION="4.6.1" \
     UBUNTU_VERSION="noble"
 ENV LANG=en_US.UTF-8
 ENV LC_ALL=en_US.UTF-8
