@@ -84,6 +84,14 @@ RUN mkdir -p ${NB_PYTHON_PREFIX}/etc/jupyter/jupyter_server_config.d/ && \
     cp ${REPO_DIR}/custom_jupyter_server_config.json ${NB_PYTHON_PREFIX}/etc/jupyter/jupyter_server_config.d/ && \
     cp ${REPO_DIR}/custom_jupyter_server_config.json ${NB_PYTHON_PREFIX}/etc/jupyter/jupyter_notebook_config.d/
 
+# Open .qmd files in the text editor by default. Opening them as jupytext notebooks makes autosave write a jupyter:
+# kernelspec header into the file, which switches R/knitr documents to the Jupyter engine when Quarto renders them.
+# Right-click > Open With > Jupytext Notebook still opens a .qmd as a notebook. "quarto" is jupytext's file type name.
+RUN mkdir -p ${NB_PYTHON_PREFIX}/share/jupyter/lab/settings && \
+    printf '%s\n' \
+'{"@jupyterlab/docmanager-extension:plugin":{"defaultViewers":{"quarto":"Editor"}}}' \
+> ${NB_PYTHON_PREFIX}/share/jupyter/lab/settings/overrides.json
+
 # Add a Jupyter server-proxy entry so the Launcher opens code-server in /home/jovyan/vscode not /home/jovyan the first time
 RUN mkdir -p /srv/conda/envs/notebook/etc/jupyter/jupyter_server_config.d && \
     printf '%s\n' \
