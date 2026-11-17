@@ -183,6 +183,11 @@ EOF
 # Install for VSCode. languageserver is required for VSCode. others make R nicer in VSCode and JLab.
 Rscript -e "install.packages(c('languageserver', 'httpgd', 'quarto'), lib = .Library)"
 
+# remotes: devtools 2.5 moved it from Imports to Suggests (it uses pak now), so it no longer
+# arrives with rocker's install_tidyverse.sh. Derivative install.R files and the book use
+# remotes::install_github (#316).
+Rscript -e "install.packages('remotes', lib = .Library)"
+
 # Ensure jovyan can modify Rprofile.site and Renviron.site because start will need this, and allow user to alter rserver.conf
 # to set the gh-scoped-cred variables if they are present
 chown ${NB_USER}:staff /etc/rstudio/rserver.conf

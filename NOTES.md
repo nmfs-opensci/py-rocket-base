@@ -7,6 +7,10 @@ quarto render .
 ```
 Then push to GitHub
 
+## 2026-11-17
+
+* R package `remotes` added back (#316). It disappeared in 2026.11.16 because `devtools` 2.5 (CRAN `noble/2026-10-28`) moved it from Imports to Suggests and imports `pak` instead; rocker still installs `devtools`, so `remotes` stopped coming with it. Installed in the system library in `install-rocker.sh`. Version bumped so the 2026.11.16 tag is not overwritten.
+
 ## 2026-11-16
 
 Issue #312. Minimal update so py-rocket-geospatial-2 can move to Python ≥3.12 (needed by icechunk, virtualizarr, zarr 3).
