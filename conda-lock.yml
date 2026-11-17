@@ -2509,7 +2509,6 @@ package:
   manager: conda
   platform: linux-64
   dependencies:
-    __cuda: ''
     __glibc: '>=2.17,<3.0.a0'
     azure-core-cpp: '>=1.16.4,<1.16.5.0a0'
     azure-identity-cpp: '>=1.13.3,<1.13.4.0a0'
@@ -2521,12 +2520,12 @@ package:
     libabseil: '*,>=20260817.0,<20260818.0a0'
     libbrotlidec: '>=1.2.1,<1.3.0a0'
     libbrotlienc: '>=1.2.1,<1.3.0a0'
-    libgcc: '>=14'
+    libgcc: '>=15'
     libgoogle-cloud: '>=3.12.0,<3.13.0a0'
     libgoogle-cloud-storage: '>=3.12.0,<3.13.0a0'
     libopentelemetry-cpp: '>=1.30.0,<1.31.0a0'
     libprotobuf: '>=7.35.1,<7.35.2.0a0'
-    libstdcxx: '>=14'
+    libstdcxx: '>=15'
     libzlib: '>=1.3.2,<2.0a0'
     lz4-c: '>=1.11.1,<1.12.0a0'
     orc: '>=2.3.1,<2.3.2.0a0'
@@ -2534,10 +2533,10 @@ package:
     snappy: '>=1.3.1,<1.4.0a0'
     uriparser: '>=0.9.8,<1.0a0'
     zstd: '>=1.5.7,<1.6.0a0'
-  url: https://conda.anaconda.org/conda-forge/linux-64/libarrow-26.0.1-hd32c0da_7_cuda.conda
+  url: https://conda.anaconda.org/conda-forge/linux-64/libarrow-26.0.1-h8efa293_7_cpu.conda
   hash:
-    md5: 20d24e631e96cea480f4c9f9ea793498
-    sha256: 3a6e6964dc8fc7456cd4f5d7860af37442c0c49c298bd6827e41a67f31d69478
+    md5: ef16d89e58d1927a846fc2e0dfccaf27
+    sha256: 9f60daab227c0b5fac3106e5fd2a4d3204b7d963530f1e6b804ce33d9c176424
   category: main
   optional: false
 - name: libarrow-acero
@@ -2548,12 +2547,12 @@ package:
     __glibc: '>=2.17,<3.0.a0'
     libarrow: 26.0.1
     libarrow-compute: 26.0.1
-    libgcc: '>=14'
-    libstdcxx: '>=14'
-  url: https://conda.anaconda.org/conda-forge/linux-64/libarrow-acero-26.0.1-h635bf11_7_cuda.conda
+    libgcc: '>=15'
+    libstdcxx: '>=15'
+  url: https://conda.anaconda.org/conda-forge/linux-64/libarrow-acero-26.0.1-h35cad7b_7_cpu.conda
   hash:
-    md5: 7b8e8d5859d3f0b70dbe2e0861412314
-    sha256: 2ef6f11c3f0ba1991d68ed4582b654d356b85a0c448b4ba9e6a8740ac85abcc8
+    md5: 7bbd5c6ebd0206bdb8f10fc47fb83475
+    sha256: 7e0239beac8048522e15c8a851eb3c26a1d5e9ebd22724a045c5bcc900a46c94
   category: main
   optional: false
 - name: libarrow-compute
@@ -2563,15 +2562,15 @@ package:
   dependencies:
     __glibc: '>=2.17,<3.0.a0'
     libarrow: 26.0.1
-    libgcc: '>=14'
+    libgcc: '>=15'
     libre2-11: '>=2025.11.5'
-    libstdcxx: '>=14'
+    libstdcxx: '>=15'
     libutf8proc: '>=2.12.0,<2.13.0a0'
     re2: ''
-  url: https://conda.anaconda.org/conda-forge/linux-64/libarrow-compute-26.0.1-hb10b899_7_cuda.conda
+  url: https://conda.anaconda.org/conda-forge/linux-64/libarrow-compute-26.0.1-hc9b89cc_7_cpu.conda
   hash:
-    md5: f7c4ab9de540218a508ffade1f57f0c7
-    sha256: 445fae93a60e8d31996d025ab91163bac26e4cdfc2746d8ed8f3cab555200375
+    md5: 977a87241555af7447f98bd3701270fc
+    sha256: 8904f4acb051b3e2f2e4cfc210c8407661c651a1ae040acfe5ce037130c9ab58
   category: main
   optional: false
 - name: libarrow-dataset
@@ -2583,13 +2582,13 @@ package:
     libarrow: 26.0.1
     libarrow-acero: 26.0.1
     libarrow-compute: 26.0.1
-    libgcc: '>=14'
+    libgcc: '>=15'
     libparquet: 26.0.1
-    libstdcxx: '>=14'
-  url: https://conda.anaconda.org/conda-forge/linux-64/libarrow-dataset-26.0.1-h635bf11_7_cuda.conda
+    libstdcxx: '>=15'
+  url: https://conda.anaconda.org/conda-forge/linux-64/libarrow-dataset-26.0.1-h35cad7b_7_cpu.conda
   hash:
-    md5: 134911901d835812ce00b1e7fbffce96
-    sha256: 7030874f2277a129df5e4f383e48f6416e0d825fe32379aae8b32da33fd11258
+    md5: 16adb1e90d67a114c7e9af44045c6e3e
+    sha256: d6681ee605dde387c575dda66fd05b23b2932a0b4b9d37cd053a80136bfc266a
   category: main
   optional: false
 - name: libarrow-s3
@@ -2601,12 +2600,12 @@ package:
     aws-crt-cpp: '>=0.43.8,<0.43.9.0a0'
     aws-sdk-cpp: '>=1.11.905,<1.11.906.0a0'
     libarrow: 26.0.1
-    libgcc: '>=14'
-    libstdcxx: '>=14'
-  url: https://conda.anaconda.org/conda-forge/linux-64/libarrow-s3-26.0.1-h7614ac4_7_cuda.conda
+    libgcc: '>=15'
+    libstdcxx: '>=15'
+  url: https://conda.anaconda.org/conda-forge/linux-64/libarrow-s3-26.0.1-hb32f990_7_cpu.conda
   hash:
-    md5: 8de23596f25894d47068940dfac0dda9
-    sha256: d9b5a5aaeca3b4a771cd16eb424ec91f9697a17ec22e9c2ce6e73266ef7fd50d
+    md5: e3f3bc4a069b2602d6c6af7a4151053b
+    sha256: 9145278950d62e852eb6f5bc0e4b8deb32fcf3337643eb712d2aa173a1733135
   category: main
   optional: false
 - name: libarrow-substrait
@@ -2619,13 +2618,13 @@ package:
     libarrow: 26.0.1
     libarrow-acero: 26.0.1
     libarrow-dataset: 26.0.1
-    libgcc: '>=14'
+    libgcc: '>=15'
     libprotobuf: '>=7.35.1,<7.35.2.0a0'
-    libstdcxx: '>=14'
-  url: https://conda.anaconda.org/conda-forge/linux-64/libarrow-substrait-26.0.1-h1f996ad_7_cuda.conda
+    libstdcxx: '>=15'
+  url: https://conda.anaconda.org/conda-forge/linux-64/libarrow-substrait-26.0.1-hbad6200_7_cpu.conda
   hash:
-    md5: 78a211817b5d3453325eb7393aa80496
-    sha256: 7d200a2af9082646f1520bfccffe320448ae3ec9163958bf05426fed69259c0d
+    md5: 512d6e7d206ade1566de0639decf9d6b
+    sha256: 2d06c4d9ed3e9df29990bf561ad854ecd5ebbaf99b18e38bd83dc10cf37145de
   category: main
   optional: false
 - name: libblas
@@ -2647,10 +2646,10 @@ package:
   dependencies:
     __glibc: '>=2.17,<3.0.a0'
     libgcc: '>=15'
-  url: https://conda.anaconda.org/conda-forge/linux-64/libbrotlicommon-1.2.1-h39a168f_0.conda
+  url: https://conda.anaconda.org/conda-forge/linux-64/libbrotlicommon-1.2.1-h39a168f_1.conda
   hash:
-    md5: 9460bdde20bcdf9e6bbef0232b14ad2d
-    sha256: 8eccfbfdb8ecba32eabfb6ee92f70e818e5f3a35a01c507f7b6bd56e00e4c617
+    md5: 3e5df77c3184a1b3bd6209b1268b5bb1
+    sha256: c8e66e6987a9c604e4677cb044331039296b4824b0bab566d3ad0b6932eb613e
   category: main
   optional: false
 - name: libbrotlidec
@@ -2661,10 +2660,10 @@ package:
     __glibc: '>=2.17,<3.0.a0'
     libbrotlicommon: 1.2.1
     libgcc: '>=15'
-  url: https://conda.anaconda.org/conda-forge/linux-64/libbrotlidec-1.2.1-ha411449_0.conda
+  url: https://conda.anaconda.org/conda-forge/linux-64/libbrotlidec-1.2.1-ha411449_1.conda
   hash:
-    md5: 6d934e235f4d452ebec720ec7c3638a6
-    sha256: 4b4bda6f70ad511bdff95fdd958dca74b6e0534ae335ddcb1d8c6569774d2429
+    md5: a4cbe7638dbdc3775078e0f13757cf80
+    sha256: 1c405e036e77b5ebdb5aec61cc3b36741fee0c96fe4d12509df255302d3d5c68
   category: main
   optional: false
 - name: libbrotlienc
@@ -2675,10 +2674,10 @@ package:
     __glibc: '>=2.17,<3.0.a0'
     libbrotlicommon: 1.2.1
     libgcc: '>=15'
-  url: https://conda.anaconda.org/conda-forge/linux-64/libbrotlienc-1.2.1-h018ffa1_0.conda
+  url: https://conda.anaconda.org/conda-forge/linux-64/libbrotlienc-1.2.1-h018ffa1_1.conda
   hash:
-    md5: 8f3078564b4a4cd9602ebaafe78e0b87
-    sha256: 61974cf9bb07115ed6725dacf83d0d985443d78dd123cc4f2758856fda5376ec
+    md5: 2dbf816843a01063fcd4cff2a3f3af63
+    sha256: f4546e1adc9edd339edf19c602ea6e1fdad7b6e9317e891c3db69fdbdbf2c7d0
   category: main
   optional: false
 - name: libcap
@@ -3139,15 +3138,15 @@ package:
   dependencies:
     __glibc: '>=2.17,<3.0.a0'
     libarrow: 26.0.1
-    libgcc: '>=14'
-    libstdcxx: '>=14'
+    libgcc: '>=15'
+    libstdcxx: '>=15'
     libthrift: '>=0.25.0,<0.25.1.0a0'
     openssl: '>=3.5.9,<4.0a0'
     simdjson: '>=5.2.0,<5.3.0a0'
-  url: https://conda.anaconda.org/conda-forge/linux-64/libparquet-26.0.1-h450e727_7_cuda.conda
+  url: https://conda.anaconda.org/conda-forge/linux-64/libparquet-26.0.1-h64aa4af_7_cpu.conda
   hash:
-    md5: 28da927ceac21e45afa14ecac3b376d2
-    sha256: f305526f9952a3db2b76b2bd0bad14f04531f4b90882f13a144337ee2a30f51d
+    md5: e5afe6ce3fb952014472faefa3d0f288
+    sha256: 3e4d3a4508b14bfcb5d49f0011024b125e2ff09a23f3566b9d97576a91869fb4
   category: main
   optional: false
 - name: libpng
@@ -4371,15 +4370,15 @@ package:
     __glibc: '>=2.17,<3.0.a0'
     libarrow: 26.0.1.*
     libarrow-compute: 26.0.1.*
-    libgcc: '>=14'
-    libstdcxx: '>=14'
+    libgcc: '>=15'
+    libstdcxx: '>=15'
     libzlib: '>=1.3.2,<2.0a0'
     python: '>=3.13,<3.14.0a0'
     python_abi: 3.13.*
-  url: https://conda.anaconda.org/conda-forge/linux-64/pyarrow-core-26.0.1-py313hfe0801a_0_cuda.conda
+  url: https://conda.anaconda.org/conda-forge/linux-64/pyarrow-core-26.0.1-py313hcba6aca_0_cpu.conda
   hash:
-    md5: d0e55ff6c9830319cc48b3514412a19e
-    sha256: 33684c8b951a876878a155c6ed7c1b42756d8ba0c8033c6cb76fbeb1ecd86428
+    md5: bd8bd420f1df68c1fdc6cb7843a33fef
+    sha256: e09196b85ebb318e1af0037f5fe4aebbf9f274e3691f0597b14ad0fa08f89ae8
   category: main
   optional: false
 - name: pybtex
