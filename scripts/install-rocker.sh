@@ -141,6 +141,23 @@ else
     echo "Warning: $ENV_FILE not found. No changes made."
 fi
 
+# Keep R on the system GDAL/PROJ data and plugins, never conda's.
+# In the JupyterLab terminal the notebook env is activated, and conda's gdal/proj
+# activate.d scripts export GDAL_DRIVER_PATH, GDAL_DATA, PROJ_DATA and PROJ_LIB pointing
+# into /srv/conda. R inherits them, and the system GDAL then loads conda's plugins, which
+# were built against conda's GDAL/GEOS/OpenSSL: "undefined symbol: GEOSCoverageClean...",
+# "OPENSSL_3.4.0 not found", and those drivers are lost for that R session. Derivative
+# images may also set PROJ_LIB image-wide for conda tools. Renviron.site overrides
+# inherited values, and RStudio, the IR kernel, R and Rscript all read it (R --vanilla
+# does not: run `conda deactivate` first). Python keeps conda's values; this applies only
+# inside R. The plugin directory is Ubuntu's multiarch path and moves with the OS (#318).
+cat >> "$RENVIRO_SITE" <<EOF
+GDAL_DATA=/usr/share/gdal
+GDAL_DRIVER_PATH=/usr/lib/$(uname -m)-linux-gnu/gdalplugins
+PROJ_DATA=/usr/share/proj
+PROJ_LIB=/usr/share/proj
+EOF
+
 # Create user library
 echo "Configuring R to use user library"
 RPROFILE_SITE="${R_HOME}/etc/Rprofile.site"

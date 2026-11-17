@@ -7,6 +7,10 @@ quarto render .
 ```
 Then push to GitHub
 
+## 2026-11-18
+
+* R no longer picks up conda's GDAL/PROJ in the JupyterLab terminal. That terminal activates the `notebook` env, whose `gdal-activate.sh`/`proj4-activate.sh` export `GDAL_DRIVER_PATH`, `GDAL_DATA`, `PROJ_DATA`, `PROJ_LIB` into `/srv/conda`; R started there (`R`, `Rscript`) inherited them and the system GDAL tried to load conda's plugins (`undefined symbol: GEOSCoverageCleanParams_setGapMaximumWidth_r`, `OPENSSL_3.4.0 not found`; on the older image "50 or more warnings" from `library(sf)`). RStudio, its terminal, and R notebooks were not affected. `install-rocker.sh` now appends the system paths to `Renviron.site`, which overrides inherited values. `R --vanilla` skips Renviron.site; `conda deactivate` first in that case. The plugin path is Ubuntu's multiarch directory (`/usr/lib/<arch>-linux-gnu/gdalplugins`), so check it on an OS move (#318).
+
 ## 2026-11-17
 
 * R package `remotes` added back (#316). It disappeared in 2026.11.16 because `devtools` 2.5 (CRAN `noble/2026-10-28`) moved it from Imports to Suggests and imports `pak` instead; rocker still installs `devtools`, so `remotes` stopped coming with it. Installed in the system library in `install-rocker.sh`. Version bumped so the 2026.11.16 tag is not overwritten.
