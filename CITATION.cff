@@ -9,8 +9,7 @@ abstract: "A base container image for JupyterHubs with Python (Pangeo base-image
 type: software
 authors:
   - family-names: Holmes
-    given-names: Eli
-    name-particle: E.
+    given-names: Elizabeth Eli
     email: eli.holmes@noaa.gov
     affiliation: "Northwest Fisheries Science Center, NOAA Fisheries"
     orcid: "https://orcid.org/0000-0001-9128-8393"

@@ -49,12 +49,22 @@ quarto render .
 ```
 This puts html in `docs`. Push to GitHub.
 
+## AI assistance
+
+Parts of this repository were written with AI coding agents. Every change was
+reviewed by the author before it was merged, and commits made with an agent end
+with a `Co-Authored-By: Agent` line. Agent instructions and notes are kept in the
+repository ([`AGENTS.md`](AGENTS.md), [`agent/`](agent/), and the dated design
+decisions in [`NOTES.md`](NOTES.md)) so that reviewers, human or agent, can check
+the work against its stated intent.
+
 ## Reuse and citation
 
 This work is released under [Apache-2.0](LICENSE). You are free to use, copy,
 modify, and redistribute it, including commercially. If you use it in published
-work, please cite it. The Rocker installation scripts it uses are GPL-2.0-or-later
-and keep their own license.
+work, please cite it. Parts derived from the CryoCloud hub image keep that
+project's BSD 3-Clause notice, and the Rocker installation scripts the image runs
+are GPL-2.0-or-later; see [`NOTICE`](NOTICE).
 
 Citation metadata is in [`CITATION.cff`](CITATION.cff). GitHub's **"Cite this
 repository"** button (top right of the repository page) will render it as BibTeX or

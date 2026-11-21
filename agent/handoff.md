@@ -17,28 +17,8 @@ latest entry before changing versions.
 
 ## How to work here
 
-- **No PR CI.** `build.yaml` builds and pushes `:latest` on every push to `main`.
-  To test first: fast-forward the `test` branch to the work branch
-  (`git push origin <branch>:test`, no force) and run `gh workflow run test-build.yml --ref test`.
-  That pushes only `ghcr.io/nmfs-opensci/py-rocket-base/test:latest`; Eli tries it on a hub.
-- **This hub cannot run Docker** (no docker or podman, `sudo` blocked). Check conda solves with
-  `mamba env create --dry-run`, and use a scratch `CONDA_PKGS_DIRS`.
-- `base-image/` changes rebuild `base-image:latest` on merge. Land them in their own PR
-  *before* a main-image change, or the two builds race.
-- R version rule: one minor release behind rocker's latest (dated CRAN). Rocker master keeps
-  only the newest few `verse_*` Dockerfiles, so an old `R_VERSION` stops building.
-- Eli prefers following rocker's choices over pinning old versions.
-
-## Things that look wrong but are deliberate
-
-- `scripts/install-rocker.sh` patches rocker's `install_pandoc.sh` (RStudio 2026.x pandoc
-  path) as well as `install_texlive.sh`. Without the pandoc patch the build fails silently.
-- Rocker's setup step deletes jovyan (`userdel` uid 1000), and `default_user.sh` recreates the
-  user. Check `id jovyan` after R updates.
-- code-server runs with `--ignore-last-opened`, because a remembered `/home` workspace drove a
-  server out of memory.
-- `.qmd` opens in JupyterLab's text editor (lab `overrides.json`), because the jupytext
-  notebook view writes a `jupyter:` header into the file.
+Working rules and the "looks wrong but is deliberate" list are in
+[`AGENTS.md`](../AGENTS.md).
 
 ## Deferred
 
