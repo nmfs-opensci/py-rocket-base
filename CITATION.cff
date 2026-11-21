@@ -25,7 +25,7 @@ authors:
 repository-code: "https://github.com/nmfs-opensci/py-rocket-base"
 url: "https://nmfs-opensci.github.io/py-rocket-base/"
 license: Apache-2.0
-version: v3.2.0
+version: v3.2.1
 date-released: "2026-11-21"
 doi: "10.5281/zenodo.13942617"
 keywords:
