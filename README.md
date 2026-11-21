@@ -80,4 +80,4 @@ repository"** button (top right of the repository page) will render it as BibTeX
 APA for you.
 
 > Holmes, E. E., Boettiger, C., Panda, Y., & López, L. (2026). *py-rocket-base*
-> (version v3.2.0) [Computer software]. https://doi.org/10.5281/zenodo.13942617
+> (version v3.2.1) [Computer software]. https://doi.org/10.5281/zenodo.13942617

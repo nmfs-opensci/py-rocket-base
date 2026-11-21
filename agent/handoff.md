@@ -14,12 +14,11 @@ latest entry before changing versions.
   from the CryoCloud hub-image (2i2c) is kept verbatim in `NOTICE`. #323 also added
   `CITATION.cff`, `AGENTS.md`/`CLAUDE.md`, the README AI-assistance and Reuse and citation
   sections, and fixed `.zenodo.json`, which was invalid JSON from 2026-02-09 to 2026-11-21.
-- **Release v3.2.0 was published 2026-11-21 at tag `c91a7cd`, before #323 merged.** The tag
-  therefore has the broken `.zenodo.json`, and Zenodo had no v3.2.0 record ten minutes later
-  (latest is still v3.1.1, `10.5281/zenodo.18512408`). Unresolved: Eli decides whether to
-  re-release (e.g. v3.2.1 from current `main`) or fix it on Zenodo by hand. `CITATION.cff` and
-  the README citation say v3.2.0.
-- Open PRs: #322 (README versions table; merges cleanly). Open issues: #309 (deferred, see
+- **Release v3.2.0 (tag `c91a7cd`) has no Zenodo record.** It was published seconds before #323
+  merged, so its tag has the invalid `.zenodo.json`, and Zenodo accepted the webhook (202) but
+  archived nothing. Re-released as **v3.2.1** from `main` with the fixed file (2026-11-21).
+  `CITATION.cff` and the README citation say v3.2.1. Do not move the v3.2.0 tag.
+- #322 (README versions table) merged. Open issues: #309 (deferred, see
   below), #308 (Positron, not started), #305, #302, #303, #290.
 
 ## How to work here
