@@ -1,0 +1,39 @@
+# Citation File Format — https://citation-file-format.github.io/
+# Keep `version` and `date-released` in step with releases. Zenodo reads
+# .zenodo.json, not this file, so keep the authors and license here in step
+# with .zenodo.json as well.
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+title: "py-rocket-base"
+abstract: "A base container image for JupyterHubs with Python (Pangeo base-image) and R/RStudio (installed with the Rocker scripts), plus a desktop, VS Code and a publishing suite."
+type: software
+authors:
+  - family-names: Holmes
+    given-names: Elizabeth Eli
+    email: eli.holmes@noaa.gov
+    affiliation: "Northwest Fisheries Science Center, NOAA Fisheries"
+    orcid: "https://orcid.org/0000-0001-9128-8393"
+  - family-names: Boettiger
+    given-names: Carl
+    affiliation: "University of California Berkeley"
+    orcid: "https://orcid.org/0000-0002-1642-628X"
+  - family-names: Panda
+    given-names: Yuvi
+    affiliation: "2i2c"
+  - family-names: López
+    given-names: Luis
+repository-code: "https://github.com/nmfs-opensci/py-rocket-base"
+url: "https://nmfs-opensci.github.io/py-rocket-base/"
+license: Apache-2.0
+version: v3.2.0
+date-released: "2026-11-21"
+doi: "10.5281/zenodo.13942617"
+keywords:
+  - Docker
+  - JupyterHub
+  - Python
+  - R
+  - RStudio
+  - Geospatial
+  - NOAA
+  - Open Science
