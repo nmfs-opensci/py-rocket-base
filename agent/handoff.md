@@ -4,16 +4,23 @@ Rolling orientation for a new session. Orientation, not a task list: Eli says wh
 Design decisions and their reasons live in [`NOTES.md`](../NOTES.md) (dated entries); read the
 latest entry before changing versions.
 
-## Repo state (2026-11-16)
+## Repo state (2026-11-21)
 
-- `main` = image **2026.11.16**: Python 3.13, R 4.6.1 (CRAN `p3m noble/2026-10-28`),
-  RStudio 2026.10.1, Quarto bundled with RStudio (1.10.18), code-server ≥4.145, JDK 21.
-  Merged in #314 (issue #312); base-image re-synced with Pangeo in #313.
-- Published `ghcr.io/nmfs-opensci/py-rocket-base:2026.11.16` (also `:latest`, `:9a7f8ce`), with
-  digest `sha256:61faa90d…`, from build 43941407540. The conda-lock workflow ran after it.
-  #312 is closed.
-- Open: #309 (deferred, see below), #308 (Positron, not started), #305, #302, #303,
-  #290 (superseded in practice by the 4.6.1 bump).
+- Image **2026.11.17** (`:latest`): Python 3.13 (notebook env; conda base is 3.14 from
+  Miniforge), R 4.6.1 (CRAN `p3m noble/2026-10-28`), RStudio 2026.10.1, Quarto bundled with
+  RStudio, code-server ≥4.145, JDK 21, Ubuntu 24.04. Built from #319 (R keeps system
+  GDAL/PROJ in conda shells) on top of #314/#317. Details in NOTES.md 2026-11-16/17.
+- **License is Apache-2.0** since #323 (2026-11-21, Eli's choice). The inherited BSD-3 notice
+  from the CryoCloud hub-image (2i2c) is kept verbatim in `NOTICE`. #323 also added
+  `CITATION.cff`, `AGENTS.md`/`CLAUDE.md`, the README AI-assistance and Reuse and citation
+  sections, and fixed `.zenodo.json`, which was invalid JSON from 2026-02-09 to 2026-11-21.
+- **Release v3.2.0 was published 2026-11-21 at tag `c91a7cd`, before #323 merged.** The tag
+  therefore has the broken `.zenodo.json`, and Zenodo had no v3.2.0 record ten minutes later
+  (latest is still v3.1.1, `10.5281/zenodo.18512408`). Unresolved: Eli decides whether to
+  re-release (e.g. v3.2.1 from current `main`) or fix it on Zenodo by hand. `CITATION.cff` and
+  the README citation say v3.2.0.
+- Open PRs: #322 (README versions table; merges cleanly). Open issues: #309 (deferred, see
+  below), #308 (Positron, not started), #305, #302, #303, #290.
 
 ## How to work here
 
