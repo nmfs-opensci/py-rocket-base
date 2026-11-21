@@ -17,7 +17,10 @@ latest entry before changing versions.
 - **Release v3.2.0 (tag `c91a7cd`) has no Zenodo record.** It was published seconds before #323
   merged, so its tag has the invalid `.zenodo.json`, and Zenodo accepted the webhook (202) but
   archived nothing. Re-released as **v3.2.1** from `main` with the fixed file (2026-11-21).
-  `CITATION.cff` and the README citation say v3.2.1. Do not move the v3.2.0 tag.
+  Zenodo archived v3.2.1 as `10.5281/zenodo.24424961`, with the `.zenodo.json` authors and
+  Apache-2.0. `CITATION.cff` and the README citation say v3.2.1. Eli is leaving v3.2.0 as it
+  is; do not move its tag. Lesson: publish a release only after every PR it should contain
+  has merged, because the tag is `main` at the moment of publishing.
 - #322 (README versions table) merged. Open issues: #309 (deferred, see
   below), #308 (Positron, not started), #305, #302, #303, #290.
 
