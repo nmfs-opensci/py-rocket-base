@@ -9,6 +9,15 @@ image url
 ghcr.io/nmfs-opensci/py-rocket-base:latest
 ```
 
+Versions in image `2026.11.17`:
+
+| Component | Version | Where it comes from |
+| --- | --- | --- |
+| Ubuntu | 24.04 LTS (24.04.5) | `FROM ubuntu:24.04` in [`base-image/Dockerfile`](base-image/Dockerfile) |
+| Python, `notebook` env | 3.13 (3.13.18) | `python~=3.13.0` in [`environment.yml`](environment.yml); the Python on `PATH`, used by Jupyter kernels and users |
+| Python, conda `base` env | 3.14 (3.14.10) | Whatever the Miniforge installer ships; it runs conda and mamba only, and is not pinned |
+| R | 4.6.1 | `R_VERSION` in [`Dockerfile`](Dockerfile), installed with the Rocker scripts |
+
 The base image has the following support:
 
 * Python + JupyterLab with mamba handling package installation
