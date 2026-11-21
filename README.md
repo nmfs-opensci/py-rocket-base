@@ -48,3 +48,17 @@ cd book
 quarto render .
 ```
 This puts html in `docs`. Push to GitHub.
+
+## Reuse and citation
+
+This work is released under [Apache-2.0](LICENSE). You are free to use, copy,
+modify, and redistribute it, including commercially. If you use it in published
+work, please cite it. The Rocker installation scripts it uses are GPL-2.0-or-later
+and keep their own license.
+
+Citation metadata is in [`CITATION.cff`](CITATION.cff). GitHub's **"Cite this
+repository"** button (top right of the repository page) will render it as BibTeX or
+APA for you.
+
+> Holmes, E. E., Boettiger, C., Panda, Y., & López, L. (2026). *py-rocket-base*
+> (version v3.2.0) [Computer software]. https://doi.org/10.5281/zenodo.13942617
